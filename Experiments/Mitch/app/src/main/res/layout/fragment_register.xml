@@ -7,6 +7,7 @@
     tools:context=".fragments.RegisterFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/loginCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -76,16 +77,40 @@
                 android:textColor="@color/black" />
 
             <Button
-                android:id="@+id/buttonSwitchRegister"
+                android:id="@+id/buttonRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/register"
-                android:textColor="#212121"
                 android:theme="@style/ButtonMain" />
+
+<!--            <Button-->
+<!--                android:id="@+id/buttonSpin"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="spin"-->
+<!--                android:theme="@style/ButtonMain" />-->
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/spinnerBlocker"
+        android:elevation="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/loginSpinner"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:elevation="100dp"
+        android:visibility="gone" />
 
 </FrameLayout>

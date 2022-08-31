@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
@@ -64,12 +67,27 @@ public class LoginFragment extends Fragment {
         passwordField = view.findViewById(R.id.passwordField);
 
         loginButton = view.findViewById(R.id.buttonLogin);
-        registerButton = view.findViewById(R.id.buttonSwitchRegister);
+        registerButton = view.findViewById(R.id.buttonRegister);
 
         loginButton.setOnClickListener(view1 -> {
             String unm = usernameField.getText().toString();
             String pwd = passwordField.getText().toString();
+
+            if (unm.equals("")) {
+                usernameField.setError("Username can't be empty");
+                usernameField.requestFocus();
+                return;
+            } else if (pwd.equals("")) {
+                passwordField.setError("Password can't be empty");
+                passwordField.requestFocus();
+                return;
+            }
+
+            spin(view);
+
             // TODO: Check for valid unm/pwd on db
+            // If invalid don't forget to remove spinner
+
             SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("username", unm);
@@ -78,12 +96,16 @@ public class LoginFragment extends Fragment {
                             pwd.getBytes(StandardCharsets.UTF_8),
                             Base64.DEFAULT));
             editor.apply();
+
+            unSpin(view);
+
             this.requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
                     .remove(LoginFragment.this)
                     .commit();
+            callbackFragment.closeFragment();
         });
 
         registerButton.setOnClickListener(view1 -> {
@@ -94,6 +116,18 @@ public class LoginFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void spin(View view) {
+        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loginCard).setAlpha(0.8f);
+        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+    }
+
+    public void unSpin(View view) {
+        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
+        view.findViewById(R.id.loginCard).setAlpha(1);
+        view.findViewById(R.id.spinnerBlocker).setClickable(false);
     }
 
     public void setCallbackFragment(CallbackFragment fragment) {

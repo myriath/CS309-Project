@@ -1,6 +1,10 @@
 package com.example.cs309android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -56,24 +60,33 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    public void closeFragment() {
+        findViewById(R.id.mainLayout).setAlpha(1);
+        findViewById(R.id.loginPopup).setClickable(false);
+    }
+
     public void startLoginFragment() {
+        findViewById(R.id.mainLayout).setAlpha(0.5f);
+        findViewById(R.id.loginPopup).setClickable(true);
+
         LoginFragment fragment = new LoginFragment();
         fragment.setCallbackFragment(this);
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-        transaction.add(R.id.fragmentContainer, fragment);
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        transaction.add(R.id.loginPopup, fragment);
         transaction.commit();
     }
 
     @Override
     public void changeFragment() {
         RegisterFragment fragment = new RegisterFragment();
+        fragment.setCallbackFragment(this);
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         transaction.addToBackStack(null);
-        transaction.replace(R.id.fragmentContainer, fragment, null);
+        transaction.replace(R.id.loginPopup, fragment, null);
         transaction.commit();
     }
 }

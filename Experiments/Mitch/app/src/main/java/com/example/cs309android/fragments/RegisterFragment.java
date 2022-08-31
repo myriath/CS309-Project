@@ -1,9 +1,12 @@
 package com.example.cs309android.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Base64;
@@ -12,13 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.util.Hash;
 import com.example.cs309android.util.Hasher;
-import com.example.cs309android.util.Toaster;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +28,8 @@ import com.example.cs309android.util.Toaster;
  * create an instance of this fragment.
  */
 public class RegisterFragment extends Fragment {
+
+    boolean spinning = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +40,7 @@ public class RegisterFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private CallbackFragment callbackFragment;
     Button registerButton;
     EditText usernameField, emailField, passwordField, passwordField2;
 
@@ -79,7 +84,11 @@ public class RegisterFragment extends Fragment {
         passwordField = view.findViewById(R.id.passwordField);
         passwordField2 = view.findViewById(R.id.passwordField2);
 
-        registerButton = view.findViewById(R.id.buttonSwitchRegister);
+        registerButton = view.findViewById(R.id.buttonRegister);
+
+//        view.findViewById(R.id.buttonSpin).setOnClickListener(view1 -> {
+//            spin(view);
+//        });
 
         registerButton.setOnClickListener(view1 -> {
             String unm = usernameField.getText().toString();
@@ -105,6 +114,8 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
+            spin(view);
+
             Hash pwdHash = Hasher.generateNewHash(passwordField.getText().toString().toCharArray());
             // TODO: Send data to database to create new account, check for collisions, etc.
 
@@ -114,15 +125,35 @@ public class RegisterFragment extends Fragment {
             editor.putString("username", unm);
             editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
             editor.apply();
+
+            unSpin(view);
+
             this.requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right)
                     .remove(RegisterFragment.this)
                     .commit();
+            callbackFragment.closeFragment();
         });
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void spin(View view) {
+        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loginCard).setAlpha(0.8f);
+        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+    }
+
+    public void unSpin(View view) {
+        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
+        view.findViewById(R.id.loginCard).setAlpha(1);
+        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+    }
+
+    public void setCallbackFragment(CallbackFragment fragment) {
+        callbackFragment = fragment;
     }
 }

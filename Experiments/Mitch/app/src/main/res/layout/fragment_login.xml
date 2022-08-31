@@ -7,6 +7,7 @@
     tools:context=".fragments.LoginFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/loginCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -73,7 +74,7 @@
                     android:layout_height="48dp" />
 
                 <Button
-                    android:id="@+id/buttonSwitchRegister"
+                    android:id="@+id/buttonRegister"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -83,6 +84,24 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/spinnerBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="50dp" >
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/loginSpinner"
+        style="?android:attr/progressBarStyle"
+        android:elevation="100dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
 </FrameLayout>
