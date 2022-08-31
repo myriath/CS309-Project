@@ -1,10 +1,10 @@
 package com.example.cs309android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.cs309android.R;
@@ -12,9 +12,11 @@ import com.example.cs309android.fragments.CallbackFragment;
 import com.example.cs309android.fragments.LoginFragment;
 import com.example.cs309android.fragments.RegisterFragment;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
+    private static final String PREF_NAME = "COMS309";
+    int PRIVATE_MODE = 0;
+    SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+
     FragmentManager manager;
     FragmentTransaction transaction;
 
@@ -23,10 +25,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addFragment();
+        String unm = pref.getString("unm", null);
+        String pwd = pref.getString("pwd", null);
+        // TODO: Check for login on db
+        if (unm != null && pwd != null) {
+            startLoginFragment();
+        }
     }
 
-    public void addFragment() {
+    public void startLoginFragment() {
         LoginFragment fragment = new LoginFragment();
         fragment.setCallbackFragment(this);
         manager = getSupportFragmentManager();
@@ -36,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         transaction.commit();
     }
 
-    public void replaceFragment() {
+    @Override
+    public void changeFragment() {
         RegisterFragment fragment = new RegisterFragment();
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
@@ -44,10 +52,5 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragmentContainer, fragment, null);
         transaction.commit();
-    }
-
-    @Override
-    public void changeFragment() {
-        replaceFragment();
     }
 }

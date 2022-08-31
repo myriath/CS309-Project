@@ -76,7 +76,10 @@ public class LoginFragment extends Fragment {
         registerButton = view.findViewById(R.id.buttonSwitchRegister);
 
         loginButton.setOnClickListener(view1 -> {
-
+            String unm = usernameField.getText().toString();
+            String pwd = passwordField.getText().toString();
+            // TODO: Check for valid unm/pwd on db
+            
         });
 
         registerButton.setOnClickListener(view1 -> {
