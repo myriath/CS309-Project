@@ -8,4 +8,5 @@
     <string name="register">Register</string>
     <string name="email">Email</string>
     <string name="re_enter_password">Re-enter Password</string>
+    <string name="logout">Logout</string>
 </resources>

@@ -65,24 +65,6 @@ public class Hasher {
     }
 
     /**
-     * Checks the given salt and password against a known hash value.
-     *
-     * @param plaintext     Password to check
-     * @param slt           Salt (From Database)
-     * @param expectedHash  Expected Hash (From Database)
-     * @return              True if the password/salt pair hashes to the expected value
-     */
-    public static boolean validPwd(char[] plaintext, byte[] slt, byte[] expectedHash) {
-        byte[] hash = hash(plaintext, slt);
-        Arrays.fill(plaintext, Character.MIN_VALUE);
-        if (hash.length != expectedHash.length) return false;
-        for (int i = 0; i < hash.length; i++) {
-            if (hash[i] != expectedHash[i]) return false;
-        }
-        return true;
-    }
-
-    /**
      * Generates a new hash from a random salt and the given plaintext
      *
      * @param plaintext Plaintext to hash

@@ -1,16 +1,24 @@
 package com.example.cs309android.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.util.Hash;
+import com.example.cs309android.util.Hasher;
+import com.example.cs309android.util.Toaster;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +82,44 @@ public class RegisterFragment extends Fragment {
         registerButton = view.findViewById(R.id.buttonSwitchRegister);
 
         registerButton.setOnClickListener(view1 -> {
+            String unm = usernameField.getText().toString();
+            String email = emailField.getText().toString();
+            String pwd = passwordField.getText().toString();
+            String pwd2 = passwordField2.getText().toString();
 
+            if (unm.equals("")) {
+                usernameField.setError("Username can't be empty");
+                usernameField.requestFocus();
+                return;
+            } else if (email.equals("")) {
+                emailField.setError("Email can't be empty");
+                emailField.requestFocus();
+                return;
+            } else if (pwd.equals("")) {
+                passwordField.setError("Password can't be empty");
+                passwordField.requestFocus();
+                return;
+            } else if (!pwd.equals(pwd2)) {
+                passwordField2.setError("Passwords don't match");
+                passwordField2.requestFocus();
+                return;
+            }
+
+            Hash pwdHash = Hasher.generateNewHash(passwordField.getText().toString().toCharArray());
+            // TODO: Send data to database to create new account, check for collisions, etc.
+
+            // TODO: If valid, set prefs
+            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("username", unm);
+            editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
+            editor.apply();
+            this.requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
+                    .remove(RegisterFragment.this)
+                    .commit();
         });
 
         // Inflate the layout for this fragment
