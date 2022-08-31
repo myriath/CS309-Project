@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
 
     Button loginButton, registerButton;
     EditText usernameField, passwordField;
+    CallbackFragment callbackFragment;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -79,10 +80,16 @@ public class LoginFragment extends Fragment {
         });
 
         registerButton.setOnClickListener(view1 -> {
-
+            if (callbackFragment != null) {
+                callbackFragment.changeFragment();
+            }
         });
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void setCallbackFragment(CallbackFragment fragment) {
+        callbackFragment = fragment;
     }
 }

@@ -8,13 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.CallbackFragment;
 import com.example.cs309android.fragments.LoginFragment;
 import com.example.cs309android.fragments.RegisterFragment;
 
-public class MainActivity extends AppCompatActivity {
-    Fragment fragment;
-    LoginFragment loginFragment;
-    RegisterFragment registerFragment;
+import java.util.Objects;
+
+public class MainActivity extends AppCompatActivity implements CallbackFragment {
     FragmentManager manager;
     FragmentTransaction transaction;
 
@@ -22,26 +22,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loginFragment = new LoginFragment();
-        registerFragment = new RegisterFragment();
 
         addFragment();
     }
 
     public void addFragment() {
-        fragment = loginFragment;
+        LoginFragment fragment = new LoginFragment();
+        fragment.setCallbackFragment(this);
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         transaction.add(R.id.fragmentContainer, fragment);
         transaction.commit();
     }
 
     public void replaceFragment() {
-        fragment = registerFragment;
+        RegisterFragment fragment = new RegisterFragment();
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out);
         transaction.addToBackStack(null);
-        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.replace(R.id.fragmentContainer, fragment, null);
         transaction.commit();
+    }
+
+    @Override
+    public void changeFragment() {
+        replaceFragment();
     }
 }
