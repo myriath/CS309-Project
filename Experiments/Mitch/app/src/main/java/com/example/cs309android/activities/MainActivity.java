@@ -12,7 +12,9 @@ import com.example.cs309android.fragments.LoginFragment;
 import com.example.cs309android.fragments.RegisterFragment;
 
 public class MainActivity extends AppCompatActivity {
-    Fragment login;
+    Fragment fragment;
+    LoginFragment loginFragment;
+    RegisterFragment registerFragment;
     FragmentManager manager;
     FragmentTransaction transaction;
 
@@ -20,24 +22,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loginFragment = new LoginFragment();
+        registerFragment = new RegisterFragment();
 
         addFragment();
     }
 
     public void addFragment() {
-        login = new LoginFragment();
+        fragment = loginFragment;
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.add(R.id.fragmentContainer, login);
+        transaction.add(R.id.fragmentContainer, fragment);
         transaction.commit();
     }
 
     public void replaceFragment() {
-        login = new RegisterFragment();
+        fragment = registerFragment;
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
         transaction.addToBackStack(null);
-        transaction.replace(R.id.fragmentContainer, login);
+        transaction.replace(R.id.fragmentContainer, fragment);
         transaction.commit();
     }
 }
