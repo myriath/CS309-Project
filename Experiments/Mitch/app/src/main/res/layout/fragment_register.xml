@@ -26,8 +26,8 @@
                 android:id="@+id/loginTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme="@style/Text"
                 android:text="@string/register"
-                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -41,7 +41,7 @@
                 android:hint="@string/username"
                 android:inputType="textPersonName"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/black" />
+                android:textColor="?android:textColorPrimary" />
 
             <EditText
                 android:id="@+id/emailField"
@@ -52,7 +52,7 @@
                 android:ems="10"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/black" />
+                android:textColor="?android:textColorPrimary" />
 
             <EditText
                 android:id="@+id/passwordField"
@@ -60,7 +60,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_height="48dp"
                 android:autofillHints="password"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 android:ems="10"
                 android:hint="@string/password"
                 android:inputType="textPassword" />
@@ -74,7 +74,7 @@
                 android:ems="10"
                 android:hint="@string/re_enter_password"
                 android:inputType="textPassword"
-                android:textColor="@color/black" />
+                android:textColor="?android:textColorPrimary" />
 
             <Button
                 android:id="@+id/buttonRegister"

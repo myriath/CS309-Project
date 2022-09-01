@@ -1,12 +1,9 @@
 package com.example.cs309android.fragments;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Base64;
@@ -15,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
@@ -28,9 +24,6 @@ import com.example.cs309android.util.Hasher;
  * create an instance of this fragment.
  */
 public class RegisterFragment extends Fragment {
-
-    boolean spinning = false;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,11 +78,6 @@ public class RegisterFragment extends Fragment {
         passwordField2 = view.findViewById(R.id.passwordField2);
 
         registerButton = view.findViewById(R.id.buttonRegister);
-
-//        view.findViewById(R.id.buttonSpin).setOnClickListener(view1 -> {
-//            spin(view);
-//        });
-
         registerButton.setOnClickListener(view1 -> {
             String unm = usernameField.getText().toString();
             String email = emailField.getText().toString();

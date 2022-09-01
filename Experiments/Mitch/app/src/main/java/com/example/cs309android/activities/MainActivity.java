@@ -1,10 +1,9 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.TAGS.TAG_GET;
+import static com.example.cs309android.util.Constants.TAGS.TAG_POST;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainer;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,11 +13,29 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.CallbackFragment;
 import com.example.cs309android.fragments.LoginFragment;
 import com.example.cs309android.fragments.RegisterFragment;
+import com.example.cs309android.models.RequestHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -33,9 +50,16 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private FragmentTransaction transaction;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        RequestHandler.getInstance(this).cancelAll();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
         String username = pref.getString("username", null);
@@ -43,12 +67,56 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         if (username != null && encodedHash != null) {
             byte[] hashB64 = Base64.decode(encodedHash, Base64.DEFAULT);
             if (DEBUG) {
-                Log.i("Null B64 decode", Arrays.toString(hashB64));
+                Log.i("B64 decode", Arrays.toString(hashB64));
             }
+            JsonObjectRequest request = new JsonObjectRequest("https://www.google.com",
+                (Response.Listener<JSONObject>) response -> {
+                    try {
+                        Log.i("JSONRESPONSE", response.toString(2));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    Log.e("JSONRESPONSE", error.getMessage());
+//                    startLoginFragment();
+            });
+            RequestHandler.getInstance(this).add(request);
             // TODO: Check for login on db
         } else {
             startLoginFragment();
         }
+
+        findViewById(R.id.getButton).setOnClickListener(view1 -> {
+            String url = "https://www.google.com";
+
+            TextView textView = findViewById(R.id.volleyResponse);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    (Response.Listener<String>) response -> {
+                        textView.setText("Response is: " + response.substring(0, 500));
+                    }, (Response.ErrorListener) error -> {
+                        textView.setText(error.getMessage());
+                    }
+            );
+
+            stringRequest.setTag(TAG_GET);
+            RequestHandler.getInstance(this).add(stringRequest);
+        });
+
+        findViewById(R.id.postButton).setOnClickListener(view1 -> {
+            String url = "https://www.google.com";
+
+            TextView textView = findViewById(R.id.volleyResponse);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    (Response.Listener<String>) response -> {
+                        textView.setText("Response is: " + response.substring(0, 500));
+                    }, (Response.ErrorListener) error -> {
+                        textView.setText(error.getMessage());
+                    }
+            );
+
+            stringRequest.setTag(TAG_POST);
+            RequestHandler.getInstance(this).add(stringRequest);
+        });
 
         Button logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(view -> {
