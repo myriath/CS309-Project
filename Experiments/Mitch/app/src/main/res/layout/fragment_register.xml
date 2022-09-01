@@ -26,7 +26,6 @@
                 android:id="@+id/loginTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/Text"
                 android:text="@string/register"
                 android:textAlignment="center"
                 android:textSize="20sp"
@@ -81,8 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/register"
-                android:theme="@style/ButtonMain" />
+                android:text="@string/register" />
 
 <!--            <Button-->
 <!--                android:id="@+id/buttonSpin"-->
