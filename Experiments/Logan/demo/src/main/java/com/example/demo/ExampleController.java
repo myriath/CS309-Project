@@ -53,6 +53,17 @@ class ExampleController {
     }
 
     // Experiment 3
+    @GetMapping("/APIRequest")
+    public String apiRequest() {
+        String uri = "https://jsonplaceholder.typicode.com/users";
+        RestTemplate restTemplate = new RestTemplate();
+
+        String res = restTemplate.getForObject(uri, String.class);
+
+        return res;
+    }
+
+    // Experiment 4
     @GetMapping("/bigMac")
     public String bigMac() {
         String uri = "https://trackapi.nutritionix.com/v2//search/instant?query=Big Mac";
@@ -73,7 +84,7 @@ class ExampleController {
         return res;
     }
 
-    // Experiment 4
+    // Experiment 5
     @GetMapping("/foodsearch/{foodName}")
     public String bigMac(@PathVariable String foodName) {
         String uri = "https://trackapi.nutritionix.com/v2//search/instant?query=" + foodName;
