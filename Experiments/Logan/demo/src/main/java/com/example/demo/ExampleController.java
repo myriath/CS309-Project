@@ -1,24 +1,10 @@
 package com.example.demo;
 
-import com.example.demo.rest.User;
-import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.net.http.HttpRequest;
 
 @RestController
 class ExampleController {
