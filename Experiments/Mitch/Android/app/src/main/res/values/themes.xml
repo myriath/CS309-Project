@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CS309Android" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:colorPrimary">@color/carb</item>
+        <item name="android:colorPrimaryDark">@color/darkcarb</item>
+        <item name="android:colorAccent">@color/protein</item>
+
+        <item name="android:colorButtonNormal">@color/carb</item>
+    </style>
+
+    
+<!--    <style name="ButtonMain" parent="android:Widget.Button">-->
+<!--        <item name="android:padding">8dp</item>-->
+<!--        <item name="android:layout_margin">8dp</item>-->
+
+<!--        <item name="android:textColor">@color/white</item>-->
+<!--        <item name="android:backgroundTint">@color/protein</item>-->
+<!--    </style>-->
+
+<!--    <style name="ButtonGray" parent="android:Widget.Button">-->
+<!--        <item name="android:padding">8dp</item>-->
+<!--        <item name="android:layout_margin">8dp</item>-->
+
+<!--&lt;!&ndash;        <item name="android:textColor">@color/gray</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:backgroundTint">@color/lightgray</item>&ndash;&gt;-->
+<!--    </style>-->
+</resources>
