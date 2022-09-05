@@ -1,11 +1,9 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.TAGS.TAG_GET;
 import static com.example.cs309android.util.Constants.TAGS.TAG_POST;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import static com.example.cs309android.util.Constants.LOGIN_URL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,17 +13,20 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.CallbackFragment;
 import com.example.cs309android.fragments.LoginFragment;
 import com.example.cs309android.fragments.RegisterFragment;
 import com.example.cs309android.models.RequestHandler;
+import com.example.cs309android.util.NukeSSLCerts;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +52,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // TODO: Remove for production
+        if (DEBUG) {
+            NukeSSLCerts.nuke();
+        }
+
         setContentView(R.layout.activity_main);
 
         pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -58,23 +65,24 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         String username = pref.getString("username", null);
         String encodedHash = pref.getString("enc_hash", null);
         if (username != null && encodedHash != null) {
-            byte[] hashB64 = Base64.decode(encodedHash, Base64.DEFAULT);
-            if (DEBUG) {
-                Log.i("B64 decode", Arrays.toString(hashB64));
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("username", username);
+                jsonBody.put("hash", encodedHash);
+
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
+                        (Response.Listener<JSONObject>) response -> {
+                            try {
+                                int result = response.getInt("result");
+                                if (result != RESULT_LOGGED_IN) startLoginFragment();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }, error -> startLoginFragment());
+                RequestHandler.getInstance(this).add(request);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            JsonObjectRequest request = new JsonObjectRequest("https://localhost:8080/greeting",
-                (Response.Listener<JSONObject>) response -> {
-                    try {
-                        Log.i("JSONRESPONSE", response.toString(2));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-                    Log.e("JSONRESPONSE", error.getMessage());
-//                    startLoginFragment();
-            });
-            RequestHandler.getInstance(this).add(request);
-            // TODO: Check for login on db
         } else {
             startLoginFragment();
         }
@@ -87,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                     (Response.Listener<String>) response -> {
                         textView.setText("Response is: " + response.substring(0, 500));
                     }, (Response.ErrorListener) error -> {
-                        textView.setText(error.getMessage());
-                    }
+                textView.setText(error.getMessage());
+            }
             );
 
             stringRequest.setTag(TAG_GET);
@@ -103,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                     (Response.Listener<String>) response -> {
                         textView.setText("Response is: " + response.substring(0, 500));
                     }, (Response.ErrorListener) error -> {
-                        textView.setText(error.getMessage());
-                    }
+                textView.setText(error.getMessage());
+            }
             );
 
             stringRequest.setTag(TAG_POST);

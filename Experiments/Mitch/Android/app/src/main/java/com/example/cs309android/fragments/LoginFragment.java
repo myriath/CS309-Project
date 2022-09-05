@@ -1,5 +1,9 @@
 package com.example.cs309android.fragments;
 
+import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.RESULT_OK;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,16 +11,25 @@ import android.util.Base64;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.models.RequestHandler;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Hasher;
+import com.example.cs309android.util.Toaster;
 
-import java.nio.charset.StandardCharsets;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,27 +95,77 @@ public class LoginFragment extends Fragment {
 
             spin(view);
 
-            // TODO: Check for valid unm/pwd on db
-            // If invalid don't forget to remove spinner
+            JSONObject bodyJson = new JSONObject();
+            try {
+                bodyJson.put("username", unm);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JsonObjectRequest saltRequest = new JsonObjectRequest(Request.Method.POST, Constants.SALT_URL, bodyJson,
+                    (Response.Listener<JSONObject>) response -> {
+                        try {
+                            int result = response.getInt("result");
+                            if (result == RESULT_ERROR_USER_HASH_MISMATCH) {
+                                passwordField.setError("Username / Password mismatch");
+                                unSpin(view);
+                                return;
+                            } else if (result != RESULT_OK) {
+                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                Log.e("Error", response.toString());
+                                Log.e("Error", String.valueOf(result));
+                                unSpin(view);
+                                return;
+                            }
 
-            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("username", unm);
-            editor.putString("enc_hash", Base64.encodeToString(
-                            /* TODO: Replace this with the db hash */
-                            pwd.getBytes(StandardCharsets.UTF_8),
-                            Base64.DEFAULT));
-            editor.apply();
+                            byte[] salt = Base64.decode(response.getString("salt"), Base64.DEFAULT);
+                            byte[] hash = Hasher.hash(pwd.toCharArray(), salt);
 
-            unSpin(view);
+                            bodyJson.put("hash", Base64.encodeToString(hash, Base64.DEFAULT));
+                            JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL, bodyJson,
+                                    (Response.Listener<JSONObject>) response1 -> {
+                                        try {
+                                            int result1 = response1.getInt("result");
+                                            if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
+                                                passwordField.setError("Username / Password mismatch");
+                                                unSpin(view);
+                                                return;
+                                            } else if (result1 != RESULT_LOGGED_IN) {
+                                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                                unSpin(view);
+                                                return;
+                                            }
 
-            this.requireActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
-                    .remove(LoginFragment.this)
-                    .commit();
-            callbackFragment.closeFragment();
+                                            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = pref.edit();
+                                            editor.putString("username", unm);
+                                            editor.putString("enc_hash", Base64.encodeToString(hash, Base64.DEFAULT));
+                                            editor.apply();
+
+                                            unSpin(view);
+
+                                            this.requireActivity()
+                                                    .getSupportFragmentManager()
+                                                    .beginTransaction()
+                                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
+                                                    .remove(LoginFragment.this)
+                                                    .commit();
+                                            callbackFragment.closeFragment();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> {
+                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                Log.e("Error", error.getMessage());
+                                unSpin(view);
+                            });
+                            RequestHandler.getInstance(this.getActivity()).add(loginRequest);
+                        } catch (JSONException ignored) {}
+                    }, error -> {
+                Toaster.toastShort("Unexpected error", this.getActivity());
+                Log.e("Error", error.getMessage());
+                unSpin(view);
+            });
+            RequestHandler.getInstance(this.getActivity()).add(saltRequest);
         });
 
         registerButton.setOnClickListener(view1 -> {
@@ -113,6 +176,24 @@ public class LoginFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void finishLogin(String username, byte[] hash, View view) {
+        SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("username", username);
+        editor.putString("enc_hash", Base64.encodeToString(hash, Base64.DEFAULT));
+        editor.apply();
+
+        unSpin(view);
+
+        this.requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
+                .remove(LoginFragment.this)
+                .commit();
+        callbackFragment.closeFragment();
     }
 
     public void spin(View view) {

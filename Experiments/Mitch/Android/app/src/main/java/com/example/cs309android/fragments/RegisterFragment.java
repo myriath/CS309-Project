@@ -1,5 +1,12 @@
 package com.example.cs309android.fragments;
 
+import static com.example.cs309android.util.Constants.REGISTER_URL;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,16 +14,25 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.models.RequestHandler;
 import com.example.cs309android.util.Hash;
 import com.example.cs309android.util.Hasher;
+import com.example.cs309android.util.Toaster;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,24 +121,55 @@ public class RegisterFragment extends Fragment {
             spin(view);
 
             Hash pwdHash = Hasher.generateNewHash(passwordField.getText().toString().toCharArray());
-            // TODO: Send data to database to create new account, check for collisions, etc.
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("username", unm);
+                jsonBody.put("email", email);
+                jsonBody.put("salt", Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim());
+                jsonBody.put("hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT).trim());
+                JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonBody, (Response.Listener<JSONObject>) response -> {
+                    try {
+                        int result = response.getInt("result");
+                        if (result == RESULT_ERROR_USERNAME_TAKEN) {
+                            usernameField.setError("Username taken");
+                            unSpin(view);
+                            return;
+                        } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
+                            emailField.setError("Account already exists");
+                            unSpin(view);
+                            return;
+                        } else if (result != RESULT_USER_CREATED) {
+                            Toaster.toastShort("Unexpected error", this.getActivity());
+                            unSpin(view);
+                            return;
+                        }
 
-            // TODO: If valid, set prefs
-            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("username", unm);
-            editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
-            editor.apply();
+                        SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("username", unm);
+                        editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
+                        editor.apply();
 
-            unSpin(view);
+                        unSpin(view);
 
-            this.requireActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right)
-                    .remove(RegisterFragment.this)
-                    .commit();
-            callbackFragment.closeFragment();
+                        this.requireActivity()
+                                .getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right)
+                                .remove(RegisterFragment.this)
+                                .commit();
+                        callbackFragment.closeFragment();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    Toaster.toastShort("Unexpected error", this.getActivity());
+                    unSpin(view);
+                });
+                RequestHandler.getInstance(this.getActivity()).add(registerRequest);
+            } catch (JSONException e) {
+                Toaster.toastShort("Unexpected Error", this.getActivity());
+            }
         });
 
         // Inflate the layout for this fragment
