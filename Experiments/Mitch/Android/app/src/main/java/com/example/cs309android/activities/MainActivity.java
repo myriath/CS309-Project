@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                     }
                 }, error -> {
                     Log.e("JSONRESPONSE", error.getMessage());
-//                    startLoginFragment(); Test Change
+//                    startLoginFragment();
             });
             RequestHandler.getInstance(this).add(request);
             // TODO: Check for login on db
