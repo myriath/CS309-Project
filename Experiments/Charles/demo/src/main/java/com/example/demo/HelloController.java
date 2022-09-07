@@ -6,18 +6,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 import static java.lang.Integer.parseInt;
+
+/*
+C - create - post
+R - read - Get
+U - update - put
+D - Delete - delete
+L - list - get
+ */
+
+// create a list that could be used for the test, may be necessary
 
 
 @RestController
 public class HelloController {
-    int hellp = 99;
+
+    ArrayList<String> Fox = new ArrayList<String>();
 
     @GetMapping("/")
     public String index() {
         return "Hello World!";
     }
-
 
     @GetMapping("/getHelp")
     public String getHelp() {
@@ -55,25 +67,48 @@ public class HelloController {
     }
 
 
+    //Fox Playground
 
 
-/*
-    @RequestMapping(value = "/deleteHelp", method = {RequestMethod.GET, RequestMethod.DELETE})
-    public void noHelp() {
-        hellp = 0;
+    @PostMapping("/PostFox/{fox}")  //create
+    public String PostFox(@RequestBody String fox) {
+
+        if(Fox.add(fox)) {
+            return "Added";
+        }
+        return "Failed";
     }
 
-    @RequestMapping(value = "/post/{id}", method = {RequestMethod.GET, RequestMethod.POST})
-    public void postHelp(@PathVariable String id) {
-        hellp = parseInt(id);
+    @GetMapping("/getFoxSpec/{id}")  //Read
+    public String getFoxSpec(@PathVariable String id) {
+        int index = parseInt(id);
+        String out = Fox.get(index);
+        return out;
     }
 
-    @RequestMapping(value = "/putHelp", method = {RequestMethod.GET, RequestMethod.PUT})
-    public void putHelp() {
-        hellp = 9;
+    @PutMapping("/putFox/{id},{Fox}") //Update
+    public String PutFox(@PathVariable String id, @PathVariable String Fox) {
+        this.Fox.set(parseInt(id), Fox);
+        return "Updated";
+
     }
 
-*/
+    @DeleteMapping("/deleteFox") //delete
+    @ResponseBody
+    public String deleteFox(@RequestParam(required = false) String index) {
+        Fox.remove(parseInt(index));
+        return "Fox removed, You monster";
+    }
+
+    @GetMapping("/getFox")  //List
+    public ArrayList<String> getFox() {
+        return Fox;
+    }
+
+
+
+
+
 
 }
 
