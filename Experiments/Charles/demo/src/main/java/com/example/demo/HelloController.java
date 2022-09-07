@@ -25,14 +25,14 @@ public class HelloController {
     }
 
     @DeleteMapping("/deleteHelp2")
-    public int NoneHelp() {
-        return 0;
+    public String NoneHelp() {
+        return "Good call, No clue why this exist";
     }
 
     @PostMapping("/PostHelp/{id}")
     public String PostHelp(@PathVariable String id) {
 
-        return id;
+        return "Your Input: " + id;
     }
 
     @PostMapping("/PostHelp")
@@ -48,6 +48,11 @@ public class HelloController {
         return out;
     }
 
+    @GetMapping("/GetHelpParam")
+    @ResponseBody
+    public String wooloo(@RequestParam(required = false) String id) {
+        return "Id: " +id;
+    }
 
 
 
