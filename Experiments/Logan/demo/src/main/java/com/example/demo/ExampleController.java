@@ -104,18 +104,23 @@ class ExampleController {
     @GetMapping("/foodsearchobject/{foodName}")
     public String foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
         String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
+
+        // Initialize a new rest template and a new set of headers
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
+        // Set API ID and API key as request headers
         headers.set("x-app-id", "b7e6f2dc");
         headers.set("x-app-key", "c24ea00b49959892af532ec574e91165");
 
-        //Create a new HttpEntity
+        // Create a new HttpEntity using the headers
         final HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        // Gather a response entity from the designated URI as a String
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 uri, HttpMethod.GET, entity, String.class);
 
+        // Read the response body into a Java Object of type "Example" from the rest package
         com.example.demo.rest.Example responseObject = objectMapper.readValue(responseEntity.getBody(), Example.class);
 
         String[] foodItems = new String[responseObject.getBranded().size()];
