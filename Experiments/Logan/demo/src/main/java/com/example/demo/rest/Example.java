@@ -2,6 +2,7 @@
 package com.example.demo.rest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -13,37 +14,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "lat",
-    "lng"
+    "branded",
+    "self",
+    "common"
 })
 @Generated("jsonschema2pojo")
-public class Geo {
+public class Example {
 
-    @JsonProperty("lat")
-    private String lat;
-    @JsonProperty("lng")
-    private String lng;
+    @JsonProperty("branded")
+    private List<Branded> branded = null;
+    @JsonProperty("self")
+    private List<Self> self = null;
+    @JsonProperty("common")
+    private List<Common> common = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("lat")
-    public String getLat() {
-        return lat;
+    @JsonProperty("branded")
+    public List<Branded> getBranded() {
+        return branded;
     }
 
-    @JsonProperty("lat")
-    public void setLat(String lat) {
-        this.lat = lat;
+    @JsonProperty("branded")
+    public void setBranded(List<Branded> branded) {
+        this.branded = branded;
     }
 
-    @JsonProperty("lng")
-    public String getLng() {
-        return lng;
+    @JsonProperty("self")
+    public List<Self> getSelf() {
+        return self;
     }
 
-    @JsonProperty("lng")
-    public void setLng(String lng) {
-        this.lng = lng;
+    @JsonProperty("self")
+    public void setSelf(List<Self> self) {
+        this.self = self;
+    }
+
+    @JsonProperty("common")
+    public List<Common> getCommon() {
+        return common;
+    }
+
+    @JsonProperty("common")
+    public void setCommon(List<Common> common) {
+        this.common = common;
     }
 
     @JsonAnyGetter
