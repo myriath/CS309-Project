@@ -58,7 +58,7 @@ class ExampleController {
         return res;
     }
 
-    // Experiment 4
+    // Experiment 4.1
     @GetMapping("/bigMac")
     public String bigMac() {
         String uri = "https://trackapi.nutritionix.com/v2//search/instant?query=Big Mac";
@@ -79,7 +79,7 @@ class ExampleController {
         return res;
     }
 
-    // Experiment 5
+    // Experiment 4.2
     @GetMapping("/foodsearch/{foodName}")
     public String foodSearch(@PathVariable String foodName) {
         String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
@@ -100,7 +100,7 @@ class ExampleController {
         return res;
     }
 
-    // Experiment 6
+    // Experiment 5
     @GetMapping("/foodsearchobject/{foodName}")
     public String foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
         String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
@@ -125,18 +125,19 @@ class ExampleController {
             com.example.demo.rest.Branded newFoodItem = responseObject.getBranded().get(i);
             res += "Food Item Name: ";
             res += newFoodItem.getFoodName();
-            res += "\n";
+            res += "<br>";
 
             res += "Calories: ";
             res += newFoodItem.getNfCalories();
-            res += "\n";
+            res += "<br>";
 
             res += "Serving Size: ";
             res += newFoodItem.getServingQty();
+            res += " ";
             res += newFoodItem.getServingUnit();
-            res += "\n";
+            res += "<br>";
 
-            res += "     |     ";
+            res += "<br>";
         }
 
         return res;
