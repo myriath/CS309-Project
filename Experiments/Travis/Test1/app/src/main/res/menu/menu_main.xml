@@ -9,5 +9,5 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/frag_1_test"
-        android:title="Fragment 1" />
+        android:title="Test Menu" />
 </menu>
