@@ -1,20 +1,21 @@
 package com.example.demo;
 
-import com.example.demo.rest.Example;
+import com.example.demo.rest.Common;
+import com.example.demo.rest.Food;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 @RestController
 class ExampleController {
+
+    ArrayList<String> exampleList = new ArrayList<>();
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -121,7 +122,7 @@ class ExampleController {
                 uri, HttpMethod.GET, entity, String.class);
 
         // Read the response body into a Java Object of type "Example" from the rest package
-        com.example.demo.rest.Example responseObject = objectMapper.readValue(responseEntity.getBody(), Example.class);
+        Food responseObject = objectMapper.readValue(responseEntity.getBody(), Food.class);
 
         String[] foodItems = new String[responseObject.getBranded().size()];
         String res = "";
@@ -149,7 +150,39 @@ class ExampleController {
 
     }
 
+    // Experiment 6: Example CRUDL Functionality
+    @GetMapping("/getFoods")
+    public @ResponseBody ArrayList<String> getAllFoods() {
+        return exampleList;
+    }
 
+    @PostMapping("/newFood")
+    public @ResponseBody String addFood(@RequestBody Common food) {
+        System.out.println(food);
+        exampleList.add(food.getFoodName());
+        return "New food added to list: " + food.getFoodName();
+    }
+
+    @GetMapping("/foodList/{foodName}")
+    public @ResponseBody String getFoodByName(@PathVariable String foodName) {
+        String p = "Food does not exist in list!";
+        if (exampleList.contains(foodName)) {
+            p = exampleList.get(exampleList.indexOf(foodName));
+        }
+        return p;
+    }
+
+    @PutMapping("/foodList/{foodName}")
+    public @ResponseBody String updatePerson(@PathVariable String foodName, @RequestBody Common p) {
+        exampleList.add(exampleList.indexOf(p.getFoodName()), foodName);
+        return exampleList.get(exampleList.indexOf(foodName));
+    }
+
+    @DeleteMapping("/foodList/{foodName}")
+    public @ResponseBody ArrayList<String> deleteFoodName(@PathVariable String foodName) {
+        exampleList.remove(foodName);
+        return exampleList;
+    }
 
 
 
