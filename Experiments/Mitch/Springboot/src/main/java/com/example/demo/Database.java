@@ -6,6 +6,7 @@ import java.util.HashMap;
 /**
  * Database class that uses a hashmap
  * TODO: Replace with actual database calls
+ * EXPERIMENT 4
  *
  * @author Mitch Hudson
  */

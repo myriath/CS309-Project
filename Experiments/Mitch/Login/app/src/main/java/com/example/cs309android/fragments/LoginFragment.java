@@ -35,6 +35,7 @@ import org.json.JSONObject;
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * EXPERIMENT 1
  */
 public class LoginFragment extends Fragment {
     Button loginButton, registerButton;

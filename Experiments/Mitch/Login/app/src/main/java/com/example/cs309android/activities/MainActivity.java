@@ -33,6 +33,12 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+/**
+ * Main activity
+ * EXPERIMENT 1, 2
+ *
+ * @author Mitch Hudson
+ */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
     // TODO: False for prod
     public static final boolean DEBUG = true;

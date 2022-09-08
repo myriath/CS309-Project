@@ -13,6 +13,7 @@ import java.util.Arrays;
 /**
  * Authentication rest controller
  * Controls requests under the /auth path, allowing users to sign in and register
+ * EXPERIMENT 4
  *
  * @author Mitch Hudson
  */

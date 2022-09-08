@@ -38,6 +38,7 @@ import org.json.JSONObject;
  * A simple {@link Fragment} subclass.
  * Use the {@link RegisterFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * EXPERIMENT 1
  */
 public class RegisterFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
