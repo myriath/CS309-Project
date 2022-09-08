@@ -18,6 +18,14 @@ import java.util.Arrays;
  */
 @Configuration
 public class SecurityConfig {
+
+    /**
+     * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
+     * TODO: Stop disabling CORS and CSRF.
+     * @param http          HTTP request
+     * @return              Built HTTP request
+     * @throws Exception    Errors
+     */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.cors().and().csrf().disable()
@@ -28,6 +36,12 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * This allows requests from all sources.
+     * TODO: Remove or change to fit our needs, allowing all is INSECURE
+     *
+     * @return  Configured source
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
