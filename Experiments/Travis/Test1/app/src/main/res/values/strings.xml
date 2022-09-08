@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Test1</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Travis Massner Bio</string>
+    <string name="second_fragment_label">More about Travis</string>
+    <string name="next">See more about him</string>
+    <string name="previous">Go back</string>
+    <string name="text_for_button">I do not know what to use here</string>
+    <string name="hello_first_fragment">Travis Massner</string>
+    <string name="hello_first_fragment1">- 6\'8\" tall</string>
+    <string name="hello_first_fragment2">- Enjoys hiking and camping</string>
+    <string name="hello_first_fragment3">- Small experience with Android Studio</string>
+    <string name="hello_first_fragment4">More facts about him</string>
+    <string name="hello_first_fragment5">- Can play the cello</string>
+    <string name="hello_first_fragment6">- Juggles occasionaly</string>
+    <string name="hello_first_fragment7">- Went camping for 30 days straight in 2020</string>
+    <string name="hello_first_fragment8">- Can dunk a basketball</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+</resources>
