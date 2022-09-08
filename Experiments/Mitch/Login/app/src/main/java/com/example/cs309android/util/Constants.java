@@ -23,7 +23,7 @@ public class Constants {
     /**
      * Base url for the server to connect to.
      */
-    public static final String SERVER_URL = "https://10.48.19.106:8443/";
+    public static final String SERVER_URL = "https://10.48.19.167:8443/";
     /**
      * Base auth url for all authentication requests
      */

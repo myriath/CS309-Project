@@ -33,6 +33,7 @@ public class Authentication {
     public String getSalt(@RequestBody String json) {
         JSONObject obj = new JSONObject(json);
         Database.User user = Database.get(obj.getString("username"));
+        System.out.println("SALT: " + user);
         if (user == null) return "{\"result\":" + RESULT_ERROR_USER_HASH_MISMATCH + "}";
 
         return "{\"result\":" + RESULT_OK + ",\"salt\":\"" + user.getEncodedSalt() + "\"}";
@@ -42,6 +43,7 @@ public class Authentication {
     public String login(@RequestBody String json) {
         JSONObject obj = new JSONObject(json);
         Database.User user = Database.get(obj.getString("username"));
+        System.out.println("LOGIN: " + user);
         if (user == null) return "{\"result\":" + RESULT_ERROR_USER_HASH_MISMATCH + "}";
         else if (user.getEncodedHash().trim().equals(obj.getString("hash").trim())) return "{\"result\":" + RESULT_LOGGED_IN + "}";
 
@@ -60,11 +62,13 @@ public class Authentication {
         }
 
         try {
-            Database.put(new Database.User(
+            Database.User user1 = new Database.User(
                     obj.getString("username"),
                     obj.getString("email"),
                     Base64.decodeBase64(obj.getString("salt")),
-                    Base64.decodeBase64(obj.getString("hash"))));
+                    Base64.decodeBase64(obj.getString("hash")));
+            System.out.println("REGISTER: " + user1);
+            Database.put(user1);
         } catch (Exception e) {
             e.printStackTrace();
             return "{\"result\":" + RESULT_ERROR + "}";
