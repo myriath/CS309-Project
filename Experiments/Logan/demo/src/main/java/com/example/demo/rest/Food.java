@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "common"
 })
 @Generated("jsonschema2pojo")
-public class Example {
+public class Food {
 
     @JsonProperty("branded")
     private List<Branded> branded = null;

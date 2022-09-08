@@ -10,6 +10,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Security config to enable HTTPS and disable CORS
+ * EXPERIMENT 5
+ *
+ * @author Mitch Hudson
+ */
 @Configuration
 public class SecurityConfig {
     @Bean

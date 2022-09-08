@@ -15,6 +15,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * Static class that ignores self signed certificates
  * TODO: REMOVE FOR PRODUCTION
+ * EXPERIMENT 5
  *
  * @author Code borrowed from: https://stackoverflow.com/a/44905278
  */

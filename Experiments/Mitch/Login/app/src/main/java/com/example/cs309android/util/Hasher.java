@@ -12,6 +12,7 @@ import javax.crypto.spec.PBEKeySpec;
 /**
  * Static Hasher utility class designed to streamline the secure generation of
  * hashes from given passwords.
+ * EXPERIMENT 3
  *
  * @author Mitch Hudson
  */
