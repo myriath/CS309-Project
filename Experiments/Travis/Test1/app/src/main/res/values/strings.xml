@@ -2,11 +2,11 @@
     <string name="app_name">Test1</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="first_fragment_label">Label number 1 test</string>
+    <string name="second_fragment_label">Label number 2 test</string>
+    <string name="next">Go to second frag</string>
+    <string name="previous">Go back please</string>
+    <string name="text_for_button">I do not know what to use here</string>
+    <string name="hello_first_fragment">I\'m smart so I changed this</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
