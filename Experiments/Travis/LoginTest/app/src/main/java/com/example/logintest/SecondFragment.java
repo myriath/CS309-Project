@@ -30,6 +30,7 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.textviewSecond.setText("Here's your username: " + FirstFragment.name);
         binding.textView.setText("Here's your password: " + FirstFragment.password);
+
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
