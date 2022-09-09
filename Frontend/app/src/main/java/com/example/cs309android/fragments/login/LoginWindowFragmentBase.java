@@ -1,10 +1,11 @@
-package com.example.cs309android.fragments;
+package com.example.cs309android.fragments.login;
 
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.R;
+import com.example.cs309android.interfaces.CallbackFragment;
 
 /**
  * Abstract helper class containing methods used by {@link LoginFragment} and {@link RegisterFragment}

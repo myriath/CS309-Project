@@ -1,4 +1,4 @@
-package com.example.cs309android.fragments;
+package com.example.cs309android.fragments.login;
 
 import static com.example.cs309android.util.Constants.REGISTER_URL;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
@@ -21,9 +21,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.Hash;
-import com.example.cs309android.models.RequestHandler;
-import com.example.cs309android.util.Hasher;
+import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.security.Hasher;
 
 import org.json.JSONException;
 import org.json.JSONObject;

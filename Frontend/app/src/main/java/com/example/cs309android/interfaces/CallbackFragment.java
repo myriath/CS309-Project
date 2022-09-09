@@ -1,4 +1,4 @@
-package com.example.cs309android.fragments;
+package com.example.cs309android.interfaces;
 
 /**
  * Interface to allow callback methods for controlling fragment activity

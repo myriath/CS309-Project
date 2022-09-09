@@ -14,12 +14,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
-import com.example.cs309android.fragments.CallbackFragment;
-import com.example.cs309android.fragments.LoginFragment;
-import com.example.cs309android.fragments.LoginWindowFragmentBase;
-import com.example.cs309android.fragments.RegisterFragment;
-import com.example.cs309android.models.RequestHandler;
-import com.example.cs309android.util.NukeSSLCerts;
+import com.example.cs309android.fragments.login.LoginFragment;
+import com.example.cs309android.fragments.login.LoginWindowFragmentBase;
+import com.example.cs309android.fragments.login.RegisterFragment;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.security.NukeSSLCerts;
 
 import org.json.JSONException;
 import org.json.JSONObject;

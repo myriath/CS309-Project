@@ -1,4 +1,4 @@
-package com.example.cs309android.util;
+package com.example.cs309android.util.security;
 
 import com.example.cs309android.models.Hash;
 
