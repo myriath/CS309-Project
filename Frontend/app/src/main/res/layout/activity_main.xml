@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/logoutButton"
+            android:fitsSystemWindows="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/logout"
@@ -20,22 +21,29 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/navbar"
+            android:id="@+id/loginPopup"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:name="com.example.cs309android.fragments.NavbarFragment">
+            android:layout_height="match_parent"
+            android:elevation="10dp"
+            android:foregroundGravity="center" />
 
-        </androidx.fragment.app.FragmentContainerView>
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/navbar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:menu="@menu/bottom_nav_menu"
+            app:navigationIcon="@drawable/ic_add" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:contentDescription="TODO"-->
+<!--            app:layout_anchor="@id/navbar"-->
+<!--            app:srcCompat="@drawable/ic_add" />-->
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/loginPopup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="10dp"
-        android:foregroundGravity="center" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

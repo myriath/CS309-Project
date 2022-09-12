@@ -1,13 +1,37 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.CS309Android" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:colorPrimary">@color/carb</item>
-        <item name="android:colorPrimaryDark">@color/darkcarb</item>
-        <item name="android:colorAccent">@color/protein</item>
+    <style name="Theme.CS309Android" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
 
-        <item name="android:colorButtonNormal">@color/carb</item>
+        <item name="colorPrimary">@color/carb</item>
+        <item name="colorPrimaryDark">@color/darkcarb</item>
+        <item name="colorSecondary">@color/protein</item>
+        <item name="colorTertiary">@color/oil</item>
+
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="colorPrimaryContainer">@color/darkprotein</item>
+        <item name="colorSecondaryContainer">@color/darkcarb</item>
+        <item name="colorTertiaryContainer">@color/darkoil</item>
+
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="colorOnTertiaryContainer">@color/white</item>
     </style>
 
+    <style name="PrimaryButton" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/protein</item>
+    </style>
+
+    <style name="PrimaryEText" parent="Widget.Material3.TextInputEditText.FilledBox">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textCursorDrawable">@drawable/light_cursor</item>
+        <item name="android:backgroundTint">@color/gray</item>
+    </style>
     
 <!--    <style name="ButtonMain" parent="android:Widget.Button">-->
 <!--        <item name="android:padding">8dp</item>-->

@@ -7,16 +7,20 @@
 <!--    <color name="teal_700">#FF018786</color>-->
 
     <color name="black">#FF000000</color>
+    <color name="darkgray">#FF222222</color>
     <color name="gray">#FF424242</color>
     <color name="lightgray">#C6C6C6</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="oil">#FFDBCE1A</color>
-    <color name="darkoil">#FFBAAF16</color>
+    <color name="oil">#B1B614</color>
+    <color name="darkoil">#585A09</color>
 
-    <color name="carb">#FF6D7DF7</color>
-    <color name="darkcarb">#FF3C48AB</color>
+    <color name="carb">#2A3CC3</color>
+    <color name="desatcarb">#31396C</color>
+    <color name="darkcarb">#262F7A</color>
 
-    <color name="protein">#FFF74C39</color>
-    <color name="darkprotein">#C52715</color>
+    <color name="protein">#B33224</color>
+    <color name="darkprotein">#6A0F05</color>
+
+    <color name="bg">#1C1B1F</color>
 </resources>

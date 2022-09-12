@@ -6,9 +6,19 @@ import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,6 +30,8 @@ import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
@@ -80,6 +93,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         }
 
         setContentView(R.layout.activity_main);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, windowInsets) -> {
+//            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemGestures());
+//            // Apply the insets as padding to the view. Here we're setting all of the
+//            // dimensions, but apply as appropriate to your layout. You could also
+//            // update the views margin if more appropriate.
+//            getWindow().getDecorView().setPadding(insets.left, insets.top, insets.right, insets.bottom);
+//
+//            // Return CONSUMED if we don't want the window insets to keep being passed
+//            // down to descendant views.
+//            return WindowInsetsCompat.CONSUMED;
+//        });
 
         // Gets stored username and password hash, if they exist
         pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -112,14 +141,30 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         }
 
         // Logout button removes stored creds and prompts login
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(view -> {
+        Button logout = findViewById(R.id.logoutButton);
+        logout.setOnClickListener(view -> {
             SharedPreferences.Editor editor = pref.edit();
             editor.remove("username");
             editor.remove("enc_hash");
             editor.apply();
             startLoginFragment();
         });
+        ViewCompat.setOnApplyWindowInsetsListener(logout, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        BottomAppBar navbar = findViewById(R.id.navbar);
+        navbar.setOnClickListener(view -> {
+            System.out.println("nav press");
+        });
+        navbar.setOnMenuItemClickListener(menuItem -> {
+            System.out.println(menuItem.getItemId());
+            return true;
+        });
+
+//        BottomNavigationView bottomNav = findViewById(R.id.navbar);
     }
 
     /**
@@ -166,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginFragment() {
-        findViewById(R.id.mainLayout).setAlpha(0.5f);
+//        findViewById(R.id.mainLayout).setAlpha(0.5f);
         findViewById(R.id.loginPopup).setClickable(true);
 
         loginWindowFragment = new LoginFragment();

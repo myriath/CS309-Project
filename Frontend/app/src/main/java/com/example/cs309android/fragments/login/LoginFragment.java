@@ -24,9 +24,12 @@ import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.security.Hasher;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 /**
  * Login fragment that makes up the Login page.
@@ -36,7 +39,7 @@ import org.json.JSONObject;
  */
 public class LoginFragment extends LoginWindowFragmentBase {
     Button loginButton, registerButton;
-    EditText usernameField, passwordField;
+    TextInputLayout usernameField, passwordField;
 
     /**
      * Ran whenever the fragment is shown.
@@ -62,8 +65,8 @@ public class LoginFragment extends LoginWindowFragmentBase {
         registerButton = view.findViewById(R.id.buttonRegister);
 
         loginButton.setOnClickListener(view1 -> {
-            String unm = usernameField.getText().toString();
-            String pwd = passwordField.getText().toString();
+            String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
+            String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
 
             // Checks for empty fields
             if (unm.equals("")) {

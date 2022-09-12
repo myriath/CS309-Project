@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:contentDescription="@string/home"
+        android:enabled="true"
         android:id="@+id/home"
         android:title="@string/home"
         android:icon="@drawable/ic_home" />
     <item
+        android:contentDescription="@string/settings"
+        android:enabled="true"
         android:id="@+id/settings"
         android:title="@string/settings"
         android:icon="@drawable/ic_settings" />
     <item
+        android:contentDescription="@string/nutrition"
+        android:enabled="true"
         android:id="@+id/nutrition"
         android:title="@string/nutrition"
         android:icon="@drawable/ic_nutrition" />
     <item
+        android:contentDescription="@string/recipes"
+        android:enabled="true"
         android:id="@+id/recipes"
         android:title="@string/recipes"
         android:icon="@drawable/ic_recipes" />
     <item
+        android:contentDescription="@string/shopping_list"
+        android:enabled="true"
         android:id="@+id/shopping"
         android:title="@string/shopping_list"
         android:icon="@drawable/ic_shopping_list" />

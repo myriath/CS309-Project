@@ -24,9 +24,12 @@ import com.example.cs309android.models.Hash;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.security.Hasher;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 /**
  * Register fragment that makes up the Register new user page.
@@ -36,7 +39,7 @@ import org.json.JSONObject;
  */
 public class RegisterFragment extends LoginWindowFragmentBase {
     Button registerButton;
-    EditText usernameField, emailField, passwordField, passwordField2;
+    TextInputLayout usernameField, emailField, passwordField, passwordField2;
 
     /**
      * Ran whenever the fragment is shown.
@@ -63,10 +66,10 @@ public class RegisterFragment extends LoginWindowFragmentBase {
 
         registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
-            String unm = usernameField.getText().toString();
-            String email = emailField.getText().toString();
-            String pwd = passwordField.getText().toString();
-            String pwd2 = passwordField2.getText().toString();
+            String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
+            String email = Objects.requireNonNull(emailField.getEditText()).getText().toString();
+            String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
+            String pwd2 = Objects.requireNonNull(passwordField2.getEditText()).getText().toString();
 
             // Basic checks for empty/non-matching fields.
             // More checks should be ran serverside for duplicate accounts.
@@ -91,7 +94,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
             spin(view);
 
             // Generates a new hash with the given password.
-            Hash pwdHash = Hasher.generateNewHash(passwordField.getText().toString().toCharArray());
+            Hash pwdHash = Hasher.generateNewHash(pwd.toCharArray());
             try {
                 // Put required data into the request body
                 JSONObject jsonBody = new JSONObject();
