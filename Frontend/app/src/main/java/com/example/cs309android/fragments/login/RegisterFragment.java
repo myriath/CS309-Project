@@ -13,10 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
@@ -59,6 +62,8 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                              Bundle savedInstanceState) {
         // Inflates the view and sets class variables for buttons/edit texts
         View view = inflater.inflate(R.layout.fragment_register, container, false);
+        ((TextView) view.findViewById(R.id.welcomeMsgTextView)).setText(getResources().getString(R.string.welcome_msg, MainActivity.APP_NAME));
+
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
         passwordField = view.findViewById(R.id.passwordField);
@@ -66,6 +71,10 @@ public class RegisterFragment extends LoginWindowFragmentBase {
 
         registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
+            emailField.setError(null);
+            usernameField.setError(null);
+            passwordField.setError(null);
+            passwordField2.setError(null);
             String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
             String email = Objects.requireNonNull(emailField.getEditText()).getText().toString();
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
@@ -73,13 +82,13 @@ public class RegisterFragment extends LoginWindowFragmentBase {
 
             // Basic checks for empty/non-matching fields.
             // More checks should be ran serverside for duplicate accounts.
-            if (unm.equals("")) {
-                usernameField.setError("Username can't be empty");
-                usernameField.requestFocus();
-                return;
-            } else if (email.equals("")) {
-                emailField.setError("Email can't be empty");
+            if (email.equals("")) {
+                emailField.setError("Username can't be empty");
                 emailField.requestFocus();
+                return;
+            } else if (unm.equals("")) {
+                usernameField.setError("Email can't be empty");
+                usernameField.requestFocus();
                 return;
             } else if (pwd.equals("")) {
                 passwordField.setError("Password can't be empty");
@@ -102,7 +111,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                 jsonBody.put("email", email);
                 jsonBody.put("salt", Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim());
                 jsonBody.put("hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT).trim());
-                JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonBody, (Response.Listener<JSONObject>) response -> {
+                JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonBody, response -> {
                     try {
                         // Check for errors.
                         int result = response.getInt("result");
@@ -141,6 +150,12 @@ public class RegisterFragment extends LoginWindowFragmentBase {
             } catch (JSONException e) {
                 Toaster.toastShort("Unexpected Error", this.getActivity());
             }
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
         });
 
         // Inflate the layout for this fragment

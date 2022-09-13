@@ -50,6 +50,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final boolean DEBUG = true;
 
     /**
+     * Name of the app for all mentions in the app
+     * TODO: Name the app
+     */
+    public static final String APP_NAME = "TEST";
+
+    /**
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 jsonBody.put("hash", encodedHash);
 
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
-                        (Response.Listener<JSONObject>) response -> {
+                        response -> {
                             // Checks if the result is valid or not. If not, opens the login page
                             try {
                                 int result = response.getInt("result");

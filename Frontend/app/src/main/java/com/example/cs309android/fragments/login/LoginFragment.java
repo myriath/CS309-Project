@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
@@ -67,6 +69,8 @@ public class LoginFragment extends LoginWindowFragmentBase {
         loginButton.setOnClickListener(view1 -> {
             String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
+            usernameField.setError(null);
+            passwordField.setError(null);
 
             // Checks for empty fields
             if (unm.equals("")) {
@@ -86,7 +90,7 @@ public class LoginFragment extends LoginWindowFragmentBase {
                 JSONObject bodyJson = new JSONObject();
                 bodyJson.put("username", unm);
                 JsonObjectRequest saltRequest = new JsonObjectRequest(Request.Method.POST, Constants.SALT_URL, bodyJson,
-                        (Response.Listener<JSONObject>) response -> {
+                        response -> {
                             try {
                                 // Check for errors.
                                 int result = response.getInt("result");
@@ -109,7 +113,7 @@ public class LoginFragment extends LoginWindowFragmentBase {
                                 // Put the hash into the request body
                                 bodyJson.put("hash", Base64.encodeToString(hash, Base64.DEFAULT));
                                 JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL, bodyJson,
-                                        (Response.Listener<JSONObject>) response1 -> {
+                                        response1 -> {
                                             try {
                                                 // Check for errors
                                                 int result1 = response1.getInt("result");
@@ -156,9 +160,17 @@ public class LoginFragment extends LoginWindowFragmentBase {
         });
 
         registerButton.setOnClickListener(view1 -> {
+            usernameField.setError(null);
+            passwordField.setError(null);
             // If the register button is pressed, switch screens
             if (callbackFragment == null) return;
             callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER);
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
         });
 
         // Inflate the layout for this fragment

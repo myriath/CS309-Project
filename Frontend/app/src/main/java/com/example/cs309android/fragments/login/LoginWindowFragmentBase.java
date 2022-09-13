@@ -26,7 +26,7 @@ public abstract class LoginWindowFragmentBase extends Fragment {
      */
     public void spin(View view) {
         view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.loginCard).setAlpha(0.8f);
+        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
         view.findViewById(R.id.spinnerBlocker).setClickable(true);
     }
 
@@ -38,7 +38,7 @@ public abstract class LoginWindowFragmentBase extends Fragment {
      */
     public void unSpin(View view) {
         view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.loginCard).setAlpha(1);
+        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
         view.findViewById(R.id.spinnerBlocker).setClickable(false);
     }
 
