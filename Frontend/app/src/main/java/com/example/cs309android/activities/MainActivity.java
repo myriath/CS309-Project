@@ -45,6 +45,7 @@ import org.json.JSONObject;
  * Main activity
  * Most pages should probably use fragments
  *
+ * TODO: 3 button navbar background is wrong color
  * @author Mitch Hudson
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
