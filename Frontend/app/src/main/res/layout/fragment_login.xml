@@ -4,55 +4,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.LoginFragment">
+    tools:context=".fragments.login.LoginFragment" >
+<!--    android:background="@color/black">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/loginCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="12dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground" >
+
+        <TextView
+            android:id="@+id/loginTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/login"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
 
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-            <TextView
-                android:id="@+id/loginTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:layout_marginTop="5dp"
-                android:textStyle="bold" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/unameField"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
                 android:autofillHints="username"
-                android:ems="10"
                 android:hint="@string/username"
-                android:inputType="textPersonName"
-                android:textColor="?android:textColorPrimary" />
+                android:padding="10dp">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textShortMessage" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
                 android:autofillHints="password"
-                android:ems="10"
                 android:hint="@string/password"
-                android:inputType="textPassword"
-                android:textColor="?android:textColorPrimary" />
+                android:padding="10dp"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,7 +74,6 @@
 
                 <Button
                     android:id="@+id/buttonLogin"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -78,29 +89,57 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/register" />
-<!--                    android:theme="@style/ButtonGray" />-->
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/welcome_back"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginTextView" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="64dp"
+            android:text="@string/log_in_msg"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/spinnerBlocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="50dp" >
+        android:id="@+id/spinnerBlocker"
+        android:elevation="50dp"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
+        android:alpha="0">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/loginSpinner"
         style="?android:attr/progressBarStyle"
-        android:elevation="100dp"
+        android:indeterminateTint="?colorPrimary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:elevation="100dp"
+        android:visibility="gone" />
 
 </FrameLayout>

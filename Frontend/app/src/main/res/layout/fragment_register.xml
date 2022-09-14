@@ -4,76 +4,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.RegisterFragment">
+    tools:context=".fragments.login.RegisterFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/loginCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="12dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground" >
 
         <LinearLayout
             android:layout_width="300dp"
-            android:padding="10dp"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
 
-            <TextView
-                android:id="@+id/loginTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/register"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/unameField"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:autofillHints="username"
-                android:ems="10"
-                android:hint="@string/username"
-                android:inputType="textPersonName"
-                android:layout_marginTop="20dp"
-                android:textColor="?android:textColorPrimary" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailField"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
                 android:autofillHints="emailAddress"
-                android:ems="10"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:textColor="?android:textColorPrimary" />
+                android:padding="10dp">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/unameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
+                android:hint="@string/username"
+                android:padding="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textShortMessage" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField"
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="48dp"
-                android:autofillHints="password"
-                android:textColor="?android:textColorPrimary"
-                android:ems="10"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:padding="10dp"
+                app:endIconMode="password_toggle">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField2"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:autofillHints="password"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/re_enter_password"
-                android:inputType="textPassword"
-                android:textColor="?android:textColorPrimary" />
+                android:hint="@string/password"
+                android:padding="10dp"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/buttonRegister"
@@ -82,21 +92,55 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/register" />
 
-<!--            <Button-->
-<!--                android:id="@+id/buttonSpin"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:text="spin"-->
-<!--                android:theme="@style/ButtonMain" />-->
-
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/loginTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/register"
+            android:textAlignment="center"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-16dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="64dp"
+            android:text="@string/register_msg"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/welcomeMsgTextView" />
+
+        <TextView
+            android:id="@+id/welcomeMsgTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"
         android:elevation="50dp"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -105,6 +149,7 @@
     <ProgressBar
         android:id="@+id/loginSpinner"
         style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?colorPrimary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"

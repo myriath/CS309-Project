@@ -1,27 +1,29 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.CS309Android" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:colorPrimary">@color/carb</item>
-        <item name="android:colorPrimaryDark">@color/darkcarb</item>
-        <item name="android:colorAccent">@color/protein</item>
+<resources>
 
-        <item name="android:colorButtonNormal">@color/carb</item>
+    <style name="Theme.CS309Android" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">#33ffffff</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+
+        <item name="colorPrimary">@color/prim</item>
+        <item name="colorPrimaryDark">@color/darkprim</item>
+        <item name="colorPrimaryContainer">@color/primcont</item>
+
+        <item name="colorSecondary">@color/seco</item>
+        <item name="colorSecondaryContainer">@color/secocont</item>
+
+        <item name="colorTertiary">@color/tert</item>
+        <item name="colorTertiaryContainer">@color/tertcont</item>
+
+        <item name="colorOnPrimary">@color/primon</item>
+        <item name="colorOnSecondary">@color/secoon</item>
+        <item name="colorOnTertiary">@color/terton</item>
+
+        <item name="colorOnPrimaryContainer">@color/primconton</item>
+        <item name="colorOnSecondaryContainer">@color/secoconton</item>
+        <item name="colorOnTertiaryContainer">@color/tertconton</item>
     </style>
 
-    
-<!--    <style name="ButtonMain" parent="android:Widget.Button">-->
-<!--        <item name="android:padding">8dp</item>-->
-<!--        <item name="android:layout_margin">8dp</item>-->
-
-<!--        <item name="android:textColor">@color/white</item>-->
-<!--        <item name="android:backgroundTint">@color/protein</item>-->
-<!--    </style>-->
-
-<!--    <style name="ButtonGray" parent="android:Widget.Button">-->
-<!--        <item name="android:padding">8dp</item>-->
-<!--        <item name="android:layout_margin">8dp</item>-->
-
-<!--&lt;!&ndash;        <item name="android:textColor">@color/gray</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="android:backgroundTint">@color/lightgray</item>&ndash;&gt;-->
-<!--    </style>-->
 </resources>
