@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView"
+            android:id="@+id/mainFragment"
             android:name="com.example.cs309android.fragments.HomeFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

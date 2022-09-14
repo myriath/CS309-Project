@@ -2,41 +2,41 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Util.*;
+import static com.example.cs309android.util.Util.hideKeyboard;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.HomeFragment;
+import com.example.cs309android.fragments.NutritionFragment;
+import com.example.cs309android.fragments.RecipesFragment;
+import com.example.cs309android.fragments.SettingsFragment;
+import com.example.cs309android.fragments.ShoppingFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.LoginWindowFragmentBase;
 import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private LoginWindowFragmentBase loginWindowFragment;
 
     /**
+     * Main window fragment
+     */
+    private Fragment mainFragment;
+
+    /**
      * Response codes for callback method. Used by Fragments for this class
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
@@ -104,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         }
 
         setContentView(R.layout.activity_main);
+
+        mainFragment = getSupportFragmentManager().findFragmentById(R.id.mainFragment);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
@@ -163,17 +170,48 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         BottomNavigationView navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
+        // TODO: Make animations make sense based on from and to fragments
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
-                System.out.println("shopping");
+                mainFragment = new ShoppingFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.mainFragment, mainFragment, null)
+                        .commit();
             } else if (item.getItemId() == R.id.nutrition) {
-                System.out.println("nutrition");
+                mainFragment = new NutritionFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.mainFragment, mainFragment, null)
+                        .commit();
             } else if (item.getItemId() == R.id.home) {
-                System.out.println("home");
+                mainFragment = new HomeFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.mainFragment, mainFragment, null)
+                        .commit();
             } else if (item.getItemId() == R.id.recipes) {
-                System.out.println("recipes");
+                mainFragment = new RecipesFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.mainFragment, mainFragment, null)
+                        .commit();
             } else if (item.getItemId() == R.id.settings) {
-                System.out.println("settings");
+                mainFragment = new SettingsFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.mainFragment, mainFragment, null)
+                        .commit();
             } else {
                 return false;
             }
