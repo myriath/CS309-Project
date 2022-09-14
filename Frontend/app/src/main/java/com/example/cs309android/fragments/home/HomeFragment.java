@@ -1,21 +1,21 @@
-package com.example.cs309android.fragments;
+package com.example.cs309android.fragments.home;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NutritionFragment#newInstance} factory method to
+ * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NutritionFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class NutritionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public NutritionFragment() {
+    public HomeFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class NutritionFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NutritionFragment.
+     * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NutritionFragment newInstance(String param1, String param2) {
-        NutritionFragment fragment = new NutritionFragment();
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class NutritionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nutrition, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

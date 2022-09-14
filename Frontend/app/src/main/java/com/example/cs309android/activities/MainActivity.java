@@ -2,37 +2,32 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Util.*;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
-import com.example.cs309android.fragments.HomeFragment;
-import com.example.cs309android.fragments.NutritionFragment;
-import com.example.cs309android.fragments.RecipesFragment;
-import com.example.cs309android.fragments.SettingsFragment;
-import com.example.cs309android.fragments.ShoppingFragment;
+import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
-import com.example.cs309android.fragments.login.LoginWindowFragmentBase;
 import com.example.cs309android.fragments.login.RegisterFragment;
+import com.example.cs309android.fragments.nutrition.NutritionFragment;
+import com.example.cs309android.fragments.recipes.RecipesFragment;
+import com.example.cs309android.fragments.settings.SettingsFragment;
+import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
@@ -65,17 +60,16 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
-    private SharedPreferences pref;
 
     /**
      * Fragment containing the current login window.
      */
-    private LoginWindowFragmentBase loginWindowFragment;
+    private BaseFragment loginWindowFragment;
 
     /**
      * Main window fragment
      */
-    private Fragment mainFragment;
+    private BaseFragment mainFragment;
     private int currentFragment = 2;
 
     /**
@@ -83,7 +77,14 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
     public static final int CALLBACK_CLOSE_LOGIN = 1;
+    public static final int CALLBACK_START_LOGIN = 2;
+    public static final int CALLBACK_MOVE_TO_HOME = 3;
 //    public static final int CALLBACK_ = 0;
+
+    /**
+     * Navbar object at the bottom of the app.
+     */
+    private BottomNavigationView navbar;
 
     /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
@@ -112,14 +113,14 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         setContentView(R.layout.activity_main);
 
-        mainFragment = getSupportFragmentManager().findFragmentById(R.id.mainFragment);
+//        mainFragment = getSupportFragmentManager().findFragmentById(R.id.mainFragment);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Gets stored username and password hash, if they exist
-        pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String username = pref.getString("username", null);
         String encodedHash = pref.getString("enc_hash", null);
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
@@ -153,26 +154,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             startLoginFragment();
         }
 
-        // Logout button removes stored creds and prompts login
-        Button logout = findViewById(R.id.logoutButton);
-        logout.setOnClickListener(view -> {
-            hideKeyboard(view, this);
-
-            SharedPreferences.Editor editor = pref.edit();
-            editor.remove("username");
-            editor.remove("enc_hash");
-            editor.apply();
-            startLoginFragment();
-        });
-        ViewCompat.setOnApplyWindowInsetsListener(logout, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
-            return WindowInsetsCompat.CONSUMED;
-        });
-
-        BottomNavigationView navbar = findViewById(R.id.navbar);
+        navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
-        // TODO: Make animations make sense based on from and to fragments
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
@@ -225,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.settings) {
                 mainFragment = new SettingsFragment();
+                mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -292,6 +276,20 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
                         .remove(loginWindowFragment)
                         .commit();
+                break;
+            }
+            case (CALLBACK_START_LOGIN): {
+                startLoginFragment();
+                break;
+            }
+            case (CALLBACK_MOVE_TO_HOME): {
+                mainFragment = new HomeFragment();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.commit();
+                currentFragment = 2;
+                navbar.setSelectedItemId(R.id.home);
                 break;
             }
         }

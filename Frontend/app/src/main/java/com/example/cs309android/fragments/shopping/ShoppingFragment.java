@@ -1,21 +1,21 @@
-package com.example.cs309android.fragments;
+package com.example.cs309android.fragments.shopping;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ShoppingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingFragment extends Fragment {
+public class ShoppingFragment extends BaseFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

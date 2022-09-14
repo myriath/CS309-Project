@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
@@ -42,7 +43,7 @@ import java.util.Objects;
  *
  * @author Mitch Hudson
  */
-public class LoginFragment extends LoginWindowFragmentBase {
+public class LoginFragment extends BaseFragment {
     Button loginButton, registerButton;
     TextInputLayout usernameField, passwordField;
 
@@ -143,6 +144,7 @@ public class LoginFragment extends LoginWindowFragmentBase {
                                                 unSpin(view);
 
                                                 // Close window
+                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
                                                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

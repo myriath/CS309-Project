@@ -12,7 +12,6 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
@@ -42,7 +42,7 @@ import java.util.Objects;
  *
  * @author Mitch Hudson
  */
-public class RegisterFragment extends LoginWindowFragmentBase {
+public class RegisterFragment extends BaseFragment {
     Button registerButton;
     TextInputLayout usernameField, emailField, passwordField, passwordField2;
 
@@ -142,6 +142,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
 
                         Util.unSpin(view);
 
+                        callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
                         callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
                     } catch (JSONException e) {
                         e.printStackTrace();
