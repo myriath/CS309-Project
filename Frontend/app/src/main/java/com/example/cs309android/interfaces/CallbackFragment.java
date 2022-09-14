@@ -12,4 +12,11 @@ public interface CallbackFragment {
      * @param op Tells the class what to do.
      */
     void callback(int op);
+
+    /**
+     * Sets the callback fragment for closing the window/opening the register page.
+     *
+     * @param fragment Callback fragment.
+     */
+    void setCallbackFragment(CallbackFragment fragment);
 }

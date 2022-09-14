@@ -14,13 +14,13 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
-import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
@@ -40,7 +40,6 @@ import org.json.JSONObject;
  * Main activity
  * Most pages should probably use fragments
  *
- * TODO: 3 button navbar background is wrong color
  * @author Mitch Hudson
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
@@ -64,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Fragment containing the current login window.
      */
-    private BaseFragment loginWindowFragment;
+    private CallbackFragment loginWindowFragment;
 
     /**
      * Main window fragment
      */
-    private BaseFragment mainFragment;
+    private CallbackFragment mainFragment;
     private int currentFragment = 2;
 
     /**
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
-                        .replace(R.id.mainFragment, mainFragment, null)
+                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 }
-                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.settings) {
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                         .addToBackStack(null)
-                        .replace(R.id.mainFragment, mainFragment, null)
+                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
             } else {
@@ -263,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                         .addToBackStack(null)
-                        .replace(R.id.loginPopup, loginWindowFragment, null)
+                        .replace(R.id.loginPopup, (Fragment) loginWindowFragment, null)
                         .commit();
                 break;
             }
@@ -274,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
-                        .remove(loginWindowFragment)
+                        .remove((Fragment) loginWindowFragment)
                         .commit();
                 break;
             }
@@ -286,13 +285,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new HomeFragment();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
                 break;
             }
         }
+    }
+
+    /**
+     * Main activity has no callback.
+     *
+     * @param fragment Callback fragment.
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
     }
 
     /**
@@ -309,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                .add(R.id.loginPopup, loginWindowFragment)
+                .add(R.id.loginPopup, (Fragment) loginWindowFragment)
                 .commit();
     }
 }

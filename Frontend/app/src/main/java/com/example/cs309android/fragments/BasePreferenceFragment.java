@@ -1,17 +1,10 @@
 package com.example.cs309android.fragments;
 
-import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceFragmentCompat;
 
-import com.example.cs309android.fragments.login.LoginFragment;
-import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 
-/**
- * Abstract helper class containing methods used by {@link LoginFragment} and {@link RegisterFragment}
- *
- * @author Mitch Hudson
- */
-public abstract class BaseFragment extends Fragment implements CallbackFragment {
+public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements CallbackFragment {
     /**
      * Callback fragment used for controlling fragment change activity.
      */
@@ -22,7 +15,6 @@ public abstract class BaseFragment extends Fragment implements CallbackFragment 
      *
      * @param fragment Callback fragment.
      */
-    @Override
     public void setCallbackFragment(CallbackFragment fragment) {
         callbackFragment = fragment;
     }

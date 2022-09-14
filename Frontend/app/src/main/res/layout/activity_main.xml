@@ -15,31 +15,17 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/mainFragment"
             android:name="com.example.cs309android.fragments.home.HomeFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <LinearLayout
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navbar"
+            style="@style/Widget.Material3.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" >
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/navbar"
-                app:elevation="8dp"
-                style="@style/Widget.Material3.BottomNavigationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:menu="@menu/bottom_nav_menu" />
-    <!--            app:navigationIcon="@drawable/ic_add" >-->
-
-        </LinearLayout>
-
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:contentDescription="TODO"-->
-<!--            app:layout_anchor="@id/navbar"-->
-<!--            app:srcCompat="@drawable/ic_add" />-->
+            android:layout_gravity="bottom"
+            app:elevation="8dp"
+            app:menu="@menu/bottom_nav_menu" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
