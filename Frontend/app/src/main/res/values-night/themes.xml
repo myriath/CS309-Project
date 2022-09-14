@@ -5,22 +5,23 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
 
-        <item name="colorPrimary">@color/desatcarb</item>
-        <item name="colorPrimaryDark">@color/darkdesatcarb</item>
-<!--        <item name="colorSecondary">@color/protein</item>-->
-<!--        <item name="colorTertiary">@color/oil</item>-->
+        <item name="colorPrimary">@color/night_prim</item>
+        <item name="colorPrimaryDark">@color/night_darkprim</item>
+        <item name="colorPrimaryContainer">@color/night_primcont</item>
 
-        <item name="colorOnPrimary">?android:colorBackground</item>
-        <item name="colorOnSecondary">?android:colorBackground</item>
-        <item name="colorOnTertiary">?android:colorBackground</item>
+        <item name="colorSecondary">@color/night_seco</item>
+        <item name="colorSecondaryContainer">@color/night_secocont</item>
 
-<!--        <item name="colorPrimaryContainer">@color/darkprotein</item>-->
-<!--        <item name="colorSecondaryContainer">@color/darkcarb</item>-->
-<!--        <item name="colorTertiaryContainer">@color/darkoil</item>-->
+        <item name="colorTertiary">@color/night_tert</item>
+        <item name="colorTertiaryContainer">@color/night_tertcont</item>
 
-<!--        <item name="colorOnPrimaryContainer">@color/white</item>-->
-<!--        <item name="colorOnSecondaryContainer">@color/white</item>-->
-<!--        <item name="colorOnTertiaryContainer">@color/white</item>-->
+        <item name="colorOnPrimary">@color/night_primon</item>
+        <item name="colorOnSecondary">@color/night_secoon</item>
+        <item name="colorOnTertiary">@color/night_terton</item>
+
+        <item name="colorOnPrimaryContainer">@color/night_primconton</item>
+        <item name="colorOnSecondaryContainer">@color/night_secoconton</item>
+        <item name="colorOnTertiaryContainer">@color/night_tertconton</item>
     </style>
 
 </resources>

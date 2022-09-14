@@ -4,7 +4,7 @@
     android:viewportWidth="24"
     android:viewportHeight="24"
     android:tint="?attr/colorControlNormal"
-    android:alpha="0.8">
+    android:alpha="0.9">
   <group android:translateY="0.5">
     <path
         android:fillColor="#ffffff"

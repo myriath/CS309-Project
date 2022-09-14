@@ -9,12 +9,14 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,6 +36,7 @@ import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -158,14 +161,41 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             return WindowInsetsCompat.CONSUMED;
         });
 
-        BottomAppBar navbar = findViewById(R.id.navbar);
-        navbar.setOnClickListener(view -> {
-            System.out.println("nav press");
-        });
-        navbar.setOnMenuItemClickListener(menuItem -> {
-            System.out.println(menuItem.getItemId());
+        BottomNavigationView navbar = findViewById(R.id.navbar);
+        navbar.setSelectedItemId(R.id.home);
+        navbar.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.shopping) {
+                System.out.println("shopping");
+            } else if (item.getItemId() == R.id.nutrition) {
+                System.out.println("nutrition");
+            } else if (item.getItemId() == R.id.home) {
+                System.out.println("home");
+            } else if (item.getItemId() == R.id.recipes) {
+                System.out.println("recipes");
+            } else if (item.getItemId() == R.id.settings) {
+                System.out.println("settings");
+            } else {
+                return false;
+            }
             return true;
         });
+        navbar.setOnItemReselectedListener(item -> {
+            if (item.getItemId() == R.id.shopping) {
+                System.out.println("shopping re");
+            } else if (item.getItemId() == R.id.nutrition) {
+                System.out.println("nutrition re");
+            } else if (item.getItemId() == R.id.home) {
+                System.out.println("home re");
+            } else if (item.getItemId() == R.id.recipes) {
+                System.out.println("recipes re");
+            } else if (item.getItemId() == R.id.settings) {
+                System.out.println("settings re");
+            }
+        });
+//        navbar.setOnMenuItemClickListener(menuItem -> {
+//            System.out.println(menuItem.getItemId());
+//            return true;
+//        });
 
 //        BottomNavigationView bottomNav = findViewById(R.id.navbar);
     }

@@ -27,4 +27,5 @@
     <string name="log_in_msg">Log in below to access the app. Click register to create a new account.</string>
     <string name="register_msg">Please enter your information below to create an account.</string>
     <string name="welcome_msg">Welcome to %1$s!</string>
+    <string name="shopping">Shopping</string>
 </resources>

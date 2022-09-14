@@ -8,11 +8,13 @@
     tools:context=".activities.MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/logoutButton"
+            android:elevation="8dp"
             android:fitsSystemWindows="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,20 +23,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/loginPopup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="10dp"
-            android:foregroundGravity="center" />
+            android:id="@+id/fragmentContainerView"
+            android:name="com.example.cs309android.fragments.HomeFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/navbar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:menu="@menu/bottom_nav_menu"
-            app:navigationIcon="@drawable/ic_add" />
+            android:layout_gravity="bottom" >
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navbar"
+                app:elevation="8dp"
+                style="@style/Widget.Material3.BottomNavigationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@menu/bottom_nav_menu" />
+    <!--            app:navigationIcon="@drawable/ic_add" >-->
+
+        </LinearLayout>
 
 <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--            android:layout_width="wrap_content"-->
@@ -63,11 +71,18 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:elevation="100dp"
+        android:elevation="51dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loginPopup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="60dp"
+        android:foregroundGravity="center" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
