@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-<!--    <color name="purple_200">#FFBB86FC</color>-->
-<!--    <color name="purple_500">#FF6200EE</color>-->
-<!--    <color name="purple_700">#FF3700B3</color>-->
-<!--    <color name="teal_200">#FF03DAC5</color>-->
-<!--    <color name="teal_700">#FF018786</color>-->
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="black">#FF000000</color>
     <color name="darkgray">#FF222222</color>
     <color name="gray">#FF424242</color>
@@ -15,12 +9,15 @@
     <color name="oil">#B1B614</color>
     <color name="darkoil">#585A09</color>
 
-    <color name="carb">#2A3CC3</color>
-    <color name="desatcarb">#31396C</color>
+    <color name="carb">#404DAD</color>
     <color name="darkcarb">#262F7A</color>
+    <color name="desatcarb">#6A74B3</color>
+    <color name="darkdesatcarb">#4C558E</color>
 
     <color name="protein">#B33224</color>
     <color name="darkprotein">#6A0F05</color>
 
     <color name="bg">#1C1B1F</color>
+    
+<!--    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/lightgray</color>-->
 </resources>

@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/white"
-        android:background="@color/white" >
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground" >
 
         <LinearLayout
             android:layout_width="300dp"
@@ -25,7 +25,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailField"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="emailAddress"
@@ -41,7 +40,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/unameField"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="username"
@@ -57,7 +55,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="username"
@@ -74,7 +71,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField2"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="password"
@@ -89,69 +85,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--                <EditText-->
-            <!--                    android:id="@+id/unameField"-->
-            <!--                    style="@style/PrimaryEText"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:layout_marginTop="20dp"-->
-            <!--                    android:autofillHints="username"-->
-            <!--                    android:ems="10"-->
-            <!--                    android:hint="@string/username"-->
-            <!--                    android:inputType="textPersonName"-->
-            <!--                    android:textColor="?android:textColorPrimary" />-->
-
-            <!--                <EditText-->
-            <!--                    android:id="@+id/emailField"-->
-            <!--                    style="@style/PrimaryEText"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:layout_marginTop="10dp"-->
-            <!--                    android:autofillHints="emailAddress"-->
-            <!--                    android:ems="10"-->
-            <!--                    android:hint="@string/email"-->
-            <!--                    android:inputType="textEmailAddress"-->
-            <!--                    android:textColor="?android:textColorPrimary" />-->
-
-            <!--                <EditText-->
-            <!--                    android:id="@+id/passwordField"-->
-            <!--                    style="@style/PrimaryEText"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:layout_marginTop="10dp"-->
-            <!--                    android:autofillHints="password"-->
-            <!--                    android:ems="10"-->
-            <!--                    android:hint="@string/password"-->
-            <!--                    android:inputType="textPassword"-->
-            <!--                    android:textColor="?android:textColorPrimary" />-->
-
-            <!--                <EditText-->
-            <!--                    android:id="@+id/passwordField2"-->
-            <!--                    style="@style/PrimaryEText"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:layout_marginTop="10dp"-->
-            <!--                    android:autofillHints="password"-->
-            <!--                    android:ems="10"-->
-            <!--                    android:hint="@string/re_enter_password"-->
-            <!--                    android:inputType="textPassword"-->
-            <!--                    android:textColor="?android:textColorPrimary" />-->
-
             <Button
                 android:id="@+id/buttonRegister"
-                style="@style/PrimaryButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/register" />
-
-            <!--            <Button-->
-            <!--                android:id="@+id/buttonSpin"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="20dp"-->
-            <!--                android:text="spin"-->
-            <!--                android:theme="@style/ButtonMain" />-->
 
         </LinearLayout>
 
@@ -193,13 +132,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginTextView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"
         android:elevation="50dp"
-        android:backgroundTint="@color/white"
-        android:background="@color/white"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
         android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -209,6 +149,7 @@
     <ProgressBar
         android:id="@+id/loginSpinner"
         style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?colorPrimary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"

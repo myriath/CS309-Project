@@ -1,6 +1,8 @@
 package com.example.cs309android.fragments.login;
 
+import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.fragment.app.Fragment;
 
@@ -17,30 +19,6 @@ public abstract class LoginWindowFragmentBase extends Fragment {
      * Callback fragment used for controlling fragment change activity.
      */
     protected CallbackFragment callbackFragment;
-
-    /**
-     * Makes the spinner visible and locks interaction to the register page.
-     * This is ran when the user starts a request to the server.
-     *
-     * @param view View to find the spinner from.
-     */
-    public void spin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
-    }
-
-    /**
-     * Makes the spinner invisible and unlocks interaction with the register page.
-     * This is ran when a response is received from the server.
-     *
-     * @param view View to find the spinner from.
-     */
-    public void unSpin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
-    }
 
     /**
      * Sets the callback fragment for closing the window/opening the register page.

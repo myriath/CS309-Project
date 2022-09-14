@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/white"
-        android:background="@color/white">
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground" >
 
         <TextView
             android:id="@+id/loginTextView"
@@ -20,7 +20,6 @@
             android:layout_marginTop="16dp"
             android:text="@string/login"
             android:textAlignment="center"
-            android:textColor="?android:textColorPrimary"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,7 +37,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/unameField"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="username"
@@ -54,7 +52,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordField"
-                style="@style/PrimaryEText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="password"
@@ -77,7 +74,6 @@
 
                 <Button
                     android:id="@+id/buttonLogin"
-                    style="@style/PrimaryButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -130,8 +126,8 @@
         android:layout_height="match_parent"
         android:id="@+id/spinnerBlocker"
         android:elevation="50dp"
-        android:backgroundTint="@color/white"
-        android:background="@color/white"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
         android:alpha="0">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -139,6 +135,7 @@
     <ProgressBar
         android:id="@+id/loginSpinner"
         style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?colorPrimary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"

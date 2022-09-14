@@ -29,7 +29,7 @@
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/navbar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -45,5 +45,29 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/spinnerBlocker"
+        android:elevation="50dp"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
+        android:alpha="0">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/loginSpinner"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?colorPrimary"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:elevation="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,9 +2,11 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Util.*;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -103,18 +105,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, windowInsets) -> {
-//            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemGestures());
-//            // Apply the insets as padding to the view. Here we're setting all of the
-//            // dimensions, but apply as appropriate to your layout. You could also
-//            // update the views margin if more appropriate.
-//            getWindow().getDecorView().setPadding(insets.left, insets.top, insets.right, insets.bottom);
-//
-//            // Return CONSUMED if we don't want the window insets to keep being passed
-//            // down to descendant views.
-//            return WindowInsetsCompat.CONSUMED;
-//        });
 
         // Gets stored username and password hash, if they exist
         pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -122,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         String encodedHash = pref.getString("enc_hash", null);
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         if (username != null && encodedHash != null) {
+            spin(this);
             try {
                 // Creates a new request with username and hash as the body
                 JSONObject jsonBody = new JSONObject();
@@ -130,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
                         response -> {
+                            unSpin(this);
                             // Checks if the result is valid or not. If not, opens the login page
                             try {
                                 int result = response.getInt("result");
@@ -137,7 +129,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }, error -> startLoginFragment());
+                        }, error -> {
+                    unSpin(this);
+                    startLoginFragment();
+                });
                 RequestHandler.getInstance(this).add(request);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -149,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Logout button removes stored creds and prompts login
         Button logout = findViewById(R.id.logoutButton);
         logout.setOnClickListener(view -> {
+            hideKeyboard(view, this);
+
             SharedPreferences.Editor editor = pref.edit();
             editor.remove("username");
             editor.remove("enc_hash");

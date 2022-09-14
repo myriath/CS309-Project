@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.Hash;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -71,6 +73,8 @@ public class RegisterFragment extends LoginWindowFragmentBase {
 
         registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
+            Util.hideKeyboard(view1, requireActivity());
+
             emailField.setError(null);
             usernameField.setError(null);
             passwordField.setError(null);
@@ -100,7 +104,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                 return;
             }
 
-            spin(view);
+            Util.spin(view);
 
             // Generates a new hash with the given password.
             Hash pwdHash = Hasher.generateNewHash(pwd.toCharArray());
@@ -117,15 +121,15 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                         int result = response.getInt("result");
                         if (result == RESULT_ERROR_USERNAME_TAKEN) {
                             usernameField.setError("Username taken");
-                            unSpin(view);
+                            Util.unSpin(view);
                             return;
                         } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
                             emailField.setError("Account already exists");
-                            unSpin(view);
+                            Util.unSpin(view);
                             return;
                         } else if (result != RESULT_USER_CREATED) {
                             Toaster.toastShort("Unexpected error", this.getActivity());
-                            unSpin(view);
+                            Util.unSpin(view);
                             return;
                         }
 
@@ -136,7 +140,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                         editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
                         editor.apply();
 
-                        unSpin(view);
+                        Util.unSpin(view);
 
                         callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
                     } catch (JSONException e) {
@@ -144,7 +148,7 @@ public class RegisterFragment extends LoginWindowFragmentBase {
                     }
                 }, error -> {
                     Toaster.toastShort("Unexpected error", this.getActivity());
-                    unSpin(view);
+                    Util.unSpin(view);
                 });
                 RequestHandler.getInstance(this.getActivity()).add(registerRequest);
             } catch (JSONException e) {

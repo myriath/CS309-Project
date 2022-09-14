@@ -3,6 +3,9 @@ package com.example.cs309android.fragments.login;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Util.hideKeyboard;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -67,6 +70,8 @@ public class LoginFragment extends LoginWindowFragmentBase {
         registerButton = view.findViewById(R.id.buttonRegister);
 
         loginButton.setOnClickListener(view1 -> {
+            hideKeyboard(view1, requireActivity());
+
             String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
             usernameField.setError(null);
@@ -160,6 +165,8 @@ public class LoginFragment extends LoginWindowFragmentBase {
         });
 
         registerButton.setOnClickListener(view1 -> {
+            hideKeyboard(view1, requireActivity());
+
             usernameField.setError(null);
             passwordField.setError(null);
             // If the register button is pressed, switch screens
