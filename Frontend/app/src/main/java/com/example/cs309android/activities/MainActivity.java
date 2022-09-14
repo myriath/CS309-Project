@@ -2,9 +2,7 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Util.hideKeyboard;
-import static com.example.cs309android.util.Util.spin;
-import static com.example.cs309android.util.Util.unSpin;
+import static com.example.cs309android.util.Util.*;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,6 +19,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Main window fragment
      */
     private Fragment mainFragment;
+    private int currentFragment = 2;
 
     /**
      * Response codes for callback method. Used by Fragments for this class
@@ -174,44 +175,63 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
+                // Always slide left (furthest left)
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
                         .replace(R.id.mainFragment, mainFragment, null)
                         .commit();
+                currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
                 mainFragment = new NutritionFragment();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, mainFragment, null)
-                        .commit();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                // if coming from shopping slide right, otherwise slide left
+                if (currentFragment == 0) {
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                }
+                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.commit();
+                currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
                 mainFragment = new HomeFragment();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, mainFragment, null)
-                        .commit();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                // if coming from shopping/nutrition, slide right, otherwise slide left
+                if (currentFragment < 2) {
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                }
+                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.commit();
+                currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
                 mainFragment = new RecipesFragment();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, mainFragment, null)
-                        .commit();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                // if coming from settings, slide left, otherwise slide right
+                if (currentFragment == 4) {
+                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                } else {
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                }
+                transaction.replace(R.id.mainFragment, mainFragment, null);
+                transaction.commit();
+                currentFragment = 3;
             } else if (item.getItemId() == R.id.settings) {
                 mainFragment = new SettingsFragment();
+                // Always slide right
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                         .addToBackStack(null)
                         .replace(R.id.mainFragment, mainFragment, null)
                         .commit();
+                currentFragment = 4;
             } else {
                 return false;
             }
