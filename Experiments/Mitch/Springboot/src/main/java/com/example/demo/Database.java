@@ -109,7 +109,7 @@ public class Database {
 
         @Override
         public String toString() {
-            return "[" + email + "]: " + getEncodedHash() + ";" + getEncodedSalt() + "\n";
+            return "[" + email + "," + username + "]: " + getEncodedHash() + ";" + getEncodedSalt() + "\n";
         }
     }
 }

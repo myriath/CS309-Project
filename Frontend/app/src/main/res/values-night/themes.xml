@@ -8,6 +8,8 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:enforceNavigationBarContrast">true</item>
 
+        <item name="colorAccent">@color/night_prim</item>
+
         <item name="colorPrimary">@color/night_prim</item>
         <item name="colorPrimaryDark">@color/night_darkprim</item>
         <item name="colorPrimaryContainer">@color/night_primcont</item>
