@@ -1,5 +1,7 @@
 package com.example.cs309android.util;
 
+import static com.example.cs309android.BuildConfig.BASE_API_URL;
+
 /**
  * Util constants class
  *
@@ -24,11 +26,12 @@ public class Constants {
      * Base url for the server to connect to.
      * TODO: Replace with actual server url
      */
-    public static final String SERVER_URL = "https://10.36.135.139:8443/";
+    @Deprecated
+    public static final String SERVER_URL = "https://2411d393-4bd1-4d6a-b765-936105c8a49e.mock.pstmn.io";
     /**
      * Base auth url for all authentication requests
      */
-    public static final String AUTH_URL = SERVER_URL + "auth/";
+    public static final String AUTH_URL = BASE_API_URL + "auth/";
     /**
      * URL to register a new account to. (Params: email, username, salt, hash)
      */

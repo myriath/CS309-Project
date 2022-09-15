@@ -7,6 +7,8 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:enforceNavigationBarContrast">false</item>
 
+        <item name="colorAccent">@color/prim</item>
+
         <item name="colorPrimary">@color/prim</item>
         <item name="colorPrimaryDark">@color/darkprim</item>
         <item name="colorPrimaryContainer">@color/primcont</item>

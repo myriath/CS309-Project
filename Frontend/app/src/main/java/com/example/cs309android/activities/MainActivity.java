@@ -36,6 +36,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 /**
  * Main activity
  * Most pages should probably use fragments
@@ -112,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         setContentView(R.layout.activity_main);
 
-//        mainFragment = getSupportFragmentManager().findFragmentById(R.id.mainFragment);
+        mainFragment = (CallbackFragment) getSupportFragmentManager().findFragmentById(R.id.mainFragment);
+        Objects.requireNonNull(mainFragment).setCallbackFragment(this);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                             }
                         }, error -> {
                     unSpin(this);
+                    error.printStackTrace();
                     startLoginFragment();
                 });
                 RequestHandler.getInstance(this).add(request);
