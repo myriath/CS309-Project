@@ -2,6 +2,7 @@ package com.example.cs309android.util;
 
 /**
  * Data class containing the salt and hash values of a full hash
+ * EXPERIMENT 3
  *
  * @author Mitch Hudson
  */

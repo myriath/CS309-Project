@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Volley RequestQueue singleton class
+ * EXPERIMENT 2
  *
  * @author Mitch Hudson
  */

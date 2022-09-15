@@ -70,7 +70,7 @@ public class HelloController {
     //Fox Playground
 
 
-    @PostMapping("/PostFox/{fox}")  //create
+    @PostMapping("/PostFox")  //create
     public String PostFox(@RequestBody String fox) {
 
         if(Fox.add(fox)) {

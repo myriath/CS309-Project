@@ -1,15 +1,12 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.TAGS.TAG_GET;
-import static com.example.cs309android.util.Constants.TAGS.TAG_POST;
-import static com.example.cs309android.util.Constants.LOGIN_URL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,47 +28,73 @@ import com.example.cs309android.util.NukeSSLCerts;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+/**
+ * Main activity
+ * Most pages should probably use fragments
+ * EXPERIMENTS 1, 2
+ *
+ * @author Mitch Hudson
+ */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
+    /**
+     * DEBUG variable for testing Logs
+     */
     // TODO: False for prod
     public static final boolean DEBUG = true;
 
+    /**
+     * Preference name for this app's shared preferences.
+     */
     public static final String PREF_NAME = "COMS309";
     private SharedPreferences pref;
 
+    /**
+     * Fragment manager for subwindows (login, register, etc.)
+     */
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
+    /**
+     * Cancels all Volley requests when the application is closed or otherwise stopped.
+     */
     @Override
     protected void onStop() {
         super.onStop();
         RequestHandler.getInstance(this).cancelAll();
     }
 
+    /**
+     * Starts up the app.
+     *
+     * @param savedInstanceState Saved instance state data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // TODO: Remove for production
+        // Removes SSL certificate checking until we can create a cert with a cert authority
         if (DEBUG) {
             NukeSSLCerts.nuke();
         }
 
         setContentView(R.layout.activity_main);
 
+        // Gets stored username and password hash, if they exist
         pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-
         String username = pref.getString("username", null);
         String encodedHash = pref.getString("enc_hash", null);
+        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         if (username != null && encodedHash != null) {
-            JSONObject jsonBody = new JSONObject();
             try {
+                // Creates a new request with username and hash as the body
+                JSONObject jsonBody = new JSONObject();
                 jsonBody.put("username", username);
                 jsonBody.put("hash", encodedHash);
 
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
                         (Response.Listener<JSONObject>) response -> {
+                            // Checks if the result is valid or not. If not, opens the login page
                             try {
                                 int result = response.getInt("result");
                                 if (result != RESULT_LOGGED_IN) startLoginFragment();
@@ -87,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             startLoginFragment();
         }
 
+        // Volley test button: GET request for google.com
         findViewById(R.id.getButton).setOnClickListener(view1 -> {
             String url = "https://www.google.com";
 
@@ -94,31 +118,31 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     (Response.Listener<String>) response -> {
                         textView.setText("Response is: " + response.substring(0, 500));
-                    }, (Response.ErrorListener) error -> {
-                textView.setText(error.getMessage());
-            }
+                    }, (Response.ErrorListener) error -> textView.setText(error.getMessage())
             );
 
             stringRequest.setTag(TAG_GET);
             RequestHandler.getInstance(this).add(stringRequest);
         });
 
-        findViewById(R.id.postButton).setOnClickListener(view1 -> {
-            String url = "https://www.google.com";
+        // Unused volley test button
+//        findViewById(R.id.postButton).setOnClickListener(view1 -> {
+//            String url = "https://www.google.com";
+//
+//            TextView textView = findViewById(R.id.volleyResponse);
+//            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                    (Response.Listener<String>) response -> {
+//                        textView.setText("Response is: " + response.substring(0, 500));
+//                    }, (Response.ErrorListener) error -> {
+//                textView.setText(error.getMessage());
+//            }
+//            );
+//
+//            stringRequest.setTag(TAG_POST);
+//            RequestHandler.getInstance(this).add(stringRequest);
+//        });
 
-            TextView textView = findViewById(R.id.volleyResponse);
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    (Response.Listener<String>) response -> {
-                        textView.setText("Response is: " + response.substring(0, 500));
-                    }, (Response.ErrorListener) error -> {
-                textView.setText(error.getMessage());
-            }
-            );
-
-            stringRequest.setTag(TAG_POST);
-            RequestHandler.getInstance(this).add(stringRequest);
-        });
-
+        // Logout button removes stored creds and prompts login
         Button logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(view -> {
             SharedPreferences.Editor editor = pref.edit();
@@ -129,11 +153,20 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    /**
+     * Runs whenever the login/register pages are closed.
+     * Removes transparency layer and allows interaction with main activity.
+     */
     public void closeFragment() {
         findViewById(R.id.mainLayout).setAlpha(1);
         findViewById(R.id.loginPopup).setClickable(false);
     }
 
+    /**
+     * Starts the login fragment.
+     * First, makes MainActivity transparent and non-interactable
+     * Then creates a new fragment and sets up the opening animations.
+     */
     public void startLoginFragment() {
         findViewById(R.id.mainLayout).setAlpha(0.5f);
         findViewById(R.id.loginPopup).setClickable(true);
@@ -147,6 +180,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         transaction.commit();
     }
 
+    /**
+     * Runs when the Register button is pressed on the Login page.
+     * First, create a new RegisterFragment, then put it on screen with some animations
+     */
     @Override
     public void changeFragment() {
         RegisterFragment fragment = new RegisterFragment();

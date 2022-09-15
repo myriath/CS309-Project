@@ -1,0 +1,29 @@
+<resources>
+
+    <style name="Theme.CS309Android" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">#33ffffff</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+
+        <item name="colorPrimary">@color/prim</item>
+        <item name="colorPrimaryDark">@color/darkprim</item>
+        <item name="colorPrimaryContainer">@color/primcont</item>
+
+        <item name="colorSecondary">@color/seco</item>
+        <item name="colorSecondaryContainer">@color/secocont</item>
+
+        <item name="colorTertiary">@color/tert</item>
+        <item name="colorTertiaryContainer">@color/tertcont</item>
+
+        <item name="colorOnPrimary">@color/primon</item>
+        <item name="colorOnSecondary">@color/secoon</item>
+        <item name="colorOnTertiary">@color/terton</item>
+
+        <item name="colorOnPrimaryContainer">@color/primconton</item>
+        <item name="colorOnSecondaryContainer">@color/secoconton</item>
+        <item name="colorOnTertiaryContainer">@color/tertconton</item>
+    </style>
+
+</resources>

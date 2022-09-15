@@ -1,19 +1,20 @@
 package com.example.cs309android.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.cs309android.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link NavbarFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Navbar Fragment.
+ * Holds the navigation menu buttons that appear at the bottom of the screen.
+ * TODO: Actually finish this class
+ *
+ * @author Mitch Hudson
  */
 public class NavbarFragment extends Fragment {
 

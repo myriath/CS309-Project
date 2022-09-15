@@ -3,23 +3,19 @@ package com.example.cs309android.fragments;
 import static com.example.cs309android.util.Constants.REGISTER_URL;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
-import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
-import static com.example.cs309android.util.Constants.RESULT_OK;
 import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,20 +31,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Register fragment that makes up the Register new user page.
+ * Shown whenever a user needs to create a new account.
+ * EXPERIMENT 1
+ *
+ * @author Mitch Hudson
  */
 public class RegisterFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private CallbackFragment callbackFragment;
     Button registerButton;
     EditText usernameField, emailField, passwordField, passwordField2;
@@ -69,8 +58,8 @@ public class RegisterFragment extends Fragment {
     public static RegisterFragment newInstance(String param1, String param2) {
         RegisterFragment fragment = new RegisterFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,15 +67,24 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
     }
 
+    /**
+     * Ran whenever the fragment is shown.
+     *
+     * @param inflater           Inflater to inflate the xml
+     * @param container          This Fragment's container
+     * @param savedInstanceState Any saved instance state data
+     * @return The fragment's inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflates the view and sets class variables for buttons/edit texts
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
@@ -100,6 +98,8 @@ public class RegisterFragment extends Fragment {
             String pwd = passwordField.getText().toString();
             String pwd2 = passwordField2.getText().toString();
 
+            // Basic checks for empty/non-matching fields.
+            // More checks should be ran serverside for duplicate accounts.
             if (unm.equals("")) {
                 usernameField.setError("Username can't be empty");
                 usernameField.requestFocus();
@@ -120,15 +120,18 @@ public class RegisterFragment extends Fragment {
 
             spin(view);
 
+            // Generates a new hash with the given password.
             Hash pwdHash = Hasher.generateNewHash(passwordField.getText().toString().toCharArray());
-            JSONObject jsonBody = new JSONObject();
             try {
+                // Put required data into the request body
+                JSONObject jsonBody = new JSONObject();
                 jsonBody.put("username", unm);
                 jsonBody.put("email", email);
                 jsonBody.put("salt", Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim());
                 jsonBody.put("hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT).trim());
                 JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonBody, (Response.Listener<JSONObject>) response -> {
                     try {
+                        // Check for errors.
                         int result = response.getInt("result");
                         if (result == RESULT_ERROR_USERNAME_TAKEN) {
                             usernameField.setError("Username taken");
@@ -144,6 +147,7 @@ public class RegisterFragment extends Fragment {
                             return;
                         }
 
+                        // If there was no error, store valid creds and close the page.
                         SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("username", unm);
@@ -176,18 +180,35 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Makes the spinner visible and locks interaction to the register page.
+     * This is ran when the user starts a request to the server.
+     *
+     * @param view View to find the spinner from.
+     */
     public void spin(View view) {
         view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
         view.findViewById(R.id.loginCard).setAlpha(0.8f);
         view.findViewById(R.id.spinnerBlocker).setClickable(true);
     }
 
+    /**
+     * Makes the spinner invisible and unlocks interaction with the register page.
+     * This is ran when a response is received from the server.
+     *
+     * @param view View to find the spinner from.
+     */
     public void unSpin(View view) {
         view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
         view.findViewById(R.id.loginCard).setAlpha(1);
         view.findViewById(R.id.spinnerBlocker).setClickable(false);
     }
 
+    /**
+     * Sets the callback fragment, used to close the page when the request is completed successfully.
+     *
+     * @param fragment Callback Fragment to close the page.
+     */
     public void setCallbackFragment(CallbackFragment fragment) {
         callbackFragment = fragment;
     }
