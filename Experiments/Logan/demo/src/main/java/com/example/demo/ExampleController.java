@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @RestController
@@ -157,10 +156,10 @@ class ExampleController {
     }
 
     @PostMapping("/newFood")
-    public @ResponseBody String addFood(@RequestBody Common food) {
+    public @ResponseBody String addFood(@RequestBody String food) {
         System.out.println(food);
-        exampleList.add(food.getFoodName());
-        return "New food added to list: " + food.getFoodName();
+        exampleList.add(food);
+        return "New food added to list: " + food;
     }
 
     @GetMapping("/foodList/{foodName}")
