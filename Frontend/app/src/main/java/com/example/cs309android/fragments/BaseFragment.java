@@ -1,5 +1,7 @@
 package com.example.cs309android.fragments;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -33,6 +35,6 @@ public abstract class BaseFragment extends Fragment implements CallbackFragment 
      * @param op Tells the class what to do.
      */
     @Override
-    public void callback(int op) {
+    public void callback(int op, Bundle bundle) {
     }
 }

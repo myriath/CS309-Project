@@ -142,8 +142,8 @@ public class RegisterFragment extends BaseFragment {
 
                         Util.unSpin(view);
 
-                        callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
-                        callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
+                        callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                        callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -4,11 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.FoodItem;
+import com.example.cs309android.models.adapters.ShoppingListAdapter;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +21,8 @@ import com.example.cs309android.fragments.BaseFragment;
  * create an instance of this fragment.
  */
 public class ShoppingFragment extends BaseFragment {
+    private static ArrayList<FoodItem> items;
+    private static ShoppingListAdapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +68,19 @@ public class ShoppingFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping, container, false);
+
+        ListView listView = view.findViewById(R.id.shopping_list);
+        items = new ArrayList<>();
+
+        adapter = new ShoppingListAdapter(this.getActivity(), items, callbackFragment);
+        listView.setAdapter(adapter);
+
+        return view;
+    }
+
+    public static void removeItem(int i, View view) {
+        items.remove(i);
+        ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
     }
 }

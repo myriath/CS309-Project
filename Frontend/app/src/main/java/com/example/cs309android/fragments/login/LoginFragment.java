@@ -144,8 +144,8 @@ public class LoginFragment extends BaseFragment {
                                                 unSpin(view);
 
                                                 // Close window
-                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
-                                                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
+                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                                                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -173,7 +173,7 @@ public class LoginFragment extends BaseFragment {
             passwordField.setError(null);
             // If the register button is pressed, switch screens
             if (callbackFragment == null) return;
-            callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER);
+            callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER, null);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {

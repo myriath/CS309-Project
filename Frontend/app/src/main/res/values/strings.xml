@@ -35,4 +35,6 @@
     <!-- Strings related to Shopping -->
     <string name="shopping_list">Shopping List</string>
     <string name="shopping">Shopping</string>
+    <string name="remove">Remove item</string>
+    <string name="add_item">Add item</string>
 </resources>
