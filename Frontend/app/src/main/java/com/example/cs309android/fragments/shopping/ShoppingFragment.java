@@ -84,7 +84,7 @@ public class ShoppingFragment extends BaseFragment {
 
         view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("fooditems", items);
+            bundle.putParcelableArrayList(MainActivity.PARCEL_FOODITEMS_LIST, items);
             callbackFragment.callback(MainActivity.CALLBACK_SEARCH_FOOD, bundle);
         });
 

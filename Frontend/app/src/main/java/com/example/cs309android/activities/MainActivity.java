@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.FoodItemDetailsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
@@ -71,9 +72,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_CLOSE_LOGIN = 1;
     public static final int CALLBACK_START_LOGIN = 2;
     public static final int CALLBACK_MOVE_TO_HOME = 3;
-    public static final int CALLBACK_MOVE_TO_FOOD_ITEM = 4;
+    public static final int CALLBACK_FOOD_DETAIL = 4;
     public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
+
+    public static final String PARCEL_FOODITEM = "fooditem";
+    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
 
     /**
      * Used to launch various activities.
@@ -131,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        System.out.println(result.getData());
-                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra("fooditems"));
+                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST));
                         mainFragment.setCallbackFragment(this);
                         // Always slide left (furthest left)
                         getSupportFragmentManager()
@@ -275,13 +278,16 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Callback method used to control fragment activity
-     *
+     * <p>
      * CALLBACK_SWITCH_TO_REGISTER:
      * Switches the login screen to the register screen with a nice animation
-     *
+     * <p>
      * CALLBACK_CLOSE_LOGIN:
      * Closes the login page with a nice animation and permits interaction and removes transparency
      * filter over the main activity
+     *
+     * @param op     Opcode to decide what to do
+     * @param bundle Bundle with args
      */
     @Override
     public void callback(int op, Bundle bundle) {
@@ -322,13 +328,19 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 navbar.setSelectedItemId(R.id.home);
                 break;
             }
-            case (CALLBACK_MOVE_TO_FOOD_ITEM): {
-                // TODO: Create page for a food item
+            case (CALLBACK_FOOD_DETAIL): {
+                mainFragment = FoodItemDetailsFragment.newInstance(bundle.getParcelable(PARCEL_FOODITEM));
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                        .addToBackStack(null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
                 Intent intent = new Intent(this, FoodSearchActivity.class);
-                intent.putExtra("fooditems", bundle.getParcelableArrayList("fooditems"));
+                intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
                 break;
             }

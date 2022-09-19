@@ -89,7 +89,6 @@ public class RequestHandler {
 //            network = new BasicNetwork(new HurlStack());
 //
 //            queue = new RequestQueue(cache, network);
-//            System.out.println("workin it");
             queue = Volley.newRequestQueue(context);
         }
         return queue;

@@ -17,11 +17,6 @@
             android:label="@string/title_activity_food_search"
             android:theme="@style/Theme.CS309Android"
             android:launchMode="singleTop">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.SEARCH"/>-->
-            <!--            </intent-filter>-->
-            <!--            <meta-data android:name="android.app.searchable"-->
-            <!--                android:resource="@xml/searchable" />-->
         </activity>
         <activity
             android:name=".activities.MainActivity"
@@ -32,8 +27,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--            <meta-data android:name="android.app.default_searchable"-->
-            <!--                android:value=".activities.FoodSearchActivity" />-->
         </activity>
     </application>
 
