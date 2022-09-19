@@ -23,15 +23,6 @@ public class Constants {
     public static final int RESULT_USER_CREATED = 2;
 
     /**
-     * API key for Nutritionix API
-     */
-    public static final String API_KEY = "7914e1ef4c7afe4996c50d5b841d234d";
-    public static final String APP_ID = "35b716f8";
-    public static final String NIX_URL = "https://trackapi.nutritionix.com/";
-    public static final String NIX_SEARCH_QUERY = NIX_URL + "v2/search/instant?query=";
-    public static final String NIX_SEARCH_ITEM = NIX_URL + "v2/search/item?";
-
-    /**
      * Base url for the server to connect to.
      * TODO: Replace with actual server url
      */

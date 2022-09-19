@@ -1,11 +1,16 @@
 package com.example.cs309android.models.Nutritionix.queries;
 
-import static com.example.cs309android.util.Constants.NIX_URL;
+import static com.example.cs309android.models.Nutritionix.Constants.APP_ID;
+import static com.example.cs309android.models.Nutritionix.Constants.APP_KEY;
+import static com.example.cs309android.models.Nutritionix.Constants.NIX_URL;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.cs309android.models.Nutritionix.Item;
+import com.example.cs309android.models.Nutritionix.BrandedFood;
+import com.example.cs309android.models.Nutritionix.CommonFood;
 import com.example.cs309android.util.RequestHandler;
 
 import org.json.JSONArray;
@@ -14,6 +19,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Performs a search using the Nutritionix API v2
@@ -24,146 +32,254 @@ public class Search {
     /**
      * URL for the Search endpoint
      */
-    private static final String URL = NIX_URL + "/v2/search?";
-
-    /**
-     * Enum of valid search_type values
-     */
-    public enum SearchType {
-        /**
-         * Valid search_type(s)
-         */
-        RECIPE("recipe"), GROCERY("grocery"), RESTAURANT("restaurant"), USDA("usda");
-
-        /**
-         * Value of the enum object.
-         */
-        private final String value;
-
-        /**
-         * Constructor
-         * @param value String literal for the valid search_type
-         */
-        SearchType(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Getter for value
-         * @return The valid string associated with the search_type
-         */
-        public String getValue() {
-            return value;
-        }
-    }
-
-    /**
-     * Enum of valid search_nutrient values
-     */
-    public enum SearchNutrient {
-        /**
-         * Valid search_nutrient(s)
-         */
-        CALORIES("calories"), FAT("fat"), PROTEIN("protein"), CARB("carb");
-
-        /**
-         * Value of the enum object.
-         */
-        private final String value;
-
-        /**
-         * Constructor
-         * @param value String literal for the valid search_nutrient
-         */
-        SearchNutrient(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Getter for value
-         * @return The valid string associated with the search_nutrient
-         */
-        public String getValue() {
-            return value;
-        }
-    }
+    private static final String URL = NIX_URL + "v2/search/instant?";
 
     // Required Parameters
     /**
-     * A {String} as the search phrase in plain text
+     * Query to be executed against
      */
-    private final String q;
+    private final String query;
 
     // Optional Parameters
     /**
-     * An {Integer} as the maximum rendered results
-     * Requires offset
+     * Whether to include users food log results
+     * Default false
      */
-    private Integer limit;
+    private Boolean self = null;
     /**
-     * An {Integer} as search offset for paging through results
-     * Requires limit
+     * Whether to include branded results
+     * Default true
      */
-    private Integer offset;
+    private Boolean branded = true;
     /**
-     * A {String} representing the search mode.
-     * Must be one of the following (recipe, grocery, restaurant, usda)
+     * A list of brand ids to filter by
+     * Default null
      */
-    private String search_type;
+    private String[] brand_ids = null;
     /**
-     * A {String} representing the nutrient returned in search defaults to calories.
-     * Can be(calories, fat, protein, carb)
+     * Brand type to filter results by
+     * 1=Restaurant, 2=Grocery, null=No filtering
+     * Default null
      */
-    private String search_nutrient;
+    private Integer branded_type = null;
+    /**
+     * Region id to filter results by
+     * 1=US, 2=UK, null=No filtering
+     * Default null
+     */
+    private Integer branded_region = null;
+    /**
+     * Search branded foods by only item name, not by combo of name and brand
+     * Default false
+     */
+    private Boolean branded_food_name_only = false;
+    /**
+     * Whether to include common food results
+     * Default true
+     */
+    private Boolean common = true;
+    /**
+     * Include common foods without grocery or restaurant tags.
+     * Applied only if common is set to true
+     * Default true
+     */
+    private Boolean common_general = true;
+    /**
+     * Include common grocery foods.
+     * Applied only if common is set to true
+     * Default true
+     */
+    private Boolean common_grocery = true;
+    /**
+     * Include common restaurant foods.
+     * Applied only if common is set to true
+     * Default true
+     */
+    private Boolean common_restaurant = true;
+    /**
+     * Local value for common food phrases search.
+     * Supported values: en_US, en_GB, de_DE, fr_FR, es_ES, it_IT, nl_NL, es_MX, pt_PT, ja_JP, ko_KR, pt_BR, ar_SA, tr_TR, pl_PL.
+     * Only common foods will be included.
+     * Default en_US
+     */
+    private String locale = "en_US";
+    /**
+     * Whether to include detailed nutrient fields like full_nutrients and serving_weight_grams
+     * Default true
+     */
+    private Boolean detailed = true;
+    /**
+     * Whether to include food label claims array
+     * Default true
+     */
+    private Boolean claims = true;
+    /**
+     * Array of food label claims that all must be true for each food in the results.
+     * Default null
+     */
+    private String[] claims_query = null;
+    /**
+     * Whether to include taxonomy node id
+     * Default true
+     */
+    private Boolean taxonomy = true;
+    /**
+     * Taxonomy node id to filter results by
+     * Default null
+     */
+    private String taxonomy_node_id = null;
 
     /**
      * Public constructor with no limit or offset
      *
-     * @param q A {String} as the search phrase in plain text
+     * @param query A {String} as the search phrase in plain text
      */
-    public Search(String q) {
-        this.q = q;
+    public Search(String query) {
+        this.query = query;
     }
 
     /**
-     * Public constructor with limits
+     * Setter for self
      *
-     * @param q A {String} as the search phrase in plain text
-     * @param limit An {Integer} as the maximum rendered results
-     * @param offset An {Integer} as search offset for paging through results
+     * @param self Whether to include users food log results
      */
-    public Search(String q, int limit, int offset) {
-        this.q = q;
-        setLimits(limit, offset);
+    public void setSelf(Boolean self) {
+        this.self = self;
     }
 
     /**
-     * Sets the limits for the search
+     * Setter for branded
      *
-     * @param limit An {Integer} as the maximum rendered results
-     * @param offset An {Integer} as search offset for paging through results
+     * @param branded Whether to include branded results
      */
-    public void setLimits(int limit, int offset) {
-        this.limit = limit;
-        this.offset = offset;
+    public void setBranded(Boolean branded) {
+        this.branded = branded;
     }
 
     /**
-     * Sets the search type
+     * Setter for brand_ids
      *
-     * @param search_type SearchType that represents a valid search_type
+     * @param brand_ids A list of brand ids to filter by
      */
-    public void setSearchType(SearchType search_type) {
-        this.search_type = search_type.getValue();
+    public void setBrandIds(String[] brand_ids) {
+        this.brand_ids = brand_ids;
     }
 
     /**
-     * Sets the search nutrient
+     * Setter for branded_type
      *
-     * @param search_nutrient SearchNutrient that represents a valid search_nutrient
+     * @param branded_type Brand type to filter results by
      */
-    public void setSearchNutrient(SearchNutrient search_nutrient) {
-        this.search_nutrient = search_nutrient.getValue();
+    public void setBrandedType(Integer branded_type) {
+        this.branded_type = branded_type;
+    }
+
+    /**
+     * Setter for branded_region
+     *
+     * @param branded_region Region id to filter results by
+     */
+    public void setBrandedRegion(Integer branded_region) {
+        this.branded_region = branded_region;
+    }
+
+    /**
+     * Setter for branded_food_name_only
+     *
+     * @param branded_food_name_only Search branded foods by only item name, not by combo of name and brand
+     */
+    public void setBrandedFoodNameOnly(Boolean branded_food_name_only) {
+        this.branded_food_name_only = branded_food_name_only;
+    }
+
+    /**
+     * Setter for common
+     *
+     * @param common Whether to include common food results
+     */
+    public void setCommon(Boolean common) {
+        this.common = common;
+    }
+
+    /**
+     * Setter for common_general
+     *
+     * @param common_general Include common grocery foods.
+     */
+    public void setCommonGeneral(Boolean common_general) {
+        this.common_general = common_general;
+    }
+
+    /**
+     * Setter for common_grocery
+     *
+     * @param common_grocery Include common grocery foods.
+     */
+    public void setCommonGrocery(Boolean common_grocery) {
+        this.common_grocery = common_grocery;
+    }
+
+    /**
+     * Setter for common_restaurant
+     *
+     * @param common_restaurant Include common restaurant foods.
+     */
+    public void setCommonRestaurant(Boolean common_restaurant) {
+        this.common_restaurant = common_restaurant;
+    }
+
+    /**
+     * Setter for locale
+     *
+     * @param locale Local value for common food phrases search.
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    /**
+     * Setter for detailed
+     *
+     * @param detailed Whether to include detailed nutrient fields like full_nutrients and serving_weight_grams
+     */
+    public void setDetailed(Boolean detailed) {
+        this.detailed = detailed;
+    }
+
+    /**
+     * Setter for claims
+     *
+     * @param claims Whether to include food label claims array
+     */
+    public void setClaims(Boolean claims) {
+        this.claims = claims;
+    }
+
+    /**
+     * Setter for claims_query
+     *
+     * @param claims_query Array of food label claims that all must be true for each food in the results.
+     */
+    public void setClaimsQuery(String[] claims_query) {
+        this.claims_query = claims_query;
+    }
+
+    /**
+     * Setter for taxonomy
+     *
+     * @param taxonomy Whether to include taxonomy node id
+     */
+    public void setTaxonomy(Boolean taxonomy) {
+        this.taxonomy = taxonomy;
+    }
+
+    /**
+     * Setter for taxonomy_node_id
+     *
+     * @param taxonomy_node_id Taxonomy node id to filter results by
+     */
+    public void setTaxonomyNodeId(String taxonomy_node_id) {
+        this.taxonomy_node_id = taxonomy_node_id;
     }
 
     /**
@@ -174,22 +290,72 @@ public class Search {
      * @throws UnsupportedEncodingException Thrown when the search parameters can't be encoded.
      */
     public void search(com.android.volley.Response.Listener<JSONObject> listener, Context context) throws UnsupportedEncodingException {
-        String url = URL + String.format("q=%s", URLEncoder.encode(q, "utf-8"));
-        if (limit != null && offset != null) {
-            url += URL + String.format("&limit=%s&offset=%s",
-                    URLEncoder.encode(String.valueOf(limit), "utf-8"),
-                    URLEncoder.encode(String.valueOf(offset), "utf-8"));
+        StringBuilder url = new StringBuilder(URL + String.format("query=%s", URLEncoder.encode(query, "utf-8")));
+        if (self != null) {
+            url.append(String.format("&self=%s", URLEncoder.encode(self.toString(), "utf-8")));
         }
-        if (search_type != null) {
-            url += URL + String.format("&search_type=%s",
-                    URLEncoder.encode(search_type, "utf-8"));
+        if (branded != null) {
+            url.append(String.format("&branded=%s", URLEncoder.encode(branded.toString(), "utf-8")));
         }
-        if (search_nutrient != null) {
-            url += URL + String.format("&search_nutrient=%s",
-                    URLEncoder.encode(search_nutrient, "utf-8"));
+        // array
+        if (brand_ids != null) {
+            for (String id : brand_ids) {
+                url.append(String.format("&brand_ids[]=%s", URLEncoder.encode(id, "utf-8")));
+            }
+        }
+        if (branded_type != null) {
+            url.append(String.format("&branded_type=%s", URLEncoder.encode(branded_type.toString(), "utf-8")));
+        }
+        if (branded_region != null) {
+            url.append(String.format("&branded_region=%s", URLEncoder.encode(branded_region.toString(), "utf-8")));
+        }
+        if (branded_food_name_only != null) {
+            url.append(String.format("&branded_food_name_only=%s", URLEncoder.encode(branded_food_name_only.toString(), "utf-8")));
+        }
+        if (common != null) {
+            url.append(String.format("&common=%s", URLEncoder.encode(common.toString(), "utf-8")));
+        }
+        if (common_general != null) {
+            url.append(String.format("&common_general=%s", URLEncoder.encode(common_general.toString(), "utf-8")));
+        }
+        if (common_grocery != null) {
+            url.append(String.format("&common_grocery=%s", URLEncoder.encode(common_grocery.toString(), "utf-8")));
+        }
+        if (common_restaurant != null) {
+            url.append(String.format("&common_restaurant=%s", URLEncoder.encode(common_restaurant.toString(), "utf-8")));
+        }
+        if (locale != null) {
+            url.append(String.format("&locale=%s", URLEncoder.encode(locale, "utf-8")));
+        }
+        if (detailed != null) {
+            url.append(String.format("&detailed=%s", URLEncoder.encode(detailed.toString(), "utf-8")));
+        }
+        if (claims != null) {
+            url.append(String.format("&claims=%s", URLEncoder.encode(claims.toString(), "utf-8")));
+        }
+        // array
+        if (claims_query != null) {
+            for (String query : claims_query) {
+                url.append(String.format("&claims_query[]=%s", URLEncoder.encode(query, "utf-8")));
+            }
+        }
+        if (taxonomy != null) {
+            url.append(String.format("&taxonomy=%s", URLEncoder.encode(taxonomy.toString(), "utf-8")));
+        }
+        if (taxonomy_node_id != null) {
+            url.append(String.format("&taxonomy_node_id=%s", URLEncoder.encode(taxonomy_node_id, "utf-8")));
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(url, listener, Throwable::printStackTrace);
+        JsonObjectRequest request = new JsonObjectRequest(url.toString(), listener, Throwable::printStackTrace) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("x-app-id", APP_ID);
+                params.put("x-app-key", APP_KEY);
+
+                return params;
+            }
+        };
         RequestHandler.getInstance(context).add(request);
     }
 
@@ -200,21 +366,13 @@ public class Search {
      */
     public static class Response {
         /**
-         * A {Boolean} attribute representing if we found an exact match for the search phrase.
+         * Array of branded foods returned from API call
          */
-        private final Boolean exact;
+        private final BrandedFood[] brandedFoods;
         /**
-         * An {Integer} as the total number of hits for the search query
+         * Array of common foods returned from API call
          */
-        private final Integer total;
-        /**
-         * An [Array] of Item{Objects} representing items that matched the search phrase passed in the requests q parameter
-         */
-        private final Item[] results;
-        /**
-         * An {Integer} as the http status code. We will supply status code mappings to help you look up common issues
-         */
-        private final Integer status;
+        private final CommonFood[] commonFoods;
 
         /**
          * Constructs the object from response JSON
@@ -223,46 +381,48 @@ public class Search {
          * @throws JSONException Thrown when the JSON is malformed.
          */
         public Response(JSONObject json) throws JSONException {
-            exact = json.getBoolean("exact");
-            total = json.getInt("total");
-            JSONArray array = json.getJSONArray("results");
-            results = new Item[array.length()];
-            for (int i = 0; i < array.length(); i++) {
-                results[i] = new Item(array.getJSONObject(i));
+            JSONArray array = json.getJSONArray("branded");
+            brandedFoods = new BrandedFood[array.length()];
+            for (int i = 0; i < brandedFoods.length; i++) {
+                brandedFoods[i] = new BrandedFood(array.getJSONObject(i));
             }
-            status = json.getInt("status");
+            array = json.getJSONArray("common");
+            commonFoods = new CommonFood[array.length()];
+            for (int i = 0; i < commonFoods.length; i++) {
+                commonFoods[i] = new CommonFood(array.getJSONObject(i));
+            }
         }
 
         /**
-         * Getter for exact
-         * @return A {Boolean} attribute representing if we found an exact match for the search phrase.
+         * Gets the array of branded foods found from the search query.
+         *
+         * @return Array of branded foods from search query.
          */
-        public Boolean getExact() {
-            return exact;
+        public BrandedFood[] getBrandedFoods() {
+            return brandedFoods;
         }
 
         /**
-         * Getter for total
-         * @return An {Integer} as the total number of hits for the search query
+         * Gets the array of common foods found from the search query.
+         *
+         * @return Array of common foods from search query.
          */
-        public Integer getTotal() {
-            return total;
+        public CommonFood[] getCommonFoods() {
+            return commonFoods;
         }
 
         /**
-         * Getter for results
-         * @return An [Array] of Item{Objects} representing items that matched the search phrase passed in the requests q parameter
+         * Debug toString method used to display the contents of this object.
+         *
+         * @return String containing the contents of this object.
          */
-        public Item[] getResults() {
-            return results;
-        }
-
-        /**
-         * Getter for status
-         * @return An {Integer} as the http status code. We will supply status code mappings to help you look up common issues
-         */
-        public Integer getStatus() {
-            return status;
+        @NonNull
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "\n brandedFoods=" + Arrays.toString(brandedFoods) +
+                    ",\n commonFoods=" + Arrays.toString(commonFoods) +
+                    '}';
         }
     }
 }

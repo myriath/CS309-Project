@@ -1,4 +1,4 @@
-package com.example.cs309android.models;
+package com.example.cs309android.models.Nutritionix;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,6 +12,13 @@ import android.os.Parcelable;
  */
 public class FoodItem implements Parcelable {
     /**
+     * Enum of valid food types
+     */
+    public enum FoodType {
+        COMMON, BRANDED, SELF
+    }
+
+    /**
      * Name of the food item.
      */
     private final String name;
@@ -19,42 +26,25 @@ public class FoodItem implements Parcelable {
     /**
      * NixID from Nutritionix's database.
      */
-    private final String nixId;
+    private final String id;
 
     /**
-     * TagID from Nutritionix's database.
+     * Type of food object
+     * Used to figure out what the id is.
      */
-    private final String tagId;
+    private final FoodType type;
 
     /**
-     * Brand name from Nutritionix's database.
-     */
-    private final String brandName;
-
-    /**
-     * Public constructor for branded item.
+     * Public constructor for food item.
      *
-     * @param name  name of the item.
-     * @param nixId id from Nutritionix's database.
+     * @param name name of the item.
+     * @param id   id from Nutritionix's database.
+     * @param type type of food item (common, branded, self)
      */
-    public FoodItem(String name, String nixId, String brandName) {
+    public FoodItem(String name, String id, FoodType type) {
         this.name = name;
-        this.nixId = nixId;
-        this.tagId = null;
-        this.brandName = brandName;
-    }
-
-    /**
-     * Public constructor for common item.
-     *
-     * @param name  name of the item.
-     * @param tagId tagId from Nutritionix's database.
-     */
-    public FoodItem(String name, String tagId) {
-        this.name = name;
-        this.nixId = null;
-        this.tagId = tagId;
-        this.brandName = null;
+        this.id = id;
+        this.type = type;
     }
 
     /**
@@ -64,9 +54,8 @@ public class FoodItem implements Parcelable {
      */
     public FoodItem(Parcel parcel) {
         name = parcel.readString();
-        nixId = parcel.readString();
-        tagId = parcel.readString();
-        brandName = parcel.readString();
+        id = parcel.readString();
+        type = FoodType.values()[parcel.readInt()];
     }
 
     /**
@@ -74,17 +63,8 @@ public class FoodItem implements Parcelable {
      *
      * @return id from Nutritionix's database
      */
-    public String getNixId() {
-        return nixId;
-    }
-
-    /**
-     * Getter for the tagId.
-     *
-     * @return tag id from Nutritionix's database
-     */
-    public String getTagId() {
-        return tagId;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -97,12 +77,12 @@ public class FoodItem implements Parcelable {
     }
 
     /**
-     * Getter for the brand name
+     * Getter for the type.
      *
-     * @return brand name from Nutritionix's database
+     * @return Food type depicting what type it is (common, branded, or self)
      */
-    public String getBrandName() {
-        return brandName;
+    public FoodType getType() {
+        return type;
     }
 
     /**
@@ -124,9 +104,8 @@ public class FoodItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
-        parcel.writeString(nixId);
-        parcel.writeString(tagId);
-        parcel.writeString(brandName);
+        parcel.writeString(id);
+        parcel.writeInt(type.ordinal());
     }
 
     /**

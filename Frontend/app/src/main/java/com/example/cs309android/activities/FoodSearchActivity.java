@@ -1,9 +1,5 @@
 package com.example.cs309android.activities;
 
-import static com.example.cs309android.util.Constants.API_KEY;
-import static com.example.cs309android.util.Constants.APP_ID;
-import static com.example.cs309android.util.Constants.NIX_SEARCH_QUERY;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,22 +11,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.FoodItem;
+import com.example.cs309android.models.Nutritionix.FoodItem;
+import com.example.cs309android.models.Nutritionix.queries.Search;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
-import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.Util;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
 /**
  * Activity used to search for food items in the nutritionix database.
@@ -116,51 +109,30 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     public boolean onQueryTextSubmit(String query) {
         findViewById(R.id.search_bar).clearFocus();
 
+        Util.spin(this);
+        Search search = new Search(query);
         try {
-            String url = NIX_SEARCH_QUERY + URLEncoder.encode(query, "utf-8");
-            JsonObjectRequest request = new JsonObjectRequest(url,
-                    (Response.Listener<JSONObject>) response -> {
-                        try {
-                            JSONArray array = response.getJSONArray("branded");
-                            for (int i = 0; i < array.length(); i++) {
-                                String name = array.getJSONObject(i).getString("food_name");
-                                String nix_item_id = array.getJSONObject(i).getString("nix_item_id");
-                                String brand_name = array.getJSONObject(i).getString("brand_name");
-                                searchResults.add(new FoodItem(name, nix_item_id, brand_name));
-                            }
-                            array = response.getJSONArray("common");
-                            for (int i = 0; i < array.length(); i++) {
-                                String name = array.getJSONObject(i).getString("food_name");
-                                String tag_id = array.getJSONObject(i).getString("tag_id");
-                                searchResults.add(new FoodItem(name, tag_id));
-                            }
-                            if (searchResults.size() > 0) {
-                                ((TextView) findViewById(R.id.empty_text)).setVisibility(View.GONE);
-                            } else {
-                                ((TextView) findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
-                            }
-                            ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    },
-                    Throwable::printStackTrace
-            ) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("x-app-id", APP_ID);
-                    params.put("x-app-key", API_KEY);
+            search.search((Response.Listener<JSONObject>) response -> {
+                try {
+                    Search.Response parsed = new Search.Response(response);
+                    searchResults.addAll(Arrays.asList(parsed.getBrandedFoods()));
+                    searchResults.addAll(Arrays.asList(parsed.getCommonFoods()));
 
-                    return params;
+                    if (!searchResults.isEmpty()) {
+                        ((TextView) findViewById(R.id.empty_text)).setVisibility(View.GONE);
+                    } else {
+                        ((TextView) findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+                    }
+                    ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+                    Util.unSpin(this);
+                } catch (JSONException e) {
+                    Util.unSpin(this);
+                    e.printStackTrace();
                 }
-            };
-
-            RequestHandler.getInstance(this).add(request);
+            }, this);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         return true;
     }
 

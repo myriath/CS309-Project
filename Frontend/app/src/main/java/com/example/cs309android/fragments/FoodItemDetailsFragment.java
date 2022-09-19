@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.models.FoodItem;
+import com.example.cs309android.models.Nutritionix.FoodItem;
 
 /**
  * Displays a food item's details in a readable manner to the user

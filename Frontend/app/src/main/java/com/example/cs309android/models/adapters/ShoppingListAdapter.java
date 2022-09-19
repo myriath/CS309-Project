@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
-import com.example.cs309android.models.FoodItem;
+import com.example.cs309android.models.Nutritionix.FoodItem;
 
 import java.util.ArrayList;
 
