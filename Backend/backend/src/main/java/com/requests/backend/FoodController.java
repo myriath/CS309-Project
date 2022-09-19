@@ -38,7 +38,7 @@ class FoodController {
     }
 
     @GetMapping("/foodsearchobject/{foodName}")
-    public String foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
+    public Food foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
         String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
 
         // Initialize a new rest template and a new set of headers
