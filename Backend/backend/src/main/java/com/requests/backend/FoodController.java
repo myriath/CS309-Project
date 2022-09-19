@@ -1,7 +1,7 @@
-package com.example.backend;
+package com.requests.backend;
 
-import com.example.demo.rest.Common;
-import com.example.demo.rest.Food;
+import com.requests.demo.rest.Common;
+import com.requests.demo.rest.Food;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
