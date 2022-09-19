@@ -18,18 +18,28 @@
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable/ic_launcher_background.xml" value="0.14" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable/list_divider.xml" value="0.1835" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout-v28/fragment_login.xml" value="0.23097826086956522" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_search.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main2.xml" value="0.1503623188405797" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/content_main.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/dark_cursor.xml" value="0.23097826086956522" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_first.xml" value="0.1503623188405797" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_food_search.xml" value="0.2667572463768116" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_fullscreen.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_home.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_navbar.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_nutrition.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_register.xml" value="0.33" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_scrolling.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_settings.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_shopping.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/shopping_list_item.xml" value="0.25" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/menu/top_menu.xml" value="0.365625" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1835" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1835" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/xml/settings_screen.xml" value="0.1778115501519757" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/drawable-anydpi/ic_home_deselected.xml" value="0.2265" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/drawable-anydpi/ic_home_selected.xml" value="0.2265" />

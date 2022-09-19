@@ -7,9 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mainFragment"
-        android:name="com.example.cs309android.fragments.home.HomeFragment"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/navbar"
@@ -27,7 +26,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

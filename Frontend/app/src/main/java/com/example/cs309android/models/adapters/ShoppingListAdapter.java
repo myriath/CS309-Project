@@ -3,7 +3,6 @@ package com.example.cs309android.models.adapters;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,23 +14,42 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
-import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.FoodItem;
 
 import java.util.ArrayList;
 
+/**
+ * Custom adapter to display the list of food items in the shopping list fragment.
+ *
+ * @author Mitch Hudson
+ */
 public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
+    /**
+     * List of items in the shopping list
+     */
     private final ArrayList<FoodItem> items;
-    private final CallbackFragment callbackFragment;
 
-    public ShoppingListAdapter(Context context, ArrayList<FoodItem> items, CallbackFragment callbackFragment) {
+    /**
+     * Public constructor.
+     *
+     * @param context context used by the superclass {@link ArrayAdapter}
+     * @param items   list of items to display.
+     */
+    public ShoppingListAdapter(Context context, ArrayList<FoodItem> items) {
         super(context, R.layout.shopping_list_item, items);
         this.items = items;
-        this.callbackFragment = callbackFragment;
     }
 
+    /**
+     * Ran for each of the child views (items in the list)
+     * Here is where button functionality for each item is given.
+     *
+     * @param position    index of the item in the list
+     * @param convertView converted view of the item in the list
+     * @param parent      ListView parent
+     * @return inflated view of the custom list_item view.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -52,14 +70,7 @@ public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
                 }
             });
 
-            convertView.findViewById(R.id.remove).setOnClickListener(view1 -> ShoppingFragment.removeItem(position, parent));
-
-            convertView.setOnClickListener(view -> {
-                FoodItem item = items.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putInt("fooditem", item.getId());
-                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_FOOD_ITEM, bundle);
-            });
+            convertView.findViewById(R.id.remove).setOnClickListener(view1 -> ShoppingFragment.removeItem(position, parent.getRootView()));
 
             int[] attrs = new int[]{R.attr.selectableItemBackground};
             TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
@@ -74,5 +85,4 @@ public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
         });
         return convertView;
     }
-
 }

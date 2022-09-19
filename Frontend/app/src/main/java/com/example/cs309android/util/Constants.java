@@ -23,6 +23,11 @@ public class Constants {
     public static final int RESULT_USER_CREATED = 2;
 
     /**
+     * API key for Nutritionix API
+     */
+    public static final String API_KEY = "";
+
+    /**
      * Base url for the server to connect to.
      * TODO: Replace with actual server url
      */

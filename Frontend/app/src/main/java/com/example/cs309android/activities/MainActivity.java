@@ -1,11 +1,13 @@
 package com.example.cs309android.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
@@ -70,7 +72,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_START_LOGIN = 2;
     public static final int CALLBACK_MOVE_TO_HOME = 3;
     public static final int CALLBACK_MOVE_TO_FOOD_ITEM = 4;
+    public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
+
+    /**
+     * Used to launch various activities.
+     */
+    ActivityResultLauncher<Intent> foodSearchLauncher;
 
     /**
      * Navbar object at the bottom of the app.
@@ -84,6 +92,18 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     protected void onStop() {
         super.onStop();
         RequestHandler.getInstance(this).cancelAll();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        navbar.setSelectedItemId(R.id.home);
+//        mainFragment = new HomeFragment();
+//        FragmentManager manager = getSupportFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+//        transaction.commit();
+//        currentFragment = 2;
     }
 
     /**
@@ -104,12 +124,35 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         setContentView(R.layout.activity_main);
 
-        mainFragment = (CallbackFragment) getSupportFragmentManager().findFragmentById(R.id.mainFragment);
-        Objects.requireNonNull(mainFragment).setCallbackFragment(this);
-
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        foodSearchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        System.out.println(result.getData());
+                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra("fooditems"));
+                        mainFragment.setCallbackFragment(this);
+                        // Always slide left (furthest left)
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                                .commit();
+                    } else {
+                        mainFragment = new ShoppingFragment();
+                        mainFragment.setCallbackFragment(this);
+                        // Always slide left (furthest left)
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                                .commit();
+                    }
+                    currentFragment = 0;
+                    navbar.setSelectedItemId(R.id.shopping);
+                }
+        );
 
         // Gets stored username and password hash, if they exist
         // TODO: Uncomment this out before PR
@@ -158,8 +201,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
@@ -172,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
@@ -185,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
@@ -198,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.settings) {
@@ -208,8 +250,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
             } else {
@@ -275,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new HomeFragment();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
@@ -283,6 +324,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_MOVE_TO_FOOD_ITEM): {
                 // TODO: Create page for a food item
+                break;
+            }
+            case (CALLBACK_SEARCH_FOOD): {
+                Intent intent = new Intent(this, FoodSearchActivity.class);
+                intent.putExtra("fooditems", bundle.getParcelableArrayList("fooditems"));
+                foodSearchLauncher.launch(intent);
+                break;
             }
         }
     }

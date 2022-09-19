@@ -4,12 +4,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.cs309android.fragments.login.LoginFragment;
-import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 
 /**
- * Abstract helper class containing methods used by {@link LoginFragment} and {@link RegisterFragment}
+ * Abstract helper class containing methods used by most fragments.
  *
  * @author Mitch Hudson
  */
