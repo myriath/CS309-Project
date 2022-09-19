@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiments/Mitch/Barcode" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiments/Mitch/Barcode" />
+            <option value="$PROJECT_DIR$/Experiments/Mitch/Barcode/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiments/Mitch/Login" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiments/Mitch/Login" />
+            <option value="$PROJECT_DIR$/Experiments/Mitch/Login/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiments/Travis/AppTest" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiments/Travis/AppTest" />
+            <option value="$PROJECT_DIR$/Experiments/Travis/AppTest/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiments/Travis/LoginTest" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiments/Travis/LoginTest" />
+            <option value="$PROJECT_DIR$/Experiments/Travis/LoginTest/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Frontend" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Frontend" />
+            <option value="$PROJECT_DIR$/Frontend/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
