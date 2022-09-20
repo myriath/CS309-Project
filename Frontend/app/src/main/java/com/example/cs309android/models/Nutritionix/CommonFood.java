@@ -66,7 +66,7 @@ public class CommonFood extends FoodItem implements Parcelable {
      * @param json JSON response from Nutritionix API
      */
     public CommonFood(JSONObject json) {
-        super(json.optString("food_name"), null, FoodType.COMMON);
+        super(json.optString("food_name"), json.optString("tag_id"), FoodType.COMMON);
         food_name = json.optString("food_name");
         serving_unit = json.optString("serving_unit");
         tag_name = json.optString("tag_name");

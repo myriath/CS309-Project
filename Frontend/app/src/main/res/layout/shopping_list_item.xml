@@ -17,8 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/stricken"
         android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/stricken"
+        android:layout_toStartOf="@+id/remove"
         android:textSize="24sp" />
 
     <ImageView

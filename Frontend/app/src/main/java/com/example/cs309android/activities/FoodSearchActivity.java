@@ -3,19 +3,26 @@ package com.example.cs309android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Response;
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.FoodItemDetailsFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.Nutritionix.FoodItem;
 import com.example.cs309android.models.Nutritionix.queries.Search;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
 import org.json.JSONException;
@@ -37,15 +44,14 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
      */
     private ArrayList<FoodItem> items;
     private ArrayList<FoodItem> searchResults;
-    private ArrayList<FoodItem> searchResultsSelected;
 
     private static FoodSearchListAdapter adapter;
 
-    public static final int CALLBACK_FOOD_DETAIL = 0;
-    public static final int CALLBACK_SELECT = 1;
-    public static final int CALLBACK_DESELECT = 2;
+    private FoodItemDetailsFragment detailsFragment;
 
-    public static final String PARCEL_INDEX = "fooditem_index";
+    public static final int CALLBACK_FOOD_DETAIL = 0;
+    public static final int CALLBACK_CLOSE_DETAIL = 1;
+    public static final int CALLBACK_SELECT = 2;
 
     /**
      * Ran when the activity is created.
@@ -56,6 +62,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_search);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         ListView listView = findViewById(R.id.search_results);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -66,7 +73,6 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         }
 
         searchResults = new ArrayList<>();
-        searchResultsSelected = new ArrayList<>();
 
         TextView empty = findViewById(R.id.empty_text);
         if (items.isEmpty()) {
@@ -81,6 +87,11 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         SearchView searchView = findViewById(R.id.search_bar);
         searchView.requestFocus();
         searchView.setOnQueryTextListener(this);
+        ViewCompat.setOnApplyWindowInsetsListener(searchView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     /**
@@ -90,7 +101,6 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        items.addAll(searchResultsSelected);
         intent.putParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST, items);
         setResult(RESULT_OK, intent);
         finish();
@@ -115,6 +125,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             search.search((Response.Listener<JSONObject>) response -> {
                 try {
                     Search.Response parsed = new Search.Response(response);
+                    searchResults.clear();
                     searchResults.addAll(Arrays.asList(parsed.getBrandedFoods()));
                     searchResults.addAll(Arrays.asList(parsed.getCommonFoods()));
 
@@ -160,6 +171,22 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     public void callback(int op, Bundle bundle) {
         // TODO: Open details page
         // TODO: select and deselect methods
+        switch (op) {
+            case (CALLBACK_FOOD_DETAIL): {
+                Intent intent = new Intent(this, FoodDetailsActivity.class);
+                intent.putExtra(MainActivity.PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                startActivity(intent);
+                break;
+            }
+            case (CALLBACK_SELECT): {
+                items.add(bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                Toaster.toastShort("Added", this);
+            }
+            case (CALLBACK_CLOSE_DETAIL): {
+                getSupportFragmentManager().popBackStack();
+                break;
+            }
+        }
     }
 
     /**

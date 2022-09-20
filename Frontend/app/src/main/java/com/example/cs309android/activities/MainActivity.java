@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -122,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         Nutrient.generateLookup();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setAppearanceLightNavigationBars(true);
+        windowInsetsController.setAppearanceLightStatusBars(true);
+
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
         if (DEBUG) {
@@ -138,24 +143,16 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST));
-                        mainFragment.setCallbackFragment(this);
-                        // Always slide left (furthest left)
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.coordinator, (Fragment) mainFragment, null)
-                                .commit();
                     } else {
                         mainFragment = new ShoppingFragment();
-                        mainFragment.setCallbackFragment(this);
-                        // Always slide left (furthest left)
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.coordinator, (Fragment) mainFragment, null)
-                                .commit();
                     }
+
+                    mainFragment.setCallbackFragment(this);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                            .commit();
                     currentFragment = 0;
-                    navbar.setSelectedItemId(R.id.shopping);
                 }
         );
 
@@ -364,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginFragment() {
-//        findViewById(R.id.mainLayout).setAlpha(0.5f);
         findViewById(R.id.loginPopup).setClickable(true);
 
         loginWindowFragment = new LoginFragment();

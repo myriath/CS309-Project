@@ -5,9 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.example.cs309android.R;
+import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.Nutritionix.FoodItem;
+import com.google.android.material.appbar.MaterialToolbar;
 
 /**
  * Displays a food item's details in a readable manner to the user
@@ -63,7 +69,28 @@ public class FoodItemDetailsFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_food_item_details, container, false);
 
-//        view.findViewById(R.id.)
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
+        System.out.println(item.getName());
+        toolbar.setNavigationOnClickListener(view1 -> {
+            callbackFragment.callback(FoodSearchActivity.CALLBACK_CLOSE_DETAIL, null);
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, insets.top, 0, 0);
+            System.out.println("padding");
+//            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+//        requireActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, item);
+            callbackFragment.callback(FoodSearchActivity.CALLBACK_SELECT, bundle);
+        });
 
         return view;
     }

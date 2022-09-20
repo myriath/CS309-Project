@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Experiments/Mitch/Android/app/src/main/res/layout/fragment_navbar.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add.xml" value="0.196" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_back.xml" value="0.1835" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_home.xml" value="0.228" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_home_selected.xml" value="0.228" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_nutrition.xml" value="0.14" />
@@ -18,6 +19,7 @@
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable/ic_launcher_background.xml" value="0.14" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable/list_divider.xml" value="0.1835" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout-v28/fragment_login.xml" value="0.23097826086956522" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.19479166666666667" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_search.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main2.xml" value="0.1503623188405797" />

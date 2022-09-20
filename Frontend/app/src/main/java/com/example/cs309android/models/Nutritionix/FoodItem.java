@@ -3,6 +3,8 @@ package com.example.cs309android.models.Nutritionix;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Simple FoodItem class that represents an item from Nutritionix's database.
  * Only stores the id to reference the database and the name for displaying.
@@ -33,6 +35,8 @@ public class FoodItem implements Parcelable {
      * Used to figure out what the id is.
      */
     private final FoodType type;
+
+    private boolean selected = false;
 
     /**
      * Public constructor for food item.
@@ -83,6 +87,38 @@ public class FoodItem implements Parcelable {
      */
     public FoodType getType() {
         return type;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    /**
+     * Used to test equivalency when performing searches.
+     *
+     * @param o Second FoodItem to check against this one.
+     * @return True if the two FoodItems are equivalent
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FoodItem foodItem = (FoodItem) o;
+        return Objects.equals(name, foodItem.name) && Objects.equals(id, foodItem.id) && type == foodItem.type;
+    }
+
+    /**
+     * Generates a hash of this object
+     *
+     * @return Hash of the object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, id, type);
     }
 
     /**

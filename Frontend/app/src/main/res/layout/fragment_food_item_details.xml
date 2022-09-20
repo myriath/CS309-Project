@@ -7,8 +7,10 @@
     tools:context=".fragments.FoodItemDetailsFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -16,29 +18,42 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 style="?attr/collapsingToolbarLayoutLargeStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:contentScrim="?attr/colorPrimary">
+                app:contentScrim="@android:color/transparent">
 
                 <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:fitsSystemWindows="true"
                     android:contentDescription="@string/food_item_image" />
 
                 <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_back"
                     android:background="@android:color/transparent"
                     android:elevation="0dp" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_item"
+            style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@+id/collapsing_toolbar"
+            app:layout_anchorGravity="bottom|end"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/ic_add"
+            android:contentDescription="TODO" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
