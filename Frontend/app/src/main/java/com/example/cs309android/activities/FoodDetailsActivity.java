@@ -1,5 +1,6 @@
 package com.example.cs309android.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(item.getName().substring(0, Math.min(item.getName().length(), 18)).trim() + (item.getName().length() > 18 ? "..." : ""));
         toolbar.setNavigationOnClickListener(view1 -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
+
+        findViewById(R.id.add_item).setOnClickListener(view1 -> {
+            Intent intent = new Intent();
+            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+            setResult(RESULT_OK, intent);
             finish();
         });
 

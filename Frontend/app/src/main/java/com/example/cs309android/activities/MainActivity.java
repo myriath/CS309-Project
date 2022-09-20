@@ -25,6 +25,7 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.Nutritionix.FoodItem;
 import com.example.cs309android.models.Nutritionix.Nutrient;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
@@ -328,13 +329,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_FOOD_DETAIL): {
-                mainFragment = FoodItemDetailsFragment.newInstance(bundle.getParcelable(PARCEL_FOODITEM));
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .addToBackStack(null)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
-                        .commit();
+                Intent intent = new Intent(this, FoodDetailsActivity.class);
+                intent.putExtra(PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                startActivity(intent);
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {

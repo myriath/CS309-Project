@@ -9,15 +9,19 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.FoodItemDetailsFragment;
+import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.Nutritionix.FoodItem;
 import com.example.cs309android.models.Nutritionix.queries.Search;
@@ -31,6 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Activity used to search for food items in the nutritionix database.
@@ -48,6 +53,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     private static FoodSearchListAdapter adapter;
 
     private FoodItemDetailsFragment detailsFragment;
+
+    private ActivityResultLauncher<Intent> foodDetailsLauncher;
 
     public static final int CALLBACK_FOOD_DETAIL = 0;
     public static final int CALLBACK_CLOSE_DETAIL = 1;
@@ -92,6 +99,15 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
             return WindowInsetsCompat.CONSUMED;
         });
+
+        foodDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        items.add(Objects.requireNonNull(result.getData()).getParcelableExtra(MainActivity.PARCEL_FOODITEM));
+                    }
+                }
+        );
     }
 
     /**
@@ -175,7 +191,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(MainActivity.PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
-                startActivity(intent);
+                foodDetailsLauncher.launch(intent);
                 break;
             }
             case (CALLBACK_SELECT): {
