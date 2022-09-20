@@ -16,12 +16,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
 import com.example.cs309android.R;
-import com.example.cs309android.fragments.FoodItemDetailsFragment;
-import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.Nutritionix.FoodItem;
 import com.example.cs309android.models.Nutritionix.queries.Search;
@@ -51,8 +48,6 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     private ArrayList<FoodItem> searchResults;
 
     private static FoodSearchListAdapter adapter;
-
-    private FoodItemDetailsFragment detailsFragment;
 
     private ActivityResultLauncher<Intent> foodDetailsLauncher;
 
