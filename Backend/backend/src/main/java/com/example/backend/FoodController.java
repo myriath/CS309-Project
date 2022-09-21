@@ -61,7 +61,7 @@ class FoodController {
         Food responseObject = objectMapper.readValue(responseEntity.getBody(), Food.class);
 
 
-        return responseObject;
+        return responseObject.toString();
     }
 
 
