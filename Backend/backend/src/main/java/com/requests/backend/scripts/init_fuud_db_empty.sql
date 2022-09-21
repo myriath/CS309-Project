@@ -2,6 +2,8 @@
 -- Fast, Unique and User-Friendly Dieting!
 CREATE DATABASE IF NOT EXISTS fuud_db;
 
+USE fuud_db;
+
 CREATE TABLE IF NOT EXISTS users (
     username CHAR(50) PRIMARY KEY,
     p_hash BINARY(256),
