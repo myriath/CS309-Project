@@ -1,73 +1,96 @@
 package com.example.backend;
 
-import com.example.demo.rest.Common;
-import com.example.demo.rest.Food;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
+
+class userInfo{
+    public String username;
+    public int userID;
+    public String Something;
+}
+
+
 @RestController
 class FoodController {
-    @Autowired
-    private ObjectMapper objectMapper;
 
-    // Search for a food item by its name.
-    @GetMapping("/foodsearch/{foodName}")
-    public String foodSearch(@PathVariable String foodName) {
-        String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+    ArrayList<userInfo> check = new ArrayList<userInfo>();
 
-        headers.set("x-app-id", "b7e6f2dc");
-        headers.set("x-app-key", "c24ea00b49959892af532ec574e91165");
+    //Methods to delete
+    @PostMapping("/pop")
+    public void populate() {
 
-        //Create a new HttpEntity
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        userInfo first = new userInfo();
+        first.username = "Charles";
+        first.Something = "Chernobyl";
+        first.userID = 1;
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, String.class);
+        check.add(first);
 
-        String res = responseEntity.toString();
+        userInfo Second = new userInfo();
+        Second.username = "steve";
+        Second.Something = "minecraft";
+        Second.userID = 2;
 
-        return res;
+        check.add(Second);
+
+        userInfo Third = new userInfo();
+        Third.username = "Artyom";
+        Third.Something = "Dark_Ones";
+        Third.userID = 3;
+
+        check.add(Second);
     }
 
-    @GetMapping("/foodsearchobject/{foodName}")
-    public String foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
-        String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
 
-        // Initialize a new rest template and a new set of headers
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+    @GetMapping("/")
+    public String test() {
+        return"Hello world! test test";
+    }
 
-        // Set API ID and API key as request headers
-        headers.set("x-app-id", "b7e6f2dc");
-        headers.set("x-app-key", "c24ea00b49959892af532ec574e91165");
 
-        // Create a new HttpEntity using the headers
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        // Gather a response entity from the designated URI as a String
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, String.class);
+    //Methods to keep
+    @GetMapping("/username/{something}")
+    public String Username(@PathVariable String something) {
+        userInfo username_output = searchSomething(check, something);
+        return username_output.username;
+    }
 
-        // Read the response body into a Java Object of type "Food" from the rest package
-        Food responseObject = objectMapper.readValue(responseEntity.getBody(), Food.class);
+    public userInfo searchSomething(ArrayList<userInfo> arr, String locate) {
+        int n = arr.size();
 
-        return "no";
-        //return responseObject.toString();
+        for(int i = 0; i < n; i++){
+            if(arr.get(i).Something.compareTo(locate) == 0) {
+                return arr.get(i);
+            }
+        }
+        return null;
+    }
+
+
+    @GetMapping("/userID/{Username}")
+    public int getID(@PathVariable String Username){
+        userInfo id_output = searchName(check, Username);
+        return id_output.userID;
+    }
+
+    public userInfo searchName(ArrayList<userInfo> arr, String locate) {
+        int n = arr.size();
+
+        for(int i = 0; i < n; i++){
+            if(arr.get(i).username.compareTo(locate) == 0) {
+                return arr.get(i);
+            }
+        }
+        return null;
     }
 
 
 }
-
-
-
-
-
