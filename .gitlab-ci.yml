@@ -24,7 +24,7 @@ build-and-test:
   cache:
     key: "maven-$CI_COMMIT_REF_SLUG"
     paths:
-      - .m2/repository/Backend/build/
+      - .m2/repository/Backend/backend/
   script:
     - mvn $MAVEN_CLI_OPTS verify
   artifacts:
