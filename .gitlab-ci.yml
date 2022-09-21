@@ -20,6 +20,8 @@ variables:
     -DdeployAtEnd=true
 
 build-and-test:
+  variables:
+    JOB_MODE: "test"
   image: maven:3.8-openjdk-11
   stage: build
   cache:
@@ -37,7 +39,10 @@ build-and-test:
         - "**/target/*-reports/TEST-*.xml"
 
 deploy-prod:
+  variables:
+    JOB_MODE: "deploy"
   stage: deploy
   script:
     - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+    - echo "$JOB_MODE"
   environment: production
