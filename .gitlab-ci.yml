@@ -6,7 +6,7 @@ stages:
 variables:
   MAVEN_OPTS: >-
     -Dhttps.protocols=TLSv1.2
-    -Dmaven.repo.local=.m2/repository
+    -Dmaven.repo.local=.m2/repository/Backend/backend/
     -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN
     -Dorg.slf4j.simpleLogger.showDateTime=true
     -Djava.awt.headless=true
@@ -24,7 +24,7 @@ build-and-test:
   cache:
     key: "maven-$CI_COMMIT_REF_SLUG"
     paths:
-      - .m2/repository
+      - .m2/repository/Backend/build/
   script:
     - mvn $MAVEN_CLI_OPTS verify
   artifacts:
