@@ -4,6 +4,7 @@ import com.requests.backend.foods.Common;
 import com.requests.backend.foods.Food;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.requests.backend.models.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +62,5 @@ class FoodController {
 
         return responseObject;
     }
-
-
-
 }
 

@@ -4,38 +4,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Blob;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private String username;
 
-    private String name;
+    private Blob p_hash;
+
+    private Blob p_salt;
+
+    private String user_type;
 
     private String email;
 
-    public Integer getId() {
-        return id;
-    }
+    private String full_name;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Integer age;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public String getUsername() {
+        return username;
     }
 }
