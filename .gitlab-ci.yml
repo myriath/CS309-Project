@@ -33,13 +33,13 @@ build:
       - .m2/repository
   script:
     - mvn $MAVEN_CLI_OPTS verify
-  artifacts:
-    name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
-    paths:
-      - "**/target/*.jar"
-    reports:
-      junit:
-        - "**/target/*-reports/TEST-*.xml"
+  # artifacts:
+  #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
+  #   paths:
+  #     - "**/target/*.jar"
+  #   reports:
+  #     junit:
+  #       - "**/target/*-reports/TEST-*.xml"
 
 deploy-prod:
   variables:
