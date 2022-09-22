@@ -1,9 +1,6 @@
 package com.example.backend;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -21,7 +18,7 @@ class userInfo{
 class FoodController {
 
     ArrayList<userInfo> check = new ArrayList<userInfo>();
-
+    private int userIDSeed = 1;
     //Methods to delete
     @PostMapping("/pop")
     public void populate() {
@@ -29,22 +26,22 @@ class FoodController {
         userInfo first = new userInfo();
         first.username = "Charles";
         first.Something = "Chernobyl";
-        first.userID = 1;
-
+        first.userID = userIDSeed;
+        userIDSeed++;
         check.add(first);
 
         userInfo Second = new userInfo();
         Second.username = "steve";
         Second.Something = "minecraft";
-        Second.userID = 2;
-
+        Second.userID = userIDSeed;
+        userIDSeed++;
         check.add(Second);
 
         userInfo Third = new userInfo();
         Third.username = "Artyom";
         Third.Something = "Dark_Ones";
-        Third.userID = 3;
-
+        Third.userID = userIDSeed;
+        userIDSeed++;
         check.add(Second);
     }
 
@@ -54,10 +51,39 @@ class FoodController {
         return"Hello world! test test";
     }
 
+    @GetMapping("/userList")
+    public String list(){
+
+        return check.toString();
+    }
 
 
-    //Methods to keep
-    @GetMapping("/username/{something}")
+    //Methods to keep?
+    @PutMapping("/newUser/{name},{something}")
+        public String newUser(@PathVariable String name, @PathVariable String something){
+            userInfo newUser = new userInfo();
+            newUser.username = name;
+            newUser.Something = something;
+            newUser.userID = userIDSeed;
+            userIDSeed++;
+            check.add(newUser);
+        return "User Added";
+    }
+
+
+
+    @PutMapping("/NameChange/{old},{news}")  //could be used for the password
+    public String UsernameChange(@PathVariable String old, @PathVariable String news){
+        userInfo user = searchName(check, old);
+        user.username = news;
+
+
+        return "Username Changed to:" + user.username;
+    }
+
+
+
+    @GetMapping("/username/{something}")  //could be switched to use an email address to find the user
     public String Username(@PathVariable String something) {
         userInfo username_output = searchSomething(check, something);
         return username_output.username;
