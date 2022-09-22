@@ -36,7 +36,7 @@ build:
   artifacts:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
-      - "**/target"
+      - "**/target/*.jar"
     reports:
       junit:
         - "**/target/*-reports/TEST-*.xml"
