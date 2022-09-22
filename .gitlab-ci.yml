@@ -46,5 +46,6 @@ deploy-prod:
     JOB_MODE: "deploy"
   stage: deploy
   script:
+    - mvn $MAVEN_CLI_OPTS verify
     - java -jar **/target/$APP_NAME-$APP_VERSION.jar
   environment: production
