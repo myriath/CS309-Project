@@ -47,5 +47,5 @@ deploy-prod:
   stage: deploy
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - java -jar **/target/$APP_NAME-$APP_VERSION.jar
+    - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
   environment: production
