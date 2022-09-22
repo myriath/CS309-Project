@@ -22,6 +22,10 @@ public class CommonFood extends FoodItem implements Parcelable {
      * Id for the common tag
      */
     private final String tag_id;
+    /**
+     * Weight of the serving unit in grams
+     */
+    private final Double serving_weight_grams;
 
     /**
      * Public constructor for use with GSON
@@ -41,10 +45,11 @@ public class CommonFood extends FoodItem implements Parcelable {
     public CommonFood(String food_name, String serving_unit, String tag_name, Integer serving_qty,
                       String common_type, String[] claims, String tag_id, Photo photo,
                       Nutrient[] full_nutrients, Double serving_weight_grams, String locale) {
-        super(food_name, serving_unit, serving_weight_grams, serving_qty, claims, full_nutrients, photo, locale);
+        super(food_name, serving_unit, serving_qty, claims, full_nutrients, photo, locale);
         this.tag_name = tag_name;
         this.common_type = common_type;
         this.tag_id = tag_id;
+        this.serving_weight_grams = serving_weight_grams;
     }
 
     /**
@@ -58,6 +63,7 @@ public class CommonFood extends FoodItem implements Parcelable {
         tag_name = parcel.readString();
         common_type = parcel.readString();
         tag_id = parcel.readString();
+        serving_weight_grams = parcel.readDouble();
     }
 
     /**
@@ -104,6 +110,15 @@ public class CommonFood extends FoodItem implements Parcelable {
     }
 
     /**
+     * Getter for serving_weight_grams
+     *
+     * @return Weight of the serving unit in grams
+     */
+    public Double getServingWeightGrams() {
+        return serving_weight_grams;
+    }
+
+    /**
      * Parcelable method
      *
      * @return 0
@@ -125,5 +140,6 @@ public class CommonFood extends FoodItem implements Parcelable {
         parcel.writeString(tag_name);
         parcel.writeString(common_type);
         parcel.writeString(tag_id);
+        parcel.writeDouble(serving_weight_grams);
     }
 }

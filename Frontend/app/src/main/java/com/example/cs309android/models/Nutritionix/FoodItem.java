@@ -3,6 +3,9 @@ package com.example.cs309android.models.Nutritionix;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -22,13 +25,9 @@ public class FoodItem implements Parcelable {
      */
     private final String serving_unit;
     /**
-     * Weight of the serving unit in grams
-     */
-    private final Double serving_weight_grams;
-    /**
      * Number of serving units per unit
      */
-    private final Integer serving_qty;
+    private final Double serving_qty;
     /**
      * Food label claims list.
      * (Atkins friendly, contains dairy, etc.)
@@ -52,17 +51,15 @@ public class FoodItem implements Parcelable {
      *
      * @param food_name            name of the food
      * @param serving_unit         serving size unit of the food
-     * @param serving_weight_grams weight of serving size in grams of the food
      * @param serving_qty          number of servings per unit of the food
      * @param claims               label claims
      * @param full_nutrients       nutrients of the food
      * @param photo                photo of the food
      * @param locale               locale
      */
-    public FoodItem(String food_name, String serving_unit, double serving_weight_grams, int serving_qty, String[] claims, Nutrient[] full_nutrients, Photo photo, String locale) {
+    public FoodItem(String food_name, String serving_unit, double serving_qty, String[] claims, Nutrient[] full_nutrients, Photo photo, String locale) {
         this.food_name = food_name;
         this.serving_unit = serving_unit;
-        this.serving_weight_grams = serving_weight_grams;
         this.serving_qty = serving_qty;
         this.claims = claims;
         this.full_nutrients = full_nutrients;
@@ -78,8 +75,7 @@ public class FoodItem implements Parcelable {
     public FoodItem(Parcel parcel) {
         food_name = parcel.readString();
         serving_unit = parcel.readString();
-        serving_weight_grams = parcel.readDouble();
-        serving_qty = parcel.readInt();
+        serving_qty = parcel.readDouble();
         claims = parcel.createStringArray();
         full_nutrients = parcel.createTypedArray(Nutrient.CREATOR);
         photo = parcel.readParcelable(Photo.class.getClassLoader());
@@ -105,20 +101,11 @@ public class FoodItem implements Parcelable {
     }
 
     /**
-     * Getter for serving_weight_grams
-     *
-     * @return Weight of the serving unit in grams
-     */
-    public Double getServingWeightGrams() {
-        return serving_weight_grams;
-    }
-
-    /**
      * Getter for serving_qty
      *
      * @return Serving unit quantity per unit
      */
-    public Integer getServingQty() {
+    public Double getServingQty() {
         return serving_qty;
     }
 
@@ -202,10 +189,9 @@ public class FoodItem implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(food_name);
         parcel.writeParcelable(photo, i);
-        parcel.writeDouble(serving_weight_grams);
         parcel.writeTypedArray(full_nutrients, i);
         parcel.writeString(serving_unit);
-        parcel.writeInt(serving_qty);
+        parcel.writeDouble(serving_qty);
         parcel.writeStringArray(claims);
         parcel.writeString(locale);
     }
@@ -223,4 +209,18 @@ public class FoodItem implements Parcelable {
             return new FoodItem[size];
         }
     };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "FoodItem{" +
+                "food_name='" + food_name + '\'' +
+                ", serving_unit='" + serving_unit + '\'' +
+                ", serving_qty=" + serving_qty +
+                ", claims=" + Arrays.toString(claims) +
+                ", full_nutrients=" + Arrays.toString(full_nutrients) +
+                ", photo=" + photo +
+                ", locale='" + locale + '\'' +
+                '}';
+    }
 }

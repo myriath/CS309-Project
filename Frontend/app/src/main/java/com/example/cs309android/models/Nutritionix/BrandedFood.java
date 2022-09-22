@@ -28,7 +28,7 @@ public class BrandedFood extends FoodItem implements Parcelable {
     /**
      * Number of calories per serving
      */
-    private final Integer nf_calories;
+    private final Double nf_calories;
     /**
      * Region
      * 1=US, 2=UK
@@ -50,7 +50,6 @@ public class BrandedFood extends FoodItem implements Parcelable {
      * @param nix_brand_id         brand id given by Nutritionix
      * @param photo                photo object
      * @param brand_name           name of the brand
-     * @param serving_weight_grams weight of the serving in grams
      * @param full_nutrients       nutrients array
      * @param nix_item_id          item id given by Nutritionix
      * @param serving_unit         serving size unit
@@ -64,11 +63,11 @@ public class BrandedFood extends FoodItem implements Parcelable {
      * @param locale               locale code
      */
     public BrandedFood(String food_name, String nix_brand_id, Photo photo, String brand_name,
-                       Double serving_weight_grams, Nutrient[] full_nutrients, String nix_item_id,
+                       Nutrient[] full_nutrients, String nix_item_id,
                        String serving_unit, String brand_name_item_name, Integer serving_qty,
-                       Integer nf_calories, String[] claims, Integer region, Integer brand_type,
+                       Double nf_calories, String[] claims, Integer region, Integer brand_type,
                        String taxonomy_node_id, String locale) {
-        super(food_name, serving_unit, serving_weight_grams, serving_qty, claims, full_nutrients, photo, locale);
+        super(food_name, serving_unit, serving_qty, claims, full_nutrients, photo, locale);
         this.nix_brand_id = nix_brand_id;
         this.brand_name = brand_name;
         this.nix_item_id = nix_item_id;
@@ -91,7 +90,7 @@ public class BrandedFood extends FoodItem implements Parcelable {
         brand_name = parcel.readString();
         nix_item_id = parcel.readString();
         brand_name_item_name = parcel.readString();
-        nf_calories = parcel.readInt();
+        nf_calories = parcel.readDouble();
         region = parcel.readInt();
         brand_type = parcel.readInt();
         taxonomy_node_id = parcel.readString();
@@ -154,7 +153,7 @@ public class BrandedFood extends FoodItem implements Parcelable {
      *
      * @return Number of calories
      */
-    public Integer getNfCalories() {
+    public Double getNfCalories() {
         return nf_calories;
     }
 
@@ -208,7 +207,7 @@ public class BrandedFood extends FoodItem implements Parcelable {
         parcel.writeString(brand_name);
         parcel.writeString(nix_item_id);
         parcel.writeString(brand_name_item_name);
-        parcel.writeInt(nf_calories);
+        parcel.writeDouble(nf_calories);
         parcel.writeInt(region);
         parcel.writeInt(brand_type);
         parcel.writeString(taxonomy_node_id);
