@@ -65,7 +65,7 @@ public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
             });
 
             TextView name = convertView.findViewById(R.id.name);
-            name.setText(items.get(position).getName());
+            name.setText(items.get(position).getFoodName());
 
             convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
                 if (((CheckBox) view).isChecked()) {

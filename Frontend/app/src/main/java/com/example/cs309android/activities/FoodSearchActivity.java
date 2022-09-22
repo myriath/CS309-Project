@@ -17,7 +17,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.android.volley.Response;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.Nutritionix.FoodItem;
@@ -27,7 +26,6 @@ import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -133,7 +131,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         Util.spin(this);
         Search search = new Search(query);
         try {
-            search.search((Response.Listener<JSONObject>) response -> {
+            search.search(response -> {
                 try {
                     Search.Response parsed = new Search.Response(response);
                     searchResults.clear();
@@ -141,9 +139,9 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                     searchResults.addAll(Arrays.asList(parsed.getCommonFoods()));
 
                     if (!searchResults.isEmpty()) {
-                        ((TextView) findViewById(R.id.empty_text)).setVisibility(View.GONE);
+                        findViewById(R.id.empty_text).setVisibility(View.GONE);
                     } else {
-                        ((TextView) findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                     }
                     ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
                     Util.unSpin(this);

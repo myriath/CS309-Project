@@ -2,6 +2,7 @@ package com.example.cs309android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -11,9 +12,12 @@ import com.example.cs309android.R;
 import com.example.cs309android.models.Nutritionix.FoodItem;
 import com.example.cs309android.util.RequestHandler;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FoodDetailsActivity extends AppCompatActivity {
     private FoodItem item;
+
+    public static final String PARCEL_BUTTON_CONTROL = "button-control";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +25,18 @@ public class FoodDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        item = getIntent().getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+        Intent i = getIntent();
+        item = i.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+
+        FloatingActionButton fab = findViewById(R.id.add_item);
+        if (!i.getBooleanExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, false)) {
+            fab.setVisibility(View.GONE);
+        }
+
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(item.getName().substring(0, Math.min(item.getName().length(), 18)).trim() + (item.getName().length() > 18 ? "..." : ""));
+        toolbar.setTitle(item.getFoodName().substring(0, Math.min(item.getFoodName().length(), 18)).trim() + (item.getFoodName().length() > 18 ? "..." : ""));
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view1 -> {
             setResult(RESULT_CANCELED);
             finish();
@@ -38,14 +50,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
         });
 
         NetworkImageView imageView = findViewById(R.id.image_view);
+//        try {
+//            ()
+//        } catch (NullPointerException e) {
+//
+//        }
         imageView.setImageUrl("https://cdn.discordapp.com/attachments/545384256617185293/1020782691714613298/unknown.png", RequestHandler.getInstance(this).getImageLoader());
-
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.collapsing_toolbar), (v, windowInsets) -> {
-//            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-////            v.setPadding(0, insets.top, 0, 0);
-//            System.out.println(insets.top);
-//            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
-//            return WindowInsetsCompat.CONSUMED;
-//        });
     }
 }

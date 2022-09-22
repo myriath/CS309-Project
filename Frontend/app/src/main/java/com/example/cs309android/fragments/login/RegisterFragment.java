@@ -149,11 +149,13 @@ public class RegisterFragment extends BaseFragment {
                     }
                 }, error -> {
                     Toaster.toastShort("Unexpected error", this.getActivity());
+                    error.printStackTrace();
                     Util.unSpin(view);
                 });
                 RequestHandler.getInstance(this.getActivity()).add(registerRequest);
             } catch (JSONException e) {
                 Toaster.toastShort("Unexpected Error", this.getActivity());
+                e.printStackTrace();
             }
         });
 

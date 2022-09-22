@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -122,10 +121,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         Nutrient.generateLookup();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
-        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        windowInsetsController.setAppearanceLightNavigationBars(true);
-        windowInsetsController.setAppearanceLightStatusBars(true);
 
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority

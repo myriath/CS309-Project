@@ -59,12 +59,11 @@ public class FoodSearchListAdapter extends ArrayAdapter<FoodItem> {
             convertView.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(MainActivity.PARCEL_FOODITEM, items.get(position));
-//                ((FoodSearchActivity) parent.getContext()).callback(FoodSearchActivity.CALLBACK_SELECT, bundle);
                 ((FoodSearchActivity) parent.getContext()).callback(FoodSearchActivity.CALLBACK_FOOD_DETAIL, bundle);
             });
 
             TextView name = convertView.findViewById(R.id.name);
-            name.setText(items.get(position).getName());
+            name.setText(items.get(position).getFoodName());
 
             int[] attrs = new int[]{R.attr.selectableItemBackground};
             TypedArray array = parent.getContext().obtainStyledAttributes(attrs);

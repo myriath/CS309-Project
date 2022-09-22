@@ -151,6 +151,7 @@ public class LoginFragment extends BaseFragment {
                                             }
                                         }, error -> {
                                     Toaster.toastShort("Unexpected error", this.getActivity());
+                                    error.printStackTrace();
                                     unSpin(view);
                                 });
                                 RequestHandler.getInstance(this.getActivity()).add(loginRequest);
@@ -158,6 +159,7 @@ public class LoginFragment extends BaseFragment {
                             }
                         }, error -> {
                     Toaster.toastShort("Unexpected error", this.getActivity());
+                    error.printStackTrace();
                     unSpin(view);
                 });
                 RequestHandler.getInstance(this.getActivity()).add(saltRequest);

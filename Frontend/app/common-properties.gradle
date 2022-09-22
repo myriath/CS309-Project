@@ -9,6 +9,6 @@ android.buildTypes {
         buildConfigField "String", "BASE_API_URL", "\"null\""
     }
     debug {
-        buildConfigField "String", "BASE_API_URL", "\"https://10.48.146.112:8443/\""
+        buildConfigField "String", "BASE_API_URL", "\"https://10.36.135.139:8443/\""
     }
 }

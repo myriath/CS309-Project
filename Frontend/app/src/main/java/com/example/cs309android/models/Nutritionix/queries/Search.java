@@ -12,8 +12,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.models.Nutritionix.BrandedFood;
 import com.example.cs309android.models.Nutritionix.CommonFood;
 import com.example.cs309android.util.RequestHandler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -381,16 +382,12 @@ public class Search {
          * @throws JSONException Thrown when the JSON is malformed.
          */
         public Response(JSONObject json) throws JSONException {
-            JSONArray array = json.getJSONArray("branded");
-            brandedFoods = new BrandedFood[array.length()];
-            for (int i = 0; i < brandedFoods.length; i++) {
-                brandedFoods[i] = new BrandedFood(array.getJSONObject(i));
-            }
-            array = json.getJSONArray("common");
-            commonFoods = new CommonFood[array.length()];
-            for (int i = 0; i < commonFoods.length; i++) {
-                commonFoods[i] = new CommonFood(array.getJSONObject(i));
-            }
+            GsonBuilder builder = new GsonBuilder();
+            builder.setPrettyPrinting();
+            Gson gson = builder.create();
+
+            brandedFoods = gson.fromJson(json.getJSONArray("branded").toString(), BrandedFood[].class);
+            commonFoods = gson.fromJson(json.getJSONArray("common").toString(), CommonFood[].class);
         }
 
         /**

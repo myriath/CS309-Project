@@ -8,17 +8,19 @@
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
+            app:toolbarId="@id/toolbar"
             style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            android:layout_height="300dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:scrimAnimationDuration="@integer/material_motion_duration_short_1"
             app:contentScrim="?attr/colorPrimary">
 
             <com.android.volley.toolbox.NetworkImageView
@@ -33,10 +35,11 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back"
                 android:background="@android:color/transparent"
-                android:elevation="0dp" />
+                android:elevation="0dp"
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -47,7 +50,7 @@
         style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@+id/collapsing_toolbar"
+        app:layout_anchor="@+id/appbarlayout"
         app:layout_anchorGravity="bottom|end"
         android:layout_marginEnd="32dp"
         android:src="@drawable/ic_add"
@@ -56,14 +59,13 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="false"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_marginTop="0dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum"
-            android:fitsSystemWindows="false"
             android:textSize="72sp" />
 
     </androidx.core.widget.NestedScrollView>

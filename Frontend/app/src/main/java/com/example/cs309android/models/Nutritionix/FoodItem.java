@@ -14,41 +14,60 @@ import java.util.Objects;
  */
 public class FoodItem implements Parcelable {
     /**
-     * Enum of valid food types
+     * Food name
      */
-    public enum FoodType {
-        COMMON, BRANDED, SELF
-    }
+    private final String food_name;
+    /**
+     * Serving size unit
+     */
+    private final String serving_unit;
+    /**
+     * Weight of the serving unit in grams
+     */
+    private final Double serving_weight_grams;
+    /**
+     * Number of serving units per unit
+     */
+    private final Integer serving_qty;
+    /**
+     * Food label claims list.
+     * (Atkins friendly, contains dairy, etc.)
+     */
+    private final String[] claims;
+    /**
+     * Nutrient array containing all nutrient information.
+     */
+    private final Nutrient[] full_nutrients;
+    /**
+     * Photo object for the item
+     */
+    private final Photo photo;
+    /**
+     * Localization value
+     */
+    private final String locale;
 
     /**
-     * Name of the food item.
-     */
-    private final String name;
-
-    /**
-     * NixID from Nutritionix's database.
-     */
-    private final String id;
-
-    /**
-     * Type of food object
-     * Used to figure out what the id is.
-     */
-    private final FoodType type;
-
-    private boolean selected = false;
-
-    /**
-     * Public constructor for food item.
+     * Public constructor for use with GSON
      *
-     * @param name name of the item.
-     * @param id   id from Nutritionix's database.
-     * @param type type of food item (common, branded, self)
+     * @param food_name            name of the food
+     * @param serving_unit         serving size unit of the food
+     * @param serving_weight_grams weight of serving size in grams of the food
+     * @param serving_qty          number of servings per unit of the food
+     * @param claims               label claims
+     * @param full_nutrients       nutrients of the food
+     * @param photo                photo of the food
+     * @param locale               locale
      */
-    public FoodItem(String name, String id, FoodType type) {
-        this.name = name;
-        this.id = id;
-        this.type = type;
+    public FoodItem(String food_name, String serving_unit, double serving_weight_grams, int serving_qty, String[] claims, Nutrient[] full_nutrients, Photo photo, String locale) {
+        this.food_name = food_name;
+        this.serving_unit = serving_unit;
+        this.serving_weight_grams = serving_weight_grams;
+        this.serving_qty = serving_qty;
+        this.claims = claims;
+        this.full_nutrients = full_nutrients;
+        this.photo = photo;
+        this.locale = locale;
     }
 
     /**
@@ -57,44 +76,86 @@ public class FoodItem implements Parcelable {
      * @param parcel parcel to construct from.
      */
     public FoodItem(Parcel parcel) {
-        name = parcel.readString();
-        id = parcel.readString();
-        type = FoodType.values()[parcel.readInt()];
+        food_name = parcel.readString();
+        serving_unit = parcel.readString();
+        serving_weight_grams = parcel.readDouble();
+        serving_qty = parcel.readInt();
+        claims = parcel.createStringArray();
+        full_nutrients = parcel.createTypedArray(Nutrient.CREATOR);
+        photo = parcel.readParcelable(Photo.class.getClassLoader());
+        locale = parcel.readString();
     }
 
     /**
-     * Getter for the nix id.
+     * Getter for food_name
      *
-     * @return id from Nutritionix's database
+     * @return Food name
      */
-    public String getId() {
-        return id;
+    public String getFoodName() {
+        return food_name;
     }
 
     /**
-     * Getter for the name.
+     * Getter for serving_unit
      *
-     * @return name from Nutritionix's database (for display)
+     * @return Serving unit
      */
-    public String getName() {
-        return name;
+    public String getServingUnit() {
+        return serving_unit;
     }
 
     /**
-     * Getter for the type.
+     * Getter for serving_weight_grams
      *
-     * @return Food type depicting what type it is (common, branded, or self)
+     * @return Weight of the serving unit in grams
      */
-    public FoodType getType() {
-        return type;
+    public Double getServingWeightGrams() {
+        return serving_weight_grams;
     }
 
-    public boolean isSelected() {
-        return selected;
+    /**
+     * Getter for serving_qty
+     *
+     * @return Serving unit quantity per unit
+     */
+    public Integer getServingQty() {
+        return serving_qty;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    /**
+     * Getter for claims
+     *
+     * @return Food label claims (Atkins friendly, dairy free, etc.)
+     */
+    public String[] getClaims() {
+        return claims;
+    }
+
+    /**
+     * Getter for full_nutrients
+     *
+     * @return Nutrient array of nutrients in the food item
+     */
+    public Nutrient[] getFullNutrients() {
+        return full_nutrients;
+    }
+
+    /**
+     * Getter for photo
+     *
+     * @return photo object for the food item
+     */
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    /**
+     * Getter for locale
+     *
+     * @return Localization value
+     */
+    public String getLocale() {
+        return locale;
     }
 
     /**
@@ -108,7 +169,7 @@ public class FoodItem implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FoodItem foodItem = (FoodItem) o;
-        return Objects.equals(name, foodItem.name) && Objects.equals(id, foodItem.id) && type == foodItem.type;
+        return Objects.equals(food_name, foodItem.food_name) && Objects.equals(serving_qty, foodItem.serving_qty);
     }
 
     /**
@@ -118,7 +179,7 @@ public class FoodItem implements Parcelable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, id, type);
+        return Objects.hash(food_name, serving_qty);
     }
 
     /**
@@ -139,9 +200,14 @@ public class FoodItem implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(id);
-        parcel.writeInt(type.ordinal());
+        parcel.writeString(food_name);
+        parcel.writeParcelable(photo, i);
+        parcel.writeDouble(serving_weight_grams);
+        parcel.writeTypedArray(full_nutrients, i);
+        parcel.writeString(serving_unit);
+        parcel.writeInt(serving_qty);
+        parcel.writeStringArray(claims);
+        parcel.writeString(locale);
     }
 
     /**
