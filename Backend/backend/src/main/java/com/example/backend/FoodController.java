@@ -1,7 +1,8 @@
 package com.example.backend;
 
-import com.example.demo.rest.Common;
-import com.example.demo.rest.Food;
+import com.example.backend.foods.Common;
+import com.example.backend.foods.Food;
+import com.example.backend.foods.Branded;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,9 @@ class FoodController {
         // Read the response body into a Java Object of type "Food" from the rest package
         Food responseObject = objectMapper.readValue(responseEntity.getBody(), Food.class);
 
-        return responseObject;
+        Branded brandedObj = responseObject.getBranded().get(0);
+
+        return brandedObj.getFoodName();
     }
 
 

@@ -1,5 +1,5 @@
 
-package com.example.demo.rest;
+package com.example.backend.foods;
 
 import java.util.HashMap;
 import java.util.Map;

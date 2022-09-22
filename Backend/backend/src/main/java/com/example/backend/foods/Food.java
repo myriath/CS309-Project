@@ -1,9 +1,10 @@
 
-package com.example.demo.rest;
+package com.example.backend.foods;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.example.backend.foods.Branded;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
