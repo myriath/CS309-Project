@@ -9,8 +9,8 @@ import androidx.core.view.WindowCompat;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.cs309android.R;
-import com.example.cs309android.models.Nutritionix.FoodItem;
-import com.example.cs309android.models.Nutritionix.Photo;
+import com.example.cs309android.models.Nutritionix.instant.FoodItem;
+import com.example.cs309android.models.Nutritionix.instant.Photo;
 import com.example.cs309android.util.RequestHandler;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +34,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
             fab.setVisibility(View.GONE);
         }
 
-
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(item.getFoodName().substring(0, Math.min(item.getFoodName().length(), 18)).trim() + (item.getFoodName().length() > 18 ? "..." : ""));
         setSupportActionBar(toolbar);
@@ -53,6 +52,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         NetworkImageView imageView = findViewById(R.id.image_view);
         try {
             Photo photo = item.getPhoto();
+            System.out.println(photo);
             if (photo.getHighres() != null) {
                 imageView.setImageUrl(photo.getHighres(), RequestHandler.getInstance(this).getImageLoader());
             } else {

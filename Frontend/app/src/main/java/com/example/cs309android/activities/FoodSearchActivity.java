@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.Nutritionix.FoodItem;
+import com.example.cs309android.models.Nutritionix.instant.FoodItem;
 import com.example.cs309android.models.Nutritionix.queries.Search;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.util.Toaster;

@@ -1,16 +1,16 @@
 package com.example.cs309android.models.Nutritionix.queries;
 
-import static com.example.cs309android.models.Nutritionix.Constants.APP_ID;
-import static com.example.cs309android.models.Nutritionix.Constants.APP_KEY;
-import static com.example.cs309android.models.Nutritionix.Constants.NIX_URL;
+import static com.example.cs309android.models.Nutritionix.instant.Constants.APP_ID;
+import static com.example.cs309android.models.Nutritionix.instant.Constants.APP_KEY;
+import static com.example.cs309android.models.Nutritionix.instant.Constants.NIX_URL;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.cs309android.models.Nutritionix.BrandedFood;
-import com.example.cs309android.models.Nutritionix.CommonFood;
+import com.example.cs309android.models.Nutritionix.instant.BrandedFood;
+import com.example.cs309android.models.Nutritionix.instant.CommonFood;
 import com.example.cs309android.util.RequestHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -383,8 +383,10 @@ public class Search {
          */
         public Response(JSONObject json) throws JSONException {
             GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
             builder.setPrettyPrinting();
             Gson gson = builder.create();
+            System.out.println(json.toString(4));
 
             brandedFoods = gson.fromJson(json.getJSONArray("branded").toString(), BrandedFood[].class);
             commonFoods = gson.fromJson(json.getJSONArray("common").toString(), CommonFood[].class);

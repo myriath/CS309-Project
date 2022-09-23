@@ -1,4 +1,4 @@
-package com.example.cs309android.models.Nutritionix;
+package com.example.cs309android.models.Nutritionix.instant;
 
 import android.os.Parcel;
 import android.os.Parcelable;

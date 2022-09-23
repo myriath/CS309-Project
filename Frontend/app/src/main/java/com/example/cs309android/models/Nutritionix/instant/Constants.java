@@ -1,4 +1,4 @@
-package com.example.cs309android.models.Nutritionix;
+package com.example.cs309android.models.Nutritionix.instant;
 
 /**
  * Constants util class used for Nutritionix API communications

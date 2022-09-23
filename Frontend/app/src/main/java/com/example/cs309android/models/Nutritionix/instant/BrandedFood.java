@@ -1,4 +1,4 @@
-package com.example.cs309android.models.Nutritionix;
+package com.example.cs309android.models.Nutritionix.instant;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -97,6 +97,25 @@ public class BrandedFood extends FoodItem implements Parcelable {
     }
 
     /**
+     * Writes this object to a parcel
+     *
+     * @param parcel parcel to write to
+     * @param i      flags
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
+        parcel.writeString(nix_brand_id);
+        parcel.writeString(brand_name);
+        parcel.writeString(nix_item_id);
+        parcel.writeString(brand_name_item_name);
+        parcel.writeDouble(nf_calories);
+        parcel.writeInt(region);
+        parcel.writeInt(brand_type);
+        parcel.writeString(taxonomy_node_id);
+    }
+
+    /**
      * Parcelable CREATOR object.
      * Used to create common foods from parcels
      */
@@ -192,24 +211,5 @@ public class BrandedFood extends FoodItem implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    /**
-     * Writes this object to a parcel
-     *
-     * @param parcel parcel to write to
-     * @param i      flags
-     */
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        super.writeToParcel(parcel, i);
-        parcel.writeString(nix_brand_id);
-        parcel.writeString(brand_name);
-        parcel.writeString(nix_item_id);
-        parcel.writeString(brand_name_item_name);
-        parcel.writeDouble(nf_calories);
-        parcel.writeInt(region);
-        parcel.writeInt(brand_type);
-        parcel.writeString(taxonomy_node_id);
     }
 }

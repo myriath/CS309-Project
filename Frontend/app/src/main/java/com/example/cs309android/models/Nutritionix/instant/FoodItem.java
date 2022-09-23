@@ -1,4 +1,4 @@
-package com.example.cs309android.models.Nutritionix;
+package com.example.cs309android.models.Nutritionix.instant;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -80,6 +80,23 @@ public class FoodItem implements Parcelable {
         full_nutrients = parcel.createTypedArray(Nutrient.CREATOR);
         photo = parcel.readParcelable(Photo.class.getClassLoader());
         locale = parcel.readString();
+    }
+
+    /**
+     * Required method from {@link Parcelable}
+     *
+     * @param parcel parcel to write to
+     * @param i      flags
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(food_name);
+        parcel.writeString(serving_unit);
+        parcel.writeDouble(serving_qty);
+        parcel.writeStringArray(claims);
+        parcel.writeTypedArray(full_nutrients, i);
+        parcel.writeParcelable(photo, i);
+        parcel.writeString(locale);
     }
 
     /**
@@ -177,23 +194,6 @@ public class FoodItem implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    /**
-     * Required method from {@link Parcelable}
-     *
-     * @param parcel parcel to write to
-     * @param i      flags
-     */
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(food_name);
-        parcel.writeParcelable(photo, i);
-        parcel.writeTypedArray(full_nutrients, i);
-        parcel.writeString(serving_unit);
-        parcel.writeDouble(serving_qty);
-        parcel.writeStringArray(claims);
-        parcel.writeString(locale);
     }
 
     /**
