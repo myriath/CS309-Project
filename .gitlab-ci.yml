@@ -30,10 +30,19 @@ build:
     key: "maven-$CI_COMMIT_REF_SLUG"
     paths:
       - .m2/repository
+  # Before-script: Add the ssh key to known hosts
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  # Script: Build and copy to the local machine
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - dockerid=$(podman ps -q -f "label=com.gitlab.gitlab-runner.job.id=$CI_JOB_ID" -f "label=com.gitlab.gitlab-runner.type=build")
-    - podman cp ${dockerid}:/builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar /var/cs309/deploy/
+    - scp -o StrictHostKeyChecking=no /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/var/cs309/deploy/latest.jar
   # artifacts:
   #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
   #   paths:
@@ -46,6 +55,7 @@ deploy-prod:
   variables:
     JOB_MODE: "deploy"
   stage: deploy
+  # Script: Run the deploy script which restarts the systemd service
   script:
     - bash /var/cs309/deploy/deploy.sh
     # - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
