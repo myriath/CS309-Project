@@ -21,9 +21,8 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
-image: maven:3.8-openjdk-11
-
 build:
+  image: maven:3.8-openjdk-11
   variables:
     JOB_MODE: "test"
   stage: build
@@ -33,6 +32,8 @@ build:
       - .m2/repository
   script:
     - mvn $MAVEN_CLI_OPTS verify
+    - dockerid=$(podman ps -q -f "label=com.gitlab.gitlab-runner.job.id=$CI_JOB_ID" -f "label=com.gitlab.gitlab-runner.type=build")
+    - podman cp ${dockerid}:/builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar /var/cs309/deploy/
   # artifacts:
   #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
   #   paths:
@@ -46,6 +47,6 @@ deploy-prod:
     JOB_MODE: "deploy"
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS verify
-    - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
+    - bash /var/cs309/deploy/deploy.sh
+    # - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
   environment: production
