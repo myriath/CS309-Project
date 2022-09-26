@@ -52,18 +52,19 @@ build:
   #       - "**/target/*-reports/TEST-*.xml"
 
 deploy-prod:
+  image: ubuntu:18.04
   variables:
     JOB_MODE: "deploy"
   stage: deploy
   # Before-script: Add the ssh key and known hosts
-  # before_script:
-  #   - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
-  #   - eval $(ssh-agent -s)
-  #   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  #   - mkdir -p ~/.ssh
-  #   - chmod 700 ~/.ssh
-  #   - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
-  #   - chmod 644 ~/.ssh/known_hosts
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   # Script: Run the deploy script which restarts the systemd service
   script:
     - ssh $SSH_USER@$SSH_ADDRESS "/home/gitlab-runner/deploy.sh"
