@@ -52,7 +52,7 @@ build:
   #       - "**/target/*-reports/TEST-*.xml"
 
 deploy-prod:
-  image: ubuntu:18.04
+  image: maven:3.8-openjdk-11
   variables:
     JOB_MODE: "deploy"
   stage: deploy
