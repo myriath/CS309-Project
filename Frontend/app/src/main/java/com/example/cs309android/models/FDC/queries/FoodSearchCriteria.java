@@ -1,6 +1,12 @@
 package com.example.cs309android.models.FDC.queries;
 
+import androidx.annotation.NonNull;
+
 import com.example.cs309android.models.FDC.Constants;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
 /**
  * A copy of the criteria that were used in the search.
@@ -81,5 +87,36 @@ public class FoodSearchCriteria {
 
     public String getEndDate() {
         return endDate;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        ArrayList<String> args = new ArrayList<>();
+        try {
+            for (String type : dataType)
+                if (type != null)
+                    args.add(String.format("dataType=%s", URLEncoder.encode(type, "utf-8")));
+            if (pageSize != null)
+                args.add(String.format("pageSize=%s", URLEncoder.encode(String.valueOf(pageSize), "utf-8")));
+            if (pageNumber != null)
+                args.add(String.format("pageNumber=%s", URLEncoder.encode(String.valueOf(pageNumber), "utf-8")));
+            if (sortBy != null)
+                args.add(String.format("sortBy=%s", URLEncoder.encode(sortBy, "utf-8")));
+            if (sortOrder != null)
+                args.add(String.format("sortOrder=%s", URLEncoder.encode(sortOrder, "utf-8")));
+            if (brandOwner != null)
+                args.add(String.format("brandOwner=%s", URLEncoder.encode(brandOwner, "utf-8")));
+            for (String channel : tradeChannel)
+                if (channel != null)
+                    args.add(String.format("tradeChannel=%s", URLEncoder.encode(channel, "utf-8")));
+            if (startDate != null)
+                args.add(String.format("startDate=%s", URLEncoder.encode(startDate, "utf-8")));
+            if (endDate != null)
+                args.add(String.format("endDate=%s", URLEncoder.encode(endDate, "utf-8")));
+            return String.join("&", args);
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 }

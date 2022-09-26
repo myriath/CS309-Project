@@ -105,6 +105,7 @@ public class Constants {
     }
 
     public static final String API_KEY = "ku3IulAMpmefeIA26Op2ZSN80uObLD4bwwjAoXns";
+    public static final String API_KEY_GET = "&api_key=" + API_KEY;
 
     public static final String API_URL = "https://api.nal.usda.gov/fdc";
     public static final String API_URL_FOOD_ENDPOINT = API_URL + "/v1/food/";

@@ -1,6 +1,13 @@
 package com.example.cs309android.models.FDC.queries;
 
+import androidx.annotation.NonNull;
+
 import com.example.cs309android.models.FDC.Constants;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * JSON for request body of 'list' POST request
@@ -50,5 +57,22 @@ public class FoodListCriteria {
 
     public String getSortOrder() {
         return sortOrder;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        ArrayList<String> args = new ArrayList<>();
+        for (String type : dataType) if (type != null) args.add(String.format("dataType=%s", type));
+        if (pageSize != null) args.add(String.format("pageSize=%s", pageSize));
+        if (pageNumber != null) args.add(String.format("pageNumber=%s", pageNumber));
+        if (sortBy != null) args.add(String.format("sortBy=%s", sortBy));
+        if (sortOrder != null) args.add(String.format("sortOrder=%s", sortOrder));
+
+        try {
+            return URLEncoder.encode(String.join("&", args), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 }

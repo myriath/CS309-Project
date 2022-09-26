@@ -1,6 +1,7 @@
 package com.example.cs309android.models.FDC;
 
 import static com.example.cs309android.models.FDC.Constants.API_KEY;
+import static com.example.cs309android.models.FDC.Constants.API_KEY_GET;
 import static com.example.cs309android.models.FDC.Constants.API_URL_SEARCH_ENDPOINT;
 
 import android.content.Context;
@@ -14,6 +15,9 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Makes a search request using the /foods/search endpoint on the FDC API
@@ -35,18 +39,11 @@ public class Search {
      * @param query      Query to search for
      * @param criteria   criteria for search
      * @param context    Application context for request
-     * @param onResponse Code to run when the request succeeds
+     * @param listener Code to run when the request succeeds
      */
-    public void search(String query, FoodSearchCriteria criteria, Context context, com.android.volley.Response.Listener<JSONObject> onResponse) throws JSONException {
-        GsonBuilder builder = new GsonBuilder();
-        builder.serializeNulls();
-        Gson gson = builder.create();
-        JSONObject json = new JSONObject(gson.toJson(criteria));
-        json.put("query", query);
-        json.put("api_key", API_KEY);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, API_URL_SEARCH_ENDPOINT, json,
-                onResponse, Throwable::printStackTrace);
-
+    public void search(String query, FoodSearchCriteria criteria, Context context, com.android.volley.Response.Listener<JSONObject> listener) throws UnsupportedEncodingException {
+        String url = API_URL_SEARCH_ENDPOINT + "?query=" + URLEncoder.encode(query, "utf-8") + "&" + criteria.toString() + API_KEY_GET;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, Throwable::printStackTrace);
         RequestHandler.getInstance(context).add(request);
     }
 }

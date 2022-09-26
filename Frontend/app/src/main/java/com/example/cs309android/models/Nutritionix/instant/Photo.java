@@ -106,7 +106,7 @@ public class Photo implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(thumb);
         parcel.writeString(highres);
-        parcel.writeBoolean(is_user_uploaded);
+        parcel.writeBoolean(is_user_uploaded != null && is_user_uploaded);
     }
 
     /**
