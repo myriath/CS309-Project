@@ -43,7 +43,6 @@ build:
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - scp -o StrictHostKeyChecking=no /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/var/cs309/deploy/latest.jar
-    - ssh $SSH_USER@$SSH_ADDRESS "./deploy.sh"
   # artifacts:
   #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
   #   paths:
@@ -56,8 +55,17 @@ deploy-prod:
   variables:
     JOB_MODE: "deploy"
   stage: deploy
+  # Before-script: Add the ssh key and known hosts
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   # Script: Run the deploy script which restarts the systemd service
   script:
-    - bash /var/cs309/deploy/deploy.sh
+    - ssh $SSH_USER@$SSH_ADDRESS "./deploy.sh"
     # - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
   environment: production
