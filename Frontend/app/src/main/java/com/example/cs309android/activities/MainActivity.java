@@ -1,25 +1,19 @@
 package com.example.cs309android.activities;
 
-import static com.example.cs309android.util.Constants.LOGIN_URL;
-import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Util.spin;
-import static com.example.cs309android.util.Util.unSpin;
-
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -29,12 +23,11 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.Nutritionix.instant.FoodItem;
+import com.example.cs309android.models.Nutritionix.instant.Nutrient;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -80,7 +73,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_CLOSE_LOGIN = 1;
     public static final int CALLBACK_START_LOGIN = 2;
     public static final int CALLBACK_MOVE_TO_HOME = 3;
+    public static final int CALLBACK_FOOD_DETAIL = 4;
+    public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
+
+    public static final String PARCEL_FOODITEM = "fooditem";
+    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+
+    /**
+     * Used to launch various activities.
+     */
+    ActivityResultLauncher<Intent> foodSearchLauncher;
 
     /**
      * Navbar object at the bottom of the app.
@@ -96,6 +99,18 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         RequestHandler.getInstance(this).cancelAll();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        navbar.setSelectedItemId(R.id.home);
+//        mainFragment = new HomeFragment();
+//        FragmentManager manager = getSupportFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+//        transaction.commit();
+//        currentFragment = 2;
+    }
+
     /**
      * Starts up the app.
      *
@@ -104,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Nutrient.generateLookup();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         // TODO: Remove for production
@@ -114,60 +130,75 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         setContentView(R.layout.activity_main);
 
-        mainFragment = (CallbackFragment) getSupportFragmentManager().findFragmentById(R.id.mainFragment);
-        Objects.requireNonNull(mainFragment).setCallbackFragment(this);
-
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        foodSearchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST));
+                    } else {
+                        mainFragment = new ShoppingFragment();
+                    }
+
+                    mainFragment.setCallbackFragment(this);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                            .commit();
+                    currentFragment = 0;
+                }
+        );
 
         // Gets stored username and password hash, if they exist
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String username = pref.getString("username", null);
-        String encodedHash = pref.getString("enc_hash", null);
-        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
-        if (username != null && encodedHash != null) {
-            spin(this);
-            try {
-                // Creates a new request with username and hash as the body
-                JSONObject jsonBody = new JSONObject();
-                jsonBody.put("username", username);
-                jsonBody.put("hash", encodedHash);
-
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
-                        response -> {
-                            unSpin(this);
-                            // Checks if the result is valid or not. If not, opens the login page
-                            try {
-                                int result = response.getInt("result");
-                                if (result != RESULT_LOGGED_IN) startLoginFragment();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }, error -> {
-                    unSpin(this);
-                    error.printStackTrace();
-                    startLoginFragment();
-                });
-                RequestHandler.getInstance(this).add(request);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            startLoginFragment();
-        }
+        // TODO: Uncomment this out before PR
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+//        String username = pref.getString("username", null);
+//        String encodedHash = pref.getString("enc_hash", null);
+//        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
+//        if (username != null && encodedHash != null) {
+//            spin(this);
+//            try {
+//                // Creates a new request with username and hash as the body
+//                JSONObject jsonBody = new JSONObject();
+//                jsonBody.put("username", username);
+//                jsonBody.put("hash", encodedHash);
+//
+//                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
+//                        response -> {
+//                            unSpin(this);
+//                            // Checks if the result is valid or not. If not, opens the login page
+//                            try {
+//                                int result = response.getInt("result");
+//                                if (result != RESULT_LOGGED_IN) startLoginFragment();
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }, error -> {
+//                    unSpin(this);
+//                    error.printStackTrace();
+//                    startLoginFragment();
+//                });
+//                RequestHandler.getInstance(this).add(request);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            startLoginFragment();
+//        }
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
+                mainFragment.setCallbackFragment(this);
                 // Always slide left (furthest left)
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
@@ -180,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
@@ -193,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
@@ -206,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 }
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.settings) {
@@ -216,8 +247,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.mainFragment, (Fragment) mainFragment, null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
             } else {
@@ -238,26 +268,23 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 System.out.println("settings re");
             }
         });
-//        navbar.setOnMenuItemClickListener(menuItem -> {
-//            System.out.println(menuItem.getItemId());
-//            return true;
-//        });
-
-//        BottomNavigationView bottomNav = findViewById(R.id.navbar);
     }
 
     /**
      * Callback method used to control fragment activity
-     *
+     * <p>
      * CALLBACK_SWITCH_TO_REGISTER:
      * Switches the login screen to the register screen with a nice animation
-     *
+     * <p>
      * CALLBACK_CLOSE_LOGIN:
      * Closes the login page with a nice animation and permits interaction and removes transparency
      * filter over the main activity
+     *
+     * @param op     Opcode to decide what to do
+     * @param bundle Bundle with args
      */
     @Override
-    public void callback(int op) {
+    public void callback(int op, Bundle bundle) {
         switch (op) {
             case (CALLBACK_SWITCH_TO_REGISTER): {
                 loginWindowFragment = new RegisterFragment();
@@ -289,10 +316,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new HomeFragment();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.mainFragment, (Fragment) mainFragment, null);
+                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
+                break;
+            }
+            case (CALLBACK_FOOD_DETAIL): {
+                Intent intent = new Intent(this, FoodDetailsActivity.class);
+                intent.putExtra(PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                startActivity(intent);
+                break;
+            }
+            case (CALLBACK_SEARCH_FOOD): {
+                Intent intent = new Intent(this, FoodSearchActivity.class);
+                intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
+                foodSearchLauncher.launch(intent);
                 break;
             }
         }
@@ -313,7 +352,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginFragment() {
-//        findViewById(R.id.mainLayout).setAlpha(0.5f);
         findViewById(R.id.loginPopup).setClickable(true);
 
         loginWindowFragment = new LoginFragment();

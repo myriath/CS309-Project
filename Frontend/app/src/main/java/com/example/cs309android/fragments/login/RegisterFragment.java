@@ -142,18 +142,20 @@ public class RegisterFragment extends BaseFragment {
 
                         Util.unSpin(view);
 
-                        callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
-                        callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
+                        callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                        callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }, error -> {
                     Toaster.toastShort("Unexpected error", this.getActivity());
+                    error.printStackTrace();
                     Util.unSpin(view);
                 });
                 RequestHandler.getInstance(this.getActivity()).add(registerRequest);
             } catch (JSONException e) {
                 Toaster.toastShort("Unexpected Error", this.getActivity());
+                e.printStackTrace();
             }
         });
 

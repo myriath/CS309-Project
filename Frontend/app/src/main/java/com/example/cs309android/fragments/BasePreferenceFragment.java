@@ -1,9 +1,16 @@
 package com.example.cs309android.fragments;
 
+import android.os.Bundle;
+
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.cs309android.interfaces.CallbackFragment;
 
+/**
+ * Abstract helper class containing methods used by most fragments.
+ *
+ * @author Mitch Hudson
+ */
 public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements CallbackFragment {
     /**
      * Callback fragment used for controlling fragment change activity.
@@ -25,6 +32,6 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
      * @param op Tells the class what to do.
      */
     @Override
-    public void callback(int op) {
+    public void callback(int op, Bundle bundle) {
     }
 }

@@ -27,7 +27,7 @@ public class Hasher {
      */
     private static final int ITERATIONS = 1000;
     /**
-     * Number of bytes of the generated hash.
+     * Number of bits of the generated hash.
      */
     private static final int KEY_LENGTH = 256;
     /**

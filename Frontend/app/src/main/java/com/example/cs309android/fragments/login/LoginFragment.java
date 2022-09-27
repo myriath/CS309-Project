@@ -144,13 +144,14 @@ public class LoginFragment extends BaseFragment {
                                                 unSpin(view);
 
                                                 // Close window
-                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME);
-                                                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN);
+                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                                                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }, error -> {
                                     Toaster.toastShort("Unexpected error", this.getActivity());
+                                    error.printStackTrace();
                                     unSpin(view);
                                 });
                                 RequestHandler.getInstance(this.getActivity()).add(loginRequest);
@@ -158,6 +159,7 @@ public class LoginFragment extends BaseFragment {
                             }
                         }, error -> {
                     Toaster.toastShort("Unexpected error", this.getActivity());
+                    error.printStackTrace();
                     unSpin(view);
                 });
                 RequestHandler.getInstance(this.getActivity()).add(saltRequest);
@@ -173,7 +175,7 @@ public class LoginFragment extends BaseFragment {
             passwordField.setError(null);
             // If the register button is pressed, switch screens
             if (callbackFragment == null) return;
-            callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER);
+            callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER, null);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {

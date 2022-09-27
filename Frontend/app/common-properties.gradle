@@ -1,6 +1,6 @@
 android.buildTypes {
     mock {
-        buildConfigField "String", "BASE_API_URL", "\"https://754321bf-553e-47a5-a387-023bbb692ab0.mock.pstmn.io\""
+        buildConfigField "String", "BASE_API_URL", "\"https://8aa423be-0bcd-4383-b9e6-51197558bb92.mock.pstmn.io\""
     }
     build {
         buildConfigField "String", "BASE_API_URL", "\"null\""
@@ -9,6 +9,6 @@ android.buildTypes {
         buildConfigField "String", "BASE_API_URL", "\"null\""
     }
     debug {
-        buildConfigField "String", "BASE_API_URL", "\"https://10.48.146.112:8443/\""
+        buildConfigField "String", "BASE_API_URL", "\"https://10.36.135.139:8443/\""
     }
 }
