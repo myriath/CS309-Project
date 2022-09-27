@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class FoodQuery {
-    public static void query(FoodsCriteria criteria, int index, Response.Listener<JSONObject> listener, Context context) {
-        String url = Constants.API_URL_FOOD_ENDPOINT + criteria.setIndex(index).toString() + API_KEY_GET;
+    public static void query(FoodsCriteria criteria, int fdcId, Response.Listener<JSONObject> listener, Context context) {
+        String url = Constants.API_URL_FOOD_ENDPOINT + fdcId + criteria.toString() + API_KEY_GET;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, Throwable::printStackTrace);
         RequestHandler.getInstance(context).add(request);
     }

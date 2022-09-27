@@ -7,8 +7,6 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.NetworkImageView;
 import com.example.cs309android.R;
 import com.example.cs309android.models.FDC.Constants;
 import com.example.cs309android.models.FDC.FoodQuery;
@@ -18,17 +16,11 @@ import com.example.cs309android.models.FDC.models.FoundationFoodItem;
 import com.example.cs309android.models.FDC.models.SRLegacyFoodItem;
 import com.example.cs309android.models.FDC.models.SurveyFoodItem;
 import com.example.cs309android.models.FDC.queries.FoodsCriteria;
-import com.example.cs309android.models.Nutritionix.instant.BrandedFood;
-import com.example.cs309android.models.Nutritionix.instant.FoodItem;
-import com.example.cs309android.models.Nutritionix.instant.Photo;
-import com.example.cs309android.util.RequestHandler;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class FoodDetailsActivity extends AppCompatActivity {
     private int fdcId;
@@ -45,7 +37,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 //        fdcId = i.getIntExtra(MainActivity.PARCEL_FOODITEM, -1);
         fdcId = 454004;
         if (fdcId != -1) {
-            FoodQuery.query(new FoodsCriteria(fdcId, Constants.Format.FULL, null), 0,
+            FoodQuery.query(new FoodsCriteria(null, Constants.Format.FULL, null), fdcId,
                     response -> {
                         GsonBuilder builder = new GsonBuilder();
                         builder.serializeNulls();

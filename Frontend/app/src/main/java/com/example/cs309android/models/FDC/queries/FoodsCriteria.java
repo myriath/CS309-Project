@@ -3,10 +3,7 @@ package com.example.cs309android.models.FDC.queries;
 import androidx.annotation.NonNull;
 
 import com.example.cs309android.models.FDC.Constants;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
+import com.example.cs309android.models.GetRequestURL;
 
 /**
  * JSON for request body of 'foods' POST request. Retrieves a list of food items by a list of up to
@@ -55,26 +52,10 @@ public class FoodsCriteria {
     @NonNull
     @Override
     public String toString() {
-        ArrayList<String> args = new ArrayList<>();
-        try {
-            if (fdcIds != null) {
-                if (index == -1) {
-                    for (Integer id : fdcIds)
-                        if (id != null)
-                            args.add(String.format("fdcId=%s", URLEncoder.encode(String.valueOf(id), "utf-8")));
-                } else {
-                    args.add(String.format("%s?", URLEncoder.encode(String.valueOf(fdcIds[index]), "utf-8")));
-                }
-            }
-            if (format != null)
-                args.add(String.format("format=%s", URLEncoder.encode(format, "utf-8")));
-            if (nutrients != null)
-                for (Integer nutrient : nutrients)
-                    if (nutrient != null)
-                        args.add(String.format("nutrients=%s", URLEncoder.encode(String.valueOf(nutrient), "utf-8")));
-            return String.join("&", args);
-        } catch (UnsupportedEncodingException e) {
-            return "";
-        }
+        return new GetRequestURL()
+                .addArray("fdcId", fdcIds, index)
+                .addParam("format", format)
+                .addArray("nutrients", nutrients)
+                .toString();
     }
 }

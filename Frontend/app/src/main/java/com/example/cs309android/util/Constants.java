@@ -11,15 +11,37 @@ public class Constants {
     /**
      * Private constructor (Util class)
      */
-    private Constants() {}
+    private Constants() {
+    }
 
+    /**
+     * Indicates the request resulted in an error (generic)
+     */
     public static final int RESULT_ERROR = -1;
+    /**
+     * Indicates a mismatch between the given username / password
+     */
     public static final int RESULT_ERROR_USER_HASH_MISMATCH = -2;
+    /**
+     * Indicates the username given has been taken
+     */
     public static final int RESULT_ERROR_USERNAME_TAKEN = -3;
+    /**
+     * Indicates the email given has been taken
+     */
     public static final int RESULT_ERROR_EMAIL_TAKEN = -4;
 
+    /**
+     * Indicates the request succeeded (generic)
+     */
     public static final int RESULT_OK = 0;
+    /**
+     * Indicates the user / hash matches
+     */
     public static final int RESULT_LOGGED_IN = 1;
+    /**
+     * Indicates the user has been successfully created
+     */
     public static final int RESULT_USER_CREATED = 2;
 
     /**

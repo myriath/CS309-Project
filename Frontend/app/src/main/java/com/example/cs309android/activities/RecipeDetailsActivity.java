@@ -37,7 +37,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        fdcId = i.getIntExtra(MainActivity.PARCEL_FOODITEM, -1);
         fdcId = 454004;
         if (fdcId != -1) {
-            FoodQuery.query(new FoodsCriteria(fdcId, Constants.Format.FULL, null), 0,
+            FoodQuery.query(new FoodsCriteria(null, Constants.Format.FULL, null), fdcId,
                     response -> {
                         GsonBuilder builder = new GsonBuilder();
                         builder.serializeNulls();
