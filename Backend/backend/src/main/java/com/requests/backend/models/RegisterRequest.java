@@ -1,20 +1,9 @@
 package com.requests.backend.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Blob;
-
-@Entity // This tells Hibernate to make a table out of this class
-public class User {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+public class RegisterRequest {
     private String username;
 
-    private String p_hash;
-
-    private String p_salt;
+    private String pHash;
 
     private String user_type;
 
@@ -24,6 +13,15 @@ public class User {
 
     private Integer age;
 
+    public RegisterRequest(String username, String pHash) {
+        this.username = username;
+        this.pHash = pHash;
+        this.user_type = "User";
+        this.email = "test@email.com";
+        this.fullName = "Test Name";
+        this.age = 25;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -32,20 +30,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPHash() {
-        return p_hash;
+    public String getpHash() {
+        return pHash;
     }
 
-    public void setPHash(String p_hash) {
-        this.p_hash = p_hash;
-    }
-
-    public String getPSalt() {
-        return p_salt;
-    }
-
-    public void setPSalt(String p_salt) {
-        this.p_salt = p_salt;
+    public void setpHash(String pHash) {
+        this.pHash = pHash;
     }
 
     public String getUser_type() {
@@ -64,12 +54,12 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
+    public String getFullName() {
         return fullName;
     }
 
-    public void setName(String name) {
-        this.fullName = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Integer getAge() {
