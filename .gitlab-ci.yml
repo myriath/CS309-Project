@@ -56,8 +56,9 @@ deploy-demo:
     JOB_MODE: "deploy"
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS verify
-    - java -jar **/target/$APP_NAME-$APP_VERSION.jar
+    - maven $MAVEN_CLI_OPTS verify
+    - cp **/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/
+    - sudo /home/gitlab-runner/deploy.sh
 
 deploy-prod:
   image: maven:3.8-openjdk-11
