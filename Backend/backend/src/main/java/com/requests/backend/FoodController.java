@@ -63,9 +63,10 @@ class FoodController {
         return responseObject;
     }
 
+    // Finds top 8 search results
     @GetMapping("/usdaFoodSearch/{foodName}")
     public String usdaFoodSearch(@PathVariable String foodName) throws JsonProcessingException {
-        String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + foodName + "&pageSize=2&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
+        String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + foodName + "&pageSize=6&requireAllWords=true&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers
         RestTemplate restTemplate = new RestTemplate();
@@ -73,6 +74,25 @@ class FoodController {
 
         // Create a new HttpEntity using the headers
         final HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // Gather a response entity from the designated URI as a String
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri, HttpMethod.GET, entity, String.class);
+
+        String res = responseEntity.getBody().toString();
+
+        return res;
+    }
+
+    @GetMapping("/foodByID/{fdcId}")
+    public String foodByID(@PathVariable String fdcId) throws JsonProcessingException {
+        String uri = "https://api.nal.usda.gov/fdc/v1/food/" + fdcId + "?api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
+
+        // Initialize a new rest template and a new set of headers
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Create a new HttpEntity using the headers
+        final HttpEntity<Void> entity = new HttpEntity<>(null);
 
         // Gather a response entity from the designated URI as a String
         ResponseEntity<String> responseEntity = restTemplate.exchange(
