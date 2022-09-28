@@ -37,7 +37,7 @@ build:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - ssh-keyscan -p $SSH_PORT $SSH_ADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   # Script: Build and copy to the local machine
   script:
@@ -63,7 +63,7 @@ deploy-prod:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - ssh-keyscan -p $SSH_PORT $SSH_ADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   # Script: Run the deploy script which restarts the systemd service
   script:
