@@ -1,0 +1,32 @@
+CREATE TABLE branded_foods (
+fdc_id TEXT,
+brand_owner TEXT,
+brand_name TEXT,
+subbrand_name TEXT,
+gtin_upc TEXT,
+ingredients TEXT,
+not_a_significant_source_of TEXT,
+serving_size TEXT,
+serving_size_unit TEXT,
+household_serving_fulltext TEXT,
+branded_food_category TEXT,
+data_source TEXT,
+package_weight TEXT,
+modified_date TEXT,
+available_date TEXT,
+market_country TEXT,
+discontinued_date TEXT,
+preparation_state_code TEXT,
+trade_channel TEXT,
+FULLTEXT (ingredients)
+);
+
+LOAD DATA LOCAL INFILE 'G:/CS 309/FoodData_Central_csv_2022-04-28/branded_food.csv' IGNORE 
+INTO TABLE branded_foods
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+
+SHOW WARNINGS;
