@@ -17,6 +17,8 @@ public class Favorite {
 
     private Integer rank_val;
 
+
+
     public String getFoodName() {
         return food_name;
     }

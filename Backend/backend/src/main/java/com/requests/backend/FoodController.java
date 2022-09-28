@@ -24,7 +24,7 @@ class FoodController {
     // Finds top 8 search results
     @GetMapping("/usdaFoodSearch/{foodName}")
     public String usdaFoodSearch(@PathVariable String foodName) throws JsonProcessingException {
-        String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + foodName + "&pageSize=6&requireAllWords=true&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
+        String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + foodName + "&pageSize=10&requireAllWords=true&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers
         RestTemplate restTemplate = new RestTemplate();
