@@ -51,6 +51,14 @@ build:
   #     junit:
   #       - "**/target/*-reports/TEST-*.xml"
 
+deploy-demo:
+  variables:
+    JOB_MODE: "deploy"
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - java -jar **/target/$APP_NAME-$APP_VERSION.jar
+
 deploy-prod:
   image: maven:3.8-openjdk-11
   variables:
