@@ -1,67 +1,25 @@
 package com.requests.backend;
 
-import com.requests.backend.foods.Common;
-import com.requests.backend.foods.Food;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.requests.backend.models.UserRepository;
+import com.requests.backend.models.FoodRepository;
+import com.requests.backend.models.SearchFood;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @RestController
 class FoodController {
     @Autowired
     private ObjectMapper objectMapper;
-
-    // Search for a food item by its name.
-    @GetMapping("/foodsearch/{foodName}")
-    public String foodSearch(@PathVariable String foodName) {
-        String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.set("x-app-id", "b7e6f2dc");
-        headers.set("x-app-key", "c24ea00b49959892af532ec574e91165");
-
-        //Create a new HttpEntity
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, String.class);
-
-        String res = responseEntity.toString();
-
-        return res;
-    }
-
-    @GetMapping("/foodsearchobject/{foodName}")
-    public Food foodSearchObject(@PathVariable String foodName) throws JsonProcessingException {
-        String uri = "https://trackapi.nutritionix.com/v2/search/instant?query=" + foodName;
-
-        // Initialize a new rest template and a new set of headers
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-
-        // Set API ID and API key as request headers
-        headers.set("x-app-id", "b7e6f2dc");
-        headers.set("x-app-key", "c24ea00b49959892af532ec574e91165");
-
-        // Create a new HttpEntity using the headers
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // Gather a response entity from the designated URI as a String
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, String.class);
-
-        // Read the response body into a Java Object of type "Food" from the rest package
-        Food responseObject = objectMapper.readValue(responseEntity.getBody(), Food.class);
-
-        return responseObject;
-    }
+    @Autowired
+    private FoodRepository foodRepository;
 
     // Finds top 8 search results
     @GetMapping("/usdaFoodSearch/{foodName}")
@@ -101,6 +59,28 @@ class FoodController {
         String res = responseEntity.getBody().toString();
 
         return res;
+    }
+
+    @GetMapping("/dbFoodSearch")
+    public String dbFoodSearch(@RequestParam String foodName) throws JsonProcessingException {
+
+        // Split each keyword by spaces into an array
+        String[] keywordsArr = foodName.split(" ");
+
+        // Add a '+' prefix to each keyword in the array
+        for (int i = 0; i < keywordsArr.length; i++) {
+            keywordsArr[i] = "+" + keywordsArr[i];
+        }
+
+        // Rejoin each word (now with a '+' prefix) into a single string
+        String keywords = String.join(" ", keywordsArr);
+
+        // Pass the string (Ex: "+golden +oreo") into the food search query
+        List<SearchFood> res = foodRepository.queryGetDbFoods(keywords);
+
+        // Parse the list of search results into a JSON object and return (via GSON)
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        return gson.toJson(res);
     }
 }
 
