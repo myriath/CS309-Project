@@ -1,14 +1,11 @@
 package com.requests.backend;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.requests.backend.models.*;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
-
 import java.util.Base64;
 import java.util.Collection;
 
@@ -145,7 +142,7 @@ public class UserController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        LoginRequest req = new Gson().fromJson(json, LoginRequest.class);
+        RegisterRequest req = new Gson().fromJson(json, RegisterRequest.class);
 
         String username = req.getUsername();
         String p_hash = req.getPHash();
@@ -154,7 +151,7 @@ public class UserController {
 
         try {
             System.out.println("GOT HERE");
-            userRepository.queryCreateUser(username, p_hash);
+            userRepository.queryCreateUser(username, p_hash, req.getPSalt(), req.getEmail(), req.getFullName(), req.getAge());
             res.setResult(RESULT_USER_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_USERNAME_TAKEN);

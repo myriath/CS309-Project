@@ -35,8 +35,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query(
             value =
-                    "INSERT INTO users (username, p_hash, user_type, email, full_name, age) values (:username, :pHash, 'User', 'test@email.com', 'Test Name', 25)",
+                    "INSERT INTO users (username, p_hash, p_salt, user_type, email, full_name, age) values (:username, :pHash, :pSalt, 'User', :email, :name, :age)",
             nativeQuery = true)
     @Transactional
-    void queryCreateUser(@Param("username") String username, @Param("pHash") String pHash);
+    void queryCreateUser(@Param("username") String username, @Param("pHash") String pHash, @Param("pSalt") String pSalt, @Param("email") String email, @Param("name") String name, @Param("age") int age);
+
+
+
 }

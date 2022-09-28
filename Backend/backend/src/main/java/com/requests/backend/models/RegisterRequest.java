@@ -5,6 +5,8 @@ public class RegisterRequest {
 
     private String pHash;
 
+    private String pSalt;
+
     private String user_type;
 
     private String email;
@@ -13,13 +15,13 @@ public class RegisterRequest {
 
     private Integer age;
 
-    public RegisterRequest(String username, String pHash) {
+    public RegisterRequest(String username, String pHash, String email, String fullName, int age){
         this.username = username;
         this.pHash = pHash;
         this.user_type = "User";
-        this.email = "test@email.com";
-        this.fullName = "Test Name";
-        this.age = 25;
+        this.email = email;
+        this.fullName = fullName;
+        this.age = age;
     }
 
     public String getUsername() {
@@ -30,19 +32,27 @@ public class RegisterRequest {
         this.username = username;
     }
 
-    public String getpHash() {
+    public String getPHash() {
         return pHash;
     }
 
-    public void setpHash(String pHash) {
+    public void setPHash(String pHash) {
         this.pHash = pHash;
     }
 
-    public String getUser_type() {
+    public String getPSalt() {
+        return pSalt;
+    }
+
+    public void setPSalt(String pSalt) {
+        this.pSalt = pSalt;
+    }
+
+    public String getUserType() {
         return user_type;
     }
 
-    public void setUser_type(String user_type) {
+    public void setUserType(String user_type) {
         this.user_type = user_type;
     }
 
