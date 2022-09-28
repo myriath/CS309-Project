@@ -42,7 +42,7 @@ build:
   # Script: Build and copy to the local machine
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - scp -o StrictHostKeyChecking=no /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/latest.jar
+    - scp -o StrictHostKeyChecking=no -P $SSH_PORT /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/latest.jar
   # artifacts:
   #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
   #   paths:
