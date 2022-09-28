@@ -67,6 +67,6 @@ deploy-prod:
     - chmod 644 ~/.ssh/known_hosts
   # Script: Run the deploy script which restarts the systemd service
   script:
-    - ssh $SSH_USER@$SSH_ADDRESS "/home/gitlab-runner/deploy.sh"
+    - ssh -p $SSH_PORT $SSH_USER@$SSH_ADDRESS "/home/gitlab-runner/deploy.sh"
     # - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
   environment: production
