@@ -58,6 +58,8 @@ class FoodController {
     }
 
 
+
+
     //Methods to keep?
     @PutMapping("/newUser/{name},{something}")
         public String newUser(@PathVariable String name, @PathVariable String something){
@@ -88,6 +90,17 @@ class FoodController {
         userInfo username_output = searchSomething(check, something);
         return username_output.username;
     }
+
+    @GetMapping
+    public String UserData(@PathVariable String username){
+        userInfo userdata = searchName(check, username);
+
+        String output = userdata.username + userdata.userID + userdata.Something;
+
+        return output;
+    }
+
+
 
     public userInfo searchSomething(ArrayList<userInfo> arr, String locate) {
         int n = arr.size();
