@@ -1,11 +1,10 @@
 stages:
-  - build
-  - test
-  - deploy
-
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+  - maven-build
+  - maven-test
+  - maven-deploy
+  - android-build
+  - android-test
+  - android-deploy
 
 variables:
   APP_VERSION: 1
@@ -25,62 +24,30 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
-image: maven:3.8-openjdk-11
-
-build:
-  variables:
-    JOB_MODE: "test"
-    KEYSTORE_PATH: "classpath:keystore/cs309.p12"
-  stage: build
-  cache:
-    key: "maven-$CI_COMMIT_REF_SLUG"
-    paths:
-      - .m2/repository
-  # Before-script: Add the ssh key and known hosts
-  before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -p $SSH_PORT $SSH_ADDRESS >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-  # Script: Build and copy to the local machine
+build-spring:
+  tags:
+    - springboot_tag
+  stage: maven-build
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    #- cp /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/latest.jar
-    - apt-get update
-    - scp -o StrictHostKeyChecking=no -P $SSH_PORT /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/latest.jar
-  # artifacts:
-  #   name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
-  #   paths:
-  #     - "**/target/*.jar"
-  #   reports:
-  #     junit:
-  #       - "**/target/*-reports/TEST-*.xml"
 
-deploy-demo:
-  variables:
-    JOB_MODE: "deploy"
-  stage: deploy
+deploy-demo-spring:
+  tags:
+    - springboot_tag
+  stage: maven-deploy
   script:
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
     - sudo /home/gitlab-runner/deploy.sh
 
-deploy-prod:
-  variables:
-    JOB_MODE: "deploy"
-  stage: deploy
-  # Before-script: Add the ssh key and known hosts
-  before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -p $SSH_PORT $SSH_ADDRESS >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-  # Script: Run the deploy script which restarts the systemd service
+deploy-prod-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - deploy_tag
+  stage: maven-deploy
   script:
-    - ssh -p $SSH_PORT $SSH_USER@$SSH_ADDRESS "sudo /home/gitlab-runner/deploy.sh"
-    # - java -jar /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar
-  environment: production
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - sudo /home/gitlab-runner/deploy.sh
