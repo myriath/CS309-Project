@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>${env.APP_NAME}</artifactId>
+	<version>${env.APP_VERSION}</version>
 	<name>backend</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
