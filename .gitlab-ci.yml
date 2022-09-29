@@ -30,14 +30,14 @@ build-spring:
   stage: maven-build
   script:
     - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
 
 deploy-demo-spring:
   tags:
     - springboot_tag
   stage: maven-deploy
   script:
-    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
-    - ln -sf /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
     - sudo /home/gitlab-runner/deploy.sh
 
 deploy-prod-spring:
