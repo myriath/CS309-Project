@@ -8,14 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.FDC.Constants;
-import com.example.cs309android.models.FDC.FoodQuery;
-import com.example.cs309android.models.FDC.models.AbridgedFoodItem;
-import com.example.cs309android.models.FDC.models.BrandedFoodItem;
-import com.example.cs309android.models.FDC.models.FoundationFoodItem;
-import com.example.cs309android.models.FDC.models.SRLegacyFoodItem;
-import com.example.cs309android.models.FDC.models.SurveyFoodItem;
-import com.example.cs309android.models.FDC.queries.FoodsCriteria;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.USDA.Queries;
+import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
+import com.example.cs309android.models.USDA.models.BrandedFoodItem;
+import com.example.cs309android.models.USDA.models.FoundationFoodItem;
+import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
+import com.example.cs309android.models.USDA.models.SurveyFoodItem;
+import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +37,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        fdcId = i.getIntExtra(MainActivity.PARCEL_FOODITEM, -1);
         fdcId = 454004;
         if (fdcId != -1) {
-            FoodQuery.query(new FoodsCriteria(null, Constants.Format.FULL, null), fdcId,
+            Queries.food(new FoodsCriteria(null, Constants.Format.FULL, null), fdcId,
                     response -> {
                         GsonBuilder builder = new GsonBuilder();
                         builder.serializeNulls();
@@ -51,7 +51,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                                 foodItem = gson.fromJson(response.toString(), FoundationFoodItem.class);
                             } else if (type.equals(Constants.DataType.SURVEY.toString())) {
                                 foodItem = gson.fromJson(response.toString(), SurveyFoodItem.class);
-                            } else if (type.equals(Constants.DataType.SR.toString())) {
+                            } else if (type.equals(Constants.DataType.LEGACY.toString())) {
                                 foodItem = gson.fromJson(response.toString(), SRLegacyFoodItem.class);
                             } else {
                                 foodItem = gson.fromJson(response.toString(), AbridgedFoodItem.class);

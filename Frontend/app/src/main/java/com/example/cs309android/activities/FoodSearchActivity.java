@@ -19,17 +19,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.Nutritionix.instant.FoodItem;
-import com.example.cs309android.models.Nutritionix.queries.Search;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.USDA.Queries;
+import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
+import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
+import com.example.cs309android.models.USDA.queries.SearchResult;
+import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-
-import org.json.JSONException;
+import com.google.gson.GsonBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -42,8 +44,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
      * List of existing items from whatever called this.
      * Completing a search adds that item to this list.
      */
-    private ArrayList<FoodItem> items;
-    private ArrayList<FoodItem> searchResults;
+    private ArrayList<SimpleFoodItem> items;
+    private ArrayList<SimpleFoodItem> searchResults;
 
     private static FoodSearchListAdapter adapter;
 
@@ -129,24 +131,32 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         findViewById(R.id.search_bar).clearFocus();
 
         Util.spin(this);
-        Search search = new Search(query);
         try {
-            search.search(response -> {
-                try {
-                    Search.Response parsed = new Search.Response(response);
-                    searchResults.clear();
-                    searchResults.addAll(Arrays.asList(parsed.getBrandedFoods()));
-                    searchResults.addAll(Arrays.asList(parsed.getCommonFoods()));
+            Queries.search(query, new FoodSearchCriteria(Constants.DataType.FOUNDATION), response -> {
+                SearchResult result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), SearchResult.class);
 
-                    if (!searchResults.isEmpty()) {
-                        findViewById(R.id.empty_text).setVisibility(View.GONE);
-                    } else {
-                        findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                    }
-                    ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-                    Util.unSpin(this);
-                } catch (JSONException e) {
-                    Util.unSpin(this);
+                searchResults.clear();
+                for (SearchResultFood food : result.getFoods()) {
+                    searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                }
+
+                try {
+                    Queries.search(query, new FoodSearchCriteria(Constants.DataType.BRANDED), response1 -> {
+                        SearchResult result1 = new GsonBuilder().serializeNulls().create().fromJson(response1.toString(), SearchResult.class);
+
+                        for (SearchResultFood food : result1.getFoods()) {
+                            searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                        }
+
+                        if (!searchResults.isEmpty()) {
+                            findViewById(R.id.empty_text).setVisibility(View.GONE);
+                        } else {
+                            findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+                        }
+                        ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+                        Util.unSpin(this);
+                    }, this);
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }, this);
@@ -183,7 +193,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         switch (op) {
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
-                intent.putExtra(MainActivity.PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                intent.putExtra(MainActivity.PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
                 foodDetailsLauncher.launch(intent);
                 break;
             }

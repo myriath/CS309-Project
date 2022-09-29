@@ -114,7 +114,11 @@ public class GetRequestURL {
      */
     public GetRequestURL addArray(String name, Object[] values) {
         if (values == null) return this;
-        for (Object value : values) params.add(new RequestParam(name, value));
+        StringBuilder builder = new StringBuilder();
+        for (Object value : values) {
+            builder.append(value).append(",");
+        }
+        params.add(new RequestParam(name, builder.substring(0, builder.length() - 1)));
         return this;
     }
 
@@ -129,7 +133,11 @@ public class GetRequestURL {
     public GetRequestURL addArray(String name, Object[] values, int index) {
         if (values == null) return this;
         if (index == -1) {
-            for (Object value : values) params.add(new RequestParam(name, value));
+            StringBuilder builder = new StringBuilder();
+            for (Object value : values) {
+                builder.append(value).append(",");
+            }
+            params.add(new RequestParam(name, builder.substring(0, builder.length() - 1)));
         } else {
             params.add(new RequestParam(name, values[index]));
         }
@@ -144,12 +152,11 @@ public class GetRequestURL {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder builder;
+        StringBuilder builder = new StringBuilder();
         if (url != null) {
-            builder = new StringBuilder(url).append("?");
-        } else {
-            builder = new StringBuilder("?");
+            builder.append(url);
         }
+
         for (RequestParam param : params) {
             if (param != null) {
                 builder.append(param).append("&");

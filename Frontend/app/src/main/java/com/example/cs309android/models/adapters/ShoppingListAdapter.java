@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
-import com.example.cs309android.models.Nutritionix.instant.FoodItem;
+import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 
 import java.util.ArrayList;
 
@@ -26,11 +26,11 @@ import java.util.ArrayList;
  *
  * @author Mitch Hudson
  */
-public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
+public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
     /**
      * List of items in the shopping list
      */
-    private final ArrayList<FoodItem> items;
+    private final ArrayList<SimpleFoodItem> items;
 
     /**
      * Public constructor.
@@ -38,7 +38,7 @@ public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public ShoppingListAdapter(Context context, ArrayList<FoodItem> items) {
+    public ShoppingListAdapter(Context context, ArrayList<SimpleFoodItem> items) {
         super(context, R.layout.shopping_list_item, items);
         this.items = items;
     }
@@ -56,34 +56,46 @@ public class ShoppingListAdapter extends ArrayAdapter<FoodItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.shopping_list_item, null);
-
-            convertView.setClickable(true);
-            convertView.setOnClickListener(view -> {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(MainActivity.PARCEL_FOODITEM, items.get(position));
-                ((MainActivity) parent.getContext()).callback(MainActivity.CALLBACK_FOOD_DETAIL, bundle);
-            });
-
-            TextView name = convertView.findViewById(R.id.name);
-            name.setText(items.get(position).getFoodName());
-
-            convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
-                if (((CheckBox) view).isChecked()) {
-                    name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    name.setEnabled(false);
-                } else {
-                    name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                    name.setEnabled(true);
-                }
-            });
-
-            convertView.findViewById(R.id.remove).setOnClickListener(view1 -> ShoppingFragment.removeItem(position, parent.getRootView()));
-
-            int[] attrs = new int[]{R.attr.selectableItemBackground};
-            TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
-            convertView.setBackgroundResource(array.getResourceId(0, 0));
-            array.recycle();
         }
+
+        convertView.setClickable(true);
+        convertView.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, items.get(position));
+            ((MainActivity) parent.getContext()).callback(MainActivity.CALLBACK_FOOD_DETAIL, bundle);
+        });
+
+        TextView name = convertView.findViewById(R.id.name);
+        name.setText(items.get(position).getDescription());
+        if (items.get(position).isStricken()) {
+            name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            name.setEnabled(false);
+            ((CheckBox) convertView.findViewById(R.id.stricken)).setChecked(true);
+        } else {
+            name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            name.setEnabled(true);
+            ((CheckBox) convertView.findViewById(R.id.stricken)).setChecked(false);
+        }
+
+        convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
+            CheckBox checkBox = (CheckBox) view;
+            if (checkBox.isChecked()) {
+                name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                name.setEnabled(false);
+            } else {
+                name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                name.setEnabled(true);
+            }
+            items.get(position).setStricken(checkBox.isChecked());
+            // TODO: API call to tell server about update
+        });
+
+        convertView.findViewById(R.id.remove).setOnClickListener(view1 -> ShoppingFragment.removeItem(position, parent.getRootView()));
+
+        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
+        convertView.setBackgroundResource(array.getResourceId(0, 0));
+        array.recycle();
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());

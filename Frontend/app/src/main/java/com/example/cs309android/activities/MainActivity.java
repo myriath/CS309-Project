@@ -23,8 +23,7 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.Nutritionix.instant.FoodItem;
-import com.example.cs309android.models.Nutritionix.instant.Nutrient;
+import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Nutrient.generateLookup();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         // TODO: Remove for production
@@ -324,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
-                intent.putExtra(PARCEL_FOODITEM, (FoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
                 startActivity(intent);
                 break;
             }

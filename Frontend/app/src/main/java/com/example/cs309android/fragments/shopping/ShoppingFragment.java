@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.Nutritionix.instant.FoodItem;
+import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ShoppingFragment extends BaseFragment {
     /**
      * All of the items to display
      */
-    private static ArrayList<FoodItem> items;
+    private static ArrayList<SimpleFoodItem> items;
     /**
      * Adapter to display the ListView
      */
@@ -44,7 +44,7 @@ public class ShoppingFragment extends BaseFragment {
      *
      * @return A new instance of fragment ShoppingFragment.
      */
-    public static ShoppingFragment newInstance(ArrayList<FoodItem> items) {
+    public static ShoppingFragment newInstance(ArrayList<SimpleFoodItem> items) {
         ShoppingFragment fragment = new ShoppingFragment();
         ShoppingFragment.items = items;
         return fragment;
