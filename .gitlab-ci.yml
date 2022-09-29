@@ -31,7 +31,7 @@ build-spring:
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
-    - cp /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - cp /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
 
 deploy-demo-spring:
   tags:
@@ -49,5 +49,5 @@ deploy-prod-spring:
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
-    - cp /home/gitlab-runner/relexase/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - cp /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
     - sudo /home/gitlab-runner/deploy.sh
