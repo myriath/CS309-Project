@@ -30,6 +30,7 @@ image: maven:3.8-openjdk-11
 build:
   variables:
     JOB_MODE: "test"
+    KEYSTORE_PATH: "classpath:keystore/cs309.p12"
   stage: build
   cache:
     key: "maven-$CI_COMMIT_REF_SLUG"
