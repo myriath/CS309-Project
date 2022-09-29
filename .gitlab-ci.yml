@@ -1,0 +1,53 @@
+stages:
+  - maven-build
+  - maven-test
+  - maven-deploy
+  - android-build
+  - android-test
+  - android-deploy
+
+variables:
+  APP_VERSION: 1
+  APP_NAME: backend
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=.m2/repository
+    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    -f Backend/backend/pom.xml
+    -DinstallAtEnd=true
+    -DdeployAtEnd=true
+
+build-spring:
+  tags:
+    - springboot_tag
+  stage: maven-build
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+
+deploy-demo-spring:
+  tags:
+    - springboot_tag
+  stage: maven-deploy
+  script:
+    - sudo /home/gitlab-runner/deploy.sh
+
+deploy-prod-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - deploy_tag
+  stage: maven-deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - sudo /home/gitlab-runner/deploy.sh
