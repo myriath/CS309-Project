@@ -1,17 +1,14 @@
 package com.requests.backend.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Blob;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private String username;
-
     private String p_hash;
 
     private String p_salt;

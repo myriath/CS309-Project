@@ -118,17 +118,19 @@ public class UserController {
         if (userRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
         }
-
-        // If a user with the username is found, assign that user to the user variable
-        User user = userRes.iterator().next();
-
-        // If the provided password does not match the user's password, return hash mismatch code
-        if (user.getPHash().compareTo(p_hash) != 0) {
-            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-        }
-        // Otherwise, the password matches and the login is valid
         else {
-            res.setResult(RESULT_LOGGED_IN);
+
+            // If a user with the username is found, assign that user to the user variable
+            User user = userRes.iterator().next();
+
+            // If the provided password does not match the user's password, return hash mismatch code
+            if (user.getPHash().compareTo(p_hash) != 0) {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            }
+            // Otherwise, the password matches and the login is valid
+            else {
+                res.setResult(RESULT_LOGGED_IN);
+            }
         }
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="

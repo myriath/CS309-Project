@@ -1,5 +1,5 @@
 -- Fast, Unique and User-Friendly Dieting!
-CREATE DATABASE IF NOT EXISTS fuud_db;
+CREATE DATABASE IF NOT EXISTS fod_db;
 
 USE fod_db;
 
