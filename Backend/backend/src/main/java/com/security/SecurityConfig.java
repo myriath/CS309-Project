@@ -9,8 +9,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,8 +20,9 @@ import java.util.List;
  *
  * @author Mitch Hudson
  */
+@EnableWebMvc
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     /**
      * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
