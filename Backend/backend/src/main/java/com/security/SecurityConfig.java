@@ -35,7 +35,7 @@ public class SecurityConfig {
 //                .antMatchers(HttpMethod.GET, "/**").permitAll()
 //                .anyRequest().authenticated();
 
-        return http.build();
+//        return http.build();
     }
 
 }
