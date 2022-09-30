@@ -15,21 +15,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    /**
-     * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
-     * TODO: Stop disabling CORS and CSRF.
-     * @param http          HTTP request
-     * @return              Built HTTP request
-     * @throws Exception    Errors
-     */
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.httpBasic().disable().formLogin().disable()
-                .requiresChannel(channel ->
-                        channel.anyRequest().requiresSecure())
-                .authorizeRequests(authorize ->
-                        authorize.anyRequest().permitAll())
-                .build();
-    }
+//    /**
+//     * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
+//     * TODO: Stop disabling CORS and CSRF.
+//     * @param http          HTTP request
+//     * @return              Built HTTP request
+//     * @throws Exception    Errors
+//     */
+//    @Bean
+//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        return http.httpBasic().disable().formLogin().disable()
+//                .requiresChannel(channel ->
+//                        channel.anyRequest().requiresSecure())
+//                .authorizeRequests(authorize ->
+//                        authorize.anyRequest().permitAll())
+//                .build();
+//    }
 
 }
