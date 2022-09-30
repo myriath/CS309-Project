@@ -2,7 +2,6 @@ package com.requests.backend.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.requests.backend.models.FavoriteRepository;
 import com.requests.backend.models.ShoppingList;
 import com.requests.backend.repositories.ShoppingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;

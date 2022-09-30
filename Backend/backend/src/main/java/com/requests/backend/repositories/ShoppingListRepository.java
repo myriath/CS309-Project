@@ -1,6 +1,5 @@
 package com.requests.backend.repositories;
 
-import com.requests.backend.models.Favorite;
 import com.requests.backend.models.ShoppingList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
