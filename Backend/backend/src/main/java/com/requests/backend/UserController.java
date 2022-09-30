@@ -60,7 +60,7 @@ public class UserController {
     @GetMapping(path="/getUserByUsername/{username}")
     public @ResponseBody String getUserByUsername(@PathVariable String username) {
         Collection<User> user = userRepository.queryGetUserByUsername(username);
-        return user.iterator().next().getEmail();
+        return user.iterator().next().getUsername();
     }
 
     @GetMapping("/getSalt")
@@ -125,7 +125,7 @@ public class UserController {
         return gson.toJson(res);
     }
 
-    @PostMapping(path="/addUser") // Map ONLY POST Requests
+    @PostMapping(path="/register") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestBody String json) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
@@ -133,13 +133,14 @@ public class UserController {
         RegisterRequest req = new Gson().fromJson(json, RegisterRequest.class);
 
         String username = req.getUsername();
-        String p_hash = req.getPHash();
+        String email = req.getEmail();
+        String pHash = req.getPHash();
+        String pSalt = req.getPSalt();
 
         LoginResponse res = new LoginResponse();
 
         try {
-            System.out.println("GOT HERE");
-            userRepository.queryCreateUser(username, p_hash, req.getPSalt(), req.getEmail(), req.getFullName(), req.getAge());
+            userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
             res.setResult(RESULT_USER_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_USERNAME_TAKEN);
