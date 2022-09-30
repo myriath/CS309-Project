@@ -1,0 +1,7 @@
+USE fuud_db;
+CREATE USER 'backend_admin'@'fuud_db' IDENTIFIED WITH mysql_native_password BY 'fuudIsGuudCW2';
+
+GRANT ALL
+  ON *.*
+  TO 'backend_admin'@'localhost'
+  WITH GRANT OPTION;

@@ -1,5 +1,5 @@
 
-package com.example.backend.foods;
+package com.requests.backend.foods;
 
 import java.util.HashMap;
 import java.util.Map;

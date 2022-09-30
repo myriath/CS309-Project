@@ -1,7 +1,10 @@
 stages:
-  - build
-  - test
-  - deploy
+  - maven-build
+  - maven-test
+  - maven-deploy
+  - android-build
+  - android-test
+  - android-deploy
 
 variables:
   APP_VERSION: 1
@@ -21,30 +24,45 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
-image: maven:3.8-openjdk-11
-
-build:
-  variables:
-    JOB_MODE: "test"
-  stage: build
-  cache:
-    key: "maven-$CI_COMMIT_REF_SLUG"
-    paths:
-      - .m2/repository
+build-spring:
+  tags:
+    - springboot_tag
+  stage: maven-build
   script:
     - mvn $MAVEN_CLI_OPTS verify
-  artifacts:
-    name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
-    paths:
-      - "**/target"
-    reports:
-      junit:
-        - "**/target/*-reports/TEST-*.xml"
 
-deploy-prod:
-  variables:
-    JOB_MODE: "deploy"
-  stage: deploy
+deploy-demo-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main"
+  tags:
+    - springboot_tag
+  stage: maven-deploy
   script:
-    - java -jar **/target/$APP_NAME-$APP_VERSION.jar
-  environment: production
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/
+    - ln -sf /home/gitlab-runner/build/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/latest.jar
+    - sudo /home/gitlab-runner/deploy.sh
+
+deploy-demoprod-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - springboot_tag
+  stage: maven-deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - sudo /home/gitlab-runner/deployprod.sh
+
+deploy-prod-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - deploy_tag
+  stage: maven-deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
+    - sudo /home/gitlab-runner/deploy.sh
