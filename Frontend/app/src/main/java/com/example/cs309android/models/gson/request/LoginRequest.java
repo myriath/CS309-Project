@@ -1,11 +1,13 @@
 package com.example.cs309android.models.gson.request;
 
+import com.example.cs309android.models.gson.PostRequest;
+
 /**
  * GSON model for a login request
  *
  * @author Mitch Hudson
  */
-public class LoginRequest {
+public class LoginRequest extends PostRequest {
     /**
      * Username to attempt a login
      */

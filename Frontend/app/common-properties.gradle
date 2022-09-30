@@ -4,7 +4,7 @@ android.buildTypes {
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     build {
-        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu/\""
+        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     release {

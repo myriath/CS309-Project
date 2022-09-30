@@ -166,12 +166,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Gets stored username and password hash, if they exist
         // TODO: Uncomment this out before PR
         SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String username = pref.getString("username", null).trim();
-        String encodedHash = pref.getString("enc_hash", null).trim();
+        String username = pref.getString("username", "").trim();
+        String encodedHash = pref.getString("enc_hash", "").trim();
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
-        if (username != null && encodedHash != null) {
+        if (username.equals("") || encodedHash.equals("")) {
             spin(this);
-
 
             try {
                 // Creates a new request with username and hash as the body
