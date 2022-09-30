@@ -1,21 +1,12 @@
 package com.requests.backend.models;
 
-import com.requests.backend.models.composites.ShoppingListPK;
-
-import javax.persistence.*;
-
-@Entity // This tells Hibernate to make a table out of this class
-@Table(name="shopping_list")
-@IdClass(ShoppingListPK.class)
-public class ShoppingList {
-    @Id
+public class ShoppingListAddRequest {
     private String username;
-    private Integer fdcId;
-
-    @Id
     private String itemName;
 
-    private Boolean  stricken;
+    private int fdcId;
+
+    private Boolean stricken;
 
     public String getUsername() {
         return username;
@@ -23,14 +14,6 @@ public class ShoppingList {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Integer getFdcId() {
-        return fdcId;
-    }
-
-    public void setFdcId(Integer fdcId) {
-        this.fdcId = fdcId;
     }
 
     public String getItemName() {
@@ -41,6 +24,14 @@ public class ShoppingList {
         this.itemName = itemName;
     }
 
+    public int getFdcId() {
+        return fdcId;
+    }
+
+    public void setFdcId(int fdcId) {
+        this.fdcId = fdcId;
+    }
+
     public Boolean getStricken() {
         return stricken;
     }
@@ -49,5 +40,3 @@ public class ShoppingList {
         this.stricken = stricken;
     }
 }
-
-

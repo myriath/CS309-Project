@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class ShoppingListPK implements Serializable {
     protected String username;
-    protected Integer fdcId;
+    protected Integer itemName;
 
     public ShoppingListPK() {}
 
-    public ShoppingListPK(String username, Integer fdcId) {
+    public ShoppingListPK(String username, Integer itemName) {
         this.username = username;
-        this.fdcId = fdcId;
+        this.itemName = itemName;
     }
     // equals, hashCode
 }

@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import java.util.Collection;
 
 @RestController
-@RequestMapping(path="/users") // This means URL's start with /demo (after Application path)
+@RequestMapping(path="/users")
 public class UserController {
 
     public static final int RESULT_ERROR = -1;
