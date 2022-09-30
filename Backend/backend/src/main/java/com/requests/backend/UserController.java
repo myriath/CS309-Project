@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 import java.util.Collection;
 
-@RestController // This means that this class is a Controller
+@RestController
 @RequestMapping(path="/users") // This means URL's start with /demo (after Application path)
 public class UserController {
 
