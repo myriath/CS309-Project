@@ -27,6 +27,8 @@ variables:
 
 build:
   stage: build
+  tags:
+    - springboot_tag
   script:
     - echo "Building..."
 
