@@ -1,5 +1,7 @@
 package com.example.cs309android.interfaces;
 
+import android.os.Bundle;
+
 /**
  * Interface to allow callback methods for controlling fragment activity
  *
@@ -11,7 +13,7 @@ public interface CallbackFragment {
      *
      * @param op Tells the class what to do.
      */
-    void callback(int op);
+    void callback(int op, Bundle bundle);
 
     /**
      * Sets the callback fragment for closing the window/opening the register page.

@@ -52,7 +52,7 @@ public class SettingsFragment extends BasePreferenceFragment {
             editor.remove("username");
             editor.remove("enc_hash");
             editor.apply();
-            callbackFragment.callback(CALLBACK_START_LOGIN);
+            callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
         });
     }

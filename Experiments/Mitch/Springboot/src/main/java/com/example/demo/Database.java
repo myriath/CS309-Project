@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+
+import java.math.BigInteger;
 import java.util.HashMap;
 
 /**
@@ -71,6 +73,7 @@ public class Database {
         public User(String username, String email, byte[] salt, byte[] hash) {
             this.username = username;
             this.email = email;
+            System.out.println(String.format("%040x", new BigInteger(1, salt)));
             this.salt = salt;
             this.hash = hash;
         }
@@ -109,7 +112,7 @@ public class Database {
 
         @Override
         public String toString() {
-            return "[" + email + "," + username + "]: " + getEncodedHash() + ";" + getEncodedSalt() + "\n";
+            return "[" + email + "," + username + "]: " + String.format("%040x", new BigInteger(1, hash)) + ";" + String.format("%040x", new BigInteger(1, salt)) + "\n";
         }
     }
 }

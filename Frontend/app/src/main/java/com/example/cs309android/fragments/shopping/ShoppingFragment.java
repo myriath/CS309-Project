@@ -4,63 +4,113 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
+import com.example.cs309android.models.adapters.ShoppingListAdapter;
+
+import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ShoppingFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Shopping list fragment.
+ * Consists of a ListView and a FAB to add items.
+ * The list view has a custom adapter that has a checkbox to strike out the text, a label, and
+ * a button to remove the item.
+ *
+ * @author Mitch Hudson
  */
 public class ShoppingFragment extends BaseFragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ShoppingFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * All of the items to display
+     */
+    private static ArrayList<SimpleFoodItem> items;
+    /**
+     * Adapter to display the ListView
+     */
+    private static ShoppingListAdapter adapter;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ShoppingFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ShoppingFragment newInstance(String param1, String param2) {
+    public static ShoppingFragment newInstance(ArrayList<SimpleFoodItem> items) {
         ShoppingFragment fragment = new ShoppingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        ShoppingFragment.items = items;
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    /**
+     * Ran when the fragment is created.
+     *
+     * @param inflater           inflater
+     * @param container          container
+     * @param savedInstanceState saved instance state
+     * @return inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping, container, false);
+
+        ListView listView = view.findViewById(R.id.shopping_list);
+        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+        // TODO: Get from database
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+
+        TextView empty = view.findViewById(R.id.empty_text);
+        if (items.isEmpty()) {
+            empty.setVisibility(View.VISIBLE);
+        } else {
+            empty.setVisibility(View.INVISIBLE);
+        }
+
+        adapter = new ShoppingListAdapter(this.getActivity(), items);
+        listView.setAdapter(adapter);
+
+        view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(MainActivity.PARCEL_FOODITEMS_LIST, items);
+            callbackFragment.callback(MainActivity.CALLBACK_SEARCH_FOOD, bundle);
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.shopping_list), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = insets.top;
+            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+            mlp.bottomMargin = insets.bottom;
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        return view;
+    }
+
+    /**
+     * Removes the given item from the list
+     *
+     * @param i    index of the item to remove
+     * @param view root view to find the listview/textview
+     */
+    public static void removeItem(int i, View view) {
+        items.remove(i);
+        ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
+        if (items.isEmpty()) {
+            ((TextView) view.findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+        }
     }
 }
