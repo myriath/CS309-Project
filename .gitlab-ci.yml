@@ -30,8 +30,6 @@ build-spring:
   stage: maven-build
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
-    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
 
 deploy-demo-spring:
   rules:
@@ -40,6 +38,9 @@ deploy-demo-spring:
     - springboot_tag
   stage: maven-deploy
   script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/
+    - ln -sf /home/gitlab-runner/build/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/latest.jar
     - sudo /home/gitlab-runner/deploy.sh
 
 deploy-demoprod-spring:
@@ -49,6 +50,9 @@ deploy-demoprod-spring:
     - springboot_tag
   stage: maven-deploy
   script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
     - sudo /home/gitlab-runner/deployprod.sh
 
 deploy-prod-spring:
