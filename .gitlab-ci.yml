@@ -40,6 +40,15 @@ deploy-demo-spring:
   script:
     - sudo /home/gitlab-runner/deploy.sh
 
+deploy-demoprod-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - springboot_tag
+  stage: maven-deploy
+  script:
+    - sudo /home/gitlab-runner/deployprod.sh
+
 deploy-prod-spring:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
