@@ -1,11 +1,13 @@
 package com.example.cs309android.models.gson.request;
 
+import com.example.cs309android.models.gson.PostRequest;
+
 /**
  * GSON model for the register endpoint POST request body
  *
  * @author Mitch Hudson
  */
-public class RegisterRequest {
+public class RegisterRequest extends PostRequest {
     /**
      * Email as a string to register.
      */
@@ -17,25 +19,25 @@ public class RegisterRequest {
     /**
      * Base64 encoded string of the 256 bit hash
      */
-    private final String hash;
+    private final String pHash;
     /**
      * Base64 encoded string of the 64 bit salt
      */
-    private final String salt;
+    private final String pSalt;
 
     /**
      * Constructor to be used by GSON
      *
      * @param email    Email to register
      * @param username Username to register
-     * @param hash     Hashed password + salt for new account
-     * @param salt     Salt used for hashing
+     * @param pHash    Hashed password + salt for new account
+     * @param pSalt    Salt used for hashing
      */
-    public RegisterRequest(String email, String username, String hash, String salt) {
+    public RegisterRequest(String email, String username, String pHash, String pSalt) {
         this.email = email;
         this.username = username;
-        this.hash = hash;
-        this.salt = salt;
+        this.pHash = pHash;
+        this.pSalt = pSalt;
     }
 
     /**
@@ -62,7 +64,7 @@ public class RegisterRequest {
      * @return hashed password + salt for new account
      */
     public String getHash() {
-        return hash;
+        return pHash;
     }
 
     /**
@@ -71,6 +73,6 @@ public class RegisterRequest {
      * @return salt used when hashing the password.
      */
     public String getSalt() {
-        return salt;
+        return pSalt;
     }
 }

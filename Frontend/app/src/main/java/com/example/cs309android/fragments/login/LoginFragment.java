@@ -26,6 +26,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.gson.request.LoginRequest;
+import com.example.cs309android.models.gson.request.SaltRequest;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
@@ -91,81 +93,78 @@ public class LoginFragment extends BaseFragment {
 
             spin(view);
 
-            try {
-                // Create request body for salt request
-                JSONObject bodyJson = new JSONObject();
-                bodyJson.put("username", unm);
-                JsonObjectRequest saltRequest = new JsonObjectRequest(Request.Method.POST, Constants.SALT_URL, bodyJson,
-                        response -> {
-                            try {
-                                // Check for errors.
-                                int result = response.getInt("result");
-                                if (result == RESULT_ERROR_USER_HASH_MISMATCH) {
-                                    passwordField.setError("Username / Password mismatch");
-                                    unSpin(view);
-                                    return;
-                                } else if (result != RESULT_OK) {
-                                    Toaster.toastShort("Unexpected error", this.getActivity());
-                                    Log.e("Error", response.toString());
-                                    Log.e("Error", String.valueOf(result));
-                                    unSpin(view);
-                                    return;
-                                }
-
-                                // Use salt with given password to generate test hash
-                                byte[] salt = Base64.decode(response.getString("salt"), Base64.DEFAULT);
-                                byte[] hash = Hasher.hash(pwd.toCharArray(), salt);
-
-                                // Put the hash into the request body
-                                bodyJson.put("hash", Base64.encodeToString(hash, Base64.DEFAULT));
-                                JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL, bodyJson,
-                                        response1 -> {
-                                            try {
-                                                // Check for errors
-                                                int result1 = response1.getInt("result");
-                                                if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
-                                                    passwordField.setError("Username / Password mismatch");
-                                                    unSpin(view);
-                                                    return;
-                                                } else if (result1 != RESULT_LOGGED_IN) {
-                                                    Toaster.toastShort("Unexpected error", this.getActivity());
-                                                    unSpin(view);
-                                                    return;
-                                                }
-
-                                                // No errors, so store credentials for future use
-                                                // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                                                SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = pref.edit();
-                                                editor.putString("username", unm);
-                                                editor.putString("enc_hash", Base64.encodeToString(hash, Base64.DEFAULT));
-                                                editor.apply();
-
-                                                unSpin(view);
-
-                                                // Close window
-                                                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-                                                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }, error -> {
-                                    Toaster.toastShort("Unexpected error", this.getActivity());
-                                    error.printStackTrace();
-                                    unSpin(view);
-                                });
-                                RequestHandler.getInstance(this.getActivity()).add(loginRequest);
-                            } catch (JSONException ignored) {
+            JsonObjectRequest saltRequest = new JsonObjectRequest(new SaltRequest(unm).getURL(),
+                    response -> {
+                        try {
+                            // Check for errors.
+                            int result = response.getInt("result");
+                            if (result == RESULT_ERROR_USER_HASH_MISMATCH) {
+                                passwordField.setError("Username / Password mismatch");
+                                unSpin(view);
+                                return;
+                            } else if (result != RESULT_OK) {
+                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                Log.e("Error", response.toString());
+                                Log.e("Error", String.valueOf(result));
+                                unSpin(view);
+                                return;
                             }
-                        }, error -> {
-                    Toaster.toastShort("Unexpected error", this.getActivity());
-                    error.printStackTrace();
-                    unSpin(view);
-                });
-                RequestHandler.getInstance(this.getActivity()).add(saltRequest);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+                            // Use salt with given password to generate test hash
+                            byte[] salt = Base64.decode(response.getString("salt"), Base64.DEFAULT);
+                            byte[] hash = Hasher.hash(pwd.toCharArray(), salt);
+                            System.out.println(Base64.encodeToString(hash, Base64.DEFAULT).trim().length());
+                            System.out.println(response.getString("salt").length());
+                            System.out.println(new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getJSON()).toString(4));
+
+                            // Put the hash into the request body
+                            JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL,
+                                    new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getJSON()),
+                                    response1 -> {
+                                        try {
+                                            System.out.println(response1.toString(4));
+                                            // Check for errors
+                                            int result1 = response1.getInt("result");
+                                            if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
+                                                passwordField.setError("Username / Password mismatch");
+                                                unSpin(view);
+                                                return;
+                                            } else if (result1 != RESULT_LOGGED_IN) {
+                                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                                unSpin(view);
+                                                return;
+                                            }
+
+                                            // No errors, so store credentials for future use
+                                            // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
+                                            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = pref.edit();
+                                            editor.putString("username", unm);
+                                            editor.putString("enc_hash", Base64.encodeToString(hash, Base64.DEFAULT));
+                                            editor.apply();
+
+                                            unSpin(view);
+
+                                            // Close window
+                                            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                                            callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> {
+                                Toaster.toastShort("Unexpected error", this.getActivity());
+                                error.printStackTrace();
+                                unSpin(view);
+                            });
+                            RequestHandler.getInstance(this.getActivity()).add(loginRequest);
+                        } catch (JSONException ignored) {
+                        }
+                    }, error -> {
+                Toaster.toastShort("Unexpected error", this.getActivity());
+                error.printStackTrace();
+                unSpin(view);
+            });
+            RequestHandler.getInstance(this.getActivity()).add(saltRequest);
         });
 
         registerButton.setOnClickListener(view1 -> {
