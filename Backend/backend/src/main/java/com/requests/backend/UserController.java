@@ -95,8 +95,8 @@ public class UserController {
         String username = req.getUsername();
         String p_hash = req.getPHash();
 
-        Base64.Decoder decoder = Base64.getDecoder();
-        String decodedHash = decoder.decode(p_hash).toString();
+        Base64.Encoder encoder = Base64.getEncoder();
+        String encodedHash = encoder.encode(p_hash.getBytes()).toString();
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
@@ -112,7 +112,7 @@ public class UserController {
             User user = userRes.iterator().next();
 
             // If the provided password does not match the user's password, return hash mismatch code
-            if (user.getPHash().compareTo(p_hash) != 0) {
+            if (user.getPHash().compareTo(encodedHash) != 0) {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             // Otherwise, the password matches and the login is valid
