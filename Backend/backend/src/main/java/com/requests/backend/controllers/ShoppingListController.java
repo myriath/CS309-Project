@@ -29,7 +29,7 @@ public class ShoppingListController {
         return gson.toJson(listItems);
     }
 
-    @GetMapping(path="/add")
+    @PostMapping(path="/add")
     public @ResponseBody String addToShoppingList(@RequestBody String json) {
 
         ShoppingListAddRequest req = new Gson().fromJson(json, ShoppingListAddRequest.class);
