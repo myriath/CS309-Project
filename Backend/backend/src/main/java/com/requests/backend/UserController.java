@@ -5,7 +5,6 @@ import com.requests.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
-import java.util.Base64;
 import java.util.Collection;
 
 @RestController // This means that this class is a Controller
