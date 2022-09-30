@@ -76,9 +76,8 @@ public class UserController {
         } else {
             User user = userRes.iterator().next();
             String salt = user.getPSalt();
-            String encodedSalt = Base64.getEncoder().encodeToString(salt.getBytes());
             res.setResult(RESULT_OK);
-            res.setSalt(encodedSalt);
+            res.setSalt(salt);
         }
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
@@ -95,9 +94,6 @@ public class UserController {
         String username = req.getUsername();
         String p_hash = req.getPHash();
 
-        Base64.Encoder encoder = Base64.getEncoder();
-        String encodedHash = encoder.encode(p_hash.getBytes()).toString();
-
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
         LoginResponse res = new LoginResponse(0);
@@ -112,7 +108,7 @@ public class UserController {
             User user = userRes.iterator().next();
 
             // If the provided password does not match the user's password, return hash mismatch code
-            if (user.getPHash().compareTo(encodedHash) != 0) {
+            if (user.getPHash().compareTo(p_hash) != 0) {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             // Otherwise, the password matches and the login is valid
@@ -139,16 +135,10 @@ public class UserController {
         String pHash = req.getPHash();
         String pSalt = req.getPSalt();
 
-        // TODO: CONFIRM THAT DECODING WORKS AS INTENDED
-        // TESTING ENCODING / DECODING
-        Base64.Decoder decoder = Base64.getDecoder();
-        String decodedHash = decoder.decode(pHash).toString();
-        String decodedSalt = decoder.decode(pSalt).toString();
-
         LoginResponse res = new LoginResponse();
 
         try {
-            userRepository.queryCreateUser(username, email, decodedHash, decodedSalt, "User");
+            userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
             res.setResult(RESULT_USER_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_USERNAME_TAKEN);
