@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson;
+package com.example.cs309android.models.gson.response;
 
 /**
  * Generic response class used for communication between front and back-ends

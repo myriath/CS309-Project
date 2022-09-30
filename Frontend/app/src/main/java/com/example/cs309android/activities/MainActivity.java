@@ -1,7 +1,14 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.LOGIN_URL;
+import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -24,9 +33,14 @@ import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.LoginRequest;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
-        if (DEBUG) {
+        if (SSL_OFF) {
             NukeSSLCerts.nuke();
         }
 
@@ -151,40 +165,42 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Gets stored username and password hash, if they exist
         // TODO: Uncomment this out before PR
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-//        String username = pref.getString("username", null);
-//        String encodedHash = pref.getString("enc_hash", null);
-//        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
-//        if (username != null && encodedHash != null) {
-//            spin(this);
-//            try {
-//                // Creates a new request with username and hash as the body
-//                JSONObject jsonBody = new JSONObject();
-//                jsonBody.put("username", username);
-//                jsonBody.put("hash", encodedHash);
-//
-//                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
-//                        response -> {
-//                            unSpin(this);
-//                            // Checks if the result is valid or not. If not, opens the login page
-//                            try {
-//                                int result = response.getInt("result");
-//                                if (result != RESULT_LOGGED_IN) startLoginFragment();
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }, error -> {
-//                    unSpin(this);
-//                    error.printStackTrace();
-//                    startLoginFragment();
-//                });
-//                RequestHandler.getInstance(this).add(request);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            startLoginFragment();
-//        }
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String username = pref.getString("username", null).trim();
+        String encodedHash = pref.getString("enc_hash", null).trim();
+        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
+        if (username != null && encodedHash != null) {
+            spin(this);
+
+
+            try {
+                // Creates a new request with username and hash as the body
+                JSONObject jsonBody = new JSONObject(new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(username, encodedHash)));
+
+                System.out.println(LOGIN_URL);
+                System.out.println(jsonBody.toString(2));
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
+                        response -> {
+                            unSpin(this);
+                            // Checks if the result is valid or not. If not, opens the login page
+                            try {
+                                int result = response.getInt("result");
+                                if (result != RESULT_LOGGED_IN) startLoginFragment();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }, error -> {
+                    unSpin(this);
+                    error.printStackTrace();
+                    startLoginFragment();
+                });
+                RequestHandler.getInstance(this).add(request);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            startLoginFragment();
+        }
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
