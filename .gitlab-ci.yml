@@ -25,6 +25,7 @@ variables:
     -DdeployAtEnd=true
 
 build-spring:
+  rules if: $CI_COMMIT_TAG == "springboot_tag"
   tags:
     - springboot_tag
   stage: maven-build
@@ -33,7 +34,7 @@ build-spring:
 
 deploy-demo-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH != "main"
+    - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_TAG == "springboot_tag"
   tags:
     - springboot_tag
   stage: maven-deploy
@@ -45,7 +46,7 @@ deploy-demo-spring:
 
 deploy-demoprod-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == "springboot_tag"
   tags:
     - springboot_tag
   stage: maven-deploy
@@ -57,7 +58,7 @@ deploy-demoprod-spring:
 
 deploy-prod-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == "springboot_tag"
   tags:
     - deploy_tag
   stage: maven-deploy
