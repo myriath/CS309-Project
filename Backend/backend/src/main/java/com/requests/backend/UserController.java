@@ -77,7 +77,6 @@ public class UserController {
             User user = userRes.iterator().next();
             String salt = user.getPSalt();
             String encodedSalt = Base64.getEncoder().encodeToString(salt.getBytes());
-
             res.setResult(RESULT_OK);
             res.setSalt(encodedSalt);
         }
@@ -95,6 +94,9 @@ public class UserController {
 
         String username = req.getUsername();
         String p_hash = req.getPHash();
+
+        Base64.Decoder decoder = Base64.getDecoder();
+        String decodedHash = decoder.decode(p_hash).toString();
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
@@ -137,10 +139,16 @@ public class UserController {
         String pHash = req.getPHash();
         String pSalt = req.getPSalt();
 
+        // TODO: CONFIRM THAT DECODING WORKS AS INTENDED
+        // TESTING ENCODING / DECODING
+        Base64.Decoder decoder = Base64.getDecoder();
+        String decodedHash = decoder.decode(pHash).toString();
+        String decodedSalt = decoder.decode(pSalt).toString();
+
         LoginResponse res = new LoginResponse();
 
         try {
-            userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
+            userRepository.queryCreateUser(username, email, decodedHash, decodedSalt, "User");
             res.setResult(RESULT_USER_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_USERNAME_TAKEN);
