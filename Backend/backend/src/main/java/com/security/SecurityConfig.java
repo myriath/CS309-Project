@@ -24,7 +24,7 @@ public class SecurityConfig {
      */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.httpBasic().disable()
+        return http.httpBasic().disable().formLogin().disable()
                 .requiresChannel(channel ->
                         channel.anyRequest().requiresSecure())
                 .authorizeRequests(authorize ->
