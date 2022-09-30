@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/food")
+@RequestMapping(path="/usda")
 class FoodController {
     @Autowired
     private ObjectMapper objectMapper;
@@ -39,8 +39,8 @@ class FoodController {
         return res;
     }
 
-    @GetMapping("/foodByID/{fdcId}")
-    public String foodByID(@PathVariable String fdcId) throws JsonProcessingException {
+    @GetMapping("/foodByID")
+    public String foodByID(@RequestParam String fdcId) throws JsonProcessingException {
         String uri = "https://api.nal.usda.gov/fdc/v1/food/" + fdcId + "?api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers
