@@ -34,6 +34,8 @@ build-spring:
     - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
 
 deploy-demo-spring:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main"
   tags:
     - springboot_tag
   stage: maven-deploy
