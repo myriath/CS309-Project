@@ -21,6 +21,7 @@ variables:
     --errors
     --fail-at-end
     --show-version
+    -X
     -f Backend/backend/pom.xml
     -DinstallAtEnd=true
     -DdeployAtEnd=true
