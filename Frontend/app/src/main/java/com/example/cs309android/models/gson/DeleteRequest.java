@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
  * <p>
  * Post requests need a method to get the json body
  */
-public class PostRequest {
+public class DeleteRequest {
     /**
      * Generates JSON of this object using GSON
      *

@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson.request;
+package com.example.cs309android.models.gson.request.users;
 
 import com.example.cs309android.models.gson.PostRequest;
 

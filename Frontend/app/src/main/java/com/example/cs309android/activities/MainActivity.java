@@ -33,7 +33,7 @@ import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.LoginRequest;
+import com.example.cs309android.models.gson.request.users.LoginRequest;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

@@ -26,8 +26,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.request.LoginRequest;
-import com.example.cs309android.models.gson.request.SaltRequest;
+import com.example.cs309android.models.gson.request.users.LoginRequest;
+import com.example.cs309android.models.gson.request.users.SaltRequest;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
@@ -115,11 +115,11 @@ public class LoginFragment extends BaseFragment {
                             byte[] hash = Hasher.hash(pwd.toCharArray(), salt);
                             System.out.println(Base64.encodeToString(hash, Base64.DEFAULT).trim().length());
                             System.out.println(response.getString("salt").length());
-                            System.out.println(new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getJSON()).toString(4));
+                            System.out.println(new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getBody()).toString(4));
 
                             // Put the hash into the request body
                             JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL,
-                                    new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getJSON()),
+                                    new JSONObject(new LoginRequest(unm, Base64.encodeToString(hash, Base64.DEFAULT).trim()).getBody()),
                                     response1 -> {
                                         try {
                                             System.out.println(response1.toString(4));

@@ -25,7 +25,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
-import com.example.cs309android.models.gson.request.RegisterRequest;
+import com.example.cs309android.models.gson.request.users.RegisterRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
@@ -115,7 +115,7 @@ public class RegisterFragment extends BaseFragment {
                 JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL,
                         new JSONObject(new RegisterRequest(email, unm,
                                 Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT).trim(),
-                                Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim()).getJSON()),
+                                Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim()).getBody()),
                         response -> {
                             // Check for errors.
                             try {
