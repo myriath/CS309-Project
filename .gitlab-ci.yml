@@ -39,7 +39,7 @@ build-spring:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - scp -o StrictHostKeyChecking=no -P $SSH_PORT /builds/cs309/fall2022/1_cw_2/Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/$APP_NAME-$APP_VERSION.jar
+    - scp -o StrictHostKeyChecking=no -P $SSH_PORT Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/$APP_NAME-$APP_VERSION.jar
   # artifacts:
   #   paths:
   #     - Backend/backend/target/*.jar
