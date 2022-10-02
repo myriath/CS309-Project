@@ -1,0 +1,6 @@
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.edek.xyz</domain>
+        <domain includeSubdomains="true">coms-309-010.class.las.iastate.edu</domain>
+    </domain-config>
+</network-security-config>
