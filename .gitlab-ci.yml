@@ -73,6 +73,7 @@ deploy-prod-spring:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
+  stage: maven-deploy
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
     - eval $(ssh-agent -s)
