@@ -10,9 +10,9 @@ public class FoodNutrient {
     private final String type;
     private final Nutrient nutrient;
     private final FoodNutrientDerivation foodNutrientDerivation;
-    private final NutrientAnalysisDetails nutrientAnalysisDetails;
+    private final NutrientAnalysisDetails[] nutrientAnalysisDetails;
 
-    public FoodNutrient(int id, float amount, int dataPoints, float min, float max, float median, String type, Nutrient nutrient, FoodNutrientDerivation foodNutrientDerivation, NutrientAnalysisDetails nutrientAnalysisDetails) {
+    public FoodNutrient(int id, float amount, int dataPoints, float min, float max, float median, String type, Nutrient nutrient, FoodNutrientDerivation foodNutrientDerivation, NutrientAnalysisDetails[] nutrientAnalysisDetails) {
         this.id = id;
         this.amount = amount;
         this.dataPoints = dataPoints;
@@ -61,7 +61,7 @@ public class FoodNutrient {
         return foodNutrientDerivation;
     }
 
-    public NutrientAnalysisDetails getNutrientAnalysisDetails() {
+    public NutrientAnalysisDetails[] getNutrientAnalysisDetails() {
         return nutrientAnalysisDetails;
     }
 }

@@ -6,7 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.util.RequestHandler;
-import com.google.gson.GsonBuilder;
+import com.example.cs309android.util.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +37,7 @@ public abstract class PostRequest {
      * @return JSON string
      */
     public String getBody() {
-        return new GsonBuilder().serializeNulls().create().toJson(this);
+        return Util.GSON.toJson(this);
     }
 
     /**

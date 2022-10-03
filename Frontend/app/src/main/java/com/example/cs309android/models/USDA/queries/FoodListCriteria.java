@@ -1,16 +1,18 @@
 package com.example.cs309android.models.USDA.queries;
 
-import androidx.annotation.NonNull;
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
+import static com.example.cs309android.models.USDA.Constants.API_URL_LIST_ENDPOINT;
 
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.gson.GetRequest;
 
 /**
  * JSON for request body of 'list' POST request
  * <p>
  * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodListCriteria
  */
-public class FoodListCriteria {
+public class FoodListCriteria extends GetRequest {
     private final String[] dataType;
     private final Integer pageSize;
     private final Integer pageNumber;
@@ -55,15 +57,15 @@ public class FoodListCriteria {
         return sortOrder;
     }
 
-    @NonNull
     @Override
-    public String toString() {
-        return new GetRequestURL()
+    public String getURL() {
+        return new GetRequestURL(API_URL_LIST_ENDPOINT)
                 .addArray("dataType", dataType)
                 .addParam("pageSize", pageSize)
                 .addParam("pageNumber", pageNumber)
                 .addParam("sortBy", sortBy)
                 .addParam("sortOrder", sortOrder)
+                .addParam("api_key", API_KEY)
                 .toString();
     }
 }

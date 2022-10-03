@@ -29,9 +29,9 @@ import com.example.cs309android.models.gson.request.users.SaltRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.users.SaltResponse;
 import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.GsonBuilder;
 
 import java.util.Objects;
 
@@ -89,7 +89,7 @@ public class LoginFragment extends BaseFragment {
 
             spin(view);
             new SaltRequest(unm).request(response -> {
-                SaltResponse saltResponse = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), SaltResponse.class);
+                SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);
                 int result = saltResponse.getResult();
                 if (result == RESULT_ERROR_USER_HASH_MISMATCH) {
                     passwordField.setError("Username / Password mismatch");
@@ -107,7 +107,7 @@ public class LoginFragment extends BaseFragment {
 
                 new LoginRequest(unm, hash).request(response1 -> {
                     // Check for errors
-                    int result1 = new GsonBuilder().serializeNulls().create().fromJson(response1.toString(), GenericResponse.class).getResult();
+                    int result1 = ((GenericResponse) Util.objFromJson(response1, GenericResponse.class)).getResult();
                     if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
                         passwordField.setError("Username / Password mismatch");
                         unSpin(view);

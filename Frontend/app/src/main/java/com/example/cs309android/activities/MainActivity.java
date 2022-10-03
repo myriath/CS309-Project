@@ -34,9 +34,9 @@ import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.GsonBuilder;
 
 import java.util.Objects;
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Name of the app for all mentions in the app
      * TODO: Name the app
      */
-    public static final String APP_NAME = "TEST";
+    public static final String APP_NAME = "Föd";
 
     /**
      * Preference name for this app's shared preferences.
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         new LoginRequest(username, hash).request(response -> {
             unSpin(this);
             // Checks if the result is valid or not. If not, opens the login page
-            int result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GenericResponse.class).getResult();
+            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
             if (result != RESULT_LOGGED_IN) startLoginFragment();
             AUTH_MODEL = new AuthModel(username, hash);
         }, error -> {

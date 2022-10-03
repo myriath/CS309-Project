@@ -29,7 +29,6 @@ import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.GsonBuilder;
 
 import java.util.Objects;
 
@@ -95,10 +94,6 @@ public class RegisterFragment extends BaseFragment {
                 passwordField.setError("Password can't be empty");
                 passwordField.requestFocus();
                 return;
-            } else if (!pwd.equals(pwd2)) {
-                passwordField2.setError("Passwords don't match");
-                passwordField2.requestFocus();
-                return;
             }
 
             Util.spin(view);
@@ -110,7 +105,7 @@ public class RegisterFragment extends BaseFragment {
 
             new RegisterRequest(email, unm, hash, salt).request(response -> {
                 // Check for errors.
-                int result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GenericResponse.class).getResult();
+                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
                 if (result == RESULT_ERROR_USERNAME_TAKEN) {
                     usernameField.setError("Username taken");
                     Util.unSpin(view);

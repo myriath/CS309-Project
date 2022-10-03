@@ -19,7 +19,7 @@ import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.shopping.GetListRequest;
 import com.example.cs309android.models.gson.response.shopping.GetListResponse;
-import com.google.gson.GsonBuilder;
+import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +75,7 @@ public class ShoppingFragment extends BaseFragment {
             items = new ArrayList<>();
         }
         new GetListRequest(MainActivity.AUTH_MODEL).request(response -> {
-            GetListResponse getResponse = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GetListResponse.class);
+            GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
             items.addAll(Arrays.asList(getResponse.getShoppingList()));
         }, requireActivity());
 

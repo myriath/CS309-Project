@@ -10,18 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.USDA.Queries;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.models.FoundationFoodItem;
 import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
+import com.example.cs309android.models.USDA.models.SurveyFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.gson.models.DataTypeModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.util.Util;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class FoodDetailsActivity extends AppCompatActivity {
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
@@ -40,41 +39,35 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
-        Queries.food(new FoodsCriteria(null, Format.FULL, null), fdcId,
-                response -> {
-                    System.out.println(response.toString());
-                    Gson gson = new GsonBuilder()
-                            .serializeNulls()
-                            .registerTypeAdapter(DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer())
-                            .create();
-                    DataTypeModel dataType = gson.fromJson(response.toString(), DataTypeModel.class);
-                    switch (dataType.getDataType()) {
-                        case BRANDED: {
-                            BrandedFoodItem foodItem = gson.fromJson(response.toString(), BrandedFoodItem.class);
-                            setTitle(foodItem.getDescription(), toolbar);
-                            break;
-                        }
-                        case FOUNDATION: {
-                            FoundationFoodItem foodItem = gson.fromJson(response.toString(), FoundationFoodItem.class);
-                            setTitle(foodItem.getDescription(), toolbar);
-                            break;
-                        }
-                        case SURVEY: {
-//                            SurveyFoodItem foodItem = gson.fromJson(response.toString(), SurveyFoodItem.class);
-//                            setTitle(foodItem.getDescription(), toolbar);
-                            break;
-                        }
-                        case LEGACY: {
-                            SRLegacyFoodItem foodItem = gson.fromJson(response.toString(), SRLegacyFoodItem.class);
-                            setTitle(foodItem.getDescription(), toolbar);
-                            break;
-                        }
-                        default: {
-                            AbridgedFoodItem foodItem = gson.fromJson(response.toString(), AbridgedFoodItem.class);
-                            setTitle(foodItem.getDescription(), toolbar);
-                        }
-                    }
-                }, this.getApplicationContext());
+        new FoodsCriteria(fdcId, Format.FULL, null).request(response -> {
+            DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
+            switch (dataType.getDataType()) {
+                case BRANDED: {
+                    BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case FOUNDATION: {
+                    FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case SURVEY: {
+                    SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
+//                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case LEGACY: {
+                    SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                default: {
+                    AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
+                    setTitle(foodItem.getDescription(), toolbar);
+                }
+            }
+        }, this);
 
         FloatingActionButton fab = findViewById(R.id.add_item);
         if (!i.getBooleanExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, false)) {

@@ -20,7 +20,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
-import com.example.cs309android.models.USDA.Queries;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
 import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
@@ -28,9 +27,7 @@ import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.gson.GsonBuilder;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -131,38 +128,30 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         findViewById(R.id.search_bar).clearFocus();
 
         Util.spin(this);
-        try {
-            Queries.search(query, new FoodSearchCriteria(Constants.DataType.FOUNDATION), response -> {
-                SearchResult result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), SearchResult.class);
+        new FoodSearchCriteria(query, Constants.DataType.FOUNDATION).request(response -> {
+            SearchResult result = Util.objFromJson(response, SearchResult.class);
 
-                searchResults.clear();
-                for (SearchResultFood food : result.getFoods()) {
+            searchResults.clear();
+            for (SearchResultFood food : result.getFoods()) {
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+            }
+
+            new FoodSearchCriteria(query, Constants.DataType.BRANDED).request(response1 -> {
+                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
+
+                for (SearchResultFood food : result1.getFoods()) {
                     searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
                 }
 
-                try {
-                    Queries.search(query, new FoodSearchCriteria(Constants.DataType.BRANDED), response1 -> {
-                        SearchResult result1 = new GsonBuilder().serializeNulls().create().fromJson(response1.toString(), SearchResult.class);
-
-                        for (SearchResultFood food : result1.getFoods()) {
-                            searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
-                        }
-
-                        if (!searchResults.isEmpty()) {
-                            findViewById(R.id.empty_text).setVisibility(View.GONE);
-                        } else {
-                            findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                        }
-                        ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-                        Util.unSpin(this);
-                    }, this);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                if (!searchResults.isEmpty()) {
+                    findViewById(R.id.empty_text).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                 }
+                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+                Util.unSpin(this);
             }, this);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        }, this);
         return true;
     }
 
