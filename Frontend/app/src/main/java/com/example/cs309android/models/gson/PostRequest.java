@@ -13,10 +13,24 @@ import org.json.JSONObject;
 
 /**
  * Base class for post requests.
- *
+ * <p>
  * Post requests need a method to get the json body
  */
 public abstract class PostRequest {
+    /**
+     * URL for the request
+     */
+    private final String url;
+
+    /**
+     * Public constructor
+     *
+     * @param url URL for the request
+     */
+    public PostRequest(String url) {
+        this.url = url;
+    }
+
     /**
      * Generates JSON of this object using GSON
      *
@@ -27,11 +41,38 @@ public abstract class PostRequest {
     }
 
     /**
+     * Getter for the url
+     *
+     * @return URL
+     */
+    public String getURL() {
+        return url;
+    }
+
+    /**
      * Makes a request using Volley
      */
-    public void request(String url, Response.Listener<JSONObject> listener, Context context) throws JSONException {
-        RequestHandler.getInstance(context).add(
-                new JsonObjectRequest(Request.Method.POST, url, new JSONObject(getBody()), listener, Throwable::printStackTrace)
-        );
+    public void request(Response.Listener<JSONObject> listener, Context context) {
+        request(Request.Method.POST, listener, Throwable::printStackTrace, context);
+    }
+
+    /**
+     * Makes a request using Volley (custom error listener)
+     */
+    public void request(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
+        request(Request.Method.POST, listener, errorListener, context);
+    }
+
+    /**
+     * Base request method
+     */
+    public void request(int method, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
+        try {
+            RequestHandler.getInstance(context).add(
+                    new JsonObjectRequest(method, url, new JSONObject(getBody()), listener, errorListener)
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

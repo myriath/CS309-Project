@@ -4,25 +4,37 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.cs309android.util.RequestHandler;
-import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Base class for post requests.
- *
+ * <p>
  * Post requests need a method to get the json body
  */
 public abstract class DeleteRequest extends PostRequest {
     /**
+     * Public constructor
+     *
+     * @param url URL for the request
+     */
+    public DeleteRequest(String url) {
+        super(url);
+    }
+
+    /**
      * Makes a request using Volley
      */
-    public void request(String url, Response.Listener<JSONObject> listener, Context context) throws JSONException {
-        RequestHandler.getInstance(context).add(
-                new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(getBody()), listener, Throwable::printStackTrace)
-        );
+    @Override
+    public void request(Response.Listener<JSONObject> listener, Context context) {
+        request(Request.Method.DELETE, listener, Throwable::printStackTrace, context);
+    }
+
+    /**
+     * Makes a request using Volley (custom error listener)
+     */
+    @Override
+    public void request(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
+        request(Request.Method.DELETE, listener, errorListener, context);
     }
 }

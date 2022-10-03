@@ -2,7 +2,6 @@ package com.example.cs309android.models.gson;
 
 import android.content.Context;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.util.RequestHandler;
@@ -19,6 +18,7 @@ import org.json.JSONObject;
 public abstract class GetRequest {
     /**
      * Generates the parameterized URL
+     *
      * @return parameterized URL
      */
     public abstract String getURL();
@@ -26,9 +26,16 @@ public abstract class GetRequest {
     /**
      * Makes a request using Volley
      */
-    public void request(String url, Response.Listener<JSONObject> listener, Context context) {
+    public void request(Response.Listener<JSONObject> listener, Context context) {
+        request(listener, Throwable::printStackTrace, context);
+    }
+
+    /**
+     * Makes a request using Volley
+     */
+    public void request(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
         RequestHandler.getInstance(context).add(
-                new JsonObjectRequest(url, listener, Throwable::printStackTrace)
+                new JsonObjectRequest(getURL(), listener, errorListener)
         );
     }
 }

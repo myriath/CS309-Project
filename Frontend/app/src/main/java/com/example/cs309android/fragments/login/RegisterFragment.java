@@ -1,6 +1,5 @@
 package com.example.cs309android.fragments.login;
 
-import static com.example.cs309android.util.Constants.REGISTER_URL;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
@@ -19,23 +18,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
+import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.request.users.RegisterRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -111,54 +105,44 @@ public class RegisterFragment extends BaseFragment {
 
             // Generates a new hash with the given password.
             Hash pwdHash = Hasher.generateNewHash(pwd.toCharArray());
-            try {
-                JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL,
-                        new JSONObject(new RegisterRequest(email, unm,
-                                Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT).trim(),
-                                Base64.encodeToString(pwdHash.getSalt(), Base64.DEFAULT).trim()).getBody()),
-                        response -> {
-                            // Check for errors.
-                            try {
-                                System.out.println(response.toString(4));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            int result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GenericResponse.class).getResult();
-                            if (result == RESULT_ERROR_USERNAME_TAKEN) {
-                                usernameField.setError("Username taken");
-                                Util.unSpin(view);
-                                return;
-                            } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
-                                emailField.setError("Account already exists");
-                                Util.unSpin(view);
-                                return;
-                            } else if (result != RESULT_USER_CREATED) {
-                                Toaster.toastShort("Unexpected error", this.getActivity());
-                                Util.unSpin(view);
-                                return;
-                            }
+            String hash = Hasher.getEncoded(pwdHash.getHash());
+            String salt = Hasher.getEncoded(pwdHash.getSalt());
 
-                            // If there was no error, store valid creds and close the page.
-                            SharedPreferences pref = this.requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = pref.edit();
-                            editor.putString("username", unm);
-                            editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
-                            editor.apply();
-
-                            Util.unSpin(view);
-
-                            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-                            callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-                        }, error -> {
-                    Toaster.toastShort("Unexpected error", this.getActivity());
-                    error.printStackTrace();
+            new RegisterRequest(email, unm, hash, salt).request(response -> {
+                // Check for errors.
+                int result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GenericResponse.class).getResult();
+                if (result == RESULT_ERROR_USERNAME_TAKEN) {
+                    usernameField.setError("Username taken");
                     Util.unSpin(view);
-                });
-                RequestHandler.getInstance(this.getActivity()).add(registerRequest);
-            } catch (JSONException e) {
-                Toaster.toastShort("Unexpected Error", this.getActivity());
-                e.printStackTrace();
-            }
+                    return;
+                } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
+                    emailField.setError("Account already exists");
+                    Util.unSpin(view);
+                    return;
+                } else if (result != RESULT_USER_CREATED) {
+                    Toaster.toastShort("Unexpected error", getActivity());
+                    Util.unSpin(view);
+                    return;
+                }
+
+                // If there was no error, store valid creds and close the page.
+                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("username", unm);
+                editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
+                editor.apply();
+
+                MainActivity.AUTH_MODEL = new AuthModel(unm, hash);
+
+                Util.unSpin(view);
+
+                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
+            }, error -> {
+                Toaster.toastShort("Unexpected error", getActivity());
+                error.printStackTrace();
+                Util.unSpin(view);
+            }, requireActivity());
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {

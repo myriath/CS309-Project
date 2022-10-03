@@ -25,16 +25,7 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
-build:
-  stage: build
-  tags:
-    - springboot_tag
-  script:
-    - echo "Building..."
-
 build-spring:
-  rules:
-    - if: $CI_COMMIT_TAG == "springboot_tag"
   tags:
     - springboot_tag
   stage: maven-build
@@ -43,7 +34,7 @@ build-spring:
 
 deploy-demo-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_TAG == "springboot_tag"
+    - if: $CI_COMMIT_BRANCH != "main"
   tags:
     - springboot_tag
   stage: maven-deploy
@@ -55,7 +46,7 @@ deploy-demo-spring:
 
 deploy-demoprod-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == "springboot_tag_prod"
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
   stage: maven-deploy
@@ -67,7 +58,7 @@ deploy-demoprod-spring:
 
 deploy-prod-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == "springboot_tag_prod"
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - deploy_tag
   stage: maven-deploy

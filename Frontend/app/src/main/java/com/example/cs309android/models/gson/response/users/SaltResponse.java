@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson.response;
+package com.example.cs309android.models.gson.response.users;
 
 /**
  * Used by gson on response to the /getSalt endpoint

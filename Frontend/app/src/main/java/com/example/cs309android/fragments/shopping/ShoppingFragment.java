@@ -15,10 +15,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.shopping.GetListRequest;
+import com.example.cs309android.models.gson.response.shopping.GetListResponse;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Shopping list fragment.
@@ -67,10 +71,13 @@ public class ShoppingFragment extends BaseFragment {
         ListView listView = view.findViewById(R.id.shopping_list);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-        // TODO: Get from database
         if (items == null) {
             items = new ArrayList<>();
         }
+        new GetListRequest(MainActivity.AUTH_MODEL).request(response -> {
+            GetListResponse getResponse = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GetListResponse.class);
+            items.addAll(Arrays.asList(getResponse.getShoppingList()));
+        }, requireActivity());
 
         TextView empty = view.findViewById(R.id.empty_text);
         if (items.isEmpty()) {

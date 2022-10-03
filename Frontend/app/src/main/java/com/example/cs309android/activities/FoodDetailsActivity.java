@@ -11,14 +11,13 @@ import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.models.USDA.Queries;
-import com.example.cs309android.models.USDA.custom.DataTypeModel;
-import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.models.FoundationFoodItem;
 import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
-import com.example.cs309android.models.USDA.models.SurveyFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
+import com.example.cs309android.models.gson.models.DataTypeModel;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;

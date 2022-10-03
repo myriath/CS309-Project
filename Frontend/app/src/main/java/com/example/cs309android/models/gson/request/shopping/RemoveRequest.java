@@ -1,6 +1,9 @@
 package com.example.cs309android.models.gson.request.shopping;
 
 import com.example.cs309android.models.gson.DeleteRequest;
+import com.example.cs309android.models.gson.models.AuthModel;
+import com.example.cs309android.util.Constants;
+import com.google.gson.annotations.Expose;
 
 /**
  * Removes the given index from the shopping list on the DB
@@ -11,26 +14,28 @@ public class RemoveRequest extends DeleteRequest {
     /**
      * Index of the item to remove
      */
+    @Expose
     private final int index;
     /**
-     * Verifying token to authenticate the request
+     * Authentication model of the user
      */
-    private final String token;
+    @Expose
+    private final AuthModel auth;
 
     /**
      * Public constructor
      *
      * @param index Index of item to remove
-     * @param token Authentication token
+     * @param auth  Authentication model for the user
      */
-    public RemoveRequest(int index, String token) {
+    public RemoveRequest(int index, AuthModel auth) {
+        super(Constants.REMOVE_SHOPPING_URL);
         this.index = index;
-        this.token = token;
+        this.auth = auth;
     }
 
     /**
      * Getter for the index
-     *
      * @return item index
      */
     public int getIndex() {
@@ -38,11 +43,11 @@ public class RemoveRequest extends DeleteRequest {
     }
 
     /**
-     * Getter for the token
+     * Getter for the authentication model
      *
-     * @return Authentication token
+     * @return Authentication model
      */
-    public String getToken() {
-        return token;
+    public AuthModel getAuth() {
+        return auth;
     }
 }
