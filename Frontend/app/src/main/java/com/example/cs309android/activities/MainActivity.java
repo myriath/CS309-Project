@@ -323,6 +323,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }

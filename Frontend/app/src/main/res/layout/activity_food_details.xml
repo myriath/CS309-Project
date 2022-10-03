@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FoodDetailsActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".activities.FoodDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
@@ -16,47 +15,19 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back"
-            android:elevation="0dp" />
+            android:layout_height="?attr/actionBarSize" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_item"
-        style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:src="@drawable/ic_add"
         android:contentDescription="@string/add_item"
-        android:visibility="visible" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/favorite"
-        style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@+id/appbarlayout"
-        app:layout_anchorGravity="bottom|end"
-        android:layout_marginEnd="32dp"
-        android:src="@drawable/ic_favorite"
-        android:contentDescription="@string/favorite"
-        android:visibility="gone" />
-
-    <!--    <androidx.core.widget.NestedScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="0dp">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="@string/lorem_ipsum"-->
-    <!--            android:textSize="72sp" />-->
-
-    <!--    </androidx.core.widget.NestedScrollView>-->
+        app:srcCompat="@drawable/ic_add"
+        android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

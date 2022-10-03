@@ -183,6 +183,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(MainActivity.PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                 foodDetailsLauncher.launch(intent);
                 break;
             }

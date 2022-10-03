@@ -24,6 +24,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FoodDetailsActivity extends AppCompatActivity {
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    public static final int CONTROL_NONE = 0;
+    public static final int CONTROL_ADD = 1;
+    public static final int CONTROL_FAV = 2;
+
+    private SimpleFoodItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,37 +47,49 @@ public class FoodDetailsActivity extends AppCompatActivity {
         new FoodsCriteria(fdcId, Format.FULL, null).request(response -> {
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
             switch (dataType.getDataType()) {
+                // TODO: Write all of these, currently only need Branded/Foundation because of search
                 case BRANDED: {
                     BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
                     break;
                 }
                 case FOUNDATION: {
                     FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
                     break;
                 }
                 case SURVEY: {
                     SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
+//                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
 //                    setTitle(foodItem.getDescription(), toolbar);
                     break;
                 }
                 case LEGACY: {
                     SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
                     break;
                 }
                 default: {
                     AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
                 }
             }
         }, this);
 
         FloatingActionButton fab = findViewById(R.id.add_item);
-        if (!i.getBooleanExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, false)) {
-            fab.setVisibility(View.GONE);
-        }
+        int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
+        if (control == CONTROL_ADD) fab.setVisibility(View.VISIBLE);
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
 //z
 //        findViewById(R.id.add_item).setOnClickListener(view1 -> {
 //            Intent intent = new Intent();
