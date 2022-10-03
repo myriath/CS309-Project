@@ -25,6 +25,8 @@ import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.shopping.AddRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
@@ -44,13 +46,29 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     private ArrayList<SimpleFoodItem> items;
     private ArrayList<SimpleFoodItem> searchResults;
 
+    /**
+     * Adapter for the search results
+     */
     private static FoodSearchListAdapter adapter;
 
+    /**
+     * Launches the food details activity for a food item clicked in the search results
+     */
     private ActivityResultLauncher<Intent> foodDetailsLauncher;
 
+    /**
+     * Callback codes used by children to tell this fragment what to do
+     */
     public static final int CALLBACK_FOOD_DETAIL = 0;
     public static final int CALLBACK_CLOSE_DETAIL = 1;
     public static final int CALLBACK_SELECT = 2;
+
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    private int intentCode;
+    public static final int INTENT_NONE = -1;
+    public static final int INTENT_SHOPPING_LIST = 0;
 
     /**
      * Ran when the activity is created.
@@ -62,6 +80,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_search);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        intentCode = getIntent().getIntExtra(MainActivity.PARCEL_INTENT_CODE, INTENT_NONE);
 
         ListView listView = findViewById(R.id.search_results);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -150,8 +170,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 }
                 ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
                 Util.unSpin(this);
-            }, this);
-        }, this);
+            }, FoodSearchActivity.this);
+        }, FoodSearchActivity.this);
         return true;
     }
 
@@ -188,8 +208,21 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 break;
             }
             case (CALLBACK_SELECT): {
-                items.add(bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
-                Toaster.toastShort("Added", this);
+                SimpleFoodItem item = bundle.getParcelable(MainActivity.PARCEL_FOODITEM);
+                switch (intentCode) {
+                    case INTENT_SHOPPING_LIST: {
+                        new AddRequest(item, MainActivity.AUTH_MODEL).request(response -> {
+                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                items.add(bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                                Toaster.toastShort("Added", this);
+                            } else {
+                                Toaster.toastShort("Error", this);
+                            }
+                        }, FoodSearchActivity.this);
+                        break;
+                    }
+                }
             }
             case (CALLBACK_CLOSE_DETAIL): {
                 getSupportFragmentManager().popBackStack();

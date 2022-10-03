@@ -34,7 +34,7 @@ public abstract class GetRequest {
      * Makes a request using Volley
      */
     public void request(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
-        RequestHandler.getInstance(context).add(
+        new RequestHandler(context).add(
                 new JsonObjectRequest(getURL(), listener, errorListener)
         );
     }

@@ -13,12 +13,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.shopping.GetListRequest;
 import com.example.cs309android.models.gson.response.shopping.GetListResponse;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
@@ -37,10 +40,6 @@ public class ShoppingFragment extends BaseFragment {
      * All of the items to display
      */
     private static ArrayList<SimpleFoodItem> items;
-    /**
-     * Adapter to display the ListView
-     */
-    private static ShoppingListAdapter adapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -73,11 +72,15 @@ public class ShoppingFragment extends BaseFragment {
 
         if (items == null) {
             items = new ArrayList<>();
+            new GetListRequest(MainActivity.AUTH_MODEL).request(response -> {
+                GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
+                if (getResponse.getResult() == Constants.RESULT_OK) {
+                    items.addAll(Arrays.asList(getResponse.getShoppingList()));
+                } else {
+                    Toaster.toastShort("Error", getContext());
+                }
+            }, requireActivity());
         }
-        new GetListRequest(MainActivity.AUTH_MODEL).request(response -> {
-            GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
-            items.addAll(Arrays.asList(getResponse.getShoppingList()));
-        }, requireActivity());
 
         TextView empty = view.findViewById(R.id.empty_text);
         if (items.isEmpty()) {
@@ -86,12 +89,13 @@ public class ShoppingFragment extends BaseFragment {
             empty.setVisibility(View.INVISIBLE);
         }
 
-        adapter = new ShoppingListAdapter(this.getActivity(), items);
+        ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         listView.setAdapter(adapter);
 
         view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(MainActivity.PARCEL_FOODITEMS_LIST, items);
+            bundle.putInt(MainActivity.PARCEL_INTENT_CODE, FoodSearchActivity.INTENT_SHOPPING_LIST);
             callbackFragment.callback(MainActivity.CALLBACK_SEARCH_FOOD, bundle);
         });
 
@@ -110,14 +114,11 @@ public class ShoppingFragment extends BaseFragment {
     /**
      * Removes the given item from the list
      *
-     * @param i    index of the item to remove
-     * @param view root view to find the listview/textview
+     * @param i index of the item to remove
+     * @return True if the items list is empty
      */
-    public static void removeItem(int i, View view) {
+    public static boolean removeItem(int i) {
         items.remove(i);
-        ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
-        if (items.isEmpty()) {
-            ((TextView) view.findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
-        }
+        return items.isEmpty();
     }
 }

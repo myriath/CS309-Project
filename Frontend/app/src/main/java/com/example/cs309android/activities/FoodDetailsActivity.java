@@ -26,7 +26,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
     public static final int CONTROL_NONE = 0;
     public static final int CONTROL_ADD = 1;
-    public static final int CONTROL_FAV = 2;
 
     private SimpleFoodItem item;
 
@@ -35,6 +34,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        Util.spin(this);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view1 -> {
@@ -44,7 +44,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
+        System.out.println(fdcId);
         new FoodsCriteria(fdcId, Format.FULL, null).request(response -> {
+            System.out.println(response.toString());
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
             switch (dataType.getDataType()) {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search
@@ -78,7 +80,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     setTitle(foodItem.getDescription(), toolbar);
                 }
             }
-        }, this);
+            Util.unSpin(this);
+        }, FoodDetailsActivity.this);
 
         FloatingActionButton fab = findViewById(R.id.add_item);
         int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);

@@ -1,6 +1,5 @@
 package com.example.cs309android.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -21,15 +20,9 @@ import com.android.volley.toolbox.Volley;
  */
 public class RequestHandler {
     /**
-     * RequestHandler instance.
-     */
-    @SuppressLint("StaticFieldLeak")
-    private static RequestHandler instance;
-    /**
      * Context for the RequestHandler;
      */
-    @SuppressLint("StaticFieldLeak")
-    private static Context context;
+    private final Context context;
 
     /**
      * RequestQueue to make requests with
@@ -44,14 +37,15 @@ public class RequestHandler {
     private final ImageLoader imageLoader;
 
     /**
-     * Private constructor, instantiated by getInstance()
-     * @param context   RequestQueue context.
+     * Public constructor
+     *
+     * @param context RequestQueue context.
      */
-    private RequestHandler(Context context) {
-        RequestHandler.context = context;
+    public RequestHandler(Context context) {
+        this.context = context;
         queue = getQueue();
 
-        imageLoader = new ImageLoader(queue, new ImageLoader.ImageCache() {
+        imageLoader = new ImageLoader(getQueue(), new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> cache = new LruCache<>(20);
 
             @Nullable
@@ -65,18 +59,6 @@ public class RequestHandler {
                 cache.put(url, bitmap);
             }
         });
-    }
-
-    /**
-     * Instantiates all variables for use.
-     * @param context   RequestQueue context.
-     * @return          RequestHandler instance.
-     */
-    public static synchronized RequestHandler getInstance(Context context) {
-        if (instance == null) {
-            instance = new RequestHandler(context);
-        }
-        return instance;
     }
 
     /**

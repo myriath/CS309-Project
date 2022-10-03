@@ -91,9 +91,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
 
+    /**
+     * This is used wherever a food item needs to be parceled.
+     */
     public static final String PARCEL_FOODITEM = "fooditem";
+    /**
+     * This is used whenever a list of food items needs to be parceled.
+     */
     public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+    /**
+     * This is used to parcel the intent of opening an activity.
+     */
+    public static final String PARCEL_INTENT_CODE = "intentCode";
 
+    /**
+     * Preference key strings for the username and hash
+     */
     public static final String PREF_USERNAME = "username";
     public static final String PREF_HASH = "enc_hash";
 
@@ -113,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onStop() {
         super.onStop();
-        RequestHandler.getInstance(this).cancelAll();
+        new RequestHandler(MainActivity.this).cancelAll();
     }
 
     @Override
@@ -184,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             unSpin(this);
             error.printStackTrace();
             startLoginFragment();
-        }, this);
+        }, MainActivity.this);
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
@@ -329,6 +342,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_SEARCH_FOOD): {
                 Intent intent = new Intent(this, FoodSearchActivity.class);
+                intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
                 break;

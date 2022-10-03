@@ -11,13 +11,13 @@ public class FoodUpdateLog {
     private final String ingredients;
     private final String modifiedDate;
     private final String publicationDate;
-    private final int servingSize;
+    private final double servingSize;
     private final String servingSizeUnit;
     private final String brandedFoodCategory;
     private final String changes;
     private final FoodAttribute[] foodAttributes;
 
-    public FoodUpdateLog(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, int servingSize, String servingSizeUnit, String brandedFoodCategory, String changes, FoodAttribute[] foodAttributes) {
+    public FoodUpdateLog(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, double servingSize, String servingSizeUnit, String brandedFoodCategory, String changes, FoodAttribute[] foodAttributes) {
         this.fdcId = fdcId;
         this.availableDate = availableDate;
         this.brandOwner = brandOwner;
@@ -75,7 +75,7 @@ public class FoodUpdateLog {
         return publicationDate;
     }
 
-    public int getServingSize() {
+    public double getServingSize() {
         return servingSize;
     }
 

@@ -68,7 +68,7 @@ public abstract class PostRequest {
      */
     public void request(int method, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
         try {
-            RequestHandler.getInstance(context).add(
+            new RequestHandler(context).add(
                     new JsonObjectRequest(method, url, new JSONObject(getBody()), listener, errorListener)
             );
         } catch (JSONException e) {
