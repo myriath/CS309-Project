@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
 
 import java.util.ArrayList;
 

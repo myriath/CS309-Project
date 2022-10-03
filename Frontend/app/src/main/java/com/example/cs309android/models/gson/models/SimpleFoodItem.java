@@ -1,7 +1,9 @@
-package com.example.cs309android.models.USDA.custom;
+package com.example.cs309android.models.gson.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
 
 /**
  * Simple food item used for displaying and moving data in the app
@@ -12,15 +14,18 @@ public class SimpleFoodItem implements Parcelable {
     /**
      * FDC ID from the api
      */
+    @Expose
     private final int fdcId;
     /**
      * Description / Item name from api
      */
+    @Expose
     private final String description;
     /**
      * True if the item should appear with strikeout on the shopping list
      */
-    private boolean stricken = false;
+    @Expose
+    private boolean stricken;
 
     /**
      * Constructor for gson
@@ -31,6 +36,7 @@ public class SimpleFoodItem implements Parcelable {
     public SimpleFoodItem(int fdcId, String description) {
         this.fdcId = fdcId;
         this.description = description;
+        this.stricken = false;
     }
 
     /**

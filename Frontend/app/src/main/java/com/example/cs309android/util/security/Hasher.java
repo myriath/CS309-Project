@@ -1,5 +1,7 @@
 package com.example.cs309android.util.security;
 
+import android.util.Base64;
+
 import com.example.cs309android.models.Hash;
 
 import java.security.NoSuchAlgorithmException;
@@ -70,6 +72,15 @@ public class Hasher {
         } finally {
             spec.clearPassword();
         }
+    }
+
+    /**
+     * Encodes the given bytes into base64
+     *
+     * @return B64 encoded string
+     */
+    public static String getEncoded(byte[] bytes) {
+        return Base64.encodeToString(bytes, Base64.DEFAULT).trim();
     }
 
     /**

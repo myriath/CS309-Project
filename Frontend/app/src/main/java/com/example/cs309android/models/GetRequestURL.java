@@ -38,7 +38,7 @@ public class GetRequestURL {
      */
     public GetRequestURL(String url) {
         this.params = new ArrayList<>();
-        this.url = url;
+        this.url = url + "?";
     }
 
     /**
