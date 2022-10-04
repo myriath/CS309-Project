@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class ShoppingListPK implements Serializable {
     protected String username;
-    protected Integer itemName;
+    protected String itemName;
 
     public ShoppingListPK() {}
 
-    public ShoppingListPK(String username, Integer itemName) {
+    public ShoppingListPK(String username, String itemName) {
         this.username = username;
         this.itemName = itemName;
     }
