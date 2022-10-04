@@ -36,22 +36,24 @@ public class ShoppingListController {
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
+        // TODO Remove after debugging
+        List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
+
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        ShoppingListGetResponse res = new ShoppingListGetResponse();
+        return gson.toJson(userQueryRes);
 
-        if (userQueryRes.isEmpty()) {
-            res.setResult(RESULT_ERROR);
-        }
-        // If the credentials aren't valid, return hash mismatch error code.
-        else {
+        // ShoppingListGetResponse res = new ShoppingListGetResponse();
 
-            List<ShoppingList> shoppingList = shoppingRepository.queryGetShoppingList(username);
-            return gson.toJson(shoppingList);
-
-//            User user = userQueryRes.iterator().next();
+//        if (userQueryRes.isEmpty()) {
+//            res.setResult(RESULT_ERROR);
+//        }
+//        // If the credentials aren't valid, return hash mismatch error code.
+//        else {
 //
 //            List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
+//
+//            User user = userQueryRes.iterator().next();
 //
 //            if (user.getPHash().compareTo(hash) != 0) {
 //                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
@@ -61,8 +63,8 @@ public class ShoppingListController {
 //                res.setResult(RESULT_OK);
 //                res.setShoppingList(listItems);
 //            }
-        }
-        return gson.toJson(res);
+//        }
+//        return gson.toJson(res);
 
     }
 
