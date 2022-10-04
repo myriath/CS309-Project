@@ -8,6 +8,10 @@ public class ShoppingListGetResponse {
     private int result;
     private List<ShoppingList> shoppingList;
 
+    public void ShoppingListGetResponse() {
+        this.shoppingList = null;
+    }
+
     public int getResult() {
         return result;
     }
