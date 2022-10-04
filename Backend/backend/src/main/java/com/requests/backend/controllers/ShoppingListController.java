@@ -43,9 +43,10 @@ public class ShoppingListController {
         if (userQueryRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
         }
-
         // If the credentials aren't valid, return hash mismatch error code.
         else {
+
+            System.out.println("GOT HERE");
 
             User user = userQueryRes.iterator().next();
 
@@ -60,9 +61,7 @@ public class ShoppingListController {
                 res.setShoppingList(listItems);
             }
         }
-
         return gson.toJson(res);
-
 
     }
 
