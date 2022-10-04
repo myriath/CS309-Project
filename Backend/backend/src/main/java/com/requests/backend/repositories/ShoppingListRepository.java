@@ -12,7 +12,7 @@ import java.util.List;
 public interface ShoppingListRepository extends JpaRepository<ShoppingList, Integer> {
 
     @Query(value="SELECT * FROM shopping_list WHERE username = :username", nativeQuery = true)
-    List<ShoppingList> queryGetShoppingList(@Param("username") String username);
+    ShoppingList[] queryGetShoppingList(@Param("username") String username);
 
     @Modifying
     @Query(

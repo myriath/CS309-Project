@@ -2,13 +2,10 @@ package com.requests.backend.models.responses;
 
 import com.requests.backend.models.ShoppingList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ShoppingListGetResponse {
     private int result;
 
-    private ArrayList<ShoppingList> shoppingList;
+    private ShoppingList[] shoppingList;
 
     public ShoppingListGetResponse() {
     }
@@ -21,11 +18,11 @@ public class ShoppingListGetResponse {
         this.result = result;
     }
 
-    public List<ShoppingList> getShoppingList() {
+    public ShoppingList[] getShoppingList() {
         return shoppingList;
     }
 
-    public void setShoppingList(List<ShoppingList> shoppingList) {
-        this.shoppingList = new ArrayList<ShoppingList>(shoppingList);
+    public void setShoppingList(ShoppingList[] shoppingList) {
+        this.shoppingList = shoppingList;
     }
 }
