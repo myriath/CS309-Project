@@ -36,35 +36,30 @@ public class ShoppingListController {
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
-        // TODO Remove after debugging
-        List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
-
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        return gson.toJson(userQueryRes);
+        ShoppingListGetResponse res = new ShoppingListGetResponse();
 
-        // ShoppingListGetResponse res = new ShoppingListGetResponse();
+        if (userQueryRes.isEmpty()) {
+            res.setResult(RESULT_ERROR);
+        }
+        // If the credentials aren't valid, return hash mismatch error code.
+        else {
 
-//        if (userQueryRes.isEmpty()) {
-//            res.setResult(RESULT_ERROR);
-//        }
-//        // If the credentials aren't valid, return hash mismatch error code.
-//        else {
-//
-//            List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
-//
-//            User user = userQueryRes.iterator().next();
-//
-//            if (user.getPHash().compareTo(hash) != 0) {
-//                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-//            }
-//            // Otherwise, the user credentials are valid. Return the user's shopping list.
-//            else {
-//                res.setResult(RESULT_OK);
-//                res.setShoppingList(listItems);
-//            }
-//        }
-//        return gson.toJson(res);
+            List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
+
+            User user = userQueryRes.iterator().next();
+
+            if (user.getPHash().compareTo(hash) != 0) {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            }
+            // Otherwise, the user credentials are valid. Return the user's shopping list.
+            else {
+                res.setResult(RESULT_OK);
+                res.setShoppingList(listItems);
+            }
+        }
+        return gson.toJson(res);
 
     }
 

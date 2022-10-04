@@ -10,7 +10,7 @@ public class ShoppingListGetResponse {
 
     private List<ShoppingList> shoppingList;
 
-    public void ShoppingListGetResponse() {
+    public ShoppingListGetResponse() {
     }
 
     public int getResult() {
