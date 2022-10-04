@@ -110,4 +110,22 @@ public class ShoppingListController {
 
         return gson.toJson(res);
     }
+
+    @DeleteMapping (path = "/remove/{username}")
+    public @ResponseBody String removeFromList(@PathVariable String username, @RequestParam String itemName) {
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        ResultResponse res = new ResultResponse();
+
+        try {
+            shoppingRepository.queryDeleteListItem(username, itemName);
+            res.setResult(RESULT_OK);
+        } catch (Exception e) {
+            res.setResult(RESULT_ERROR);
+        }
+
+        return gson.toJson(res);
+
+    }
 }
