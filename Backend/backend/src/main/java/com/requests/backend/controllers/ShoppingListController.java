@@ -46,7 +46,8 @@ public class ShoppingListController {
         // If the credentials aren't valid, return hash mismatch error code.
         else {
 
-            return gson.toJson(shoppingRepository.queryGetShoppingList(username));
+            List<ShoppingList> shoppingList = shoppingRepository.queryGetShoppingList(username);
+            return gson.toJson(shoppingList);
 
 //            User user = userQueryRes.iterator().next();
 //
