@@ -46,20 +46,20 @@ public class ShoppingListController {
         // If the credentials aren't valid, return hash mismatch error code.
         else {
 
-            System.out.println("GOT HERE");
+            return gson.toJson(shoppingRepository.queryGetShoppingList(username));
 
-            User user = userQueryRes.iterator().next();
-
-            List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
-
-            if (user.getPHash().compareTo(hash) != 0) {
-                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            }
-            // Otherwise, the user credentials are valid. Return the user's shopping list.
-            else {
-                res.setResult(RESULT_OK);
-                res.setShoppingList(listItems);
-            }
+//            User user = userQueryRes.iterator().next();
+//
+//            List<ShoppingList> listItems = shoppingRepository.queryGetShoppingList(username);
+//
+//            if (user.getPHash().compareTo(hash) != 0) {
+//                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+//            }
+//            // Otherwise, the user credentials are valid. Return the user's shopping list.
+//            else {
+//                res.setResult(RESULT_OK);
+//                res.setShoppingList(listItems);
+//            }
         }
         return gson.toJson(res);
 
