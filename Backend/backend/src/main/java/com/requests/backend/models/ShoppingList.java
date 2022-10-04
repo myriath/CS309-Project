@@ -17,6 +17,10 @@ public class ShoppingList {
 
     private Boolean  stricken;
 
+    public ShoppingList() {
+
+    }
+
     public String getUsername() {
         return username;
     }
