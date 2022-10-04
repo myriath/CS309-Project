@@ -1,5 +1,6 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
 import com.requests.backend.models.composites.ShoppingListPK;
 
 import javax.persistence.*;
@@ -10,11 +11,15 @@ import javax.persistence.*;
 public class ShoppingList {
     @Id
     private String username;
+
+    @Expose
     private Integer fdcId;
 
     @Id
+    @Expose
     private String itemName;
 
+    @Expose
     private Boolean  stricken;
 
     public ShoppingList() {

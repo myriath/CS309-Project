@@ -36,7 +36,7 @@ public class ShoppingListController {
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
 
         ShoppingListGetResponse res = new ShoppingListGetResponse();
 
