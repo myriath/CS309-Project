@@ -19,6 +19,7 @@ import androidx.preference.Preference;
 
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.BasePreferenceFragment;
+import com.example.cs309android.fragments.shopping.ShoppingFragment;
 
 import java.util.Objects;
 
@@ -52,6 +53,7 @@ public class SettingsFragment extends BasePreferenceFragment {
             editor.remove("username");
             editor.remove("enc_hash");
             editor.apply();
+            ShoppingFragment.clearItems();
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
         });

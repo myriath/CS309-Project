@@ -117,9 +117,9 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         if (ShoppingFragment.removeItem(position)) {
-                            ((TextView) view1.findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+                            ((TextView) view1.getRootView().findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
                         }
-                        ((ListView) view1.findViewById(R.id.shopping_list)).setAdapter(this);
+                        ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
                     } else {
                         Toaster.toastShort("Error", getContext());
                     }
