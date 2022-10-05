@@ -10,7 +10,7 @@ import java.util.Collection;
 
 
 @RestController // This means that this class is a Controller
-@RequestMapping(path="/Recipe") // This means URL's start with /demo (after Application path)
+@RequestMapping(path="/recipe")
 public class RecipeController {
 
     public static final int RESULT_ERROR = -1;
@@ -26,20 +26,20 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Recipe> getAllRecipies() {
+    public @ResponseBody Iterable<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
-    @GetMapping(path="/getRecipeByrname/{rname}")
-    public @ResponseBody String getRecipeByrname(@PathVariable String rname) {
-        Collection<Recipe> recipes = recipeRepository.queryGetrecipeByrname(rname);
+    @GetMapping(path="/getRecipeByRname/{rname}")
+    public @ResponseBody String getRecipeByRname(@PathVariable String rname) {
+        Collection<Recipe> recipes = recipeRepository.queryGetRecipeByRname(rname);
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(recipes);
     }
 
-    @GetMapping(path="/getRecipeByrid/{rid}")
-    public @ResponseBody String getRecipeByrname(@PathVariable int rid) {
-        Collection<Recipe> recipes = recipeRepository.queryGetrecipeByrid(rid);
+    @GetMapping(path="/getRecipeByRid/{rid}")
+    public @ResponseBody String getRecipeByRname(@PathVariable int rid) {
+        Collection<Recipe> recipes = recipeRepository.queryGetRecipeByRid(rid);
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(recipes);
     }

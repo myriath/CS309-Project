@@ -8,22 +8,23 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     @Query(value="SELECT * FROM user_recipes", nativeQuery = true)
-    Collection<Recipe> querygetAllRecipies();
+    List<Recipe> queryGetAllRecipes();
 
     @Query(
             value = "SELECT * FROM user_recipes WHERE rname = :rname",
             nativeQuery = true)
-    Collection<Recipe> queryGetrecipeByrname(@Param("rname") String rname);
+    List<Recipe> queryGetRecipeByRname(@Param("rname") String rname);
 
     @Query(
             value = "SELECT * FROM user_recipes WHERE rid = :rid",
             nativeQuery = true)
-    Collection<Recipe> queryGetrecipeByrid(@Param("rid") int rid);
+    List<Recipe> queryGetRecipeByRid(@Param("rid") int rid);
 
 }
