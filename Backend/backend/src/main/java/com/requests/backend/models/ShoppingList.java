@@ -17,7 +17,7 @@ public class ShoppingList {
 
     @Id
     @Expose
-    private String itemName;
+    private String description;
 
     @Expose
     private Boolean  stricken;
@@ -43,11 +43,11 @@ public class ShoppingList {
     }
 
     public String getItemName() {
-        return itemName;
+        return description;
     }
 
     public void setItemName(String itemName) {
-        this.itemName = itemName;
+        this.description = itemName;
     }
 
     public Boolean getStricken() {
