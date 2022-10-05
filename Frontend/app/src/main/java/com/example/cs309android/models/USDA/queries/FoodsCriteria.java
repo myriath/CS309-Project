@@ -5,6 +5,7 @@ import static com.example.cs309android.models.USDA.Constants.API_KEY;
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.gson.GetRequest;
+import com.google.gson.annotations.Expose;
 
 /**
  * JSON for request body of 'foods' POST request. Retrieves a list of food items by a list of up to
@@ -14,9 +15,13 @@ import com.example.cs309android.models.gson.GetRequest;
  * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodsCriteria
  */
 public class FoodsCriteria extends GetRequest {
+    @Expose
     private final Integer[] fdcIds;
+    @Expose
     private final String format;
+    @Expose
     private final Integer[] nutrients;
+    @Expose
     private int index = 0;
 
     public FoodsCriteria(Integer[] fdcIds, String format, Integer[] nutrients) {

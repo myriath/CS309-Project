@@ -44,9 +44,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
-        System.out.println(fdcId);
         new FoodsCriteria(fdcId, Format.FULL, null).request(response -> {
-            System.out.println(response.toString());
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
             switch (dataType.getDataType()) {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search

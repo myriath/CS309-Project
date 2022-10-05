@@ -15,7 +15,7 @@ public class StrikeRequest extends PatchRequest {
      * Index of the item to strikeout
      */
     @Expose
-    private final int index;
+    private final String itemName;
     /**
      * Authentication model for the user
      */
@@ -25,12 +25,12 @@ public class StrikeRequest extends PatchRequest {
     /**
      * Public constructor
      *
-     * @param index Index of the item to strikeout
+     * @param itemName Name of the item
      * @param auth  Authentication model for the user (almost always MainActivity.AUTH_MODEL)
      */
-    public StrikeRequest(int index, AuthModel auth) {
+    public StrikeRequest(String itemName, AuthModel auth) {
         super(Constants.STRIKE_SHOPPING_URL);
-        this.index = index;
+        this.itemName = itemName;
         this.auth = auth;
     }
 
@@ -39,8 +39,8 @@ public class StrikeRequest extends PatchRequest {
      *
      * @return Index of the strikeout item.
      */
-    public int getIndex() {
-        return index;
+    public String getItemName() {
+        return itemName;
     }
 
     /**

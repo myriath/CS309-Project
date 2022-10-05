@@ -26,6 +26,7 @@ import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Shopping list fragment.
@@ -76,21 +77,15 @@ public class ShoppingFragment extends BaseFragment {
                 GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
                 if (getResponse.getResult() == Constants.RESULT_OK) {
                     items.addAll(Arrays.asList(getResponse.getShoppingList()));
+
+                    refreshList(view);
                 } else {
                     Toaster.toastShort("Error", getContext());
                 }
             }, requireActivity());
         }
 
-        TextView empty = view.findViewById(R.id.empty_text);
-        if (items.isEmpty()) {
-            empty.setVisibility(View.VISIBLE);
-        } else {
-            empty.setVisibility(View.INVISIBLE);
-        }
-
-        ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
-        listView.setAdapter(adapter);
+        refreshList(view);
 
         view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
@@ -109,6 +104,18 @@ public class ShoppingFragment extends BaseFragment {
         });
 
         return view;
+    }
+
+    public void refreshList(View view) {
+        ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
+        ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
+
+        TextView empty = view.findViewById(R.id.empty_text);
+        if (items.isEmpty()) {
+            empty.setVisibility(View.VISIBLE);
+        } else {
+            empty.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**

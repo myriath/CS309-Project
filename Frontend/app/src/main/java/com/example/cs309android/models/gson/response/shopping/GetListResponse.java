@@ -14,17 +14,17 @@ public class GetListResponse extends GenericResponse {
      * Shopping list array from JSON
      */
     @Expose
-    private final SimpleFoodItem[] shopping_list;
+    private final SimpleFoodItem[] shoppingList;
 
     /**
      * Public constructor
      *
      * @param result        Result code from the request
-     * @param shopping_list Shopping list array
+     * @param shoppingList Shopping list array
      */
-    public GetListResponse(int result, SimpleFoodItem[] shopping_list) {
+    public GetListResponse(int result, SimpleFoodItem[] shoppingList) {
         super(result);
-        this.shopping_list = shopping_list;
+        this.shoppingList = shoppingList;
     }
 
     /**
@@ -33,6 +33,6 @@ public class GetListResponse extends GenericResponse {
      * @return Array of simple food items.
      */
     public SimpleFoodItem[] getShoppingList() {
-        return shopping_list;
+        return shoppingList;
     }
 }

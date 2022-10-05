@@ -6,6 +6,7 @@ import static com.example.cs309android.models.USDA.Constants.API_URL_SEARCH_ENDP
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.gson.GetRequest;
+import com.google.gson.annotations.Expose;
 
 /**
  * A copy of the criteria that were used in the search.
@@ -13,15 +14,25 @@ import com.example.cs309android.models.gson.GetRequest;
  * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodSearchCriteria
  */
 public class FoodSearchCriteria extends GetRequest {
+    @Expose
     private final String query;
+    @Expose
     private String[] dataType;
+    @Expose
     private Integer pageSize;
+    @Expose
     private Integer pageNumber;
+    @Expose
     private String sortBy;
+    @Expose
     private String sortOrder;
+    @Expose
     private String brandOwner;
+    @Expose
     private String[] tradeChannel;
+    @Expose
     private String startDate;
+    @Expose
     private String endDate;
 
     public FoodSearchCriteria(String query, String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder, String brandOwner, String[] tradeChannel, String startDate, String endDate) {

@@ -1,6 +1,7 @@
 package com.example.cs309android.models.gson.response.users;
 
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.google.gson.annotations.Expose;
 
 /**
  * Used by gson on response to the /getSalt endpoint
@@ -12,6 +13,7 @@ public class SaltResponse extends GenericResponse {
      * Salt to be used for hashing the password
      * B64 encoded
      */
+    @Expose
     private final String salt;
 
     /**

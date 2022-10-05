@@ -22,7 +22,10 @@ public class Util {
     /**
      * Gson object used by the entire application.
      */
-    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
+    public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .serializeNulls()
+            .excludeFieldsWithoutExposeAnnotation();
+    public static final Gson GSON = GSON_BUILDER.create();
 
     /**
      * Makes the spinner visible and locks interaction to the register page.
@@ -116,8 +119,7 @@ public class Util {
      * @return Object from json
      */
     public static <T> T objFromJsonAdapted(String json, Type type, Object typeAdapter) {
-        return new GsonBuilder()
-                .serializeNulls()
+        return GSON_BUILDER
                 .registerTypeAdapter(type, typeAdapter)
                 .create()
                 .fromJson(json, type);

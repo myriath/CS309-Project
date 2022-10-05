@@ -61,7 +61,6 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
      */
     public static final int CALLBACK_FOOD_DETAIL = 0;
     public static final int CALLBACK_CLOSE_DETAIL = 1;
-    public static final int CALLBACK_SELECT = 2;
 
     /**
      * Various intents tell the app what to do when certain things are done.
@@ -116,7 +115,22 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        items.add(Objects.requireNonNull(result.getData()).getParcelableExtra(MainActivity.PARCEL_FOODITEM));
+                        Intent intent = result.getData();
+                        switch (intentCode) {
+                            case INTENT_SHOPPING_LIST: {
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+                                new AddRequest(item, MainActivity.AUTH_MODEL).request(response -> {
+                                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                        items.add(item);
+                                        Toaster.toastShort("Added", this);
+                                    } else {
+                                        Toaster.toastShort("Error", this);
+                                    }
+                                }, FoodSearchActivity.this);
+                                break;
+                            }
+                        }
                     }
                 }
         );
@@ -206,23 +220,6 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                 foodDetailsLauncher.launch(intent);
                 break;
-            }
-            case (CALLBACK_SELECT): {
-                SimpleFoodItem item = bundle.getParcelable(MainActivity.PARCEL_FOODITEM);
-                switch (intentCode) {
-                    case INTENT_SHOPPING_LIST: {
-                        new AddRequest(item, MainActivity.AUTH_MODEL).request(response -> {
-                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
-                                items.add(bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
-                                Toaster.toastShort("Added", this);
-                            } else {
-                                Toaster.toastShort("Error", this);
-                            }
-                        }, FoodSearchActivity.this);
-                        break;
-                    }
-                }
             }
             case (CALLBACK_CLOSE_DETAIL): {
                 getSupportFragmentManager().popBackStack();
