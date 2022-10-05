@@ -22,13 +22,37 @@ import com.example.cs309android.util.Util;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
+
+/**
+ * Food Details activity displays the information of a food from the USDA API
+ *
+ * @author Mitch Hudson
+ */
 public class FoodDetailsActivity extends AppCompatActivity {
+    /**
+     * Used to parcel the control variable
+     */
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    /**
+     * Used to tell the activity to display no fab
+     */
     public static final int CONTROL_NONE = 0;
+    /**
+     * Used to tell the activity to display the add button
+     */
     public static final int CONTROL_ADD = 1;
 
+    /**
+     * Food item to display details for
+     */
     private SimpleFoodItem item;
 
+    /**
+     * Runs when the activity is started
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +61,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Util.spin(this);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(view1 -> {
-            setResult(RESULT_CANCELED);
-            finish();
-        });
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
@@ -110,6 +134,24 @@ public class FoodDetailsActivity extends AppCompatActivity {
 //        } catch (NullPointerException ignored) {}
     }
 
+    /**
+     * Handles the back button on the toolbar
+     *
+     * @return true
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
+    }
+
+    /**
+     * Sets the title of the activity
+     *
+     * @param title   New title
+     * @param toolbar Toolbar to change the title of
+     */
     private void setTitle(String title, MaterialToolbar toolbar) {
         toolbar.setTitle(title.substring(0, Math.min(title.length(), 18)).trim() + (title.length() > 18 ? "..." : ""));
         setSupportActionBar(toolbar);
