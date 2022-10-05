@@ -29,9 +29,8 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.users.LoginRequest;
+import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
@@ -76,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private int currentFragment = 2;
 
     /**
-     * Auth model for the whole app
+     * Login token for app
      */
-    public static AuthModel AUTH_MODEL;
+    public static String TOKEN;
 
     /**
      * Response codes for callback method. Used by Fragments for this class
@@ -109,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     public static final String PREF_USERNAME = "username";
     public static final String PREF_HASH = "enc_hash";
+    public static final String PREF_TOKEN = "token";
 
     /**
      * Used to launch various activities.
@@ -182,16 +182,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Gets stored username and password hash, if they exist
         SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String username = pref.getString(PREF_USERNAME, "").trim();
-        String hash = pref.getString(PREF_HASH, "").trim();
+        String token = pref.getString(PREF_TOKEN, "").trim();
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        new LoginRequest(username, hash).unspinOnComplete(response -> {
+        new LoginTokenRequest(token).unspinOnComplete(response -> {
             // Checks if the result is valid or not. If not, opens the login page
             int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
             if (result != RESULT_LOGGED_IN) startLoginFragment();
-            AUTH_MODEL = new AuthModel(username, hash);
+            TOKEN = token;
         }, error -> {
             error.printStackTrace();
             startLoginFragment();

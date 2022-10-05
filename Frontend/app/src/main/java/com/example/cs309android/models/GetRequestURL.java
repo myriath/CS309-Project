@@ -155,7 +155,7 @@ public class GetRequestURL {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        if (url != null) {
+        if (url != null && params.size() != 0) {
             builder.append(url).append("?");
         }
 

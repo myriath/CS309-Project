@@ -87,7 +87,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
             CheckBox checkBox = (CheckBox) view;
             if (checkBox.isChecked()) {
-                new StrikeRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                new StrikeRequest(items.get(position).getDescription(), MainActivity.TOKEN).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -98,7 +98,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
                     }
                 }, getContext());
             } else {
-                new StrikeRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                new StrikeRequest(items.get(position).getDescription(), MainActivity.TOKEN).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
@@ -113,7 +113,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         });
 
         convertView.findViewById(R.id.remove).setOnClickListener(view1 ->
-                new RemoveRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                new RemoveRequest(items.get(position).getDescription(), MainActivity.TOKEN).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         if (ShoppingFragment.removeItem(position)) {

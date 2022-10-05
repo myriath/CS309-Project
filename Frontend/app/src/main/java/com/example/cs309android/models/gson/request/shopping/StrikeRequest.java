@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
 import com.example.cs309android.models.gson.PatchRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -20,18 +19,18 @@ public class StrikeRequest extends PatchRequest {
      * Authentication model for the user
      */
     @Expose
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
      * @param itemName Name of the item
-     * @param auth  Authentication model for the user (almost always MainActivity.AUTH_MODEL)
+     * @param token Token for authentication
      */
-    public StrikeRequest(String itemName, AuthModel auth) {
+    public StrikeRequest(String itemName, String token) {
         super(Constants.STRIKE_SHOPPING_URL);
         this.itemName = itemName;
-        this.auth = auth;
+        this.token = token;
     }
 
     /**
@@ -44,11 +43,11 @@ public class StrikeRequest extends PatchRequest {
     }
 
     /**
-     * Getter for the authentication model
+     * Getter for the token
      *
-     * @return Authentication model
+     * @return token
      */
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 }

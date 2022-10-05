@@ -73,7 +73,7 @@ public class ShoppingFragment extends BaseFragment {
 
         if (items == null) {
             items = new ArrayList<>();
-            new GetListRequest(MainActivity.AUTH_MODEL).request(response -> {
+            new GetListRequest(MainActivity.TOKEN).request(response -> {
                 GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
                 if (getResponse.getResult() == Constants.RESULT_OK) {
                     items.addAll(Arrays.asList(getResponse.getShoppingList()));

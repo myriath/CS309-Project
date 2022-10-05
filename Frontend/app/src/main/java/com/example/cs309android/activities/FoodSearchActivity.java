@@ -121,7 +121,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                                 SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
 
                                 Util.spin(getWindow().getDecorView());
-                                new AddRequest(item, MainActivity.AUTH_MODEL).unspinOnComplete(response -> {
+                                new AddRequest(item, MainActivity.TOKEN).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                                     if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
                                         items.add(item);

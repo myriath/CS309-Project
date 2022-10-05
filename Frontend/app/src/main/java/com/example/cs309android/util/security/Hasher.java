@@ -1,7 +1,5 @@
 package com.example.cs309android.util.security;
 
-import android.util.Base64;
-
 import com.example.cs309android.models.Hash;
 
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +7,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Base64;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -36,6 +35,14 @@ public class Hasher {
      * Number of bytes for the salt.
      */
     private static final int SALT_LENGTH = 16;
+
+    public static final Base64.Encoder B64_URL_ENCODER = Base64.getUrlEncoder();
+    public static final Base64.Encoder B64_ENCODER = Base64.getEncoder();
+
+    /**
+     * Header for the JWT
+     */
+    private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
 
     /**
      * Static util class
@@ -75,12 +82,23 @@ public class Hasher {
     }
 
     /**
+     * Generates a new random token (32 chars / 24 bytes)
+     *
+     * @return new token
+     */
+    public static String genToken() {
+        byte[] randomBytes = new byte[24];
+        RANDOM.nextBytes(randomBytes);
+        return B64_URL_ENCODER.encodeToString(randomBytes);
+    }
+
+    /**
      * Encodes the given bytes into base64
      *
      * @return B64 encoded string
      */
     public static String getEncoded(byte[] bytes) {
-        return Base64.encodeToString(bytes, Base64.DEFAULT).trim();
+        return B64_ENCODER.encodeToString(bytes).trim();
     }
 
     /**
