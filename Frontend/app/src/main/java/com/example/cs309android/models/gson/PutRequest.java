@@ -19,22 +19,6 @@ public abstract class PutRequest extends PostRequest {
      * @param url URL for the request
      */
     public PutRequest(String url) {
-        super(url);
-    }
-
-    /**
-     * Makes a request using Volley
-     */
-    @Override
-    public void request(Response.Listener<JSONObject> listener, Context context) {
-        request(Request.Method.PUT, listener, Throwable::printStackTrace, context);
-    }
-
-    /**
-     * Makes a request using Volley (custom error listener)
-     */
-    @Override
-    public void request(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context) {
-        request(Request.Method.PUT, listener, errorListener, context);
+        super(url, Request.Method.PUT);
     }
 }

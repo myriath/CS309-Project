@@ -1,10 +1,17 @@
 package com.example.cs309android.models.USDA.queries;
 
+import com.google.gson.annotations.Expose;
+
 public class SearchResult {
+    @Expose
     private final FoodSearchCriteria foodSearchCriteria;
+    @Expose
     private final Integer totalHits;
+    @Expose
     private final Integer currentPage;
+    @Expose
     private final Integer totalPages;
+    @Expose
     private final SearchResultFood[] foods;
 
     public SearchResult(FoodSearchCriteria foodSearchCriteria, int totalHits, int currentPage, int totalPages, SearchResultFood[] foods) {

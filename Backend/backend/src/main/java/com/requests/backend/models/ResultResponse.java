@@ -1,13 +1,13 @@
 package com.requests.backend.models;
 
-public class LoginResponse {
+public class ResultResponse {
 
     private int result;
 
-    public LoginResponse() {
+    public ResultResponse() {
     }
 
-    public LoginResponse(int responseCode) {
+    public ResultResponse(int responseCode) {
         this.result = responseCode;
     }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
@@ -18,6 +19,12 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.shopping.RemoveRequest;
+import com.example.cs309android.models.gson.request.shopping.StrikeRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
 
@@ -80,17 +87,44 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
             CheckBox checkBox = (CheckBox) view;
             if (checkBox.isChecked()) {
-                name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                name.setEnabled(false);
+                new StrikeRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                    if (genericResponse.getResult() == Constants.RESULT_OK) {
+                        name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        name.setEnabled(false);
+                    } else {
+                        Toaster.toastShort("Error", getContext());
+                        checkBox.setChecked(false);
+                    }
+                }, getContext());
             } else {
-                name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                name.setEnabled(true);
+                new StrikeRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                    if (genericResponse.getResult() == Constants.RESULT_OK) {
+                        name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                        name.setEnabled(true);
+                    } else {
+                        Toaster.toastShort("Error", getContext());
+                        checkBox.setChecked(true);
+                    }
+                }, getContext());
             }
             items.get(position).setStricken(checkBox.isChecked());
-            // TODO: API call to tell server about update
         });
 
-        convertView.findViewById(R.id.remove).setOnClickListener(view1 -> ShoppingFragment.removeItem(position, parent.getRootView()));
+        convertView.findViewById(R.id.remove).setOnClickListener(view1 ->
+                new RemoveRequest(items.get(position).getDescription(), MainActivity.AUTH_MODEL).request(response -> {
+                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                    if (genericResponse.getResult() == Constants.RESULT_OK) {
+                        if (ShoppingFragment.removeItem(position)) {
+                            ((TextView) view1.findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+                        }
+                        ((ListView) view1.findViewById(R.id.shopping_list)).setAdapter(this);
+                    } else {
+                        Toaster.toastShort("Error", getContext());
+                    }
+                }, getContext())
+        );
 
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
