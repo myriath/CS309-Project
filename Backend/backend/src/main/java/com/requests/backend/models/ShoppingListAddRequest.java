@@ -1,42 +1,24 @@
 package com.requests.backend.models;
 
 public class ShoppingListAddRequest {
-    private String username;
-    private String itemName;
 
-    private int fdcId;
-
-    private Boolean stricken;
-
-    public String getUsername() {
-        return username;
+    public SimpleFoodItem getFoodItem() {
+        return foodItem;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFoodItem(SimpleFoodItem foodItem) {
+        this.foodItem = foodItem;
     }
 
-    public String getItemName() {
-        return itemName;
+    public AuthModel getAuth() {
+        return auth;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setAuth(AuthModel auth) {
+        this.auth = auth;
     }
 
-    public int getFdcId() {
-        return fdcId;
-    }
+    private SimpleFoodItem foodItem;
 
-    public void setFdcId(int fdcId) {
-        this.fdcId = fdcId;
-    }
-
-    public Boolean getStricken() {
-        return stricken;
-    }
-
-    public void setStricken(Boolean stricken) {
-        this.stricken = stricken;
-    }
+    private AuthModel auth;
 }

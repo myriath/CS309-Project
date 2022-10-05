@@ -69,10 +69,13 @@ public class ShoppingListController {
 
         ShoppingListAddRequest req = new Gson().fromJson(json, ShoppingListAddRequest.class);
 
-        String username = req.getUsername();
-        String itemName = req.getItemName();
-        int fdcId = req.getFdcId();
-        boolean stricken = req.getStricken();
+        SimpleFoodItem foodItem = req.getFoodItem();
+        AuthModel auth = req.getAuth();
+
+        String username = auth.getUsername();
+        String itemName = foodItem.getDescription();
+        int fdcId = foodItem.getFdcId();
+        boolean stricken = false;
 
         ResultResponse res = new ResultResponse();
 
