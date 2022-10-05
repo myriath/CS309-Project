@@ -44,7 +44,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
-        new FoodsCriteria(fdcId, Format.FULL, null).request(response -> {
+        new FoodsCriteria(fdcId, Format.FULL, null).unspinOnComplete(response -> {
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
             switch (dataType.getDataType()) {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search
@@ -78,8 +78,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     setTitle(foodItem.getDescription(), toolbar);
                 }
             }
-            Util.unSpin(this);
-        }, FoodDetailsActivity.this);
+        }, FoodDetailsActivity.this, getWindow().getDecorView());
 
         FloatingActionButton fab = findViewById(R.id.add_item);
         int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);

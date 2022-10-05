@@ -119,7 +119,9 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                         switch (intentCode) {
                             case INTENT_SHOPPING_LIST: {
                                 SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
-                                new AddRequest(item, MainActivity.AUTH_MODEL).request(response -> {
+
+                                Util.spin(getWindow().getDecorView());
+                                new AddRequest(item, MainActivity.AUTH_MODEL).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                                     if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
                                         items.add(item);
@@ -127,7 +129,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                                     } else {
                                         Toaster.toastShort("Error", this);
                                     }
-                                }, FoodSearchActivity.this);
+                                }, FoodSearchActivity.this, getWindow().getDecorView());
                                 break;
                             }
                         }
@@ -170,7 +172,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
             }
 
-            new FoodSearchCriteria(query, Constants.DataType.BRANDED).request(response1 -> {
+            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
                 SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
                 for (SearchResultFood food : result1.getFoods()) {
@@ -183,8 +185,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                     findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                 }
                 ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-                Util.unSpin(this);
-            }, FoodSearchActivity.this);
+            }, FoodSearchActivity.this, getWindow().getDecorView());
         }, FoodSearchActivity.this);
         return true;
     }

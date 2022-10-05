@@ -105,16 +105,14 @@ public class LoginFragment extends BaseFragment {
                 byte[] salt = Base64.decode(saltResponse.getSalt(), Base64.DEFAULT);
                 String hash = Hasher.getEncoded(Hasher.hash(pwd.toCharArray(), salt));
 
-                new LoginRequest(unm, hash).request(response1 -> {
+                new LoginRequest(unm, hash).unspinOnComplete(response1 -> {
                     // Check for errors
                     int result1 = ((GenericResponse) Util.objFromJson(response1, GenericResponse.class)).getResult();
                     if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
                         passwordField.setError("Username / Password mismatch");
-                        unSpin(view);
                         return;
                     } else if (result1 != RESULT_LOGGED_IN) {
                         Toaster.toastShort("Unexpected error", getActivity());
-                        unSpin(view);
                         return;
                     }
 
@@ -128,16 +126,13 @@ public class LoginFragment extends BaseFragment {
 
                     MainActivity.AUTH_MODEL = new AuthModel(unm, hash);
 
-                    unSpin(view);
-
                     // Close window
                     callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
                     callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
                 }, error -> {
                     Toaster.toastShort("Unexpected error", getActivity());
                     error.printStackTrace();
-                    unSpin(view);
-                }, requireActivity());
+                }, requireActivity(), view);
             }, error -> {
                 Toaster.toastShort("Unexpected error", getActivity());
                 error.printStackTrace();

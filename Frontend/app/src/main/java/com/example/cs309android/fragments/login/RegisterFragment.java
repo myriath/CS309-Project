@@ -103,20 +103,17 @@ public class RegisterFragment extends BaseFragment {
             String hash = Hasher.getEncoded(pwdHash.getHash());
             String salt = Hasher.getEncoded(pwdHash.getSalt());
 
-            new RegisterRequest(email, unm, hash, salt).request(response -> {
+            new RegisterRequest(email, unm, hash, salt).unspinOnComplete(response -> {
                 // Check for errors.
                 int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
                 if (result == RESULT_ERROR_USERNAME_TAKEN) {
                     usernameField.setError("Username taken");
-                    Util.unSpin(view);
                     return;
                 } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
                     emailField.setError("Account already exists");
-                    Util.unSpin(view);
                     return;
                 } else if (result != RESULT_USER_CREATED) {
                     Toaster.toastShort("Unexpected error", getActivity());
-                    Util.unSpin(view);
                     return;
                 }
 
@@ -129,15 +126,12 @@ public class RegisterFragment extends BaseFragment {
 
                 MainActivity.AUTH_MODEL = new AuthModel(unm, hash);
 
-                Util.unSpin(view);
-
                 callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
             }, error -> {
                 Toaster.toastShort("Unexpected error", getActivity());
                 error.printStackTrace();
-                Util.unSpin(view);
-            }, requireActivity());
+            }, requireActivity(), view);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {
