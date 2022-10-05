@@ -17,24 +17,24 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Inte
     @Modifying
     @Query(
             value =
-                    "INSERT INTO shopping_list (fdc_id, username, item_name, stricken) VALUES (:fdc_id, :username, :item_name, :stricken)",
+                    "INSERT INTO shopping_list (fdc_id, username, description, stricken) VALUES (:fdc_id, :username, :description, :stricken)",
             nativeQuery = true)
     @Transactional
-    void queryCreateShoppingListEntry(@Param("username") String username, @Param("item_name") String itemName, @Param("fdc_id") Integer fdcId, @Param("stricken") Boolean stricken);
+    void queryCreateShoppingListEntry(@Param("username") String username, @Param("description") String description, @Param("fdc_id") Integer fdcId, @Param("stricken") Boolean stricken);
 
     @Modifying
     @Query(
             value =
-                    "UPDATE shopping_list SET stricken = NOT stricken WHERE username = :username AND item_name = :item_name",
+                    "UPDATE shopping_list SET stricken = NOT stricken WHERE username = :username AND description = :description",
             nativeQuery = true)
     @Transactional
-    void queryShoppingChangeStricken(@Param("username") String username, @Param("item_name") String itemName);
+    void queryShoppingChangeStricken(@Param("username") String username, @Param("description") String description);
 
     @Modifying
     @Query(
             value =
-                    "DELETE FROM shopping_list WHERE username = :username AND item_name = :item_name",
+                    "DELETE FROM shopping_list WHERE username = :username AND description = :description",
             nativeQuery = true)
     @Transactional
-    void queryDeleteListItem(@Param("username") String username, @Param("item_name") String itemName);
+    void queryDeleteListItem(@Param("username") String username, @Param("description") String description);
 }
