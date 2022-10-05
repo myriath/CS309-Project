@@ -8,6 +8,10 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/2.7.3/spring-boot-autoconfigure-2.7.3-sources.jar!/" />
+      <root url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/2.7.3" />
+      <root url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/2.7.3" />
     </SOURCES>
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/2.7.3" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/2.7.3" recursive="false" type="SOURCES" />
   </library>
 </component>
