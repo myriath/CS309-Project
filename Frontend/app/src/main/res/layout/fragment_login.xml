@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.login.LoginFragment" >
-<!--    android:background="@color/black">-->
+    tools:context=".fragments.login.LoginFragment">
+    <!--    android:background="@color/black">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="?android:colorBackground"
-        android:background="?android:colorBackground" >
+        android:background="?android:colorBackground">
 
         <TextView
             android:id="@+id/loginTextView"

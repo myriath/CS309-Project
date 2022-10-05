@@ -126,7 +126,7 @@ public class ShoppingListController {
         return gson.toJson(res);
     }
 
-    @DeleteMapping (path = "/remove")
+    @PutMapping (path = "/remove")
     public @ResponseBody String removeFromList(@RequestBody String json) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();

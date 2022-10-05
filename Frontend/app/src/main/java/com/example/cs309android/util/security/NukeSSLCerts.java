@@ -27,7 +27,8 @@ public class NukeSSLCerts {
     /**
      * Private constructor; util class
      */
-    private NukeSSLCerts() {}
+    private NukeSSLCerts() {
+    }
 
     /**
      * Creates a custom TrustManager that trusts all certificates, regardless of CA.
@@ -35,13 +36,15 @@ public class NukeSSLCerts {
      */
     public static void nuke() {
         try {
-            TrustManager[] trustAllCerts = new TrustManager[] {
+            TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
-                        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {}
+                        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                        }
 
                         @Override
-                        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {}
+                        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                        }
 
                         @Override
                         public X509Certificate[] getAcceptedIssuers() {
@@ -55,6 +58,7 @@ public class NukeSSLCerts {
             sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
-        } catch (NoSuchAlgorithmException | KeyManagementException ignored) {}
+        } catch (NoSuchAlgorithmException | KeyManagementException ignored) {
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.example.cs309android.activities;
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Util.spin;
-import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
