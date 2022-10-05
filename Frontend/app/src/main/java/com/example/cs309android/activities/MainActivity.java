@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Preference key strings for the username and hash
      */
-    public static final String PREF_USERNAME = "username";
-    public static final String PREF_HASH = "enc_hash";
     public static final String PREF_TOKEN = "token";
 
     /**

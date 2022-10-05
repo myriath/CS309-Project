@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.Preference;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 
 import java.util.Objects;
@@ -49,8 +50,7 @@ public class SettingsFragment extends BasePreferenceFragment {
         Preference logout = Objects.requireNonNull(findPreference("logout"));
         logout.setOnPreferenceClickListener(preference -> {
             SharedPreferences.Editor editor = pref.edit();
-            editor.remove("username");
-            editor.remove("enc_hash");
+            editor.remove(MainActivity.PREF_TOKEN);
             editor.apply();
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
