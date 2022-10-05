@@ -20,17 +20,16 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
-import com.example.cs309android.models.USDA.Queries;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
 import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.shopping.AddRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.gson.GsonBuilder;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -47,13 +46,28 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
     private ArrayList<SimpleFoodItem> items;
     private ArrayList<SimpleFoodItem> searchResults;
 
+    /**
+     * Adapter for the search results
+     */
     private static FoodSearchListAdapter adapter;
 
+    /**
+     * Launches the food details activity for a food item clicked in the search results
+     */
     private ActivityResultLauncher<Intent> foodDetailsLauncher;
 
+    /**
+     * Callback codes used by children to tell this fragment what to do
+     */
     public static final int CALLBACK_FOOD_DETAIL = 0;
     public static final int CALLBACK_CLOSE_DETAIL = 1;
-    public static final int CALLBACK_SELECT = 2;
+
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    private int intentCode;
+    public static final int INTENT_NONE = -1;
+    public static final int INTENT_SHOPPING_LIST = 0;
 
     /**
      * Ran when the activity is created.
@@ -65,6 +79,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_search);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        intentCode = getIntent().getIntExtra(MainActivity.PARCEL_INTENT_CODE, INTENT_NONE);
 
         ListView listView = findViewById(R.id.search_results);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -99,7 +115,24 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        items.add(Objects.requireNonNull(result.getData()).getParcelableExtra(MainActivity.PARCEL_FOODITEM));
+                        Intent intent = result.getData();
+                        switch (intentCode) {
+                            case INTENT_SHOPPING_LIST: {
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+
+                                Util.spin(getWindow().getDecorView());
+                                new AddRequest(item, MainActivity.AUTH_MODEL).unspinOnComplete(response -> {
+                                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                        items.add(item);
+                                        Toaster.toastShort("Added", this);
+                                    } else {
+                                        Toaster.toastShort("Error", this);
+                                    }
+                                }, FoodSearchActivity.this, getWindow().getDecorView());
+                                break;
+                            }
+                        }
                     }
                 }
         );
@@ -131,38 +164,29 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         findViewById(R.id.search_bar).clearFocus();
 
         Util.spin(this);
-        try {
-            Queries.search(query, new FoodSearchCriteria(Constants.DataType.FOUNDATION), response -> {
-                SearchResult result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), SearchResult.class);
+        new FoodSearchCriteria(query, Constants.DataType.FOUNDATION).request(response -> {
+            SearchResult result = Util.objFromJson(response, SearchResult.class);
 
-                searchResults.clear();
-                for (SearchResultFood food : result.getFoods()) {
+            searchResults.clear();
+            for (SearchResultFood food : result.getFoods()) {
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+            }
+
+            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
+                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
+
+                for (SearchResultFood food : result1.getFoods()) {
                     searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
                 }
 
-                try {
-                    Queries.search(query, new FoodSearchCriteria(Constants.DataType.BRANDED), response1 -> {
-                        SearchResult result1 = new GsonBuilder().serializeNulls().create().fromJson(response1.toString(), SearchResult.class);
-
-                        for (SearchResultFood food : result1.getFoods()) {
-                            searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
-                        }
-
-                        if (!searchResults.isEmpty()) {
-                            findViewById(R.id.empty_text).setVisibility(View.GONE);
-                        } else {
-                            findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                        }
-                        ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-                        Util.unSpin(this);
-                    }, this);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                if (!searchResults.isEmpty()) {
+                    findViewById(R.id.empty_text).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                 }
-            }, this);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+            }, FoodSearchActivity.this, getWindow().getDecorView());
+        }, FoodSearchActivity.this);
         return true;
     }
 
@@ -194,12 +218,9 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(MainActivity.PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
+                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                 foodDetailsLauncher.launch(intent);
                 break;
-            }
-            case (CALLBACK_SELECT): {
-                items.add(bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
-                Toaster.toastShort("Added", this);
             }
             case (CALLBACK_CLOSE_DETAIL): {
                 getSupportFragmentManager().popBackStack();

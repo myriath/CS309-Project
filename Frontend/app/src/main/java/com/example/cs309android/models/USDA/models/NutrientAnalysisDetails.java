@@ -1,13 +1,23 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class NutrientAnalysisDetails {
+    @Expose
     private final int subSampleId;
+    @Expose
     private final float amount;
+    @Expose
     private final int nutrientId;
+    @Expose
     private final String labMethodDescription;
+    @Expose
     private final String labMethodOriginalDescription;
+    @Expose
     private final String labMethodLink;
+    @Expose
     private final String labMethodTechnique;
+    @Expose
     private final NutrientAquisitionDetails[] nutrientAquisitionDetails;
 
     public NutrientAnalysisDetails(int subSampleId, float amount, int nutrientId, String labMethodDescription, String labMethodOriginalDescription, String labMethodLink, String labMethodTechnique, NutrientAquisitionDetails[] nutrientAquisitionDetails) {

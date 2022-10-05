@@ -1,9 +1,15 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class FoodAttribute {
+    @Expose
     private final int id;
+    @Expose
     private final int sequenceNumber;
+    @Expose
     private final String value;
+    @Expose
     private final FoodAttributeType FoodAttributeType;
 
     public FoodAttribute(int id, int sequenceNumber, String value, FoodAttribute.FoodAttributeType foodAttributeType) {

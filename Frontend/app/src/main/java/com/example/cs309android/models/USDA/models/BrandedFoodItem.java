@@ -1,26 +1,49 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class BrandedFoodItem {
+    @Expose
     private final int fdcId;
+    @Expose
     private final String availableDate;
+    @Expose
     private final String brandOwner;
+    @Expose
     private final String dataSource;
+    @Expose
     private final String dataType;
+    @Expose
     private final String description;
+    @Expose
     private final String foodClass;
+    @Expose
     private final String gtinUpc;
+    @Expose
     private final String householdServingFullText;
+    @Expose
     private final String ingredients;
+    @Expose
     private final String modifiedDate;
+    @Expose
     private final String publicationDate;
+    @Expose
     private final double servingSize;
+    @Expose
     private final String servingSizeUnit;
+    @Expose
     private final String preparationStateCode;
+    @Expose
     private final String brandedFoodCategory;
+    @Expose
     private final String[] tradeChannel;
+    @Expose
     private final int gpcClassCode;
+    @Expose
     private final FoodNutrient[] foodNutrients;
+    @Expose
     private final FoodUpdateLog[] foodUpdateLog;
+    @Expose
     private final LabelNutrients labelNutrients;
 
     public BrandedFoodItem(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String description, String foodClass, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, double servingSize, String servingSizeUnit, String preparationStateCode, String brandedFoodCategory, String[] tradeChannel, int gpcClassCode, FoodNutrient[] foodNutrients, FoodUpdateLog[] foodUpdateLog, LabelNutrients labelNutrients) {

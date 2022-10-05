@@ -1,6 +1,14 @@
 package com.example.cs309android.models.USDA;
 
+/**
+ * Constants util class for USDA objects
+ *
+ * @author Mitch Hudson
+ */
 public class Constants {
+    /**
+     * Util class
+     */
     private Constants() {
     }
 
