@@ -14,6 +14,7 @@ public class RegisterRequest {
     public RegisterRequest(String username, String email, String pHash, String pSalt){
         this.username = username;
         this.email = email;
+        this.pHash = pHash;
         this.pSalt = pSalt;
     }
 

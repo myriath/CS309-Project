@@ -1,5 +1,4 @@
 stages:
-  - build
   - maven-build
   - maven-test
   - maven-deploy

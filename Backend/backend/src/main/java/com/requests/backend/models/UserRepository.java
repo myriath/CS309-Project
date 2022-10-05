@@ -9,9 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value="SELECT * FROM users", nativeQuery = true)
