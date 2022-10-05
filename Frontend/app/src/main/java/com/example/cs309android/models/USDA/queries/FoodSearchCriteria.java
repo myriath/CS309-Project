@@ -1,29 +1,42 @@
 package com.example.cs309android.models.USDA.queries;
 
-import androidx.annotation.NonNull;
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
+import static com.example.cs309android.models.USDA.Constants.API_URL_SEARCH_ENDPOINT;
 
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.gson.GetRequest;
+import com.google.gson.annotations.Expose;
 
 /**
  * A copy of the criteria that were used in the search.
  * <p>
  * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodSearchCriteria
  */
-public class FoodSearchCriteria {
-    public static final int DATATYPE_DEFAULT = 0;
-
+public class FoodSearchCriteria extends GetRequest {
+    @Expose
+    private final String query;
+    @Expose
     private String[] dataType;
+    @Expose
     private Integer pageSize;
+    @Expose
     private Integer pageNumber;
+    @Expose
     private String sortBy;
+    @Expose
     private String sortOrder;
+    @Expose
     private String brandOwner;
+    @Expose
     private String[] tradeChannel;
+    @Expose
     private String startDate;
+    @Expose
     private String endDate;
 
-    public FoodSearchCriteria(String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder, String brandOwner, String[] tradeChannel, String startDate, String endDate) {
+    public FoodSearchCriteria(String query, String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder, String brandOwner, String[] tradeChannel, String startDate, String endDate) {
+        this.query = query;
         this.dataType = dataType;
         this.pageSize = pageSize;
         this.pageNumber = pageNumber;
@@ -35,7 +48,8 @@ public class FoodSearchCriteria {
         this.endDate = endDate;
     }
 
-    public FoodSearchCriteria(Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder, String brandOwner, Constants.TradeChannel[] tradeChannels, String startDate, String endDate) {
+    public FoodSearchCriteria(String query, Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder, String brandOwner, Constants.TradeChannel[] tradeChannels, String startDate, String endDate) {
+        this.query = query;
         String[] dataType = new String[dataTypes.length];
         for (int i = 0; i < dataTypes.length; i++) dataType[i] = dataTypes[i].getValue();
         this.dataType = dataType;
@@ -52,7 +66,8 @@ public class FoodSearchCriteria {
         this.endDate = endDate;
     }
 
-    public FoodSearchCriteria(Constants.DataType dataType) {
+    public FoodSearchCriteria(String query, Constants.DataType dataType) {
+        this.query = query;
         this.dataType = new String[]{dataType.getValue()};
         this.pageSize = null;
         this.pageNumber = null;
@@ -136,10 +151,10 @@ public class FoodSearchCriteria {
         return endDate;
     }
 
-    @NonNull
     @Override
-    public String toString() {
-        return new GetRequestURL()
+    public String getURL() {
+        return new GetRequestURL(API_URL_SEARCH_ENDPOINT)
+                .addParam("query", query)
                 .addArray("dataType", dataType)
                 .addParam("pageSize", pageSize)
                 .addParam("pageNumber", pageNumber)
@@ -149,6 +164,7 @@ public class FoodSearchCriteria {
                 .addArray("tradeChannel", tradeChannel)
                 .addParam("startDate", startDate)
                 .addParam("endDate", endDate)
+                .addParam("api_key", API_KEY)
                 .toString();
     }
 }

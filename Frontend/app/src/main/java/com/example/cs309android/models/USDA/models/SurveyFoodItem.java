@@ -1,16 +1,29 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class SurveyFoodItem {
+    @Expose
     private final int fdcId;
+    @Expose
     private final String datatype;
+    @Expose
     private final String endDate;
+    @Expose
     private final String foodClass;
+    @Expose
     private final String foodCode;
+    @Expose
     private final String publicationDate;
+    @Expose
     private final String startDate;
+    @Expose
     private final FoodAttribute[] foodAttributes;
+    @Expose
     private final FoodPortion[] foodPortions;
+    @Expose
     private final InputFoodSurvey[] inputFoods;
+    @Expose
     private final WweiaFoodCategory wweiaFoodCategory;
 
     public SurveyFoodItem(int fdcId, String datatype, String endDate, String foodClass, String foodCode, String publicationDate, String startDate, FoodAttribute[] foodAttributes, FoodPortion[] foodPortions, InputFoodSurvey[] inputFoods, WweiaFoodCategory wweiaFoodCategory) {

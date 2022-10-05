@@ -3,7 +3,6 @@ package com.example.cs309android.activities;
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Util.spin;
-import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,9 +33,9 @@ import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.GsonBuilder;
 
 import java.util.Objects;
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Name of the app for all mentions in the app
      * TODO: Name the app
      */
-    public static final String APP_NAME = "TEST";
+    public static final String APP_NAME = "Föd";
 
     /**
      * Preference name for this app's shared preferences.
@@ -91,9 +90,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
 
+    /**
+     * This is used wherever a food item needs to be parceled.
+     */
     public static final String PARCEL_FOODITEM = "fooditem";
+    /**
+     * This is used whenever a list of food items needs to be parceled.
+     */
     public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+    /**
+     * This is used to parcel the intent of opening an activity.
+     */
+    public static final String PARCEL_INTENT_CODE = "intentCode";
 
+    /**
+     * Preference key strings for the username and hash
+     */
     public static final String PREF_USERNAME = "username";
     public static final String PREF_HASH = "enc_hash";
 
@@ -113,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onStop() {
         super.onStop();
-        RequestHandler.getInstance(this).cancelAll();
+        new RequestHandler(MainActivity.this).cancelAll();
     }
 
     @Override
@@ -174,17 +186,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        new LoginRequest(username, hash).request(response -> {
-            unSpin(this);
+        new LoginRequest(username, hash).unspinOnComplete(response -> {
             // Checks if the result is valid or not. If not, opens the login page
-            int result = new GsonBuilder().serializeNulls().create().fromJson(response.toString(), GenericResponse.class).getResult();
+            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
             if (result != RESULT_LOGGED_IN) startLoginFragment();
             AUTH_MODEL = new AuthModel(username, hash);
         }, error -> {
-            unSpin(this);
             error.printStackTrace();
             startLoginFragment();
-        }, this);
+        }, MainActivity.this, getWindow().getDecorView());
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
@@ -323,11 +333,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
                 Intent intent = new Intent(this, FoodSearchActivity.class);
+                intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
                 break;

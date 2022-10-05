@@ -1,9 +1,15 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class NutrientAquisitionDetails {
+    @Expose
     private final int sampleUnitId;
+    @Expose
     private final String purchaseDate;
+    @Expose
     private final String storeCity;
+    @Expose
     private final String storeState;
 
     public NutrientAquisitionDetails(int sampleUnitId, String purchaseDate, String storeCity, String storeState) {

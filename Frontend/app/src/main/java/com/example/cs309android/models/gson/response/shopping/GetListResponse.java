@@ -1,6 +1,7 @@
 package com.example.cs309android.models.gson.response.shopping;
 
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -8,20 +9,22 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class GetListResponse {
+public class GetListResponse extends GenericResponse {
     /**
      * Shopping list array from JSON
      */
     @Expose
-    private final SimpleFoodItem[] shopping_list;
+    private final SimpleFoodItem[] shoppingList;
 
     /**
      * Public constructor
      *
-     * @param shopping_list Shopping list array
+     * @param result        Result code from the request
+     * @param shoppingList Shopping list array
      */
-    public GetListResponse(SimpleFoodItem[] shopping_list) {
-        this.shopping_list = shopping_list;
+    public GetListResponse(int result, SimpleFoodItem[] shoppingList) {
+        super(result);
+        this.shoppingList = shoppingList;
     }
 
     /**
@@ -30,6 +33,6 @@ public class GetListResponse {
      * @return Array of simple food items.
      */
     public SimpleFoodItem[] getShoppingList() {
-        return shopping_list;
+        return shoppingList;
     }
 }
