@@ -2,12 +2,16 @@ package com.requests.backend.models;
 
 public class ShoppingListAddRequest {
 
+    private SimpleFoodItem item;
+
+    private AuthModel auth;
+
     public SimpleFoodItem getFoodItem() {
-        return foodItem;
+        return item;
     }
 
     public void setFoodItem(SimpleFoodItem foodItem) {
-        this.foodItem = foodItem;
+        this.item = foodItem;
     }
 
     public AuthModel getAuth() {
@@ -17,8 +21,4 @@ public class ShoppingListAddRequest {
     public void setAuth(AuthModel auth) {
         this.auth = auth;
     }
-
-    private SimpleFoodItem foodItem;
-
-    private AuthModel auth;
 }
