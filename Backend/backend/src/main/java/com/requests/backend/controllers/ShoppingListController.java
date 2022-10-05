@@ -67,7 +67,9 @@ public class ShoppingListController {
     @PostMapping(path="/add")
     public @ResponseBody String addToShoppingList(@RequestBody String json) {
 
-        ShoppingListAddRequest req = new Gson().fromJson(json, ShoppingListAddRequest.class);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
         AuthModel auth = req.getAuth();
@@ -86,8 +88,6 @@ public class ShoppingListController {
             res.setResult(RESULT_ERROR);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
         return gson.toJson(res);
     }
 
@@ -97,16 +97,28 @@ public class ShoppingListController {
 
         StrikeoutRequest req = new Gson().fromJson(json, StrikeoutRequest.class);
 
-        String username = req.getUsername();
+        AuthModel auth = req.getAuth();
+
         String itemName = req.getItemName();
+        String username = auth.getUsername();
+
+        Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
         ResultResponse res = new ResultResponse();
 
-        try {
-            shoppingRepository.queryShoppingChangeStricken(username, itemName);
-            res.setResult(RESULT_OK);
-        } catch (Exception e) {
+        if (userQueryRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
+        }
+        else {
+            User user = userQueryRes.iterator().next();
+
+            if (user.getPHash().compareTo(auth.getHash()) != 0) {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            }
+            else {
+                shoppingRepository.queryShoppingChangeStricken(username, itemName);
+                res.setResult(RESULT_OK);
+            }
         }
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -114,18 +126,35 @@ public class ShoppingListController {
         return gson.toJson(res);
     }
 
-    @DeleteMapping (path = "/remove/{username}")
-    public @ResponseBody String removeFromList(@PathVariable String username, @RequestParam String itemName) {
+    @DeleteMapping (path = "/remove")
+    public @ResponseBody String removeFromList(@RequestBody String json) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
+        ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
+
+        AuthModel auth = req.getAuth();
+
+        String itemName = req.getItemName();
+        String username = auth.getUsername();
+
+        Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
+
         ResultResponse res = new ResultResponse();
 
-        try {
-            shoppingRepository.queryDeleteListItem(username, itemName);
-            res.setResult(RESULT_OK);
-        } catch (Exception e) {
+        if (userQueryRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
+        }
+        else {
+            User user = userQueryRes.iterator().next();
+
+            if (user.getPHash().compareTo(auth.getHash()) != 0) {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            }
+            else {
+                shoppingRepository.queryDeleteListItem(username, itemName);
+                res.setResult(RESULT_OK);
+            }
         }
 
         return gson.toJson(res);

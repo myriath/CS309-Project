@@ -1,12 +1,12 @@
 package com.requests.backend.models;
 
-public class StrikeoutRequest {
+public class ShoppingListRemoveRequest {
     private String itemName;
 
     private AuthModel auth;
 
     public String getItemName() {
-        return itemName;
+        return this.itemName;
     }
 
     public void setItemName(String itemName) {
