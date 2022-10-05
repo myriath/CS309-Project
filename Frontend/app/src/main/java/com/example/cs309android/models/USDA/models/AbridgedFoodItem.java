@@ -1,14 +1,25 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class AbridgedFoodItem {
+    @Expose
     private final String dataType;
+    @Expose
     private final String description;
+    @Expose
     private final int fdcId;
+    @Expose
     private final AbridgedFoodNutrient[] foodNutrients;
+    @Expose
     private final String publicationDate;
+    @Expose
     private final String brandOwner;
+    @Expose
     private final String gtinUpc;
+    @Expose
     private final int ndbNumber;
+    @Expose
     private final String foodCode;
 
     public AbridgedFoodItem(String dataType, String description, int fdcId, AbridgedFoodNutrient[] foodNutrients, String publicationDate, String brandOwner, String gtinUpc, int ndbNumber, String foodCode) {

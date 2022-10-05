@@ -1,18 +1,30 @@
 package com.example.cs309android.models.USDA.models;
 
-public class FoodNutrient {
-    private final int id;
-    private final float amount;
-    private final int dataPoints;
-    private final float min;
-    private final float max;
-    private final float median;
-    private final String type;
-    private final Nutrient nutrient;
-    private final FoodNutrientDerivation foodNutrientDerivation;
-    private final NutrientAnalysisDetails nutrientAnalysisDetails;
+import com.google.gson.annotations.Expose;
 
-    public FoodNutrient(int id, float amount, int dataPoints, float min, float max, float median, String type, Nutrient nutrient, FoodNutrientDerivation foodNutrientDerivation, NutrientAnalysisDetails nutrientAnalysisDetails) {
+public class FoodNutrient {
+    @Expose
+    private final int id;
+    @Expose
+    private final float amount;
+    @Expose
+    private final int dataPoints;
+    @Expose
+    private final float min;
+    @Expose
+    private final float max;
+    @Expose
+    private final float median;
+    @Expose
+    private final String type;
+    @Expose
+    private final Nutrient nutrient;
+    @Expose
+    private final FoodNutrientDerivation foodNutrientDerivation;
+    @Expose
+    private final NutrientAnalysisDetails[] nutrientAnalysisDetails;
+
+    public FoodNutrient(int id, float amount, int dataPoints, float min, float max, float median, String type, Nutrient nutrient, FoodNutrientDerivation foodNutrientDerivation, NutrientAnalysisDetails[] nutrientAnalysisDetails) {
         this.id = id;
         this.amount = amount;
         this.dataPoints = dataPoints;
@@ -61,7 +73,7 @@ public class FoodNutrient {
         return foodNutrientDerivation;
     }
 
-    public NutrientAnalysisDetails getNutrientAnalysisDetails() {
+    public NutrientAnalysisDetails[] getNutrientAnalysisDetails() {
         return nutrientAnalysisDetails;
     }
 }

@@ -1,9 +1,15 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class FoodNutrientDerivation {
+    @Expose
     private final int id;
+    @Expose
     private final String code;
+    @Expose
     private final String description;
+    @Expose
     private final FoodNutrientSource foodNutrientSource;
 
     public FoodNutrientDerivation(int id, String code, String description, FoodNutrientSource foodNutrientSource) {

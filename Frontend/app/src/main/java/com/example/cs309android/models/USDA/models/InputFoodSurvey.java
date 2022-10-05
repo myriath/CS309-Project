@@ -1,18 +1,33 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class InputFoodSurvey {
+    @Expose
     private final int id;
+    @Expose
     private final float amount;
+    @Expose
     private final String foodDescription;
+    @Expose
     private final int ingredientCode;
+    @Expose
     private final String ingredientDescription;
+    @Expose
     private final float ingredientWeight;
+    @Expose
     private final String portionCode;
+    @Expose
     private final String portionDescription;
+    @Expose
     private final int sequenceNumber;
+    @Expose
     private final int surveyFlag;
+    @Expose
     private final String unit;
+    @Expose
     private final SurveyFoodItem inputFood;
+    @Expose
     private final RetentionFactor retentionFactor;
 
     public InputFoodSurvey(int id, float amount, String foodDescription, int ingredientCode, String ingredientDescription, float ingredientWeight, String portionCode, String portionDescription, int sequenceNumber, int surveyFlag, String unit, SurveyFoodItem inputFood, RetentionFactor retentionFactor) {

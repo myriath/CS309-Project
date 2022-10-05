@@ -1,21 +1,36 @@
 package com.example.cs309android.models.USDA.queries;
 
 import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
+import com.google.gson.annotations.Expose;
 
 public class SearchResultFood {
+    @Expose
     private final Integer fdcId;
+    @Expose
     private final String dataType;
+    @Expose
     private final String description;
+    @Expose
     private final String foodCode;
+    @Expose
     private final AbridgedFoodNutrient[] foodNutrients;
+    @Expose
     private final String publicationDate;
+    @Expose
     private final String scientificName;
+    @Expose
     private final String brandOwner;
+    @Expose
     private final String gtinUpc;
+    @Expose
     private final String ingredients;
+    @Expose
     private final Integer ndbNumber;
+    @Expose
     private final String additionalDescriptions;
+    @Expose
     private final String allHighlightFields;
+    @Expose
     private final Float score;
 
     public SearchResultFood(Integer fdcId, String dataType, String description, String foodCode, AbridgedFoodNutrient[] foodNutrients, String publicationDate, String scientificName, String brandOwner, String gtinUpc, String ingredients, Integer ndbNumber, String additionalDescriptions, String allHighlightFields, Float score) {

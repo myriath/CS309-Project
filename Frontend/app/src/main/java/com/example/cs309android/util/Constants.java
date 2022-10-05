@@ -85,7 +85,7 @@ public class Constants {
     /**
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
-    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strike";
+    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout";
 
 
     // TAGS
