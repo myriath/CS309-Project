@@ -4,11 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
+import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
+import com.example.cs309android.models.gson.response.shopping.GetListResponse;
+import com.example.cs309android.util.Util;
+
+import org.json.JSONException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,12 +30,11 @@ import com.example.cs309android.fragments.BaseFragment;
  */
 public class RecipesFragment extends BaseFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
@@ -38,7 +50,7 @@ public class RecipesFragment extends BaseFragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment RecipesFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static RecipesFragment newInstance(String param1, String param2) {
         RecipesFragment fragment = new RecipesFragment();
         Bundle args = new Bundle();
@@ -61,6 +73,29 @@ public class RecipesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipes, container, false);
+        View view = inflater.inflate(R.layout.fragment_recipes, container, false);
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.linear_layout), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
+        });
+        new GetRecipeDetailsRequest(1, MainActivity.AUTH_MODEL).request(response -> {
+            try {
+                System.out.print(response.toString(4));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
+            TextView recipes = view.findViewById(R.id.recipeName);
+            String stuff = recipeResponse.getRecipe().getRecipeName();
+            recipes.setText(stuff);
+
+            //stuff
+        },getContext());
+//        TextView recipes = (TextView) view.findViewById(R.id.recipeName);
+//        String stuff = new String("Stuff");
+//        recipes.setText(stuff);
+        // Inflate the layout for this fragment
+        return view;
     }
 }

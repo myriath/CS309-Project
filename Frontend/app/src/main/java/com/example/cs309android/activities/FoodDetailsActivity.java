@@ -10,77 +10,111 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.USDA.Queries;
-import com.example.cs309android.models.USDA.custom.DataTypeModel;
-import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.models.FoundationFoodItem;
 import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
 import com.example.cs309android.models.USDA.models.SurveyFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
+import com.example.cs309android.models.gson.models.DataTypeModel;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.util.Util;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
+import java.util.Objects;
+
+/**
+ * Food Details activity displays the information of a food from the USDA API
+ *
+ * @author Mitch Hudson
+ */
 public class FoodDetailsActivity extends AppCompatActivity {
+    /**
+     * Used to parcel the control variable
+     */
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    /**
+     * Used to tell the activity to display no fab
+     */
+    public static final int CONTROL_NONE = 0;
+    /**
+     * Used to tell the activity to display the add button
+     */
+    public static final int CONTROL_ADD = 1;
 
+    /**
+     * Food item to display details for
+     */
+    private SimpleFoodItem item;
+
+    /**
+     * Runs when the activity is started
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        Util.spin(this);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
-        Queries.food(new FoodsCriteria(null, Format.FULL, null), fdcId,
-                response -> {
-                    System.out.println(response.toString());
-                    GsonBuilder builder = new GsonBuilder();
-                    builder.serializeNulls();
-                    builder.registerTypeAdapter(DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
-                    Gson gson = builder.create();
-                    DataTypeModel dataType = gson.fromJson(response.toString(), DataTypeModel.class);
-                    Object foodItem;
-                    switch (dataType.getDataType()) {
-                        case BRANDED: {
-                            foodItem = gson.fromJson(response.toString(), BrandedFoodItem.class);
-                            break;
-                        }
-                        case FOUNDATION: {
-                            foodItem = gson.fromJson(response.toString(), FoundationFoodItem.class);
-                            break;
-                        }
-                        case SURVEY: {
-                            foodItem = gson.fromJson(response.toString(), SurveyFoodItem.class);
-                            break;
-                        }
-                        case LEGACY: {
-                            foodItem = gson.fromJson(response.toString(), SRLegacyFoodItem.class);
-                            break;
-                        }
-                        default: {
-                            foodItem = gson.fromJson(response.toString(), AbridgedFoodItem.class);
-                        }
-                    }
-
-                    System.out.println(foodItem);
-                }, this.getApplicationContext());
+        new FoodsCriteria(fdcId, Format.FULL, null).unspinOnComplete(response -> {
+            DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
+            switch (dataType.getDataType()) {
+                // TODO: Write all of these, currently only need Branded/Foundation because of search
+                case BRANDED: {
+                    BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case FOUNDATION: {
+                    FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case SURVEY: {
+                    SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
+//                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+//                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                case LEGACY: {
+                    SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    setTitle(foodItem.getDescription(), toolbar);
+                    break;
+                }
+                default: {
+                    AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    setTitle(foodItem.getDescription(), toolbar);
+                }
+            }
+        }, FoodDetailsActivity.this, getWindow().getDecorView());
 
         FloatingActionButton fab = findViewById(R.id.add_item);
-        if (!i.getBooleanExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, false)) {
-            fab.setVisibility(View.GONE);
-        }
+        int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
+        if (control == CONTROL_ADD) fab.setVisibility(View.VISIBLE);
 
-//        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-//        toolbar.setTitle(item.getFoodName().substring(0, Math.min(item.getFoodName().length(), 18)).trim() + (item.getFoodName().length() > 18 ? "..." : ""));
-//        setSupportActionBar(toolbar);
-//        toolbar.setNavigationOnClickListener(view1 -> {
-//            setResult(RESULT_CANCELED);
-//            finish();
-//        });
-//
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
+//z
 //        findViewById(R.id.add_item).setOnClickListener(view1 -> {
 //            Intent intent = new Intent();
 //            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
@@ -98,5 +132,28 @@ public class FoodDetailsActivity extends AppCompatActivity {
 //                imageView.setImageUrl(photo.getThumb(), RequestHandler.getInstance(this).getImageLoader());
 //            }
 //        } catch (NullPointerException ignored) {}
+    }
+
+    /**
+     * Handles the back button on the toolbar
+     *
+     * @return true
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
+    }
+
+    /**
+     * Sets the title of the activity
+     *
+     * @param title   New title
+     * @param toolbar Toolbar to change the title of
+     */
+    private void setTitle(String title, MaterialToolbar toolbar) {
+        toolbar.setTitle(title.substring(0, Math.min(title.length(), 18)).trim() + (title.length() > 18 ? "..." : ""));
+        setSupportActionBar(toolbar);
     }
 }

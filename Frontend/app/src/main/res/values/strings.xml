@@ -65,5 +65,7 @@
         Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsum
         Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsum
     </string>
+    <string name="favorite">Favorite</string>
+    <string name="title_activity_temp">TempActivity</string>
 
 </resources>

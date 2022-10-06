@@ -1,12 +1,21 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class FoodComponent {
+    @Expose
     private final int id;
+    @Expose
     private final String name;
+    @Expose
     private final int dataPoints;
+    @Expose
     private final float gramWeight;
+    @Expose
     private final boolean isRefuse;
+    @Expose
     private final int minYearAcquired;
+    @Expose
     private final float percentWeight;
 
     public FoodComponent(int id, String name, int dataPoints, float gramWeight, boolean isRefuse, int minYearAcquired, float percentWeight) {

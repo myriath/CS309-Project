@@ -59,6 +59,7 @@ public class GetRequestURL {
      * @return this (allows stacking calls)
      */
     public GetRequestURL addParam(RequestParam param) {
+        if (param == null) return this;
         params.add(param);
         return this;
     }
@@ -71,6 +72,7 @@ public class GetRequestURL {
      * @return this (allows stacking calls)
      */
     public GetRequestURL addParam(String name, Object value) {
+        if (value == null) return this;
         params.add(new RequestParam(name, value));
         return this;
     }
@@ -154,7 +156,7 @@ public class GetRequestURL {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         if (url != null) {
-            builder.append(url);
+            builder.append(url).append("?");
         }
 
         for (RequestParam param : params) {

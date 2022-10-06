@@ -11,9 +11,6 @@
         <module name="demo (1)" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="CS309 Android.CS309_Android.app" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

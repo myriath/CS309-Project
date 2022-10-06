@@ -1,16 +1,29 @@
 package com.example.cs309android.models.USDA.models;
 
+import com.google.gson.annotations.Expose;
+
 public class SRLegacyFoodItem {
+    @Expose
     private final int fdcId;
+    @Expose
     private final String dataType;
+    @Expose
     private final String description;
+    @Expose
     private final String foodClass;
+    @Expose
     private final boolean isHistoricalReference;
+    @Expose
     private final int ndbNumber;
+    @Expose
     private final String publicationDate;
+    @Expose
     private final String scientificName;
+    @Expose
     private final FoodCategory foodCategory;
+    @Expose
     private final FoodNutrient[] foodNutrients;
+    @Expose
     private final NutrientConversionFactors[] nutrientConversionFactors;
 
     public SRLegacyFoodItem(int fdcId, String dataType, String description, String foodClass, boolean isHistoricalReference, int ndbNumber, String publicationDate, String scientificName, FoodCategory foodCategory, FoodNutrient[] foodNutrients, NutrientConversionFactors[] nutrientConversionFactors) {

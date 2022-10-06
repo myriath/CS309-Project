@@ -1,10 +1,8 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
-import static com.example.cs309android.util.Constants.LOGIN_URL;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Util.spin;
-import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -32,15 +28,14 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.USDA.custom.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.LoginRequest;
+import com.example.cs309android.models.gson.models.AuthModel;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.users.LoginRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -61,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Name of the app for all mentions in the app
      * TODO: Name the app
      */
-    public static final String APP_NAME = "TEST";
+    public static final String APP_NAME = "Föd";
 
     /**
      * Preference name for this app's shared preferences.
@@ -80,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private int currentFragment = 2;
 
     /**
+     * Auth model for the whole app
+     */
+    public static AuthModel AUTH_MODEL;
+
+    /**
      * Response codes for callback method. Used by Fragments for this class
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
@@ -90,8 +90,24 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_SEARCH_FOOD = 5;
 //    public static final int CALLBACK_ = 0;
 
+    /**
+     * This is used wherever a food item needs to be parceled.
+     */
     public static final String PARCEL_FOODITEM = "fooditem";
+    /**
+     * This is used whenever a list of food items needs to be parceled.
+     */
     public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+    /**
+     * This is used to parcel the intent of opening an activity.
+     */
+    public static final String PARCEL_INTENT_CODE = "intentCode";
+
+    /**
+     * Preference key strings for the username and hash
+     */
+    public static final String PREF_USERNAME = "username";
+    public static final String PREF_HASH = "enc_hash";
 
     /**
      * Used to launch various activities.
@@ -109,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onStop() {
         super.onStop();
-        RequestHandler.getInstance(this).cancelAll();
+        new RequestHandler(MainActivity.this).cancelAll();
     }
 
     @Override
@@ -164,42 +180,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         );
 
         // Gets stored username and password hash, if they exist
-        // TODO: Uncomment this out before PR
         SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String username = pref.getString("username", "").trim();
-        String encodedHash = pref.getString("enc_hash", "").trim();
+        String username = pref.getString(PREF_USERNAME, "").trim();
+        String hash = pref.getString(PREF_HASH, "").trim();
+
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
-        if (username.equals("") || encodedHash.equals("")) {
-            spin(this);
-
-            try {
-                // Creates a new request with username and hash as the body
-                JSONObject jsonBody = new JSONObject(new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(username, encodedHash)));
-
-                System.out.println(LOGIN_URL);
-                System.out.println(jsonBody.toString(2));
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonBody,
-                        response -> {
-                            unSpin(this);
-                            // Checks if the result is valid or not. If not, opens the login page
-                            try {
-                                int result = response.getInt("result");
-                                if (result != RESULT_LOGGED_IN) startLoginFragment();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }, error -> {
-                    unSpin(this);
-                    error.printStackTrace();
-                    startLoginFragment();
-                });
-                RequestHandler.getInstance(this).add(request);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
+        spin(this);
+        new LoginRequest(username, hash).unspinOnComplete(response -> {
+            // Checks if the result is valid or not. If not, opens the login page
+            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+            if (result != RESULT_LOGGED_IN) startLoginFragment();
+            AUTH_MODEL = new AuthModel(username, hash);
+        }, error -> {
+            error.printStackTrace();
             startLoginFragment();
-        }
+        }, MainActivity.this, getWindow().getDecorView());
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
@@ -338,11 +333,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
+                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
                 Intent intent = new Intent(this, FoodSearchActivity.class);
+                intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
                 break;

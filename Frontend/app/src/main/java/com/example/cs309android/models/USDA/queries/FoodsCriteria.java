@@ -1,9 +1,11 @@
 package com.example.cs309android.models.USDA.queries;
 
-import androidx.annotation.NonNull;
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
 
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.gson.GetRequest;
+import com.google.gson.annotations.Expose;
 
 /**
  * JSON for request body of 'foods' POST request. Retrieves a list of food items by a list of up to
@@ -12,10 +14,14 @@ import com.example.cs309android.models.USDA.Constants;
  * <p>
  * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodsCriteria
  */
-public class FoodsCriteria {
+public class FoodsCriteria extends GetRequest {
+    @Expose
     private final Integer[] fdcIds;
+    @Expose
     private final String format;
+    @Expose
     private final Integer[] nutrients;
+    @Expose
     private int index = 0;
 
     public FoodsCriteria(Integer[] fdcIds, String format, Integer[] nutrients) {
@@ -49,13 +55,19 @@ public class FoodsCriteria {
         return this;
     }
 
-    @NonNull
     @Override
-    public String toString() {
-        return new GetRequestURL()
+    public String getURL() {
+        if (index == -1) return new GetRequestURL(Constants.API_URL_FOODS_ENDPOINT)
                 .addArray("fdcId", fdcIds, index)
                 .addParam("format", format)
                 .addArray("nutrients", nutrients)
+                .addParam("api_key", API_KEY)
+                .toString();
+        return new GetRequestURL(Constants.API_URL_FOOD_ENDPOINT + fdcIds[0])
+                .addArray("fdcId", fdcIds, index)
+                .addParam("format", format)
+                .addArray("nutrients", nutrients)
+                .addParam("api_key", API_KEY)
                 .toString();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.cs309android.models.gson.response;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Generic response class used for communication between front and back-ends
  *
@@ -9,6 +11,7 @@ public class GenericResponse {
     /**
      * Result code from the request
      */
+    @Expose
     private final int result;
 
     /**
