@@ -11,11 +11,14 @@ public class RegisterRequest {
 
     private String pSalt;
 
-    public RegisterRequest(String username, String email, String pHash, String pSalt){
+    private String token;
+
+    public RegisterRequest(String username, String email, String pHash, String pSalt, String token){
         this.username = username;
         this.email = email;
         this.pHash = pHash;
         this.pSalt = pSalt;
+        this.token = token;
     }
 
     public String getUsername() {
@@ -50,4 +53,11 @@ public class RegisterRequest {
         this.email = email;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

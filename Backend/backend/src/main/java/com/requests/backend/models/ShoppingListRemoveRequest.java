@@ -3,7 +3,8 @@ package com.requests.backend.models;
 public class ShoppingListRemoveRequest {
     private String itemName;
 
-    private AuthModel auth;
+    // TODO: Replace with token
+    private String token;
 
     public String getItemName() {
         return this.itemName;
@@ -13,11 +14,11 @@ public class ShoppingListRemoveRequest {
         this.itemName = itemName;
     }
 
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuth(AuthModel auth) {
-        this.auth = auth;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
