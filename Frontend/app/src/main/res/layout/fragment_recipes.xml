@@ -7,8 +7,17 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/recipeName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="recipes" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"/>
+
+
 
 </FrameLayout>
