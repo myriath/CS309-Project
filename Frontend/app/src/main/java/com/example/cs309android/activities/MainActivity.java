@@ -184,19 +184,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         String username = pref.getString(PREF_USERNAME, "").trim();
         String hash = pref.getString(PREF_HASH, "").trim();
 
-        // TODO: UNCOMMENT AND REMOVE BAD CODE:
-        AUTH_MODEL = new AuthModel(username, hash);
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
-//        spin(this);
-//        new LoginRequest(username, hash).unspinOnComplete(response -> {
-//            // Checks if the result is valid or not. If not, opens the login page
-//            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-//            if (result != RESULT_LOGGED_IN) startLoginFragment();
-//            AUTH_MODEL = new AuthModel(username, hash);
-//        }, error -> {
-//            error.printStackTrace();
-//            startLoginFragment();
-//        }, MainActivity.this, getWindow().getDecorView());
+        spin(this);
+        new LoginRequest(username, hash).unspinOnComplete(response -> {
+            // Checks if the result is valid or not. If not, opens the login page
+            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+            if (result != RESULT_LOGGED_IN) startLoginFragment();
+            AUTH_MODEL = new AuthModel(username, hash);
+        }, error -> {
+            error.printStackTrace();
+            startLoginFragment();
+        }, MainActivity.this, getWindow().getDecorView());
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
