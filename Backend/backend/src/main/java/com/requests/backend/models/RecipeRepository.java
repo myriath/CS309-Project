@@ -27,4 +27,17 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
+
+
+    @Modifying
+    @Query(
+            value =
+                    "INSERT INTO user_recipes (rid, rname)",
+            nativeQuery = true)
+    @Transactional
+    void queryCreateRecipe(@Param("rid") String rid, @Param("rname") String rname);
+
+
+
 }
+
