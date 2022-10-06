@@ -71,7 +71,7 @@ public class RecipeController {
 
 
     @PostMapping(path="/newRecipe") // Map ONLY POST Requests
-    public @ResponseBody String addNewUser (@RequestBody String json) {
+    public @ResponseBody String addNewRecipe(@RequestBody String json) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
@@ -80,9 +80,6 @@ public class RecipeController {
         String username = req.getUsername();
         String recipeName = req.getRecipeName();
         String instructions = req.getInstructions();
-
-
-        //String rname = req.getEmail();
 
         ResultResponse res = new ResultResponse();
 
