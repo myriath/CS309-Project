@@ -75,15 +75,19 @@ public class RecipeController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        RegisterRequest req = new Gson().fromJson(json, RegisterRequest.class);
+        RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
-        String rid = req.getUsername();
-        String rname = req.getEmail();
+        String username = req.getUsername();
+        String recipeName = req.getRecipeName();
+        String instructions = req.getInstructions();
+
+
+        //String rname = req.getEmail();
 
         ResultResponse res = new ResultResponse();
 
         try {
-            recipeRepository.queryCreateRecipe(rid, rname);
+            recipeRepository.queryCreateRecipe2(username, recipeName, instructions);
             res.setResult(RESULT_RECIPE_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_RID_TAKEN);

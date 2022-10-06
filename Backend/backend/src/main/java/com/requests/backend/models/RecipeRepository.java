@@ -37,7 +37,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Transactional
     void queryCreateRecipe(@Param("rid") String rid, @Param("rname") String rname);
 
+    @Modifying
+    @Query(
+            value =
+                    "INSERT INTO user_recipes (username, rname, steps)",
+            nativeQuery = true)
+    @Transactional
+    void queryCreateRecipe2(@Param("username") String username, @Param("recipeName") String rname, @Param("instructions") String steps);
 
+    //queryCreateRecipe2(username, recipeName, instructions);
 
 }
 
