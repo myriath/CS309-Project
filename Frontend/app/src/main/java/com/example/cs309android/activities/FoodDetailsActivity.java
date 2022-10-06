@@ -5,6 +5,7 @@ import static com.example.cs309android.models.USDA.Constants.Format;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -12,6 +13,7 @@ import androidx.core.view.WindowCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
+import com.example.cs309android.models.USDA.models.FoodNutrient;
 import com.example.cs309android.models.USDA.models.FoundationFoodItem;
 import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
 import com.example.cs309android.models.USDA.models.SurveyFoodItem;
@@ -19,6 +21,7 @@ import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.gson.models.DataTypeModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.NutritionItemView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -82,6 +85,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
                     item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
+                    fillNutrition(foodItem.getFoodNutrients());
                     break;
                 }
                 case SURVEY: {
@@ -155,5 +159,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
     private void setTitle(String title, MaterialToolbar toolbar) {
         toolbar.setTitle(title.substring(0, Math.min(title.length(), 18)).trim() + (title.length() > 18 ? "..." : ""));
         setSupportActionBar(toolbar);
+    }
+
+    private void fillNutrition(FoodNutrient[] nutrients) {
+        LinearLayout layout = findViewById(R.id.nutrition_layout);
+        for (FoodNutrient nutrient : nutrients) {
+            NutritionItemView itemView = new NutritionItemView(this);
+            itemView.initView(nutrient);
+            layout.addView(itemView);
+        }
     }
 }
