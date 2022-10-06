@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;
+import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
