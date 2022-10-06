@@ -67,5 +67,6 @@
     </string>
     <string name="favorite">Favorite</string>
     <string name="title_activity_temp">TempActivity</string>
+    <string name="ingredients">Ingredients</string>
 
 </resources>

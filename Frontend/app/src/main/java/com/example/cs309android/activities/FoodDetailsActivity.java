@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -79,6 +80,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
                     item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
                     setTitle(foodItem.getDescription(), toolbar);
+                    fillNutrition(foodItem.getFoodNutrients());
+                    fillIngredients(foodItem.getIngredients());
                     break;
                 }
                 case FOUNDATION: {
@@ -161,12 +164,30 @@ public class FoodDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    /**
+     * Fills the nutrition values for the nutrition table
+     * @param nutrients Nutrients of the item
+     */
     private void fillNutrition(FoodNutrient[] nutrients) {
         LinearLayout layout = findViewById(R.id.nutrition_layout);
         for (FoodNutrient nutrient : nutrients) {
             NutritionItemView itemView = new NutritionItemView(this);
             itemView.initView(nutrient);
             layout.addView(itemView);
+        }
+    }
+
+    /**
+     * Fills the ingredient values for the ingredients table
+     * @param ingredientsText Ingredients of the item
+     */
+    private void fillIngredients(String ingredientsText) {
+        LinearLayout layout = findViewById(R.id.ingredients_layout);
+        String[] ingredients = ingredientsText.split(",");
+        for (String ingredient : ingredients) {
+            TextView view = new TextView(this);
+            view.setText(ingredient);
+            layout.addView(view);
         }
     }
 }
