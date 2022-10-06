@@ -87,6 +87,28 @@ public class Constants {
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout";
 
+    // RECIPES
+    /**
+     * Base recipes url for all recipes based requests
+     */
+    public static final String RECIPES_URL = BASE_API_URL + "recipes/";
+    /**
+     * Get url for getting recipes
+     */
+    // public static final String GET_RECIPES_URL = RECIPES_URL + "get";
+    /**
+     * Add url for adding an item to recipes
+     */
+    public static final String ADD_RECIPES_URL = RECIPES_URL + "add";
+    /**
+     * Remove url for removing an item from recipes
+     */
+    public static final String REMOVE_RECIPES_URL = RECIPES_URL + "remove";
+    /**
+     * Url for gett an item from recipes
+     */
+    public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByrid/";
+
 
     // TAGS
 
