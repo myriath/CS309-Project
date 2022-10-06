@@ -1,15 +1,23 @@
 package com.requests.backend.models;
 
-import java.util.List;
-
 public class RecipeResponse {
-    private List<Recipe> recipes;
+    private int result;
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    private Recipe recipe;
+
+    public int getResult() {
+        return result;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

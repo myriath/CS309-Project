@@ -15,16 +15,16 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     @Query(value="SELECT * FROM user_recipes", nativeQuery = true)
-    List<Recipe> queryGetAllRecipes();
+    Recipe[] queryGetAllRecipes();
 
     @Query(
             value = "SELECT * FROM user_recipes WHERE rname = :rname",
             nativeQuery = true)
-    List<Recipe> queryGetRecipeByRname(@Param("rname") String rname);
+    Recipe[] queryGetRecipeByRname(@Param("rname") String rname);
 
     @Query(
             value = "SELECT * FROM user_recipes WHERE rid = :rid",
             nativeQuery = true)
-    List<Recipe> queryGetRecipeByRid(@Param("rid") int rid);
+    Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
 }
