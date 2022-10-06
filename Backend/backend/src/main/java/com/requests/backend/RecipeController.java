@@ -16,6 +16,13 @@ import static com.requests.backend.ResultCodes.RESULT_OK;
 @RequestMapping(path="/recipe")
 public class RecipeController {
 
+    public static final int RESULT_ERROR_RID_TAKEN = -23;
+
+    public static final int RESULT_OK = 0;
+
+    public static final int RESULT_RECIPE_CREATED = 22;
+
+
     @Autowired
     private RecipeRepository recipeRepository;
 
@@ -58,6 +65,36 @@ public class RecipeController {
             res.setRecipe(recipe[0]);
             res.setResult(RESULT_OK);
         }
+
+        return gson.toJson(res);
+    }
+
+
+    @PostMapping(path="/newRecipe") // Map ONLY POST Requests
+    public @ResponseBody String addNewUser (@RequestBody String json) {
+        // @ResponseBody means the returned String is the response, not a view name
+        // @RequestParam means it is a parameter from the GET or POST request
+
+        RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
+
+        String username = req.getUsername();
+        String recipeName = req.getRecipeName();
+        String instructions = req.getInstructions();
+
+
+        //String rname = req.getEmail();
+
+        ResultResponse res = new ResultResponse();
+
+        try {
+            recipeRepository.queryCreateRecipe2(username, recipeName, instructions);
+            res.setResult(RESULT_RECIPE_CREATED);
+        } catch (Exception e) {
+            res.setResult(RESULT_ERROR_RID_TAKEN);
+        }
+
+        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
     }

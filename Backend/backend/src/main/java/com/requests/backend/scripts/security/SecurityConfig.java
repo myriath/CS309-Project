@@ -1,4 +1,4 @@
-package com.security;
+package com.requests.backend.scripts.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
