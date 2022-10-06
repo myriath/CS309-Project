@@ -1,4 +1,6 @@
-package com.requests.backend.models;
+package com.requests.backend.models.responses;
+
+import com.requests.backend.models.Recipe;
 
 public class RecipeResponse {
     private int result;

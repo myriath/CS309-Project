@@ -1,7 +1,13 @@
-package com.requests.backend;
+package com.requests.backend.controllers;
 
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
+import com.requests.backend.models.requests.LoginRequest;
+import com.requests.backend.models.requests.RegisterRequest;
+import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.models.responses.SaltResponse;
+import com.requests.backend.repositories.FavoriteRepository;
+import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
