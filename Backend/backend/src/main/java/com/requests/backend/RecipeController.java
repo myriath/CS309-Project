@@ -70,7 +70,7 @@ public class RecipeController {
     }
 
 
-    @PostMapping(path="/NewRecipe") // Map ONLY POST Requests
+    @PostMapping(path="/newRecipe") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestBody String json) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
