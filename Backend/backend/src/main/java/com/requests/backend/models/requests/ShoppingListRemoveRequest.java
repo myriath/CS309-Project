@@ -1,4 +1,6 @@
-package com.requests.backend.models;
+package com.requests.backend.models.requests;
+
+import com.requests.backend.models.AuthModel;
 
 public class ShoppingListRemoveRequest {
     private String itemName;

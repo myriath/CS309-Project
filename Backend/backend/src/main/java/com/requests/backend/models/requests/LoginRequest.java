@@ -1,4 +1,4 @@
-package com.requests.backend.models;
+package com.requests.backend.models.requests;
 
 public class LoginRequest {
     private String username;

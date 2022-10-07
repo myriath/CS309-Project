@@ -1,4 +1,4 @@
-package com.requests.backend;
+package com.requests.backend.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
