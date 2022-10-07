@@ -79,17 +79,17 @@ public class FoodDetailsActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         Util.spin(this);
 
+        Intent intent = getIntent();
+        item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
         detailsLayout = findViewById(R.id.details_layout);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        setTitle(item.getDescription(), toolbar);
 
         Space spacer = new Space(this);
         spacer.setMinimumHeight((int) dp16 * 10);
 
-        Intent i = getIntent();
-        int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
-        new FoodsCriteria(fdcId, Format.FULL, null).unspinOnComplete(response -> {
+        new FoodsCriteria(item.getFdcId(), Format.FULL, null).unspinOnComplete(response -> {
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
             switch (dataType.getDataType()) {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search
@@ -104,7 +104,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 }
                 case FOUNDATION: {
                     FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
                     setTitle(foodItem.getDescription(), toolbar);
                     fillNutrition(foodItem.getFoodNutrients());
                     detailsLayout.addView(spacer);
@@ -112,14 +111,12 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 }
                 case SURVEY: {
                     SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
                     setTitle(foodItem.getDescription(), toolbar);
                     detailsLayout.addView(spacer);
                     break;
                 }
                 case LEGACY: {
                     SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
                     setTitle(foodItem.getDescription(), toolbar);
                     fillNutrition(foodItem.getFoodNutrients());
                     detailsLayout.addView(spacer);
@@ -140,13 +137,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         FloatingActionButton fab = findViewById(R.id.add_item);
-        int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
+        int control = intent.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
         if (control == CONTROL_ADD) fab.setVisibility(View.VISIBLE);
 
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
-            setResult(RESULT_OK, intent);
+            Intent intent1 = new Intent();
+            intent1.putExtra(MainActivity.PARCEL_FOODITEM, item);
+            setResult(RESULT_OK, intent1);
             finish();
         });
 //z
