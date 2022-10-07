@@ -28,12 +28,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
-
-
     @Modifying
     @Query(
             value =
-                    "INSERT INTO user_recipes (rid, rname)",
+                    "INSERT INTO user_recipes (:rid, :rname)",
             nativeQuery = true)
     @Transactional
     void queryCreateRecipe(@Param("rid") String rid, @Param("rname") String rname);
@@ -41,7 +39,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Modifying
     @Query(
             value =
-                    "INSERT INTO user_recipes (username, rname, steps)",
+                    "INSERT INTO user_recipes (:username, :recipeName, :instructions)",
             nativeQuery = true)
     @Transactional
     void queryCreateRecipe2(@Param("username") String username, @Param("recipeName") String rname, @Param("instructions") String steps);

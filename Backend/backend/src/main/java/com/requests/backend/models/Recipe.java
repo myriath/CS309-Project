@@ -3,7 +3,7 @@ package com.requests.backend.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Recipe")
+@Table(name="user_recipes")
 public class Recipe {
 
     @Id
