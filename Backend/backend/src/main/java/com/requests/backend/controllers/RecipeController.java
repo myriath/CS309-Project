@@ -84,7 +84,7 @@ public class RecipeController {
         ResultResponse res = new ResultResponse();
 
         try {
-            recipeRepository.queryCreateRecipe2(username, recipeName, instructions);
+            recipeRepository.queryCreateRecipe(username, recipeName, instructions);
             res.setResult(RESULT_RECIPE_CREATED);
         } catch (Exception e) {
             res.setResult(RESULT_ERROR_RID_TAKEN);
