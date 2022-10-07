@@ -83,9 +83,6 @@ public class RecipeController {
         String recipeName = req.getRecipeName();
         String instructions = req.getInstructions();
 
-
-        //String rname = req.getEmail();
-
         ResultResponse res = new ResultResponse();
 
         try {
