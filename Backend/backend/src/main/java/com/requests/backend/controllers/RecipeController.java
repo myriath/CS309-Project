@@ -72,10 +72,8 @@ public class RecipeController {
     }
 
 
-    @PostMapping(path="/newRecipe") // Map ONLY POST Requests
+    @PostMapping(path="/add")
     public @ResponseBody String addNewRecipe(@RequestBody String json) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
 
         RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
