@@ -169,14 +169,14 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
 
             searchResults.clear();
             for (SearchResultFood food : result.getFoods()) {
-                searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription(), null));
             }
 
             new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
                 SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
                 for (SearchResultFood food : result1.getFoods()) {
-                    searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                    searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription(), food.getBrandOwner()));
                 }
 
                 if (!searchResults.isEmpty()) {

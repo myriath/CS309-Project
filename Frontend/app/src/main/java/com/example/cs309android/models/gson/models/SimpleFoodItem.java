@@ -22,6 +22,11 @@ public class SimpleFoodItem implements Parcelable {
     @Expose
     private final String description;
     /**
+     * Brand (if branded)
+     */
+    @Expose
+    private final String brand;
+    /**
      * True if the item should appear with strikeout on the shopping list
      */
     @Expose
@@ -32,10 +37,12 @@ public class SimpleFoodItem implements Parcelable {
      *
      * @param fdcId       item id
      * @param description description / title
+     * @param brand       Brand of the item (null for none)
      */
-    public SimpleFoodItem(int fdcId, String description) {
+    public SimpleFoodItem(int fdcId, String description, String brand) {
         this.fdcId = fdcId;
         this.description = description;
+        this.brand = brand;
         this.stricken = false;
     }
 
@@ -44,11 +51,13 @@ public class SimpleFoodItem implements Parcelable {
      *
      * @param fdcId       item id
      * @param description description / title
+     * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int fdcId, String description, boolean stricken) {
+    public SimpleFoodItem(int fdcId, String description, String brand, boolean stricken) {
         this.fdcId = fdcId;
         this.description = description;
+        this.brand = brand;
         this.stricken = stricken;
     }
 
@@ -60,6 +69,7 @@ public class SimpleFoodItem implements Parcelable {
     protected SimpleFoodItem(Parcel in) {
         fdcId = in.readInt();
         description = in.readString();
+        brand = in.readString();
         stricken = in.readBoolean();
     }
 
@@ -94,6 +104,15 @@ public class SimpleFoodItem implements Parcelable {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Getter for the brand
+     *
+     * @return item brand / null
+     */
+    public String getBrand() {
+        return brand;
     }
 
     /**
@@ -134,6 +153,7 @@ public class SimpleFoodItem implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(fdcId);
         parcel.writeString(description);
+        parcel.writeString(brand);
         parcel.writeBoolean(stricken);
     }
 }

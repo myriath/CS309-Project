@@ -4,15 +4,19 @@ import static com.example.cs309android.models.USDA.Constants.Format;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
+import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.models.FoodNutrient;
 import com.example.cs309android.models.USDA.models.FoundationFoodItem;
@@ -48,6 +52,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public static final int CONTROL_ADD = 1;
 
     /**
+     * DP measurements
+     */
+    public float dp16;
+    public float dp8;
+
+    private LinearLayout detailsLayout;
+
+    /**
      * Food item to display details for
      */
     private SimpleFoodItem item;
@@ -60,15 +72,20 @@ public class FoodDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
+        dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
+
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         Util.spin(this);
 
+        detailsLayout = findViewById(R.id.details_layout);
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+
+        Space spacer = new Space(this);
+        spacer.setMinimumHeight((int) dp16 * 10);
 
         Intent i = getIntent();
         int fdcId = ((SimpleFoodItem) i.getParcelableExtra(MainActivity.PARCEL_FOODITEM)).getFdcId();
@@ -78,38 +95,49 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search
                 case BRANDED: {
                     BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), foodItem.getBrandOwner());
                     setTitle(foodItem.getDescription(), toolbar);
-                    fillNutrition(foodItem.getFoodNutrients());
                     fillIngredients(foodItem.getIngredients());
+                    fillNutrition(foodItem.getFoodNutrients());
+                    detailsLayout.addView(spacer);
                     break;
                 }
                 case FOUNDATION: {
                     FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
                     setTitle(foodItem.getDescription(), toolbar);
                     fillNutrition(foodItem.getFoodNutrients());
+                    detailsLayout.addView(spacer);
                     break;
                 }
                 case SURVEY: {
                     SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
-//                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
-//                    setTitle(foodItem.getDescription(), toolbar);
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
+                    setTitle(foodItem.getDescription(), toolbar);
+                    detailsLayout.addView(spacer);
                     break;
                 }
                 case LEGACY: {
                     SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), null);
                     setTitle(foodItem.getDescription(), toolbar);
+                    fillNutrition(foodItem.getFoodNutrients());
+                    detailsLayout.addView(spacer);
                     break;
                 }
                 default: {
                     AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription());
+                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), foodItem.getBrandOwner());
                     setTitle(foodItem.getDescription(), toolbar);
+                    fillNutrition(foodItem.getFoodNutrients());
+                    detailsLayout.addView(spacer);
                 }
             }
         }, FoodDetailsActivity.this, getWindow().getDecorView());
+
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         FloatingActionButton fab = findViewById(R.id.add_item);
         int control = i.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
@@ -160,34 +188,114 @@ public class FoodDetailsActivity extends AppCompatActivity {
      * @param toolbar Toolbar to change the title of
      */
     private void setTitle(String title, MaterialToolbar toolbar) {
-        toolbar.setTitle(title.substring(0, Math.min(title.length(), 18)).trim() + (title.length() > 18 ? "..." : ""));
-        setSupportActionBar(toolbar);
+        if (title.length() > 20) {
+            toolbar.setTitle(title.substring(0, 20) + "...");
+        } else {
+            toolbar.setTitle(title);
+        }
     }
+
+    /*
+<TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/nutrition"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp" >
+
+                <LinearLayout
+                    android:id="@+id/nutrition_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+ */
 
     /**
      * Fills the nutrition values for the nutrition table
+     *
      * @param nutrients Nutrients of the item
      */
     private void fillNutrition(FoodNutrient[] nutrients) {
-        LinearLayout layout = findViewById(R.id.nutrition_layout);
+        // Title TextView
+        TextView title = new TextView(this);
+        title.setText(getResources().getString(R.string.nutrition));
+        title.setTextSize(30f);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        detailsLayout.addView(title);
+
+        // Body CardView
+        CardView cardView = new CardView(this);
+        cardView.setRadius(dp16);
+        // Linear layout inside CardView with details
+        LinearLayout layout = new LinearLayout(this);
         for (FoodNutrient nutrient : nutrients) {
             NutritionItemView itemView = new NutritionItemView(this);
             itemView.initView(nutrient);
             layout.addView(itemView);
         }
+        cardView.addView(layout);
+        detailsLayout.addView(cardView);
+    }
+
+    /**
+     * Fills the nutrition values for the nutrition table
+     *
+     * @param nutrients Nutrients of the item
+     */
+    private void fillNutrition(AbridgedFoodNutrient[] nutrients) {
+        // Title TextView
+        TextView title = new TextView(this);
+        title.setText(getResources().getString(R.string.nutrition));
+        title.setTextSize(30f);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        detailsLayout.addView(title);
+
+        // Body CardView
+        CardView cardView = new CardView(this);
+        cardView.setRadius(dp16);
+        // Linear layout inside CardView with details
+        LinearLayout layout = new LinearLayout(this);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        for (AbridgedFoodNutrient nutrient : nutrients) {
+            NutritionItemView itemView = new NutritionItemView(this);
+            itemView.initView(nutrient);
+            layout.addView(itemView);
+        }
+        cardView.addView(layout);
+        detailsLayout.addView(cardView);
     }
 
     /**
      * Fills the ingredient values for the ingredients table
+     *
      * @param ingredientsText Ingredients of the item
      */
     private void fillIngredients(String ingredientsText) {
-        LinearLayout layout = findViewById(R.id.ingredients_layout);
-        String[] ingredients = ingredientsText.split(",");
-        for (String ingredient : ingredients) {
-            TextView view = new TextView(this);
-            view.setText(ingredient);
-            layout.addView(view);
-        }
+        // Title TextView
+        TextView title = new TextView(this);
+        title.setText(getResources().getString(R.string.ingredients));
+        title.setTextSize(30f);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        detailsLayout.addView(title);
+
+        // Body CardView
+        CardView cardView = new CardView(this);
+        cardView.setRadius(dp16);
+        TextView ingredients = new TextView(this);
+        ingredients.setTextSize(20f);
+        ingredients.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        ingredients.setText(ingredientsText);
+        cardView.addView(ingredients);
+        detailsLayout.addView(cardView);
     }
 }

@@ -10,7 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cs309android.R;
+import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
 import com.example.cs309android.models.USDA.models.FoodNutrient;
+
+import java.util.Locale;
 
 /**
  * Custom view inflates the nutrition_item layout.
@@ -37,10 +40,23 @@ public class NutritionItemView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
+     *
+     * @param nutrient Food nutrient to display
      */
     public void initView(FoodNutrient nutrient) {
         View view = inflate(getContext(), R.layout.nutrition_item, this);
         ((TextView) view.findViewById(R.id.name)).setText(nutrient.getNutrient().getName());
-        ((TextView) view.findViewById(R.id.value)).setText(String.format("%.02f %s", nutrient.getAmount(), nutrient.getNutrient().getUnitName()));
+        ((TextView) view.findViewById(R.id.value)).setText(String.format(Locale.getDefault(), "%.02f %s", nutrient.getAmount(), nutrient.getNutrient().getUnitName()));
+    }
+
+    /**
+     * Inflates the nutrition_item layout under this view
+     *
+     * @param nutrient Abridged food nutrient to display
+     */
+    public void initView(AbridgedFoodNutrient nutrient) {
+        View view = inflate(getContext(), R.layout.nutrition_item, this);
+        ((TextView) view.findViewById(R.id.name)).setText(nutrient.getName());
+        ((TextView) view.findViewById(R.id.value)).setText(String.format(Locale.getDefault(), "%.02f %s", nutrient.getAmount(), nutrient.getUnitName()));
     }
 }
