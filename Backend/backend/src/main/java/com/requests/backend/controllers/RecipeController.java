@@ -83,12 +83,9 @@ public class RecipeController {
 
         ResultResponse res = new ResultResponse();
 
-        try {
-            recipeRepository.queryCreateRecipe(username, recipeName, instructions);
-            res.setResult(RESULT_RECIPE_CREATED);
-        } catch (Exception e) {
-            res.setResult(RESULT_ERROR_RID_TAKEN);
-        }
+        // TODO Add error handling to query result.
+        recipeRepository.queryCreateRecipe(username, recipeName, instructions);
+        res.setResult(RESULT_RECIPE_CREATED);
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
