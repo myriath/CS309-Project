@@ -73,7 +73,8 @@ public class RecipeController {
 
 
     @PostMapping(path="/add")
-    public @ResponseBody String addNewRecipe(@RequestBody String json) {
+    @ResponseBody
+    public String addNewRecipe(@RequestBody String json) {
 
         RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
