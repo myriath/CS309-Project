@@ -238,12 +238,12 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
+        cardView.addView(layout);
         for (FoodNutrient nutrient : nutrients) {
             NutritionItemView itemView = new NutritionItemView(this);
             itemView.initView(nutrient);
             layout.addView(itemView);
         }
-        cardView.addView(layout);
         detailsLayout.addView(cardView);
     }
 
@@ -265,13 +265,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
+        cardView.addView(layout);
         layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         for (AbridgedFoodNutrient nutrient : nutrients) {
             NutritionItemView itemView = new NutritionItemView(this);
             itemView.initView(nutrient);
             layout.addView(itemView);
         }
-        cardView.addView(layout);
         detailsLayout.addView(cardView);
     }
 
