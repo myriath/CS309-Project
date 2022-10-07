@@ -14,7 +14,7 @@ import static com.requests.backend.ResultCodes.RESULT_ERROR;
 import static com.requests.backend.ResultCodes.RESULT_OK;
 
 
-@RestController // This means that this class is a Controller
+@RestController
 @RequestMapping(path="/recipe")
 public class RecipeController {
 

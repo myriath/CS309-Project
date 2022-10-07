@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@EnableWebSecurity
+@ComponentScan(basePackages = "com.requests.backend.controllers")
 public class BackendApplication {
 
 	public static void main(String[] args) {
