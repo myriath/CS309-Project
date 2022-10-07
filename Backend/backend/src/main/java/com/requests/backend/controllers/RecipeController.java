@@ -84,9 +84,12 @@ public class RecipeController {
 
         ResultResponse res = new ResultResponse();
 
-        // TODO Add in logic to handle duplicate recipe.
-        recipeRepository.queryCreateRecipe(username, recipeName, instructions);
-        res.setResult(RESULT_RECIPE_CREATED);
+        try {
+            recipeRepository.queryCreateRecipe(username, recipeName, instructions);
+            res.setResult(RESULT_RECIPE_CREATED);
+        } catch (Exception e) {
+            res.setResult(RESULT_ERROR_RID_TAKEN);
+        }
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
