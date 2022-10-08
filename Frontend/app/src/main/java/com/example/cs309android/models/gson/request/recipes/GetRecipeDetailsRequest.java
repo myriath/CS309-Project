@@ -7,16 +7,16 @@ import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Gets info from specific recipe
+ * Gets info from specific recipe from the recipe id
  *
  * @author Travis Massner
  */
 public class GetRecipeDetailsRequest extends GetRequest {
     /**
-     * Index of recipe to get info for
+     * Recipe id to get info for
      */
     @Expose
-    private final int index;
+    private final int rid;
     /**
      * Authentication model of the user
      */
@@ -26,21 +26,21 @@ public class GetRecipeDetailsRequest extends GetRequest {
     /**
      * Public constructor
      *
-     * @param index Index of recipe to get
+     * @param rid Recipe id to get info for
      * @param auth Authentication model for the user
      */
-    public GetRecipeDetailsRequest(int index, AuthModel auth) {
-        this.index = index;
+    public GetRecipeDetailsRequest(int rid, AuthModel auth) {
+        this.rid = rid;
         this.auth = auth;
     }
 
     /**
-     * Getter for the recipe index
+     * Getter for the recipe id
      *
      * @return item to add
      */
     public int getRecipe() {
-        return index;
+        return rid;
     }
 
     /**
@@ -53,14 +53,12 @@ public class GetRecipeDetailsRequest extends GetRequest {
     }
 
     /**
-     * Method to
+     * Getter for the URL with rid
      *
-     * @return
+     * @return URL with rid
      */
     @Override
     public String getURL() {
-        return new GetRequestURL(Constants.GET_RECIPES_URL)
-
-                + "1";
+        return new GetRequestURL(Constants.GET_RECIPES_URL) + String.valueOf(rid);
     }
 }

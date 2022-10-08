@@ -9,41 +9,46 @@ import java.util.ArrayList;
 
 /**
  * Simple recipe item used for displaying and moving data in the app
+ *
+ * @author Travis Massner
  */
 public class SimpleRecipeItem implements Parcelable {
     /**
      * ID of recipe stored in database
      */
     @Expose
-    private final int recipeID;
+    private final int rid;
     /**
      * Name of the recipe
      */
     @Expose
-    private final String recipeName;
+    private final String rname;
     /**
      * Name of the recipe
      */
     @Expose
-    private final String steps;
-
-//UNCOMMENT WHEN YOU WANT TO USE ARRAYLIST FOR STEPS INSTEAD OF STRING
-//    /**
-//     * Steps of the recipe
-//     */
-//    @Expose
-//    private final ArrayList<String> steps;
+    private String steps;
 
     /**
      * Constructor for gson
-     *
-     * @param recipeName       item id
-     * @param steps steps of recipe
+     * @param rid    Recipe id
+     * @param rname  Recipe Name
+     * @param steps  Steps of recipe
      */
-    public SimpleRecipeItem(int recipeID, String recipeName, String steps) {
-        this.recipeID = recipeID;
-        this.recipeName = recipeName;
+    public SimpleRecipeItem(int rid, String rname, String steps) {
+        this.rid = rid;
+        this.rname = rname;
         this.steps = steps;
+    }
+
+    /**
+     * Constructor for gson
+     * @param rid     Recipe id
+     * @param rname    Recipe Name
+     */
+    public SimpleRecipeItem(int rid, String rname) {
+        this.rid = rid;
+        this.rname = rname;
     }
 
 
@@ -53,10 +58,9 @@ public class SimpleRecipeItem implements Parcelable {
      * @param in Parcel to unpack
      */
     protected SimpleRecipeItem(Parcel in) {
-        recipeID = in.readInt();
-        recipeName = in.readString();
+        rid = in.readInt();
+        rname = in.readString();
         steps = in.readString();
-//        steps = in.createStringArrayList();
     }
 
     /**
@@ -80,7 +84,7 @@ public class SimpleRecipeItem implements Parcelable {
      * @return recipe ID
      */
     public int getRecipeID() {
-        return recipeID;
+        return rid;
     }
     /**
      * Getter for the recipe name
@@ -88,7 +92,7 @@ public class SimpleRecipeItem implements Parcelable {
      * @return recipe name
      */
     public String getRecipeName() {
-        return recipeName;
+        return rname;
     }
 
     /**
@@ -119,9 +123,8 @@ public class SimpleRecipeItem implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(recipeID);
-        parcel.writeString(recipeName);
+        parcel.writeInt(rid);
+        parcel.writeString(rname);
         parcel.writeString(steps);
-//        parcel.writeArray(steps.toArray(new String[steps.size()]));
     }
 }
