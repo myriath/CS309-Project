@@ -114,10 +114,11 @@ deploy-spring-dev:
     - springboot_tag
   stage: maven-deploy
   script:
+    - sudo systemctl stop cs309.service
     - cp /home/gitlab-runner/build/temp/* /home/gitlab-runner/build/
     - rm /home/gitlab-runner/build/temp/*
     - ln -sf /home/gitlab-runner/build/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/latest.jar
-    - sudo /home/gitlab-runner/deploy.sh
+    - sudo systemctl start cs309.service
 
 deploy-spring-main:
   rules:
@@ -126,10 +127,11 @@ deploy-spring-main:
     - springboot_tag
   stage: maven-deploy
   script:
+    - sudo systemctl stop cs309prod.service
     - cp /home/gitlab-runner/release/temp/* /home/gitlab-runner/release/
     - rm /home/gitlab-runner/release/temp/*
     - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
-    - sudo /home/gitlab-runner/deployprod.sh
+    - sudo systemctl start cs309prod.service
 
 deploy-spring-prod:
   rules:
@@ -140,7 +142,8 @@ deploy-spring-prod:
     - deploy_tag
   stage: maven-deploy
   script:
+    - sudo systemctl stop cs309.service
     - cp /home/gitlab-runner/temp/* /home/gitlab-runner/
     - rm /home/gitlab-runner/temp/*
     - ln -sf /home/gitlab-runner/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/latest.jar
-    - sudo /home/gitlab-runner/deploy.sh
+    - sudo systemctl start cs309.service
