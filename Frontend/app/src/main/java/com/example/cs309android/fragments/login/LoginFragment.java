@@ -20,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
@@ -124,7 +125,7 @@ public class LoginFragment extends BaseFragment {
                     editor.putString(MainActivity.PREF_HASH, hash);
                     editor.apply();
 
-                    MainActivity.AUTH_MODEL = new AuthModel(unm, hash);
+                    ((GlobalClass) requireActivity().getApplicationContext()).setAuthModel(new AuthModel(unm, hash));
 
                     // Close window
                     callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
