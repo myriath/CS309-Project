@@ -1,9 +1,9 @@
 stages:
   - maven-build
-  - maven-test
-  - maven-deploy
   - android-build
+  - maven-test
   - android-test
+  - maven-deploy
   - android-deploy
 
 variables:
