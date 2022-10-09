@@ -30,6 +30,7 @@ import com.example.cs309android.views.NutritionItemView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -87,7 +88,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
         setTitle(item.getDescription(), toolbar);
 
         Space spacer = new Space(this);
-        spacer.setMinimumHeight((int) dp16 * 10);
 
         new FoodsCriteria(item.getFdcId(), Format.FULL, null).unspinOnComplete(response -> {
             DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
@@ -95,38 +95,33 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 // TODO: Write all of these, currently only need Branded/Foundation because of search
                 case BRANDED: {
                     BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), foodItem.getBrandOwner());
-                    setTitle(foodItem.getDescription(), toolbar);
+                    setSubtitle(foodItem.getBrandOwner(), toolbar);
                     fillIngredients(foodItem.getIngredients());
-                    fillNutrition(foodItem.getFoodNutrients());
+                    fillNutrition(foodItem.getFoodNutrients(), (float) foodItem.getServingSize(), foodItem.getServingSizeUnit());
                     detailsLayout.addView(spacer);
                     break;
                 }
                 case FOUNDATION: {
                     FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
-                    setTitle(foodItem.getDescription(), toolbar);
-                    fillNutrition(foodItem.getFoodNutrients());
+                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
                     detailsLayout.addView(spacer);
                     break;
                 }
                 case SURVEY: {
                     SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
-                    setTitle(foodItem.getDescription(), toolbar);
                     detailsLayout.addView(spacer);
                     break;
                 }
                 case LEGACY: {
                     SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
-                    setTitle(foodItem.getDescription(), toolbar);
-                    fillNutrition(foodItem.getFoodNutrients());
+                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
                     detailsLayout.addView(spacer);
                     break;
                 }
                 default: {
                     AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
-                    item = new SimpleFoodItem(foodItem.getFdcId(), foodItem.getDescription(), foodItem.getBrandOwner());
-                    setTitle(foodItem.getDescription(), toolbar);
-                    fillNutrition(foodItem.getFoodNutrients());
+                    setSubtitle(foodItem.getBrandOwner(), toolbar);
+                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
                     detailsLayout.addView(spacer);
                 }
             }
@@ -138,7 +133,12 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.add_item);
         int control = intent.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
-        if (control == CONTROL_ADD) fab.setVisibility(View.VISIBLE);
+        if (control == CONTROL_ADD) {
+            fab.setVisibility(View.VISIBLE);
+            spacer.setMinimumHeight((int) dp16 * 10);
+        } else {
+            spacer.setMinimumHeight((int) dp16 * 3);
+        }
 
         fab.setOnClickListener(view -> {
             Intent intent1 = new Intent();
@@ -192,56 +192,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         }
     }
 
-    /*
-<TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:text="@string/nutrition"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp" >
-
-                <LinearLayout
-                    android:id="@+id/nutrition_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
- */
-
-    /**
-     * Fills the nutrition values for the nutrition table
-     *
-     * @param nutrients Nutrients of the item
-     */
-    private void fillNutrition(FoodNutrient[] nutrients) {
-        // Title TextView
-        TextView title = new TextView(this);
-        title.setText(getResources().getString(R.string.nutrition));
-        title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
-        detailsLayout.addView(title);
-
-        // Body CardView
-        CardView cardView = new CardView(this);
-        cardView.setRadius(dp16);
-        // Linear layout inside CardView with details
-        LinearLayout layout = new LinearLayout(this);
-        cardView.addView(layout);
-        for (FoodNutrient nutrient : nutrients) {
-            NutritionItemView itemView = new NutritionItemView(this);
-            itemView.initView(nutrient);
-            layout.addView(itemView);
+    private void setSubtitle(String brand, MaterialToolbar toolbar) {
+        if (brand != null && !brand.equals("")) {
+            toolbar.setSubtitle(brand);
         }
-        detailsLayout.addView(cardView);
     }
 
     /**
@@ -249,7 +203,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
      *
      * @param nutrients Nutrients of the item
      */
-    private void fillNutrition(AbridgedFoodNutrient[] nutrients) {
+    private void fillNutrition(Object[] nutrients, float servingSize, String servingUnit) {
+        if (nutrients.getClass() != FoodNutrient[].class && nutrients.getClass() != AbridgedFoodNutrient[].class)
+            return;
         // Title TextView
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
@@ -257,19 +213,77 @@ public class FoodDetailsActivity extends AppCompatActivity {
         title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
+        if (servingUnit != null) {
+            TextView subtitle = new TextView(this);
+            subtitle.setText(String.format(Locale.getDefault(), "per %.02f %s serving", servingSize, servingUnit));
+            subtitle.setTextSize(24f);
+            subtitle.setEnabled(false);
+            subtitle.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+            detailsLayout.addView(subtitle);
+        }
+
         // Body CardView
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        cardView.addView(layout);
         layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
-        for (AbridgedFoodNutrient nutrient : nutrients) {
-            NutritionItemView itemView = new NutritionItemView(this);
-            itemView.initView(nutrient);
-            layout.addView(itemView);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        cardView.addView(layout);
+
+        if (nutrients.getClass() == FoodNutrient[].class) {
+            fillNutritionTable((FoodNutrient[]) nutrients, layout);
+        } else {
+            fillNutritionTable((AbridgedFoodNutrient[]) nutrients, layout);
         }
+
         detailsLayout.addView(cardView);
+    }
+
+    /**
+     * Handles the nutrition table for a FoodNutrient[]
+     *
+     * @param nutrients FoodNutrient[] of nutrients
+     * @param table     Linear Layout to be used for the table
+     */
+    private void fillNutritionTable(FoodNutrient[] nutrients, LinearLayout table) {
+        for (FoodNutrient nutrient : nutrients) {
+            NutritionItemView view = generateNutritionRow(nutrient.getNutrient().getName(), nutrient.getAmount(), nutrient.getNutrient().getUnitName());
+            if (view != null) {
+                table.addView(view);
+            }
+        }
+    }
+
+    /**
+     * Handles the nutrition table for an AbridgedFoodNutrient[]
+     *
+     * @param nutrients AbridgedFoodNutrient[] of nutrients
+     * @param table     Linear Layout to be used for the table
+     */
+    private void fillNutritionTable(AbridgedFoodNutrient[] nutrients, LinearLayout table) {
+        for (AbridgedFoodNutrient nutrient : nutrients) {
+            NutritionItemView view = generateNutritionRow(nutrient.getName(), nutrient.getAmount(), nutrient.getUnitName());
+            if (view != null) {
+                table.addView(view);
+            }
+        }
+    }
+
+    /**
+     * Generates a NutritionItemView to be used for the nutrition table
+     *
+     * @param name   Name of the nutrient
+     * @param amount Amount of the nutrient in units
+     * @param unit   Unit for the nutrient
+     * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
+     */
+    private NutritionItemView generateNutritionRow(String name, float amount, String unit) {
+        System.out.println(name);
+        if (amount == 0) return null;
+        NutritionItemView itemView = new NutritionItemView(this);
+        itemView.initView(name, String.format(Locale.getDefault(), "%.02f %s", amount, unit));
+        return itemView;
     }
 
     /**
