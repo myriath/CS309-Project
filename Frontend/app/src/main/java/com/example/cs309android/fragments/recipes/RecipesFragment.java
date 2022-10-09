@@ -116,29 +116,29 @@ public class RecipesFragment extends BaseFragment {
             },getContext());
         });
 
-//        //Add button adds recipe to db
-//        view.findViewById(R.id.add_recipe).setOnClickListener(view1 -> {
-//            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
-//
-//            new AddRecipe(MainActivity.AUTH_MODEL.getUsername(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
-//                TextView recipes = view.findViewById(R.id.recipeName);
-//                if(recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
-//                    recipes.setText("Recipe Created");
-//                }
-//                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
-//                    recipes.setText("That RID is taken");
-//                }
-//                else {
-//                    recipes.setText("Something went wrong");
-//                }
-//            },getContext());
-//        });
+        //Add button adds recipe to db
+        view.findViewById(R.id.add_recipe).setOnClickListener(view1 -> {
+            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
+
+            new AddRecipe(MainActivity.AUTH_MODEL.getUsername(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
+                try {
+                    System.out.print(response.toString(4));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+                TextView recipes = view.findViewById(R.id.recipeName);
+                if(recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
+                    recipes.setText("Recipe Created");
+                }
+                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
+                    recipes.setText("That RID is taken");
+                }
+                else {
+                    recipes.setText("Something went wrong");
+                }
+            },getContext());
+        });
         return view;
     }
 }
