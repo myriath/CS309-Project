@@ -1,4 +1,4 @@
-package com.requests.backend.models;
+package com.requests.backend.models.requests;
 
 public class SaltRequest {
     private String username;

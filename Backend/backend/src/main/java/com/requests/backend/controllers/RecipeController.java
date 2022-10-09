@@ -1,20 +1,29 @@
-package com.requests.backend;
+package com.requests.backend.controllers;
 
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
-import com.requests.backend.ResultCodes;
+import com.requests.backend.models.responses.RecipeListResponse;
+import com.requests.backend.models.responses.RecipeResponse;
+import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
-import java.util.List;
 
 import static com.requests.backend.ResultCodes.RESULT_ERROR;
 import static com.requests.backend.ResultCodes.RESULT_OK;
 
 
-@RestController // This means that this class is a Controller
+@RestController
 @RequestMapping(path="/recipe")
 public class RecipeController {
+
+    public static final int RESULT_ERROR_RID_TAKEN = -23;
+
+    public static final int RESULT_OK = 0;
+
+    public static final int RESULT_RECIPE_CREATED = 22;
+
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -58,6 +67,32 @@ public class RecipeController {
             res.setRecipe(recipe[0]);
             res.setResult(RESULT_OK);
         }
+
+        return gson.toJson(res);
+    }
+
+
+    @PostMapping(path="/add")
+    @ResponseBody
+    public String addNewRecipe(@RequestBody String json) {
+
+        RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
+
+        String username = req.getUsername();
+        String recipeName = req.getRecipeName();
+        String instructions = req.getInstructions();
+
+        ResultResponse res = new ResultResponse();
+
+        try {
+            recipeRepository.queryCreateRecipe(username, recipeName, instructions);
+            res.setResult(RESULT_RECIPE_CREATED);
+        } catch (Exception e) {
+            res.setResult(RESULT_ERROR_RID_TAKEN);
+        }
+
+        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
     }

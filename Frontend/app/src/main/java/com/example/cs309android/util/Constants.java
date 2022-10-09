@@ -44,6 +44,14 @@ public class Constants {
      * Indicates the user has been successfully created
      */
     public static final int RESULT_USER_CREATED = 2;
+    /**
+     * Indicates the user has been successfully created
+     */
+    public static final int RESULT_RECIPE_CREATED = 22;
+    /**
+     * Indicates the user has been successfully created
+     */
+    public static final int RESULT_ERROR_RID_TAKEN = -23;
 
 
     // USERS
@@ -91,11 +99,7 @@ public class Constants {
     /**
      * Base recipes url for all recipes based requests
      */
-    public static final String RECIPES_URL = BASE_API_URL + "recipes/";
-    /**
-     * Get url for getting recipes
-     */
-    // public static final String GET_RECIPES_URL = RECIPES_URL + "get";
+    public static final String RECIPES_URL = BASE_API_URL + "recipe/";
     /**
      * Add url for adding an item to recipes
      */
@@ -105,9 +109,9 @@ public class Constants {
      */
     public static final String REMOVE_RECIPES_URL = RECIPES_URL + "remove";
     /**
-     * Url for gett an item from recipes
+     * Url for getting an item from recipes
      */
-    public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByrid/";
+    public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
 
 
     // TAGS

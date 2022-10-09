@@ -1,5 +1,6 @@
-package com.requests.backend.models;
+package com.requests.backend.repositories;
 
+import com.requests.backend.models.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
+    @Modifying
+    @Query(
+            value =
+                    "INSERT INTO user_recipes (username, rname, instructions) VALUES (:username, :rname, :instructions)",
+            nativeQuery = true)
+    @Transactional
+    void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname, @Param("instructions") String instructions);
+
 }
+

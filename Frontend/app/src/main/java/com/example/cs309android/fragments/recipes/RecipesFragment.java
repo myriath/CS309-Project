@@ -14,11 +14,17 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.gson.request.recipes.AddRecipe;
+import com.example.cs309android.models.gson.request.recipes.AddRecipeRequest;
 import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
 import com.example.cs309android.models.gson.response.shopping.GetListResponse;
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 
 import org.json.JSONException;
@@ -74,28 +80,65 @@ public class RecipesFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipes, container, false);
-        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.linear_layout), (v, windowInsets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.recipe_frame_layout), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
             return WindowInsetsCompat.CONSUMED;
         });
-        new GetRecipeDetailsRequest(1, MainActivity.AUTH_MODEL).request(response -> {
-            try {
-                System.out.print(response.toString(4));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
-            TextView recipes = view.findViewById(R.id.recipeName);
-            String stuff = recipeResponse.getRecipe().getRecipeName();
-            recipes.setText(stuff);
 
-            //stuff
-        },getContext());
-//        TextView recipes = (TextView) view.findViewById(R.id.recipeName);
-//        String stuff = new String("Stuff");
-//        recipes.setText(stuff);
-        // Inflate the layout for this fragment
+        //Search button triggers search by RID
+        view.findViewById(R.id.recipe_search_button).setOnClickListener(view1 -> {
+            TextView ridInput = view.findViewById(R.id.recipeRidInput);
+            TextView recipes = view.findViewById(R.id.recipeName);
+
+            if(!(ridInput.getText().toString().matches("[0-9]+"))) {
+                recipes.setText("Invalid Search");
+                return;
+            }
+            int ridValue = Integer.parseInt(ridInput.getText().toString());
+            new GetRecipeDetailsRequest(ridValue, MainActivity.AUTH_MODEL).request(response -> {
+                try {
+                    System.out.print(response.toString(4));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
+
+
+                if(recipeResponse.getResult() == Constants.RESULT_OK) {
+                    String stuff = recipeResponse.getRecipe().getRecipeName() + recipeResponse.getRecipe().getSteps();
+                    recipes.setText(stuff);
+                }
+                else {
+                    recipes.setText("Invalid RID");
+                }
+            },getContext());
+        });
+
+//        //Add button adds recipe to db
+//        view.findViewById(R.id.add_recipe).setOnClickListener(view1 -> {
+//            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
+//
+//            new AddRecipe(MainActivity.AUTH_MODEL.getUsername(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
+//                try {
+//                    System.out.print(response.toString(4));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+//                TextView recipes = view.findViewById(R.id.recipeName);
+//                if(recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
+//                    recipes.setText("Recipe Created");
+//                }
+//                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
+//                    recipes.setText("That RID is taken");
+//                }
+//                else {
+//                    recipes.setText("Something went wrong");
+//                }
+//            },getContext());
+//        });
         return view;
     }
 }
