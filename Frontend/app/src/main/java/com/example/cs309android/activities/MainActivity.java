@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Name of the app for all mentions in the app
-     * TODO: Name the app
      */
     public static final String APP_NAME = "Föd";
 

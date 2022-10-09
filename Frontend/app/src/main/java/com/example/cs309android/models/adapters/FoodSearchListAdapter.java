@@ -52,19 +52,28 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        SimpleFoodItem item = items.get(position);
         if (convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.food_search_item, null);
+            convertView = View.inflate(parent.getContext(), R.layout.food_search_branded, null);
         }
 
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, items.get(position));
+            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, item);
             ((FoodSearchActivity) parent.getContext()).callback(FoodSearchActivity.CALLBACK_FOOD_DETAIL, bundle);
         });
 
         TextView name = convertView.findViewById(R.id.name);
-        name.setText(items.get(position).getDescription());
+        name.setText(item.getDescription());
+
+        TextView brand = convertView.findViewById(R.id.brand);
+        if (item.getBrand() != null && !item.getBrand().equals("")) {
+            brand.setText(item.getBrand());
+        } else {
+            brand.setText("");
+            brand.setWidth(0);
+        }
 
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
