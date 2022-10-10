@@ -9,6 +9,7 @@ import com.requests.backend.models.requests.StrikeoutRequest;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
+import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ShoppingListController {
     @Autowired
     private ShoppingListRepository shoppingRepository;
     @Autowired
-    private UserRepository userRepository;
+    private TokenRepository tokenRepository;
 
     /**
      * Gets the users shopping list if the hash provided is valid.
@@ -37,7 +38,7 @@ public class ShoppingListController {
     @GetMapping(path="/get/{token}")
     public @ResponseBody String getShoppingList(@PathVariable String token) {
 
-        // TODO: Look up username from token table
+        // TODO: Look up token from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
@@ -71,7 +72,7 @@ public class ShoppingListController {
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        // TODO: Look up username from token table
+        // TODO: Look up token from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         String itemName = foodItem.getDescription();
