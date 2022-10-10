@@ -7,7 +7,7 @@ public class ShoppingListAddRequest {
 
     private SimpleFoodItem item;
 
-    private AuthModel auth;
+    private String token;
 
     public SimpleFoodItem getFoodItem() {
         return item;
@@ -17,11 +17,11 @@ public class ShoppingListAddRequest {
         this.item = foodItem;
     }
 
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuth(AuthModel auth) {
-        this.auth = auth;
+    public void setAuth(String token) {
+        this.token = token;
     }
 }

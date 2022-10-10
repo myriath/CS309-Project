@@ -7,7 +7,6 @@ import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.request.users.RegisterRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Toaster;
@@ -66,7 +64,6 @@ public class RegisterFragment extends BaseFragment {
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
         passwordField = view.findViewById(R.id.passwordField);
-        passwordField2 = view.findViewById(R.id.passwordField2);
 
         registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
@@ -75,11 +72,9 @@ public class RegisterFragment extends BaseFragment {
             emailField.setError(null);
             usernameField.setError(null);
             passwordField.setError(null);
-            passwordField2.setError(null);
             String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
             String email = Objects.requireNonNull(emailField.getEditText()).getText().toString();
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
-            String pwd2 = Objects.requireNonNull(passwordField2.getEditText()).getText().toString();
 
             // Basic checks for empty/non-matching fields.
             // More checks should be ran serverside for duplicate accounts.
@@ -103,8 +98,9 @@ public class RegisterFragment extends BaseFragment {
             Hash pwdHash = Hasher.generateNewHash(pwd.toCharArray());
             String hash = Hasher.getEncoded(pwdHash.getHash());
             String salt = Hasher.getEncoded(pwdHash.getSalt());
+            String token = Hasher.genToken();
 
-            new RegisterRequest(email, unm, hash, salt).unspinOnComplete(response -> {
+            new RegisterRequest(email, unm, hash, salt, token).unspinOnComplete(response -> {
                 // Check for errors.
                 int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
                 if (result == RESULT_ERROR_USERNAME_TAKEN) {
@@ -121,8 +117,7 @@ public class RegisterFragment extends BaseFragment {
                 // If there was no error, store valid creds and close the page.
                 SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("username", unm);
-                editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
+                editor.putString(MainActivity.PREF_TOKEN, token);
                 editor.apply();
 
                 ((GlobalClass) requireActivity().getApplicationContext()).setAuthModel(new AuthModel(unm, hash));

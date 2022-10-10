@@ -2,9 +2,7 @@ package com.example.cs309android.models.gson.request.shopping;
 
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.gson.GetRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.util.Constants;
-import com.google.gson.annotations.Expose;
 
 /**
  * Request for getting a user's shopping list
@@ -13,17 +11,17 @@ import com.google.gson.annotations.Expose;
  */
 public class GetListRequest extends GetRequest {
     /**
-     * Authentication object for the user
+     * Authentication token
      */
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
-     * @param auth Authentication object for the user (should almost always be MainActivity.AUTH_MODEL)
+     * @param token Authentication token
      */
-    public GetListRequest(AuthModel auth) {
-        this.auth = auth;
+    public GetListRequest(String token) {
+        this.token = token;
     }
 
     /**
@@ -33,8 +31,7 @@ public class GetListRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new GetRequestURL(Constants.GET_SHOPPING_URL + "/" + auth.getUsername())
-                .addParam("hash", auth.getHash())
+        return new GetRequestURL(Constants.GET_SHOPPING_URL + "/" + token)
                 .toString();
     }
 }

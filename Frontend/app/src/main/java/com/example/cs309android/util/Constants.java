@@ -45,6 +45,10 @@ public class Constants {
      */
     public static final int RESULT_USER_CREATED = 2;
     /**
+     * Login is valid, but needs to regen token
+     */
+    public static final int RESULT_REGEN_TOKEN = 3;
+    /**
      * Indicates the user has been successfully created
      */
     public static final int RESULT_RECIPE_CREATED = 22;
@@ -71,6 +75,10 @@ public class Constants {
      * URL to check for login. (Params: username, hash)
      */
     public static final String LOGIN_URL = AUTH_URL + "validateLogin";
+    /**
+     * URL to regen an expired token
+     */
+    public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken";
 
 
     // FOOD

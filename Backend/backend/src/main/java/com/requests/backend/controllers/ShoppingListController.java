@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-import static com.requests.backend.ResultCodes.*;
+import static com.util.Constants.*;
 
 @RestController
 @RequestMapping(path="/shopping")
@@ -36,7 +36,10 @@ public class ShoppingListController {
      * @return
      */
     @GetMapping(path="/get/{username}")
-    public @ResponseBody String getShoppingList(@PathVariable String username, @RequestParam String hash) {
+    public @ResponseBody String getShoppingList(@PathVariable String token) {
+
+        // TODO: Look up username from token table
+        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
@@ -49,19 +52,11 @@ public class ShoppingListController {
         }
         // If the credentials aren't valid, return hash mismatch error code.
         else {
-
             ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
 
-            User user = userQueryRes.iterator().next();
-
-            if (user.getPHash().compareTo(hash) != 0) {
-                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            }
-            // Otherwise, the user credentials are valid. Return the user's shopping list.
-            else {
-                res.setResult(RESULT_OK);
-                res.setShoppingList(listItems);
-            }
+            // User already passed authentication, just return shopping list
+            res.setResult(RESULT_OK);
+            res.setShoppingList(listItems);
         }
 
         return gson.toJson(res);
@@ -76,9 +71,11 @@ public class ShoppingListController {
         ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
-        AuthModel auth = req.getAuth();
+        String token = req.getToken();
 
-        String username = auth.getUsername();
+        // TODO: Look up username from token table
+        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
+
         String itemName = foodItem.getDescription();
         int fdcId = foodItem.getFdcId();
         boolean stricken = false;
@@ -101,10 +98,11 @@ public class ShoppingListController {
 
         StrikeoutRequest req = new Gson().fromJson(json, StrikeoutRequest.class);
 
-        AuthModel auth = req.getAuth();
+        String token = req.getToken();
+        // TODO: Look up username from token table
+        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         String itemName = req.getItemName();
-        String username = auth.getUsername();
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
@@ -114,15 +112,9 @@ public class ShoppingListController {
             res.setResult(RESULT_ERROR);
         }
         else {
-            User user = userQueryRes.iterator().next();
-
-            if (user.getPHash().compareTo(auth.getHash()) != 0) {
-                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            }
-            else {
-                shoppingRepository.queryShoppingChangeStricken(username, itemName);
-                res.setResult(RESULT_OK);
-            }
+            // User already passed authentication from token earlier
+            shoppingRepository.queryShoppingChangeStricken(username, itemName);
+            res.setResult(RESULT_OK);
         }
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -137,10 +129,11 @@ public class ShoppingListController {
 
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
 
-        AuthModel auth = req.getAuth();
+        String token = req.getToken();
+        // TODO: Look up username from token table
+        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         String itemName = req.getItemName();
-        String username = auth.getUsername();
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
@@ -150,15 +143,9 @@ public class ShoppingListController {
             res.setResult(RESULT_ERROR);
         }
         else {
-            User user = userQueryRes.iterator().next();
-
-            if (user.getPHash().compareTo(auth.getHash()) != 0) {
-                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            }
-            else {
-                shoppingRepository.queryDeleteListItem(username, itemName);
-                res.setResult(RESULT_OK);
-            }
+            // User already passed authentication from token lookup
+            shoppingRepository.queryDeleteListItem(username, itemName);
+            res.setResult(RESULT_OK);
         }
 
         return gson.toJson(res);

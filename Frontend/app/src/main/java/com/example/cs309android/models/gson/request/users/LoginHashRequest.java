@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class LoginRequest extends PostRequest {
+public class LoginHashRequest extends PostRequest {
     /**
      * Username to attempt a login
      */
@@ -27,7 +27,7 @@ public class LoginRequest extends PostRequest {
      * @param username Username for login
      * @param hash     Hash for login
      */
-    public LoginRequest(String username, String hash) {
+    public LoginHashRequest(String username, String hash) {
         super(Constants.LOGIN_URL);
         this.username = username;
         this.pHash = hash;

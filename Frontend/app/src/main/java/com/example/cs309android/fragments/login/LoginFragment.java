@@ -3,6 +3,7 @@ package com.example.cs309android.fragments.login;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Util.hideKeyboard;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
@@ -24,10 +25,11 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.models.AuthModel;
-import com.example.cs309android.models.gson.request.users.LoginRequest;
+import com.example.cs309android.models.gson.request.users.LoginHashRequest;
+import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
 import com.example.cs309android.models.gson.request.users.SaltRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.users.LoginHashResponse;
 import com.example.cs309android.models.gson.response.users.SaltResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -106,26 +108,46 @@ public class LoginFragment extends BaseFragment {
                 byte[] salt = Base64.decode(saltResponse.getSalt(), Base64.DEFAULT);
                 String hash = Hasher.getEncoded(Hasher.hash(pwd.toCharArray(), salt));
 
-                new LoginRequest(unm, hash).unspinOnComplete(response1 -> {
+                new LoginHashRequest(unm, hash).unspinOnComplete(response1 -> {
                     // Check for errors
-                    int result1 = ((GenericResponse) Util.objFromJson(response1, GenericResponse.class)).getResult();
-                    if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
+//                    int result1 = ((GenericResponse) Util.objFromJson(response1, GenericResponse.class)).getResult();
+                    LoginHashResponse loginResponse = Util.objFromJson(response1, GenericResponse.class);
+                    if (loginResponse.getResult() == RESULT_ERROR_USER_HASH_MISMATCH) {
                         passwordField.setError("Username / Password mismatch");
                         return;
-                    } else if (result1 != RESULT_LOGGED_IN) {
+                    } else if (loginResponse.getResult() != RESULT_LOGGED_IN && loginResponse.getResult() != RESULT_REGEN_TOKEN) {
                         Toaster.toastShort("Unexpected error", getActivity());
                         return;
                     }
 
-                    // No errors, so store credentials for future use
-                    // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                    SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString(MainActivity.PREF_USERNAME, unm);
-                    editor.putString(MainActivity.PREF_HASH, hash);
-                    editor.apply();
+                    if (loginResponse.getResult() == RESULT_LOGGED_IN) {
+                        // No errors, so store credentials for future use
+                        // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
+                        SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString(MainActivity.PREF_TOKEN, loginResponse.getToken());
+                        editor.apply();
 
-                    ((GlobalClass) requireActivity().getApplicationContext()).setAuthModel(new AuthModel(unm, hash));
+                        MainActivity.TOKEN = loginResponse.getToken();
+                    } else if (loginResponse.getResult() == RESULT_REGEN_TOKEN) {
+                        String token = Hasher.genToken();
+
+                        new RegenTokenRequest(token, loginResponse.getToken()).request(response2 -> {
+                            GenericResponse genericResponse = Util.objFromJson(response2, GenericResponse.class);
+                            if (genericResponse.getResult() == RESULT_OK) {
+                                // No errors, so store credentials for future use
+                                // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
+                                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString(MainActivity.PREF_TOKEN, token);
+                                editor.apply();
+
+                                MainActivity.TOKEN = token;
+                            } else {
+                                Toaster.toastShort("Error", getContext());
+                            }
+                        }, getContext());
+                    }
 
                     // Close window
                     callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);

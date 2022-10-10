@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
 import com.example.cs309android.models.gson.PostRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
@@ -18,21 +17,21 @@ public class AddRequest extends PostRequest {
     @Expose
     private final SimpleFoodItem item;
     /**
-     * Authentication model of the user
+     * Authentication token
      */
     @Expose
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
      * @param item Item to add to the list
-     * @param auth Authentication model for the user
+     * @param token Authentication token
      */
-    public AddRequest(SimpleFoodItem item, AuthModel auth) {
+    public AddRequest(SimpleFoodItem item, String token) {
         super(Constants.ADD_SHOPPING_URL);
         this.item = item;
-        this.auth = auth;
+        this.token = token;
     }
 
     /**
@@ -45,11 +44,11 @@ public class AddRequest extends PostRequest {
     }
 
     /**
-     * Getter for the authentication model
+     * Getter for the token
      *
-     * @return authentication model
+     * @return authentication token
      */
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 }
