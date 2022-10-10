@@ -84,7 +84,8 @@ public class CustomFoodActivity extends AppCompatActivity {
                             Toaster.toastShort("Error!", this);
                         }
                     }, error -> Toaster.toastShort("Error!", this),
-                    CustomFoodActivity.this, getWindow().getDecorView().getRootView());
+                    CustomFoodActivity.this,
+                    getWindow().getDecorView().getRootView());
         });
     }
 
