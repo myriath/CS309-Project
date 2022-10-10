@@ -1,6 +1,7 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
+import static com.example.cs309android.util.Util.setSubtitle;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.NutritionItemView;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -58,6 +59,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public float dp16;
     public float dp8;
 
+    /**
+     * Layout for displaying the food details
+     */
     private LinearLayout detailsLayout;
 
     /**
@@ -85,7 +89,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         detailsLayout = findViewById(R.id.details_layout);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(item.getDescription(), toolbar);
+        Util.setTitle(item.getDescription(), toolbar);
 
         Space spacer = new Space(this);
 
@@ -131,13 +135,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
-        FloatingActionButton fab = findViewById(R.id.add_item);
+        ExtendedFloatingActionButton fab = findViewById(R.id.add_item);
         int control = intent.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
         if (control == CONTROL_ADD) {
             fab.setVisibility(View.VISIBLE);
             spacer.setMinimumHeight((int) dp16 * 10);
         } else {
-            spacer.setMinimumHeight((int) dp16 * 3);
+            fab.setVisibility(View.GONE);
+            spacer.setMinimumHeight((int) dp16 * 4);
         }
 
         fab.setOnClickListener(view -> {
@@ -176,26 +181,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         finish();
         return true;
-    }
-
-    /**
-     * Sets the title of the activity
-     *
-     * @param title   New title
-     * @param toolbar Toolbar to change the title of
-     */
-    private void setTitle(String title, MaterialToolbar toolbar) {
-        if (title.length() > 20) {
-            toolbar.setTitle(title.substring(0, 20) + "...");
-        } else {
-            toolbar.setTitle(title);
-        }
-    }
-
-    private void setSubtitle(String brand, MaterialToolbar toolbar) {
-        if (brand != null && !brand.equals("")) {
-            toolbar.setSubtitle(brand);
-        }
     }
 
     /**

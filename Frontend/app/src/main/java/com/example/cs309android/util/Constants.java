@@ -73,6 +73,21 @@ public class Constants {
     public static final String LOGIN_URL = AUTH_URL + "validateLogin";
 
 
+    // FOOD
+    /**
+     * URL for the custom food database part of the api
+     */
+    public static final String FOOD_URL = BASE_API_URL + "food/";
+    /**
+     * URL for adding a new custom food item
+     */
+    public static final String ADD_FOOD_URL = FOOD_URL + "add";
+    /**
+     * URL for getting a custom food item
+     */
+    public static final String GET_FOOD_URL = FOOD_URL + "get";
+
+
     // SHOPPING
     /**
      * Base shopping url for all shopping list based requests
@@ -113,6 +128,11 @@ public class Constants {
      */
     public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
 
+    // OTHER
+    /**
+     * No fdc id associated with this item, used for custom items
+     */
+    public static final int ITEM_ID_NULL = -1;
 
     // TAGS
 

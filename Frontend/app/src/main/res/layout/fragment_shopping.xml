@@ -14,16 +14,17 @@
         android:dividerHeight="1dp"
         android:clickable="true" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_item"
         style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/add_item"
+        android:text="@string/add_item"
         app:fabSize="auto"
         android:layout_margin="32dp"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_add" />
+        app:icon="@drawable/ic_add" />
 
     <TextView
         android:id="@+id/empty_text"

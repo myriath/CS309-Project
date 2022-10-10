@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -73,6 +74,32 @@ public class Util {
         view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
         view.findViewById(R.id.spinnerBlocker).setAlpha(0);
         view.findViewById(R.id.spinnerBlocker).setClickable(false);
+    }
+
+    /**
+     * Sets the title of the activity
+     *
+     * @param title   New title
+     * @param toolbar Toolbar to change the title of
+     */
+    public static void setTitle(String title, MaterialToolbar toolbar) {
+        if (title.length() > 20) {
+            toolbar.setTitle(title.substring(0, 20) + "...");
+        } else {
+            toolbar.setTitle(title);
+        }
+    }
+
+    /**
+     * Sets the subtitle to whatever the brand of the item is
+     *
+     * @param subtitle Subtitle for the toolbar
+     * @param toolbar  Toolbar to set subtitle of
+     */
+    public static void setSubtitle(String subtitle, MaterialToolbar toolbar) {
+        if (subtitle != null && !subtitle.equals("")) {
+            toolbar.setSubtitle(subtitle);
+        }
     }
 
     /**

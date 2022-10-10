@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CS309 Android</string>
+    <string name="app_name">Föd</string>
     <!-- Strings related to login -->
     <string name="password">Password</string>
     <string name="username">Username</string>
@@ -39,7 +39,7 @@
     <string name="shopping_list">Shopping List</string>
     <string name="shopping">Shopping</string>
     <string name="remove">Remove item</string>
-    <string name="add_item">Add item</string>
+    <string name="add_item">ADD ITEM</string>
     <string name="empty">Empty…</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -71,5 +71,13 @@
     <string name="favorite">Favorite</string>
     <string name="title_activity_temp">TempActivity</string>
     <string name="ingredients">Ingredients</string>
+    <string name="total_carbs">Total carbs in grams</string>
+    <string name="carbs">Carbs</string>
+    <string name="fat">Fat</string>
+    <string name="total_fat">Total fat in grams</string>
+    <string name="calories">Calories</string>
+    <string name="total_calories">Calories in kcal</string>
+    <string name="protein">Protein</string>
+    <string name="total_protein">Total protein in grams</string>
 
 </resources>

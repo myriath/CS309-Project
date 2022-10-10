@@ -1,5 +1,7 @@
 package com.example.cs309android.models.gson.models;
 
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,9 +15,16 @@ import com.google.gson.annotations.Expose;
 public class SimpleFoodItem implements Parcelable {
     /**
      * FDC ID from the api
+     * -1 if it is a Custom food item
      */
     @Expose
     private final int fdcId;
+    /**
+     * Database id for the custom foods table
+     * -1 if it is a USDA food item
+     */
+    @Expose
+    private final int dbId;
     /**
      * Description / Item name from api
      */
@@ -33,29 +42,49 @@ public class SimpleFoodItem implements Parcelable {
     private boolean stricken;
 
     /**
-     * Constructor for gson
+     * Public constructor for new custom item
+     * DB id will be assigned by backend
      *
-     * @param fdcId       item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
      */
-    public SimpleFoodItem(int fdcId, String description, String brand) {
-        this.fdcId = fdcId;
+    public SimpleFoodItem(String description, String brand) {
+        this.fdcId = ITEM_ID_NULL;
+        this.dbId = ITEM_ID_NULL;
         this.description = description;
         this.brand = brand;
         this.stricken = false;
     }
 
     /**
-     * Constructor for gson
+     * Public constructor
      *
-     * @param fdcId       item id
+     * @param fdcId       fdc item id
+     * @param dbId        custom item id
+     * @param description description / title
+     * @param brand       Brand of the item (null for none)
+     */
+    public SimpleFoodItem(int fdcId, int dbId, String description, String brand) {
+        this.fdcId = fdcId;
+        this.dbId = dbId;
+        this.description = description;
+        this.brand = brand;
+        this.stricken = false;
+    }
+
+    /**
+     * Public constructor
+     * stricken is set
+     *
+     * @param fdcId       fdc item id
+     * @param dbId        custom item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int fdcId, String description, String brand, boolean stricken) {
+    public SimpleFoodItem(int fdcId, int dbId, String description, String brand, boolean stricken) {
         this.fdcId = fdcId;
+        this.dbId = dbId;
         this.description = description;
         this.brand = brand;
         this.stricken = stricken;
@@ -68,6 +97,7 @@ public class SimpleFoodItem implements Parcelable {
      */
     protected SimpleFoodItem(Parcel in) {
         fdcId = in.readInt();
+        dbId = in.readInt();
         description = in.readString();
         brand = in.readString();
         stricken = in.readBoolean();
@@ -89,12 +119,21 @@ public class SimpleFoodItem implements Parcelable {
     };
 
     /**
-     * Getter for the id
+     * Getter for the fdc id
      *
      * @return item id
      */
     public int getFdcId() {
         return fdcId;
+    }
+
+    /**
+     * Getter for the custom id
+     *
+     * @return item id
+     */
+    public int getDbId() {
+        return dbId;
     }
 
     /**
@@ -152,6 +191,7 @@ public class SimpleFoodItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(fdcId);
+        parcel.writeInt(dbId);
         parcel.writeString(description);
         parcel.writeString(brand);
         parcel.writeBoolean(stricken);
