@@ -31,6 +31,7 @@ public class UserController {
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
+        // TODO: Probably should remove this for security
         return userRepository.findAll();
     }
 
@@ -88,6 +89,7 @@ public class UserController {
 
     @GetMapping(path="/validateLogin/{token}") // /users/validateLogin/{token}
     public @ResponseBody String validateTokenLogin(@PathVariable String token) {
+        String hashedToken = Hasher.sha256(token);
         // TODO: The request is a token request, handle that
         //       If the token is older than a day, return RESULT_REGEN_TOKEN to tell the app to generate a new token.
         //       If the token is not expired and valid, return RESULT_LOGGED_IN
@@ -101,13 +103,14 @@ public class UserController {
         return gson.toJson(res);
     }
 
-    @GetMapping(path="/validateLogin/{username}") // /users/validateLogin/{username}?hash=""
-    public @ResponseBody String validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash) {
+    @GetMapping(path="/validateLogin/{username}") // /users/validateLogin/{username}?hash=""&newToken=""
+    public @ResponseBody String validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash, @RequestParam(name="newToken") String newToken) {
         String p_hash = Hasher.sha256(hash); // SHA-256's the incoming hash
+        String tokenHash = Hasher.sha256(newToken); // SHA-256's the incoming token, this is added to the table as another hash for the username
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
-        LoginResponse res = new LoginResponse(null, RESULT_OK);
+        ResultResponse res = new ResultResponse(RESULT_OK);
 
         if (userRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
@@ -124,8 +127,12 @@ public class UserController {
             // Otherwise, the password matches and the login is valid
             else {
                 res.setResult(RESULT_LOGGED_IN);
-                //TODO: Get the token from the table, if its expired set result to RESULT_REGEN_TOKEN
-                res.setToken(null); // temp
+                // TODO: Add the hashed token to the tokens table
+                //       If the token already exists return RESULT_REGEN_TOKEN
+                //       Else return RESULT_LOGGED_IN
+                //       Note: THIS DOES NOT REPLACE ANY OTHER TOKENS!
+                //       multiple tokens can be allowed for each user (this lets you log into multiple devices at once)
+                //       in the future we'll add an email that goes out whenever someone logs into an account
             }
         }
 
@@ -156,7 +163,7 @@ public class UserController {
         // TODO: Add token calls to the db
         //       If token exists in the table, return RESULT_REGEN_TOKEN,
         //       If the username exists, return RESULT_ERROR,
-        //       if not, add it to the token table along with Username and return RESULT_OK
+        //       if not, add it to the token table along with Username and return RESULT_USER_CREATED
         try {
             userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
             res.setResult(RESULT_USER_CREATED);
@@ -168,5 +175,14 @@ public class UserController {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
+    }
+
+    @PutMapping(path="/regenToken/{oldToken}")
+    public @ResponseBody String regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
+        String oldTokenHash = Hasher.sha256(oldToken);
+        String newTokenHash = Hasher.sha256(newToken);
+        // TODO: If the hashed newToken exists in the table: return RESULT_REGEN_TOKEN
+        //       If the hashed oldToken is valid and that token is outdated: replace it with newToken, remove the oldToken from the table, return RESULT_OK
+        return "";
     }
 }
