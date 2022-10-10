@@ -26,6 +26,8 @@ public class ShoppingListController {
     @Autowired
     private ShoppingListRepository shoppingRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private TokenRepository tokenRepository;
 
     /**
@@ -38,26 +40,39 @@ public class ShoppingListController {
      */
     @GetMapping(path="/get/{token}")
     public @ResponseBody String getShoppingList(@PathVariable String token) {
-        // TODO: Look up username from token table
-        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
-        Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
+        String hashedToken = Hasher.sha256(token);
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
+        // Find token in table
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
         ShoppingListGetResponse res = new ShoppingListGetResponse();
 
-        if (userQueryRes.isEmpty()) {
-            res.setResult(RESULT_ERROR);
+        // If the token doesn't exist in the table, return error.
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
-        // If the credentials aren't valid, return hash mismatch error code.
+        // Otherwise, the token exists in the table
         else {
-            ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
+            // Get the username associated with the token
+            String username = tokenQueryRes[0].getUsername();
 
-            // User already passed authentication, just return shopping list
-            res.setResult(RESULT_OK);
-            res.setShoppingList(listItems);
+            Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
+
+            if (userQueryRes.isEmpty()) {
+                res.setResult(RESULT_ERROR);
+            }
+            // If the credentials aren't valid, return hash mismatch error code.
+            else {
+                ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
+
+                // User already passed authentication, just return shopping list
+                res.setResult(RESULT_OK);
+                res.setShoppingList(listItems);
+            }
         }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
 
         return gson.toJson(res);
 
@@ -68,14 +83,11 @@ public class ShoppingListController {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
+        String hashedToken = Hasher.sha256(token);
+
         ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
-
-        String hashedToken = Hasher.sha256(token);
-        String username = ""; // temp
-        // TODO: Look up username from token table
-        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         String itemName = foodItem.getDescription();
         int fdcId = foodItem.getFdcId();
@@ -83,11 +95,23 @@ public class ShoppingListController {
 
         ResultResponse res = new ResultResponse();
 
-        try {
-            shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken);
-            res.setResult(RESULT_OK);
-        } catch (Exception e) {
-            res.setResult(RESULT_ERROR);
+        // Find token in table
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
+
+        // If the token doesn't exist in the table, return error.
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        }
+        else {
+            // Get the username associated with the token
+            String username = tokenQueryRes[0].getUsername();
+
+            try {
+                shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken);
+                res.setResult(RESULT_OK);
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return gson.toJson(res);
@@ -97,29 +121,35 @@ public class ShoppingListController {
     @PatchMapping (path="/strikeout/{token}")
     public @ResponseBody String changeStrikeout(@PathVariable String token, @RequestBody String json) {
 
-        StrikeoutRequest req = new Gson().fromJson(json, StrikeoutRequest.class);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         String hashedToken = Hasher.sha256(token);
-        String username = ""; // temp
-        // TODO: Look up username from token table
-        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
+        StrikeoutRequest req = gson.fromJson(json, StrikeoutRequest.class);
         String itemName = req.getItemName();
-
-        Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
         ResultResponse res = new ResultResponse();
 
-        if (userQueryRes.isEmpty()) {
-            res.setResult(RESULT_ERROR);
+        // Find token in table
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
+
+        // If the token doesn't exist in the table, return error.
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            // User already passed authentication from token earlier
-            shoppingRepository.queryShoppingChangeStricken(username, itemName);
-            res.setResult(RESULT_OK);
-        }
+            // Get the username associated with the token
+            String username = tokenQueryRes[0].getUsername();
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            // User does not exist
+            try {
+                // User already passed authentication from token earlier
+                shoppingRepository.queryShoppingChangeStricken(username, itemName);
+                res.setResult(RESULT_OK);
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
+        }
 
         return gson.toJson(res);
     }
@@ -129,25 +159,32 @@ public class ShoppingListController {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
+        String hashedToken = Hasher.sha256(token);
+
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
-
-        String username = ""; // temp
-        // TODO: Look up username from token table
-        //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
-
         String itemName = req.getItemName();
-
-        Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
 
         ResultResponse res = new ResultResponse();
 
-        if (userQueryRes.isEmpty()) {
-            res.setResult(RESULT_ERROR);
+        // Find token in table
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
+
+        // If the token doesn't exist in the table, return error.
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            // User already passed authentication from token lookup
-            shoppingRepository.queryDeleteListItem(username, itemName);
-            res.setResult(RESULT_OK);
+
+            // Get the username associated with the token
+            String username = tokenQueryRes[0].getUsername();
+
+            try {
+                // User already passed authentication from token lookup
+                shoppingRepository.queryDeleteListItem(username, itemName);
+                res.setResult(RESULT_OK);
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return gson.toJson(res);

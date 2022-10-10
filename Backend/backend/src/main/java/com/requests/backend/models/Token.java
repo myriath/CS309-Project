@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name="tokens")
@@ -15,7 +16,7 @@ public class Token {
 
     private String username;
     @CreationTimestamp
-    private Date creation_date;
+    private Date creationDate;
 
     public String getToken() {
         return token;
@@ -25,11 +26,32 @@ public class Token {
         this.token = token;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public boolean isOutdated() {
+
+        // The current date and time
+        java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+
+        // Calculate the difference between the time of creation of the token and the
+        // current date in days.
+        long diffInMils = Math.abs(currentDate.getTime() - creationDate.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMils, TimeUnit.MILLISECONDS);
+
+        return diff >= 1;
     }
 }

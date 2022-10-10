@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
-import com.requests.backend.models.requests.LoginRequest;
 import com.requests.backend.models.requests.RegisterRequest;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.models.responses.SaltResponse;
@@ -13,10 +12,7 @@ import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
-
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 import static com.util.Constants.*;
 
@@ -95,15 +91,10 @@ public class UserController {
     @GetMapping(path="/validateToken/{token}") // /users/validateLogin/{token}
     public @ResponseBody String validateTokenLogin(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
-        // TODO: The request is a token request, handle that
-        //       If the token is older than a day, return RESULT_REGEN_TOKEN to tell the app to generate a new token.
-        //       If the token is not expired and valid, return RESULT_LOGGED_IN
-        //       If the token is not valid, return RESULT_USER_HASH_MISMATCH
-        //       If the server encounters an error, return RESULT_ERROR
 
         ResultResponse res = new ResultResponse();
 
-        Token[] tokenQuery = tokenRepository.queryGetToken(token);
+        Token[] tokenQuery = tokenRepository.queryGetToken(hashedToken);
 
         try {
             // If the token is not valid, return RESULT_USER_HASH_MISMATCH
@@ -112,32 +103,26 @@ public class UserController {
             }
             else {
 
-                // The current date and time
-                java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
-
                 // The token that was gathered from querying the database
                 Token dbToken = tokenQuery[0];
 
-                // Calculate the difference between the time of creation of the token and the
-                // current date in days.
-                long diffInMils = Math.abs(currentDate.getTime() - dbToken.getCreation_date().getTime());
-                long diff = TimeUnit.DAYS.convert(diffInMils, TimeUnit.MILLISECONDS);
+                boolean outdatedToken = dbToken.isOutdated();
 
                 // If the difference is one day or greater, a new token needs to be generated.
-                if (diff >= 1) {
+                if (outdatedToken) {
                     res.setResult(RESULT_REGEN_TOKEN);
                 }
-                // Otherwise, the user should be logged in.
+                // Otherwise, the user should be logged in, as the token is valid.
                 else {
                     res.setResult(RESULT_LOGGED_IN);
                 }
             }
 
+        // If the server encounters an error, return RESULT_ERROR
         } catch (Exception e) {
             res.setResult(RESULT_ERROR);
         }
 
-        // TODO: Maybe don't disable escaping, could it lead to an SQL injection?
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
@@ -145,7 +130,7 @@ public class UserController {
 
     @GetMapping(path="/validateLogin/{username}") // /users/validateLogin/{username}?hash=""&newToken=""
     public @ResponseBody String validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash, @RequestParam(name="newToken") String newToken) {
-        String p_hash = Hasher.sha256(hash); // SHA-256's the incoming hash
+        String pHash = Hasher.sha256(hash); // SHA-256's the incoming hash
         String tokenHash = Hasher.sha256(newToken); // SHA-256's the incoming token, this is added to the table as another hash for the username
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
@@ -161,25 +146,33 @@ public class UserController {
             User user = userRes.iterator().next();
 
             // If the provided password does not match the user's password, return hash mismatch code
-            if (user.getPHash().compareTo(p_hash) != 0) {
+            if (user.getPHash().compareTo(pHash) != 0) {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             // Otherwise, the password matches and the login is valid
             else {
-                res.setResult(RESULT_LOGGED_IN);
-                // TODO: Add the hashed token to the tokens table
-                //       If the token already exists return RESULT_REGEN_TOKEN
-                //       Else return RESULT_LOGGED_IN
+                Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
+
+                // If the token already exists in the table, return RESULT_REGEN_TOKEN
+                if (tokenQueryRes.length > 0) {
+                    res.setResult(RESULT_REGEN_TOKEN);
+                }
+                // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
+                else {
+                    tokenRepository.queryAddToken(username, tokenHash);
+                    res.setResult(RESULT_LOGGED_IN);
+                }
+
                 //       Note: THIS DOES NOT REPLACE ANY OTHER TOKENS!
                 //       multiple tokens can be allowed for each user (this lets you log into multiple devices at once)
                 //       in the future we'll add an email that goes out whenever someone logs into an account
+
             }
         }
 
         // If no users with the username is found, return code -1
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "=")
-        // TODO: Maybe don't disable escaping, could it lead to an SQL injection?
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
@@ -194,26 +187,26 @@ public class UserController {
         String email = req.getEmail();
         String pHash = Hasher.sha256(req.getPHash()); // SHA-256's the incoming hash
         String pSalt = req.getPSalt();
-        String token = Hasher.sha256(req.getToken()); // SHA-256's the incoming token
+        String tokenHash = Hasher.sha256(req.getToken()); // SHA-256's the incoming token
 
         ResultResponse res = new ResultResponse();
 
-        Token[] tokenQuery = tokenRepository.queryGetToken(token);
+        Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
 
-        // TODO: Add token calls to the db
-        //       If token exists in the table, return RESULT_REGEN_TOKEN,
-        //       If the username exists, return RESULT_ERROR,
-        //       if not, add it to the token table along with Username and return RESULT_OK
+        // If the token exists in the table, return RESULT_REGEN_TOKEN,
         if (tokenQuery.length > 0) {
             res.setResult(RESULT_REGEN_TOKEN);
         }
         else {
+            // If the token does not already exist, try to add the user to user table
             try {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(token);
-                res.setResult(RESULT_USER_CREATED);
+                tokenRepository.queryAddToken(username, tokenHash);
+                res.setResult(RESULT_OK);
+
+            // If the username already exists in the user table, return an error result
             } catch (Exception e) {
-                res.setResult(RESULT_ERROR_USERNAME_TAKEN);
+                res.setResult(RESULT_ERROR);
             }
         }
 
@@ -227,10 +220,37 @@ public class UserController {
     public @ResponseBody String regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
         String oldTokenHash = Hasher.sha256(oldToken);
         String newTokenHash = Hasher.sha256(newToken);
-        // TODO: If oldToken isnt in the tokens database: return error result
-        //       Else if oldToken isnt expired: return error result
-        //       Else if newToken is in the table already: return regen token result
-        //       Else: replace the old token with the new token
-        return "";
+
+        ResultResponse res = new ResultResponse();
+
+        Token[] oldTokenQueryRes = tokenRepository.queryGetToken(oldTokenHash);
+        Token[] newTokenQueryRes = tokenRepository.queryGetToken(newTokenHash);
+
+        // If the oldToken isn't in the tokens table, return error result
+        if (oldTokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR);
+        }
+        else {
+            Token dbToken = oldTokenQueryRes[0];
+
+            // If newToken is in the tokens table already, return regen token result
+            if (dbToken.isOutdated() && newTokenQueryRes.length > 0) {
+                res.setResult(RESULT_REGEN_TOKEN);
+            }
+            // Otherwise, if the token is expired, replace the old token with the new token
+            // in the tokens table
+            else if (dbToken.isOutdated()) {
+                tokenRepository.queryUpdateToken(oldTokenHash, newTokenHash);
+                res.setResult(RESULT_OK);
+            }
+            // Otherwise, oldToken is not outdated, and does not need replacement -- return an error
+            else {
+                res.setResult(RESULT_ERROR);
+            }
+        }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(res);
     }
 }
