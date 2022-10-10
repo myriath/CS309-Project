@@ -128,25 +128,9 @@ public class LoginFragment extends BaseFragment {
                         editor.putString(MainActivity.PREF_TOKEN, loginResponse.getToken());
                         editor.apply();
 
-                        MainActivity.TOKEN = loginResponse.getToken();
+                        ((GlobalClass) requireActivity().getApplicationContext()).setToken(loginResponse.getToken());
                     } else if (loginResponse.getResult() == RESULT_REGEN_TOKEN) {
-                        String token = Hasher.genToken();
-
-                        new RegenTokenRequest(token, loginResponse.getToken()).request(response2 -> {
-                            GenericResponse genericResponse = Util.objFromJson(response2, GenericResponse.class);
-                            if (genericResponse.getResult() == RESULT_OK) {
-                                // No errors, so store credentials for future use
-                                // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putString(MainActivity.PREF_TOKEN, token);
-                                editor.apply();
-
-                                MainActivity.TOKEN = token;
-                            } else {
-                                Toaster.toastShort("Error", getContext());
-                            }
-                        }, getContext());
+                        regenToken(loginResponse.getToken(), 0);
                     }
 
                     // Close window
@@ -181,5 +165,34 @@ public class LoginFragment extends BaseFragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    /**
+     * Recursive method for regenerating tokens
+     * (recursive in case duplicates are generated)
+     *
+     * @param oldToken Old token for authentication
+     * @param depth    number of retries
+     */
+    public void regenToken(String oldToken, int depth) {
+        String token = Hasher.genToken();
+
+        new RegenTokenRequest(token, oldToken).request(response2 -> {
+            GenericResponse genericResponse = Util.objFromJson(response2, GenericResponse.class);
+            if (genericResponse.getResult() == RESULT_OK) {
+                // No errors, so store credentials for future use
+                // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
+                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(MainActivity.PREF_TOKEN, token);
+                editor.apply();
+
+                ((GlobalClass) requireActivity().getApplicationContext()).setToken(token);
+            } else if (genericResponse.getResult() == RESULT_REGEN_TOKEN && depth < 5) {
+                regenToken(oldToken, depth + 1);
+            } else {
+                Toaster.toastShort("Error", getContext());
+            }
+        }, getContext());
     }
 }

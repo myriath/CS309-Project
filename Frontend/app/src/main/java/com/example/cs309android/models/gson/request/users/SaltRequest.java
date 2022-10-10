@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.users;
 
-import com.example.cs309android.models.GetRequestURL;
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.gson.GetRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
@@ -42,8 +42,7 @@ public class SaltRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new GetRequestURL(Constants.SALT_URL)
-                .addParam("username", username)
+        return new ParameterizedRequestURL(Constants.SALT_URL + "/" + username)
                 .toString();
     }
 }

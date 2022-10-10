@@ -15,11 +15,6 @@ public class StrikeRequest extends PatchRequest {
      */
     @Expose
     private final String itemName;
-    /**
-     * Authentication model for the user
-     */
-    @Expose
-    private final String token;
 
     /**
      * Public constructor
@@ -28,9 +23,8 @@ public class StrikeRequest extends PatchRequest {
      * @param token Token for authentication
      */
     public StrikeRequest(String itemName, String token) {
-        super(Constants.STRIKE_SHOPPING_URL);
+        super(Constants.STRIKE_SHOPPING_URL + "/" + token);
         this.itemName = itemName;
-        this.token = token;
     }
 
     /**
@@ -40,14 +34,5 @@ public class StrikeRequest extends PatchRequest {
      */
     public String getItemName() {
         return itemName;
-    }
-
-    /**
-     * Getter for the token
-     *
-     * @return token
-     */
-    public String getToken() {
-        return token;
     }
 }

@@ -11,6 +11,7 @@ import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
+import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +38,7 @@ public class ShoppingListController {
      */
     @GetMapping(path="/get/{token}")
     public @ResponseBody String getShoppingList(@PathVariable String token) {
-
-        // TODO: Look up token from token table
+        // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
@@ -72,7 +72,9 @@ public class ShoppingListController {
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        // TODO: Look up token from token table
+        String hashedToken = Hasher.sha256(token);
+        String username = ""; // temp
+        // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
         String itemName = foodItem.getDescription();
@@ -97,6 +99,8 @@ public class ShoppingListController {
 
         StrikeoutRequest req = new Gson().fromJson(json, StrikeoutRequest.class);
 
+        String hashedToken = Hasher.sha256(token);
+        String username = ""; // temp
         // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
@@ -127,6 +131,7 @@ public class ShoppingListController {
 
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
 
+        String username = ""; // temp
         // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
