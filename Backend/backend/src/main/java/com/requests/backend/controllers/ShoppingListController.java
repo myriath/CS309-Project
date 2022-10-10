@@ -31,11 +31,10 @@ public class ShoppingListController {
      * If the user does not exist return error code with empty shopping list.
      * If the user exists, but the hash is incorrect, return hash mismatch error code with empty list.
      * Otherwise, the credentials are valid: return "OK" result code and shopping list for associated user.
-     * @param username
-     * @param hash
+     * @param token Token for authentication
      * @return
      */
-    @GetMapping(path="/get/{username}")
+    @GetMapping(path="/get/{token}")
     public @ResponseBody String getShoppingList(@PathVariable String token) {
 
         // TODO: Look up username from token table
@@ -63,15 +62,14 @@ public class ShoppingListController {
 
     }
 
-    @PostMapping(path="/add")
-    public @ResponseBody String addToShoppingList(@RequestBody String json) {
+    @PostMapping(path="/add/{token}")
+    public @ResponseBody String addToShoppingList(@PathVariable String token, @RequestBody String json) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
-        String token = req.getToken();
 
         // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
@@ -93,12 +91,11 @@ public class ShoppingListController {
     }
 
 
-    @PatchMapping (path="/strikeout")
-    public @ResponseBody String changeStrikeout(@RequestBody String json) {
+    @PatchMapping (path="/strikeout/{token}")
+    public @ResponseBody String changeStrikeout(@PathVariable String token, @RequestBody String json) {
 
         StrikeoutRequest req = new Gson().fromJson(json, StrikeoutRequest.class);
 
-        String token = req.getToken();
         // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
@@ -122,14 +119,13 @@ public class ShoppingListController {
         return gson.toJson(res);
     }
 
-    @PutMapping (path = "/remove")
-    public @ResponseBody String removeFromList(@RequestBody String json) {
+    @PutMapping (path = "/remove/{token}")
+    public @ResponseBody String removeFromList(@PathVariable String token, @RequestBody String json) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
 
-        String token = req.getToken();
         // TODO: Look up username from token table
         //       If username doesn't exist, return RESULT_USER_HASH_MISMATCH
 
