@@ -1,6 +1,7 @@
 package com.example.cs309android.activities;
 
 import android.content.Intent;
+import android.databinding.tool.util.StringUtils;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,6 +116,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
+                        System.out.println(result);
                         Intent intent = result.getData();
                         switch (intentCode) {
                             case INTENT_SHOPPING_LIST: {
@@ -169,14 +171,14 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
 
             searchResults.clear();
             for (SearchResultFood food : result.getFoods()) {
-                searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), null));
             }
 
             new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
                 SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
                 for (SearchResultFood food : result1.getFoods()) {
-                    searchResults.add(new SimpleFoodItem(food.getFdcId(), food.getDescription()));
+                    searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
                 }
 
                 if (!searchResults.isEmpty()) {

@@ -18,8 +18,8 @@ public class Hash {
     /**
      * Public constructor
      *
-     * @param salt  byte array containing the salt used for the hash
-     * @param hash  byte array containing the hash value
+     * @param salt byte array containing the salt used for the hash
+     * @param hash byte array containing the hash value
      */
     public Hash(byte[] salt, byte[] hash) {
         this.salt = salt;
@@ -28,7 +28,8 @@ public class Hash {
 
     /**
      * Getter for the salt
-     * @return  Salt byte array
+     *
+     * @return Salt byte array
      */
     public byte[] getSalt() {
         return salt;
@@ -36,7 +37,8 @@ public class Hash {
 
     /**
      * Getter for the hash
-     * @return  Hash byte array
+     *
+     * @return Hash byte array
      */
     public byte[] getHash() {
         return hash;

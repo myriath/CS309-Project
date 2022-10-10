@@ -3,8 +3,13 @@ package com.requests.backend.controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
+import com.requests.backend.models.requests.ShoppingListAddRequest;
+import com.requests.backend.models.requests.ShoppingListRemoveRequest;
+import com.requests.backend.models.requests.StrikeoutRequest;
+import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
+import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -117,7 +122,7 @@ public class ShoppingListController {
         return gson.toJson(res);
     }
 
-    @DeleteMapping (path = "/remove")
+    @PutMapping (path = "/remove")
     public @ResponseBody String removeFromList(@RequestBody String json) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();

@@ -20,6 +20,7 @@ import androidx.preference.Preference;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
+import com.example.cs309android.fragments.shopping.ShoppingFragment;
 
 import java.util.Objects;
 
@@ -52,6 +53,7 @@ public class SettingsFragment extends BasePreferenceFragment {
             SharedPreferences.Editor editor = pref.edit();
             editor.remove(MainActivity.PREF_TOKEN);
             editor.apply();
+            ShoppingFragment.clearItems();
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
         });

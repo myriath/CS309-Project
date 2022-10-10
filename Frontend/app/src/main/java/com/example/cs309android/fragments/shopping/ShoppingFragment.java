@@ -128,4 +128,11 @@ public class ShoppingFragment extends BaseFragment {
         items.remove(i);
         return items.isEmpty();
     }
+
+    /**
+     * Clears the item list.
+     */
+    public static void clearItems() {
+        items = null;
+    }
 }

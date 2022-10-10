@@ -8,6 +8,8 @@ public class SurveyFoodItem {
     @Expose
     private final String datatype;
     @Expose
+    private final String description;
+    @Expose
     private final String endDate;
     @Expose
     private final String foodClass;
@@ -26,9 +28,10 @@ public class SurveyFoodItem {
     @Expose
     private final WweiaFoodCategory wweiaFoodCategory;
 
-    public SurveyFoodItem(int fdcId, String datatype, String endDate, String foodClass, String foodCode, String publicationDate, String startDate, FoodAttribute[] foodAttributes, FoodPortion[] foodPortions, InputFoodSurvey[] inputFoods, WweiaFoodCategory wweiaFoodCategory) {
+    public SurveyFoodItem(int fdcId, String datatype, String description, String endDate, String foodClass, String foodCode, String publicationDate, String startDate, FoodAttribute[] foodAttributes, FoodPortion[] foodPortions, InputFoodSurvey[] inputFoods, WweiaFoodCategory wweiaFoodCategory) {
         this.fdcId = fdcId;
         this.datatype = datatype;
+        this.description = description;
         this.endDate = endDate;
         this.foodClass = foodClass;
         this.foodCode = foodCode;
@@ -46,6 +49,10 @@ public class SurveyFoodItem {
 
     public String getDatatype() {
         return datatype;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getEndDate() {

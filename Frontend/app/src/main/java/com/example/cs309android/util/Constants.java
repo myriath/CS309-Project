@@ -48,6 +48,14 @@ public class Constants {
      * Login is valid, but needs to regen token
      */
     public static final int RESULT_REGEN_TOKEN = 3;
+    /**
+     * Indicates the user has been successfully created
+     */
+    public static final int RESULT_RECIPE_CREATED = 22;
+    /**
+     * Indicates the user has been successfully created
+     */
+    public static final int RESULT_ERROR_RID_TAKEN = -23;
 
 
     // USERS
@@ -94,6 +102,24 @@ public class Constants {
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout";
+
+    // RECIPES
+    /**
+     * Base recipes url for all recipes based requests
+     */
+    public static final String RECIPES_URL = BASE_API_URL + "recipe/";
+    /**
+     * Add url for adding an item to recipes
+     */
+    public static final String ADD_RECIPES_URL = RECIPES_URL + "add";
+    /**
+     * Remove url for removing an item from recipes
+     */
+    public static final String REMOVE_RECIPES_URL = RECIPES_URL + "remove";
+    /**
+     * Url for getting an item from recipes
+     */
+    public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
 
 
     // TAGS

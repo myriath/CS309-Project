@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="?android:colorBackground"
-        android:background="?android:colorBackground" >
+        android:background="?android:colorBackground">
 
         <LinearLayout
             android:layout_width="300dp"

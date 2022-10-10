@@ -32,6 +32,9 @@
     <string name="nutrition">Nutrition</string>
     <!-- Strings related to Recipes -->
     <string name="recipes">Recipes</string>
+    <string name="recipes_id_input">Recipe ID</string>
+    <string name="recipes_name_input">Recipe Name</string>
+    <string name="recipes_search">Search</string>
     <!-- Strings related to Shopping -->
     <string name="shopping_list">Shopping List</string>
     <string name="shopping">Shopping</string>
@@ -67,5 +70,6 @@
     </string>
     <string name="favorite">Favorite</string>
     <string name="title_activity_temp">TempActivity</string>
+    <string name="ingredients">Ingredients</string>
 
 </resources>

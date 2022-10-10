@@ -1,9 +1,9 @@
 stages:
   - maven-build
-  - maven-test
-  - maven-deploy
   - android-build
+  - maven-test
   - android-test
+  - maven-deploy
   - android-deploy
 
 variables:
@@ -24,7 +24,21 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
-build-spring:
+###### BUILD JOBS ######
+
+build-spring-dev:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "backend-dev"
+  tags:
+    - springboot_tag
+  stage: maven-build
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/temp/
+
+build-spring-main:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
   stage: maven-build
@@ -38,49 +52,98 @@ build-spring:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - mvn $MAVEN_CLI_OPTS verify
-    - scp -o StrictHostKeyChecking=no -P $SSH_PORT Backend/backend/target/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/$APP_NAME-$APP_VERSION.jar
+    - scp -o StrictHostKeyChecking=no -P $SSH_PORT /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar $SSH_USER@$SSH_ADDRESS:/home/gitlab-runner/temp/$APP_NAME-$APP_VERSION.jar
+    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/temp/
   # artifacts:
   #   paths:
   #     - Backend/backend/target/*.jar
 
-deploy-demo-spring:
+build-android:
   rules:
-    - if: $CI_COMMIT_BRANCH != "main"
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "frontend-dev"
+  tags:
+    - android_tag
+  stage: android-build
+  script:
+    - echo "STUB!"
+
+###### TEST JOBS ######
+
+test-spring-dev:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "backend-dev"
+  tags:
+    - springboot_tag
+  stage: maven-test
+  script:
+    - echo "STUB!"
+
+test-spring-main:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - springboot_tag
+  stage: maven-test
+  script:
+    - echo "STUB!"
+
+test-android-dev:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "frontend-dev"
+  tags:
+    - android_tag
+  stage: android-test
+  script:
+    - echo "STUB!"
+
+test-android-main:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - android_tag
+  stage: android-test
+  script:
+    - echo "STUB!"
+
+###### DEPLOY JOBS ######
+
+deploy-spring-dev:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "backend-dev"
   tags:
     - springboot_tag
   stage: maven-deploy
   script:
-    - mvn $MAVEN_CLI_OPTS verify
-    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/
+    - sudo systemctl stop cs309.service
+    - cp /home/gitlab-runner/build/temp/* /home/gitlab-runner/build/
+    - rm /home/gitlab-runner/build/temp/*
     - ln -sf /home/gitlab-runner/build/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/latest.jar
-    - sudo /home/gitlab-runner/deploy.sh
+    - sudo systemctl start cs309.service
 
-deploy-demoprod-spring:
+deploy-spring-main:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
   stage: maven-deploy
   script:
-    - mvn $MAVEN_CLI_OPTS verify
-    - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/
+    - sudo systemctl stop cs309prod.service
+    - cp /home/gitlab-runner/release/temp/* /home/gitlab-runner/release/
+    - rm /home/gitlab-runner/release/temp/*
     - ln -sf /home/gitlab-runner/release/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/release/latest.jar
-    - sudo /home/gitlab-runner/deployprod.sh
+    - sudo systemctl start cs309prod.service
 
-deploy-prod-spring:
+deploy-spring-prod:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+  variables:
+    GIT_STRATEGY: none
   tags:
-    - springboot_tag
+    - deploy_tag
   stage: maven-deploy
-  before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -p $SSH_PORT $SSH_ADDRESS >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -p $SSH_PORT $SSH_USER@$SSH_ADDRESS "sudo /home/gitlab-runner/deploy.sh"
-
+    - sudo systemctl stop cs309.service
+    - cp /home/gitlab-runner/temp/* /home/gitlab-runner/
+    - rm /home/gitlab-runner/temp/*
+    - ln -sf /home/gitlab-runner/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/latest.jar
+    - sudo systemctl start cs309.service
