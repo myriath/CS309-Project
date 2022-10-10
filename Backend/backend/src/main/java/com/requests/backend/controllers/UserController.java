@@ -202,7 +202,7 @@ public class UserController {
             try {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
                 tokenRepository.queryAddToken(username, tokenHash);
-                res.setResult(RESULT_OK);
+                res.setResult(RESULT_USER_CREATED);
 
             // If the username already exists in the user table, return an error result
             } catch (Exception e) {
