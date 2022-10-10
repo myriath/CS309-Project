@@ -76,6 +76,10 @@ public class Constants {
      */
     public static final String LOGIN_URL = AUTH_URL + "validateLogin";
     /**
+     * URL to check token login
+     */
+    public static final String TOKEN_URL = AUTH_URL + "validateToken";
+    /**
      * URL to regen an expired token
      */
     public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken";

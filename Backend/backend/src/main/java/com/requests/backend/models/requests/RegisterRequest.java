@@ -1,7 +1,5 @@
 package com.requests.backend.models.requests;
 
-import java.util.Base64;
-
 public class RegisterRequest {
     private String username;
 

@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.users;
 
-import static com.example.cs309android.util.Constants.LOGIN_URL;
+import static com.example.cs309android.util.Constants.TOKEN_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.gson.GetRequest;
@@ -38,6 +38,6 @@ public class LoginTokenRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(LOGIN_URL + "/" + token).toString();
+        return new ParameterizedRequestURL(TOKEN_URL + "/" + token).toString();
     }
 }

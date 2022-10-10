@@ -22,6 +22,11 @@ public class LoginHashRequest extends GetRequest {
      */
     @Expose
     private final String hash;
+    /**
+     * B64 encoded string of the new login token
+     */
+    @Expose
+    private final String token;
 
     /**
      * Public constructor
@@ -29,9 +34,10 @@ public class LoginHashRequest extends GetRequest {
      * @param username Username for login
      * @param hash     Hash for login
      */
-    public LoginHashRequest(String username, String hash) {
+    public LoginHashRequest(String username, String hash, String token) {
         this.username = username;
         this.hash = hash;
+        this.token = token;
     }
 
     /**
@@ -56,6 +62,7 @@ public class LoginHashRequest extends GetRequest {
     public String getURL() {
         return new ParameterizedRequestURL(LOGIN_URL + "/" + username)
                 .addParam("hash", hash)
+                .addParam("newToken", token)
                 .toString();
     }
 }

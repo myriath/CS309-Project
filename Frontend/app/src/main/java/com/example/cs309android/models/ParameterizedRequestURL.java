@@ -155,8 +155,12 @@ public class ParameterizedRequestURL {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        if (url != null && params.size() != 0) {
-            builder.append(url).append("?");
+        if (url != null) {
+            builder.append(url);
+            if (params.size() == 0) {
+                return builder.toString();
+            }
+            builder.append("?");
         }
 
         for (RequestParam param : params) {

@@ -178,15 +178,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        new LoginTokenRequest(token).unspinOnComplete(response -> {
-            // Checks if the result is valid or not. If not, opens the login page
-            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-            if (result != RESULT_LOGGED_IN) startLoginFragment();
-            else ((GlobalClass) getApplicationContext()).setToken(token);
-        }, error -> {
-            error.printStackTrace();
-            startLoginFragment();
-        }, MainActivity.this, getWindow().getDecorView());
+        if (!token.equals("")) {
+            new LoginTokenRequest(token).unspinOnComplete(response -> {
+                // Checks if the result is valid or not. If not, opens the login page
+                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+                if (result != RESULT_LOGGED_IN) startLoginFragment();
+                else ((GlobalClass) getApplicationContext()).setToken(token);
+            }, error -> {
+                error.printStackTrace();
+                startLoginFragment();
+            }, MainActivity.this, getWindow().getDecorView());
+        } else startLoginFragment();
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
