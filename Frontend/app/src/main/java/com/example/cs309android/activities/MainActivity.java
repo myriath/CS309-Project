@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -72,11 +73,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     private CallbackFragment mainFragment;
     private int currentFragment = 2;
-
-    /**
-     * Auth model for the whole app
-     */
-    public static AuthModel AUTH_MODEL;
 
     /**
      * Response codes for callback method. Used by Fragments for this class
@@ -189,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             // Checks if the result is valid or not. If not, opens the login page
             int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
             if (result != RESULT_LOGGED_IN) startLoginFragment();
-            AUTH_MODEL = new AuthModel(username, hash);
+            ((GlobalClass) getApplicationContext()).setAuthModel(new AuthModel(username, hash));
         }, error -> {
             error.printStackTrace();
             startLoginFragment();
