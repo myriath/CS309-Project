@@ -108,8 +108,8 @@ test-android-main:
 ###### DEPLOY JOBS ######
 
 deploy-spring-dev:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "backend-dev"
+  # rules:
+    # - if: $CI_COMMIT_BRANCH == "backend-dev"
   tags:
     - springboot_tag
   stage: maven-deploy
