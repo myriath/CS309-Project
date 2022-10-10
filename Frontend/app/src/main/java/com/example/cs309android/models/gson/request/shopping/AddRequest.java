@@ -16,11 +16,6 @@ public class AddRequest extends PostRequest {
      */
     @Expose
     private final SimpleFoodItem item;
-    /**
-     * Authentication token
-     */
-    @Expose
-    private final String token;
 
     /**
      * Public constructor
@@ -29,9 +24,8 @@ public class AddRequest extends PostRequest {
      * @param token Authentication token
      */
     public AddRequest(SimpleFoodItem item, String token) {
-        super(Constants.ADD_SHOPPING_URL);
+        super(Constants.ADD_SHOPPING_URL + "/" + token);
         this.item = item;
-        this.token = token;
     }
 
     /**
@@ -41,14 +35,5 @@ public class AddRequest extends PostRequest {
      */
     public SimpleFoodItem getItem() {
         return item;
-    }
-
-    /**
-     * Getter for the token
-     *
-     * @return authentication token
-     */
-    public String getToken() {
-        return token;
     }
 }

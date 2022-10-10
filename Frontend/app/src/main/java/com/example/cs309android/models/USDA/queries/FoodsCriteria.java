@@ -2,7 +2,7 @@ package com.example.cs309android.models.USDA.queries;
 
 import static com.example.cs309android.models.USDA.Constants.API_KEY;
 
-import com.example.cs309android.models.GetRequestURL;
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.gson.GetRequest;
 import com.google.gson.annotations.Expose;
@@ -57,13 +57,13 @@ public class FoodsCriteria extends GetRequest {
 
     @Override
     public String getURL() {
-        if (index == -1) return new GetRequestURL(Constants.API_URL_FOODS_ENDPOINT)
+        if (index == -1) return new ParameterizedRequestURL(Constants.API_URL_FOODS_ENDPOINT)
                 .addArray("fdcId", fdcIds, index)
                 .addParam("format", format)
                 .addArray("nutrients", nutrients)
                 .addParam("api_key", API_KEY)
                 .toString();
-        return new GetRequestURL(Constants.API_URL_FOOD_ENDPOINT + fdcIds[0])
+        return new ParameterizedRequestURL(Constants.API_URL_FOOD_ENDPOINT + fdcIds[0])
                 .addArray("fdcId", fdcIds, index)
                 .addParam("format", format)
                 .addArray("nutrients", nutrients)

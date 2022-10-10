@@ -181,8 +181,10 @@ public class UserController {
     public @ResponseBody String regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
         String oldTokenHash = Hasher.sha256(oldToken);
         String newTokenHash = Hasher.sha256(newToken);
-        // TODO: If the hashed newToken exists in the table: return RESULT_REGEN_TOKEN
-        //       If the hashed oldToken is valid and that token is outdated: replace it with newToken, remove the oldToken from the table, return RESULT_OK
+        // TODO: If oldToken isnt in the tokens database: return error result
+        //       Else if oldToken isnt expired: return error result
+        //       Else if newToken is in the table already: return regen token result
+        //       Else: replace the old token with the new token
         return "";
     }
 }

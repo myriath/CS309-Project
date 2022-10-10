@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.GetRequestURL;
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.gson.GetRequest;
 import com.example.cs309android.util.Constants;
 
@@ -31,6 +31,6 @@ public class GetListRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new GetRequestURL(Constants.GET_SHOPPING_URL + "/" + token).toString();
+        return new ParameterizedRequestURL(Constants.GET_SHOPPING_URL + "/" + token).toString();
     }
 }
