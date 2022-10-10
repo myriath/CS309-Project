@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
@@ -119,7 +120,7 @@ public class RegisterFragment extends BaseFragment {
                 editor.putString(MainActivity.PREF_TOKEN, token);
                 editor.apply();
 
-                MainActivity.TOKEN = token;
+                ((GlobalClass) requireActivity().getApplicationContext()).setAuthModel(new AuthModel(unm, hash));
 
                 callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);

@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
@@ -23,10 +24,10 @@ import com.example.cs309android.models.gson.response.shopping.GetListResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Shopping list fragment.
@@ -73,7 +74,7 @@ public class ShoppingFragment extends BaseFragment {
 
         if (items == null) {
             items = new ArrayList<>();
-            new GetListRequest(MainActivity.TOKEN).request(response -> {
+            new GetListRequest(((GlobalClass) requireActivity().getApplicationContext()).getAuthModel()).request(response -> {
                 GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
                 if (getResponse.getResult() == Constants.RESULT_OK) {
                     items.addAll(Arrays.asList(getResponse.getShoppingList()));
@@ -109,12 +110,15 @@ public class ShoppingFragment extends BaseFragment {
     public void refreshList(View view) {
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
+        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);
 
         TextView empty = view.findViewById(R.id.empty_text);
         if (items.isEmpty()) {
             empty.setVisibility(View.VISIBLE);
+            fab.extend();
         } else {
             empty.setVisibility(View.INVISIBLE);
+            fab.shrink();
         }
     }
 
