@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             // Checks if the result is valid or not. If not, opens the login page
             int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
             if (result != RESULT_LOGGED_IN) startLoginFragment();
-            ((GlobalClass) getApplicationContext()).setAuthModel(new AuthModel(username, hash));
+            else ((GlobalClass) getApplicationContext()).setToken(token);
         }, error -> {
             error.printStackTrace();
             startLoginFragment();

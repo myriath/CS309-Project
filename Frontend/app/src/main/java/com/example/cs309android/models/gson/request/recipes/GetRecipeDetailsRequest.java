@@ -2,7 +2,6 @@ package com.example.cs309android.models.gson.request.recipes;
 
 import com.example.cs309android.models.GetRequestURL;
 import com.example.cs309android.models.gson.GetRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -18,20 +17,20 @@ public class GetRecipeDetailsRequest extends GetRequest {
     @Expose
     private final int rid;
     /**
-     * Authentication model of the user
+     * Authentication token of the user
      */
     @Expose
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
-     * @param rid Recipe id to get info for
-     * @param auth Authentication model for the user
+     * @param rid   Recipe id to get info for
+     * @param token Authentication token for the user
      */
-    public GetRecipeDetailsRequest(int rid, AuthModel auth) {
+    public GetRecipeDetailsRequest(int rid, String token) {
         this.rid = rid;
-        this.auth = auth;
+        this.token = token;
     }
 
     /**
@@ -44,12 +43,12 @@ public class GetRecipeDetailsRequest extends GetRequest {
     }
 
     /**
-     * Getter for the authentication model
+     * Getter for the authentication token
      *
-     * @return authentication model
+     * @return authentication token
      */
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 
     /**
