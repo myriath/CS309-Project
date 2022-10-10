@@ -27,8 +27,8 @@ variables:
 ###### BUILD JOBS ######
 
 build-spring-dev:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "backend-dev"
+  # rules:
+    # - if: $CI_COMMIT_BRANCH == "backend-dev"
   tags:
     - springboot_tag
   stage: maven-build
