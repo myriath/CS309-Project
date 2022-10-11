@@ -35,6 +35,7 @@
     <string name="recipes_id_input">Recipe ID</string>
     <string name="recipes_name_input">Recipe Name</string>
     <string name="recipes_search">Search</string>
+    <string name="recipes_instructions">Recipe Instructions</string>
     <!-- Strings related to Shopping -->
     <string name="shopping_list">Shopping List</string>
     <string name="shopping">Shopping</string>

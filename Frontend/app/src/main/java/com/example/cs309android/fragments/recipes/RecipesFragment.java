@@ -1,11 +1,14 @@
 package com.example.cs309android.fragments.recipes;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -13,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.AddRecipeActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.gson.request.recipes.AddRecipe;
 import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
@@ -20,6 +24,7 @@ import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
@@ -110,28 +115,34 @@ public class RecipesFragment extends BaseFragment {
         });
 
         //Add button adds recipe to db
-        view.findViewById(R.id.add_recipe).setOnClickListener(view1 -> {
-            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
+        FloatingActionButton addRecipe = view.findViewById(R.id.add_recipe);
+        addRecipe.setOnClickListener(view1 -> {
+            Intent myIntent = new Intent(view.getContext(), AddRecipeActivity.class);
+            startActivity(myIntent);
 
-            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getToken(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
-                try {
-                    System.out.print(response.toString(4));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
-                TextView recipes = view.findViewById(R.id.recipeName);
-                if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
-                    recipes.setText("Recipe Created");
-                }
-                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
-                    recipes.setText("That RID is taken");
-                }
-                else {
-                    recipes.setText("Something went wrong");
-                }
-            },getContext());
+//            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
+//
+//            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getToken(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
+//                try {
+//                    System.out.print(response.toString(4));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+//                TextView recipes = view.findViewById(R.id.recipeName);
+//                if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
+//                    recipes.setText("Recipe Created");
+//                }
+//                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
+//                    recipes.setText("That RID is taken");
+//                }
+//                else {
+//                    recipes.setText("Something went wrong");
+//                }
+//            },getContext());
         });
         return view;
     }
+
+
 }
