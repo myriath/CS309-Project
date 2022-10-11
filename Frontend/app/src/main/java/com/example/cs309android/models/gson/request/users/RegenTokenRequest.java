@@ -23,14 +23,4 @@ public class RegenTokenRequest extends PutRequest {
                 .addParam("newToken", newToken)
                 .toString());
     }
-
-    /**
-     * RegenToken has no body, all of the arguments are in the path
-     *
-     * @return empty string
-     */
-    @Override
-    public String getBody() {
-        return "";
-    }
 }

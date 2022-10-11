@@ -2,6 +2,7 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Util.spin;
 
 import android.content.Context;
@@ -31,9 +32,11 @@ import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
+import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -182,7 +185,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             new LoginTokenRequest(token).unspinOnComplete(response -> {
                 // Checks if the result is valid or not. If not, opens the login page
                 int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-                if (result != RESULT_LOGGED_IN) startLoginFragment();
+                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
+                else if (result != RESULT_LOGGED_IN) startLoginFragment();
                 else ((GlobalClass) getApplicationContext()).setToken(token);
             }, error -> {
                 error.printStackTrace();
@@ -365,5 +369,26 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                 .add(R.id.loginPopup, (Fragment) loginWindowFragment)
                 .commit();
+    }
+
+    public void regenToken(String oldToken, int depth) {
+        String newToken = Hasher.genToken();
+
+        new RegenTokenRequest(newToken, oldToken).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            int result = genericResponse.getResult();
+            if (result == RESULT_REGEN_TOKEN && depth < 5) {
+                regenToken(oldToken, depth + 1);
+            } else if (result == RESULT_LOGGED_IN) {
+                SharedPreferences pref = getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(MainActivity.PREF_TOKEN, newToken);
+                editor.apply();
+
+                ((GlobalClass) getApplicationContext()).setToken(newToken);
+            } else {
+                startLoginFragment();
+            }
+        }, MainActivity.this);
     }
 }

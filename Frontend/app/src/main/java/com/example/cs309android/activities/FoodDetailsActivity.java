@@ -264,7 +264,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
      * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, float amount, String unit) {
-        System.out.println(name);
         if (amount == 0) return null;
         NutritionItemView itemView = new NutritionItemView(this);
         itemView.initView(name, String.format(Locale.getDefault(), "%.02f %s", amount, unit));
