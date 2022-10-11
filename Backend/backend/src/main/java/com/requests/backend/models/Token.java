@@ -16,7 +16,7 @@ public class Token {
 
     private String username;
     @CreationTimestamp
-    private Date creationDate;
+    private long creationDate;
 
     public String getToken() {
         return token;
@@ -34,12 +34,12 @@ public class Token {
         this.username = username;
     }
 
-    public Date getCreationDate() {
+    public long getCreationDate() {
         return creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+        this.creationDate = creationDate.getTime();
     }
 
     public boolean isOutdated() {
@@ -49,7 +49,7 @@ public class Token {
 
         // Calculate the difference between the time of creation of the token and the
         // current date in days.
-        long diffInMils = Math.abs(currentDate.getTime() - creationDate.getTime());
+        long diffInMils = Math.abs(currentDate.getTime() - creationDate);
         long diff = TimeUnit.DAYS.convert(diffInMils, TimeUnit.MILLISECONDS);
 
         return diff >= 1;

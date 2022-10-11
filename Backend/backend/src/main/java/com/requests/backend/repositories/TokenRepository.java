@@ -22,7 +22,7 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
                     "VALUES (:token, :creation_date, :username)",
             nativeQuery = true)
     @Transactional
-    void queryAddToken(@Param("token") String token, @Param("creation_date") long creationDate, @Param("username") String username);
+        void queryAddToken(@Param("token") String token, @Param("creation_date") long creationDate, @Param("username") String username);
 
     // TODO Complete query logic
     @Modifying
