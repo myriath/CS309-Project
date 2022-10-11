@@ -160,7 +160,7 @@ public class UserController {
                 }
                 // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
                 else {
-                    tokenRepository.queryAddToken(username, tokenHash);
+                    tokenRepository.queryAddToken(tokenHash, System.currentTimeMillis(), username);
                     res.setResult(RESULT_LOGGED_IN);
                 }
 
@@ -202,7 +202,7 @@ public class UserController {
             // If the token does not already exist, try to add the user to user table
             try {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(username, tokenHash);
+                tokenRepository.queryAddToken(tokenHash, System.currentTimeMillis(), username);
                 res.setResult(RESULT_USER_CREATED);
 
             // If the username already exists in the user table, return an error result

@@ -46,7 +46,6 @@ public class Token {
 
         // The current date and time
         Date currentDate = new Date(System.currentTimeMillis());
-        System.out.println(currentDate);
 
         // Calculate the difference between the time of creation of the token and the
         // current date in days.
