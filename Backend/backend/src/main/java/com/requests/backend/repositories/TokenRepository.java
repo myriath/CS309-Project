@@ -30,10 +30,10 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
     @Modifying
     @Query(
             value = "UPDATE tokens " +
-                    "SET token = :newToken" +
+                    "SET token = :newToken, creation_date = :creationDate " +
                     "WHERE token = :oldToken",
             nativeQuery = true)
     @Transactional
-    void queryUpdateToken(@Param("oldToken") String oldToken, @Param("newToken") String newToken);
+    void queryUpdateToken(@Param("oldToken") String oldToken, @Param("newToken") String newToken, @Param("creationDate") Date creationDate);
 }
 

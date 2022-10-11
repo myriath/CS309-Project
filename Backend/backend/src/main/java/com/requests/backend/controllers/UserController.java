@@ -243,7 +243,7 @@ public class UserController {
             // Otherwise, if the token is expired, replace the old token with the new token
             // in the tokens table
             else if (dbToken.isOutdated()) {
-                tokenRepository.queryUpdateToken(oldTokenHash, newTokenHash);
+                tokenRepository.queryUpdateToken(oldTokenHash, newTokenHash, new Date(System.currentTimeMillis()));
                 res.setResult(RESULT_OK);
             }
             // Otherwise, oldToken is not outdated, and does not need replacement -- return an error
