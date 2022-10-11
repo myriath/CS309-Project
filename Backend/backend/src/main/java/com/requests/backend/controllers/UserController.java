@@ -244,7 +244,7 @@ public class UserController {
             // in the tokens table
             else if (dbToken.isOutdated()) {
                 tokenRepository.queryUpdateToken(oldTokenHash, newTokenHash, new Date(System.currentTimeMillis()));
-                res.setResult(RESULT_OK);
+                res.setResult(RESULT_LOGGED_IN);
             }
             // Otherwise, oldToken is not outdated, and does not need replacement -- return an error
             else {
