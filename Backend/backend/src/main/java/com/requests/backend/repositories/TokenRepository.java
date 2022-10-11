@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
     @Query(
@@ -22,7 +24,7 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
                     "VALUES (:token, :creation_date, :username)",
             nativeQuery = true)
     @Transactional
-        void queryAddToken(@Param("token") String token, @Param("creation_date") long creationDate, @Param("username") String username);
+        void queryAddToken(@Param("token") String token, @Param("creation_date") Date creationDate, @Param("username") String username);
 
     // TODO Complete query logic
     @Modifying

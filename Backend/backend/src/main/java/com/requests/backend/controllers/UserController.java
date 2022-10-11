@@ -12,6 +12,8 @@ import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
+
+import java.sql.Date;
 import java.util.Collection;
 
 import static com.util.Constants.*;
@@ -160,7 +162,7 @@ public class UserController {
                 }
                 // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
                 else {
-                    tokenRepository.queryAddToken(tokenHash, System.currentTimeMillis(), username);
+                    tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                     res.setResult(RESULT_LOGGED_IN);
                 }
 
@@ -202,7 +204,7 @@ public class UserController {
             // If the token does not already exist, try to add the user to user table
             try {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(tokenHash, System.currentTimeMillis(), username);
+                tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                 res.setResult(RESULT_USER_CREATED);
 
             // If the username already exists in the user table, return an error result
