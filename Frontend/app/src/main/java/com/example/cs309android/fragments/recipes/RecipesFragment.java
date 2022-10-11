@@ -89,7 +89,7 @@ public class RecipesFragment extends BaseFragment {
                 return;
             }
             int ridValue = Integer.parseInt(ridInput.getText().toString());
-            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getAuthModel()).request(response -> {
+            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
                 try {
                     System.out.print(response.toString(4));
                 } catch (JSONException e) {
@@ -113,7 +113,7 @@ public class RecipesFragment extends BaseFragment {
         view.findViewById(R.id.add_recipe).setOnClickListener(view1 -> {
             TextView RnameInput = view.findViewById(R.id.recipeNameInput);
 
-            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getAuthModel().getUsername(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
+            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getToken(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
                 try {
                     System.out.print(response.toString(4));
                 } catch (JSONException e) {

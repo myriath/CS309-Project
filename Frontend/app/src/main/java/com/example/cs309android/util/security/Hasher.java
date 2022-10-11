@@ -47,16 +47,6 @@ public class Hasher {
      * Decodes from an url-safe base64 string
      */
     public static final Base64.Decoder B64_URL_DECODER = Base64.getUrlDecoder();
-    /**
-     * Base64 encoder.
-     * Encodes to a url-unsafe base64 string
-     */
-    public static final Base64.Encoder B64_ENCODER = Base64.getEncoder();
-    /**
-     * Base64 decoder.
-     * Decodes from an url-unsafe base64 string
-     */
-    public static final Base64.Decoder B64_DECODER = Base64.getDecoder();
 
     /**
      * SHA256 message digest
@@ -129,7 +119,7 @@ public class Hasher {
      * @return B64 encoded string
      */
     public static String getEncoded(byte[] bytes) {
-        return B64_ENCODER.encodeToString(bytes).trim();
+        return B64_URL_ENCODER.encodeToString(bytes).trim();
     }
 
     /**
@@ -151,6 +141,6 @@ public class Hasher {
      * @return Base64 encoded string.
      */
     public static String sha256(String b64) {
-        return B64_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64)));
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64)));
     }
 }

@@ -1,7 +1,9 @@
 package com.example.cs309android.models.gson.request.users;
 
-import com.example.cs309android.models.gson.PostRequest;
-import com.example.cs309android.util.Constants;
+import static com.example.cs309android.util.Constants.TOKEN_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.gson.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -9,7 +11,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class LoginTokenRequest extends PostRequest {
+public class LoginTokenRequest extends GetRequest {
     /**
      * Token to log in with
      */
@@ -22,7 +24,6 @@ public class LoginTokenRequest extends PostRequest {
      * @param token Token for login
      */
     public LoginTokenRequest(String token) {
-        super(Constants.LOGIN_URL);
         this.token = token;
     }
 
@@ -33,5 +34,10 @@ public class LoginTokenRequest extends PostRequest {
      */
     public String getToken() {
         return token;
+    }
+
+    @Override
+    public String getURL() {
+        return new ParameterizedRequestURL(TOKEN_URL + "/" + token).toString();
     }
 }

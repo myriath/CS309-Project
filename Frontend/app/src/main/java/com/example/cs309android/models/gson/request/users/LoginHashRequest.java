@@ -1,7 +1,9 @@
 package com.example.cs309android.models.gson.request.users;
 
-import com.example.cs309android.models.gson.PostRequest;
-import com.example.cs309android.util.Constants;
+import static com.example.cs309android.util.Constants.LOGIN_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.gson.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -9,7 +11,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class LoginHashRequest extends PostRequest {
+public class LoginHashRequest extends GetRequest {
     /**
      * Username to attempt a login
      */
@@ -19,7 +21,12 @@ public class LoginHashRequest extends PostRequest {
      * Hash to attempt a login with
      */
     @Expose
-    private final String pHash;
+    private final String hash;
+    /**
+     * B64 encoded string of the new login token
+     */
+    @Expose
+    private final String token;
 
     /**
      * Public constructor
@@ -27,10 +34,10 @@ public class LoginHashRequest extends PostRequest {
      * @param username Username for login
      * @param hash     Hash for login
      */
-    public LoginHashRequest(String username, String hash) {
-        super(Constants.LOGIN_URL);
+    public LoginHashRequest(String username, String hash, String token) {
         this.username = username;
-        this.pHash = hash;
+        this.hash = hash;
+        this.token = token;
     }
 
     /**
@@ -47,7 +54,15 @@ public class LoginHashRequest extends PostRequest {
      *
      * @return hash
      */
-    public String getPHash() {
-        return pHash;
+    public String getHash() {
+        return hash;
+    }
+
+    @Override
+    public String getURL() {
+        return new ParameterizedRequestURL(LOGIN_URL + "/" + username)
+                .addParam("hash", hash)
+                .addParam("newToken", token)
+                .toString();
     }
 }

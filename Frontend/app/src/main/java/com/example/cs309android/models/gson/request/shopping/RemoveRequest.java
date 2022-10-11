@@ -15,11 +15,6 @@ public class RemoveRequest extends PutRequest {
      */
     @Expose
     private final String itemName;
-    /**
-     * Authentication token
-     */
-    @Expose
-    private final String token;
 
     /**
      * Public constructor
@@ -28,9 +23,8 @@ public class RemoveRequest extends PutRequest {
      * @param token  Token for authentication
      */
     public RemoveRequest(String itemName, String token) {
-        super(Constants.REMOVE_SHOPPING_URL);
+        super(Constants.REMOVE_SHOPPING_URL + "/" + token);
         this.itemName = itemName;
-        this.token = token;
     }
 
     /**
@@ -39,14 +33,5 @@ public class RemoveRequest extends PutRequest {
      */
     public String getIndex() {
         return itemName;
-    }
-
-    /**
-     * Getter for the token
-     *
-     * @return Authentication token
-     */
-    public String getToken() {
-        return token;
     }
 }
