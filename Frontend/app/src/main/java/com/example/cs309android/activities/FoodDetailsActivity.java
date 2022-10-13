@@ -16,15 +16,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
-import com.example.cs309android.models.USDA.models.FoodNutrient;
-import com.example.cs309android.models.USDA.models.FoundationFoodItem;
-import com.example.cs309android.models.USDA.models.SRLegacyFoodItem;
-import com.example.cs309android.models.USDA.models.SurveyFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
-import com.example.cs309android.models.gson.models.DataTypeModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.NutritionItemView;
@@ -94,41 +88,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Space spacer = new Space(this);
 
         new FoodsCriteria(item.getFdcId(), Format.FULL, null).unspinOnComplete(response -> {
-            DataTypeModel dataType = Util.objFromJsonAdapted(response.toString(), DataTypeModel.class, new DataTypeModel.DataTypeModelDeserializer());
-            switch (dataType.getDataType()) {
-                // TODO: Write all of these, currently only need Branded/Foundation because of search
-                case BRANDED: {
-                    BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
-                    setSubtitle(foodItem.getBrandOwner(), toolbar);
-                    fillIngredients(foodItem.getIngredients());
-                    fillNutrition(foodItem.getFoodNutrients(), (float) foodItem.getServingSize(), foodItem.getServingSizeUnit());
-                    detailsLayout.addView(spacer);
-                    break;
-                }
-                case FOUNDATION: {
-                    FoundationFoodItem foodItem = Util.objFromJson(response, FoundationFoodItem.class);
-                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
-                    detailsLayout.addView(spacer);
-                    break;
-                }
-                case SURVEY: {
-                    SurveyFoodItem foodItem = Util.objFromJson(response, SurveyFoodItem.class);
-                    detailsLayout.addView(spacer);
-                    break;
-                }
-                case LEGACY: {
-                    SRLegacyFoodItem foodItem = Util.objFromJson(response, SRLegacyFoodItem.class);
-                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
-                    detailsLayout.addView(spacer);
-                    break;
-                }
-                default: {
-                    AbridgedFoodItem foodItem = Util.objFromJson(response, AbridgedFoodItem.class);
-                    setSubtitle(foodItem.getBrandOwner(), toolbar);
-                    fillNutrition(foodItem.getFoodNutrients(), 0, null);
-                    detailsLayout.addView(spacer);
-                }
-            }
+            BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+            setSubtitle(foodItem.getBrandOwner(), toolbar);
+            fillIngredients(foodItem.getIngredients());
+            fillNutrition(foodItem.getLabelNutrients(), (float) foodItem.getServingSize(), foodItem.getServingSizeUnit());
+            detailsLayout.addView(spacer);
         }, FoodDetailsActivity.this, getWindow().getDecorView());
 
         setSupportActionBar(toolbar);
@@ -188,9 +152,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
      *
      * @param nutrients Nutrients of the item
      */
-    private void fillNutrition(Object[] nutrients, float servingSize, String servingUnit) {
-        if (nutrients.getClass() != FoodNutrient[].class && nutrients.getClass() != AbridgedFoodNutrient[].class)
-            return;
+    private void fillNutrition(BrandedFoodItem.LabelNutrients nutrients, float servingSize, String servingUnit) {
         // Title TextView
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
@@ -207,6 +169,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             detailsLayout.addView(subtitle);
         }
 
+        // Macro nutrients
         // Body CardView
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
@@ -216,28 +179,32 @@ public class FoodDetailsActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
-        if (nutrients.getClass() == FoodNutrient[].class) {
-            fillNutritionTable((FoodNutrient[]) nutrients, layout);
-        } else {
-            fillNutritionTable((AbridgedFoodNutrient[]) nutrients, layout);
-        }
-
+        layout.addView(generateNutritionRow("Calories", nutrients.getCalories().getValue(), "kcal"));
+        layout.addView(generateNutritionRow("Total carbohydrates", nutrients.getCarbohydrates().getValue(), "g"));
+        layout.addView(generateNutritionRow("Total fat", nutrients.getFat().getValue(), "g"));
+        layout.addView(generateNutritionRow("Total protein", nutrients.getProtein().getValue(), "g"));
         detailsLayout.addView(cardView);
-    }
 
-    /**
-     * Handles the nutrition table for a FoodNutrient[]
-     *
-     * @param nutrients FoodNutrient[] of nutrients
-     * @param table     Linear Layout to be used for the table
-     */
-    private void fillNutritionTable(FoodNutrient[] nutrients, LinearLayout table) {
-        for (FoodNutrient nutrient : nutrients) {
-            NutritionItemView view = generateNutritionRow(nutrient.getNutrient().getName(), nutrient.getAmount(), nutrient.getNutrient().getUnitName());
-            if (view != null) {
-                table.addView(view);
-            }
-        }
+        // Micro nutrients
+        // Body CardView
+        cardView = new CardView(this);
+        cardView.setRadius(dp16);
+        // Linear layout inside CardView with details
+        layout = new LinearLayout(this);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        cardView.addView(layout);
+
+        layout.addView(generateNutritionRow("Sodium", nutrients.getSodium().getValue(), "mg"));
+        layout.addView(generateNutritionRow("Total sugars", nutrients.getSugars().getValue(), "g"));
+        layout.addView(generateNutritionRow("Total fiber", nutrients.getFiber().getValue(), "g"));
+        layout.addView(generateNutritionRow("Saturated fat", nutrients.getSaturatedFat().getValue(), "g"));
+        layout.addView(generateNutritionRow("Trans fat", nutrients.getTransFat().getValue(), "g"));
+        layout.addView(generateNutritionRow("Cholesterol", nutrients.getCholesterol().getValue(), "mg"));
+        layout.addView(generateNutritionRow("Calcium", nutrients.getCalcium().getValue(), "mg"));
+        layout.addView(generateNutritionRow("Iron", nutrients.getIron().getValue(), "mg"));
+        layout.addView(generateNutritionRow("Potassium", nutrients.getPotassium().getValue(), "mg"));
+        detailsLayout.addView(cardView);
     }
 
     /**

@@ -389,6 +389,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             } else {
                 startLoginFragment();
             }
+        }, error -> {
+            error.printStackTrace();
+            startLoginFragment();
         }, MainActivity.this);
     }
 }
