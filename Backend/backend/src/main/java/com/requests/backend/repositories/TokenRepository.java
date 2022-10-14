@@ -34,6 +34,6 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
                     "WHERE token = :oldToken",
             nativeQuery = true)
     @Transactional
-    void queryUpdateToken(@Param("oldToken") String oldToken, @Param("newToken") String newToken, @Param("creationDate") Date creationDate);
+    void queryUpdateToken(@Param("newToken") String newToken, @Param("creationDate") Date creationDate, @Param("oldToken") String oldToken);
 }
 
