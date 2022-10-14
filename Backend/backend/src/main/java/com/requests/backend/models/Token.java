@@ -15,7 +15,7 @@ public class Token {
 
     private String username;
 
-    private Date creationDate = new Date(System.currentTimeMillis());
+    private Date creationDate;
 
     public String getToken() {
         return token;
@@ -37,9 +37,8 @@ public class Token {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+    @PrePersist
+    public void setCreationDate() {  this.creationDate = new Date(System.currentTimeMillis()); }
 
     @PreUpdate
     public void setLastUpdate() {  this.creationDate = new Date(System.currentTimeMillis()); }
