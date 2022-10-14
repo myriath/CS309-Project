@@ -162,7 +162,7 @@ public class UserController {
                 }
                 // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
                 else {
-                    tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
+                    tokenRepository.queryAddToken(tokenHash, username);
                     res.setResult(RESULT_LOGGED_IN);
                 }
 
@@ -204,7 +204,7 @@ public class UserController {
             // If the token does not already exist, try to add the user to user table
             try {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
+                tokenRepository.queryAddToken(tokenHash, username);
                 res.setResult(RESULT_USER_CREATED);
 
             // If the username already exists in the user table, return an error result
@@ -243,7 +243,7 @@ public class UserController {
             // Otherwise, if the token is expired, replace the old token with the new token
             // in the tokens table
             else if (dbToken.isOutdated()) {
-                tokenRepository.queryUpdateToken(newTokenHash, new Date(System.currentTimeMillis()), oldTokenHash);
+                tokenRepository.queryUpdateToken(newTokenHash, oldTokenHash);
                 res.setResult(RESULT_LOGGED_IN);
             }
             // Otherwise, oldToken is not outdated, and does not need replacement -- return an error

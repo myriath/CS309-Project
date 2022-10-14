@@ -20,20 +20,20 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
 
     @Modifying
     @Query(
-            value = "INSERT INTO tokens (token, creation_date, username) " +
-                    "VALUES (:token, :creation_date, :username)",
+            value = "INSERT INTO tokens (token, username) " +
+                    "VALUES (:token, :username)",
             nativeQuery = true)
     @Transactional
-        void queryAddToken(@Param("token") String token, @Param("creation_date") Date creationDate, @Param("username") String username);
+        void queryAddToken(@Param("token") String token, @Param("username") String username);
 
     // TODO Complete query logic
     @Modifying
     @Query(
             value = "UPDATE tokens " +
-                    "SET token = :newToken, creation_date = :creationDate " +
+                    "SET token = :newToken" +
                     "WHERE token = :oldToken",
             nativeQuery = true)
     @Transactional
-    void queryUpdateToken(@Param("newToken") String newToken, @Param("creationDate") Date creationDate, @Param("oldToken") String oldToken);
+    void queryUpdateToken(@Param("newToken") String newToken, @Param("oldToken") String oldToken);
 }
 
