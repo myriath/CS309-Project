@@ -15,10 +15,7 @@ public class Token {
 
     private String username;
 
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date")
-    private Date creationDate;
+    private Date creationDate = new Date(System.currentTimeMillis());
 
     public String getToken() {
         return token;
@@ -43,6 +40,9 @@ public class Token {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
+
+    @PreUpdate
+    public void setLastUpdate() {  this.creationDate = new Date(System.currentTimeMillis()); }
 
     public boolean isOutdated() {
 
