@@ -1,18 +1,14 @@
 android.buildTypes {
-    mock {
-        buildConfigField "String", "BASE_API_URL", "\"https://8aa423be-0bcd-4383-b9e6-51197558bb92.mock.pstmn.io\""
+    demodev {
+        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
-    build {
-        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
+    demo {
+        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8080/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     release {
         buildConfigField "String", "BASE_API_URL", "\"https://api.edek.xyz/\""
         buildConfigField "Boolean", "SSL_OFF", "false"
-    }
-    debug {
-        buildConfigField "String", "BASE_API_URL", "\"https://10.36.135.139:8443/\""
-        buildConfigField "Boolean", "SSL_OFF", "true"
     }
 }
