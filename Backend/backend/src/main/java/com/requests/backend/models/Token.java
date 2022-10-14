@@ -37,11 +37,7 @@ public class Token {
         return creationDate;
     }
 
-    @PrePersist
-    public void setCreationDate() {  this.creationDate = new Date(System.currentTimeMillis()); }
-
-    @PreUpdate
-    public void setLastUpdate() {  this.creationDate = new Date(System.currentTimeMillis()); }
+    public void setCreationDate(Date creationDate) { this.creationDate = creationDate; }
 
     public boolean isOutdated() {
 
