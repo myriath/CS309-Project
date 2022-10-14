@@ -7,7 +7,6 @@ import static com.example.cs309android.util.Util.spin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
@@ -22,18 +21,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.food.FoodSearchActivity;
+import com.example.cs309android.fragments.account.AccountFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
-import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
 import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.users.LoginResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
@@ -75,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     private CallbackFragment mainFragment;
     private int currentFragment = 2;
+
+    /**
+     * GlobalClass for storing universal values
+     */
+    private GlobalClass global;
 
     /**
      * Response codes for callback method. Used by Fragments for this class
@@ -146,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        global = ((GlobalClass) getApplicationContext());
+        global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
+
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
         if (SSL_OFF) {
@@ -176,18 +185,19 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         );
 
         // Gets stored username and password hash, if they exist
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String token = pref.getString(PREF_TOKEN, "").trim();
+        String token = global.getPreferences().getString(PREF_TOKEN, "").trim();
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
         if (!token.equals("")) {
             new LoginTokenRequest(token).unspinOnComplete(response -> {
+                LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
                 // Checks if the result is valid or not. If not, opens the login page
-                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+                int result = loginResponse.getResult();
+
                 if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
-                else ((GlobalClass) getApplicationContext()).setToken(token);
+                else Util.login(global, token, loginResponse);
             }, error -> {
                 error.printStackTrace();
                 startLoginFragment();
@@ -246,8 +256,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
-            } else if (item.getItemId() == R.id.settings) {
-                mainFragment = new SettingsFragment();
+            } else if (item.getItemId() == R.id.account) {
+                mainFragment = new AccountFragment();
                 mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
@@ -270,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 System.out.println("home re");
             } else if (item.getItemId() == R.id.recipes) {
                 System.out.println("recipes re");
-            } else if (item.getItemId() == R.id.settings) {
+            } else if (item.getItemId() == R.id.account) {
                 System.out.println("settings re");
             }
         });
@@ -375,20 +385,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         String newToken = Hasher.genToken();
 
         new RegenTokenRequest(newToken, oldToken).request(response -> {
-            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-            int result = genericResponse.getResult();
-            if (result == RESULT_REGEN_TOKEN && depth < 5) {
-                regenToken(oldToken, depth + 1);
-            } else if (result == RESULT_LOGGED_IN) {
-                SharedPreferences pref = getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString(MainActivity.PREF_TOKEN, newToken);
-                editor.apply();
+            LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
+            int result = loginResponse.getResult();
 
-                ((GlobalClass) getApplicationContext()).setToken(newToken);
-            } else {
-                startLoginFragment();
-            }
+            if (result == RESULT_REGEN_TOKEN && depth < 5) regenToken(oldToken, depth + 1);
+            else if (result == RESULT_LOGGED_IN) Util.login(global, newToken, loginResponse);
+            else startLoginFragment();
         }, MainActivity.this);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.recipe;
 
 import android.content.Intent;
 import android.os.Bundle;

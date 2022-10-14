@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.custom;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 
@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.food.CustomFoodAddRequest;

@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
 import static com.example.cs309android.util.Util.setSubtitle;
@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.USDA.models.AbridgedFoodItem;
 import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;

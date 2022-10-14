@@ -1,9 +1,7 @@
 package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.activities.MainActivity.CALLBACK_START_LOGIN;
-import static com.example.cs309android.activities.MainActivity.PREF_NAME;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.Preference;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
@@ -30,12 +29,6 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class SettingsFragment extends BasePreferenceFragment {
-
-    /**
-     * Preferences used to store user settings
-     */
-    private SharedPreferences pref;
-
     /**
      * Runs when the window is created. Here is where preference code is written
      *
@@ -45,14 +38,12 @@ public class SettingsFragment extends BasePreferenceFragment {
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.settings_screen, rootKey);
-        pref = requireActivity().getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences preferences = ((GlobalClass) requireActivity().getApplicationContext()).getPreferences();
 
         // Logout button removes stored creds and prompts login
         Preference logout = Objects.requireNonNull(findPreference("logout"));
         logout.setOnPreferenceClickListener(preference -> {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.remove(MainActivity.PREF_TOKEN);
-            editor.apply();
+            preferences.edit().remove(MainActivity.PREF_TOKEN).apply();
             ShoppingFragment.clearItems();
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;

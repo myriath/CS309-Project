@@ -1,6 +1,5 @@
 package com.example.cs309android.fragments.recipes;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -16,11 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AddRecipeActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.request.recipes.AddRecipe;
 import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;

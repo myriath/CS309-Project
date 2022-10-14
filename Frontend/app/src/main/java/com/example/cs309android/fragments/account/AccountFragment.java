@@ -1,21 +1,22 @@
 package com.example.cs309android.fragments.account;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.fragments.BaseFragment;
 
 /**
  * Fragment to display account details
  *
  * @author Mitch Hudson
  */
-public class AccountFragment extends Fragment {
+public class AccountFragment extends BaseFragment {
 
     /**
      * Use this factory method to create a new instance of
@@ -41,6 +42,14 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
+
+        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+
+        return view;
     }
 }

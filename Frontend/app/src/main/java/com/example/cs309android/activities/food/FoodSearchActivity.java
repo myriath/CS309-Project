@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 
@@ -22,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.custom.CustomFoodActivity;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;

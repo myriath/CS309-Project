@@ -1,23 +1,13 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.recipe;
+
+import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.request.recipes.AddRecipe;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.util.Constants;
-import com.example.cs309android.util.Util;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONException;
 
 import java.util.Objects;
 

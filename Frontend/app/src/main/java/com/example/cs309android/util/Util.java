@@ -2,10 +2,15 @@ package com.example.cs309android.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.models.gson.response.users.LoginResponse;
+import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -110,6 +115,35 @@ public class Util {
     public static void hideKeyboard(View view, Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
+
+    /**
+     * Sets variables necessary for app functions after a login
+     * Also sets the preferences for a new token
+     *
+     * @param global GlobalClass for storing values
+     * @param token  Token for authentication
+     * @param login  LoginResponse for other values from the server
+     */
+    public static void login(GlobalClass global, String token, LoginResponse login) {
+        global.getPreferences().edit().putString(MainActivity.PREF_TOKEN, token).apply();
+        global.setToken(token);
+
+//        SharedPreferences preferences = global.getPreferences();
+//        SharedPreferences.Editor editor = preferences.edit();
+
+//        editor.putString(PREF_BANNER, login.getBanner());
+        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());
+        global.setBanner(BitmapFactory.decodeByteArray(bannerBytes, 0, bannerBytes.length));
+
+//        editor.putString(PREF_PFP, login.getPfp());
+        byte[] pfpBytes = Hasher.B64_URL_DECODER.decode(login.getPfp());
+        global.setPfp(BitmapFactory.decodeByteArray(pfpBytes, 0, pfpBytes.length));
+
+//        editor.putString(PREF_UNM, login.getUsername());
+        global.setUsername(login.getUsername());
+
+//        editor.apply();
     }
 
     /**
