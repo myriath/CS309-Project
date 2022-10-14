@@ -31,6 +31,11 @@ public class FoodLogController {
     @Autowired
     private TokenRepository tokenRepository;
 
+    /**
+     * Gets all food log entries for a user
+     * @param token     The provided token of the user
+     * @return          A JSON array containing all food log entries for the given date
+     */
     @GetMapping (path = "/get/{token}")
     public @ResponseBody String getFoodLog(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
@@ -54,6 +59,12 @@ public class FoodLogController {
         return gson.toJson(res);
     }
 
+    /**
+     * Gets the food log entries for a user for a specific date
+     * @param token     The provided token of the user
+     * @param json      A JSON object containing the desired date
+     * @return          A JSON array containing all food log entries for the given date
+     */
     @GetMapping (path = "/getDay/{token}")
     public @ResponseBody String getLogByDay(@PathVariable String token, @RequestBody String json) {
 
@@ -82,6 +93,12 @@ public class FoodLogController {
         return gson.toJson(res);
     }
 
+    /**
+     * Adds a food log entry associated with a user
+     * @param token  The provided token of the user
+     * @param json   JSON object containing all food information (fdcId, foodName, nutrients etc.)
+     * @return       JSON response containing result code
+     */
     @PostMapping(path = "/add/{token}")
     public @ResponseBody String addToLog(@PathVariable String token, @RequestBody String json) {
 
@@ -110,6 +127,13 @@ public class FoodLogController {
         return gson.toJson(res);
     }
 
+    /**
+     * Removes a log entry of a user of the database based on a given logId (PK of food_log)
+     *
+     * @param token  The provided token of the user
+     * @param logId  The logId of the entry the user wants to remove
+     * @return
+     */
     @DeleteMapping (path = "/remove/{token}")
     public @ResponseBody String removeFromLog(@PathVariable String token, @RequestParam int logId) {
 
