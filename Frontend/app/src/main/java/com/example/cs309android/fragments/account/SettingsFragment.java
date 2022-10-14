@@ -1,4 +1,4 @@
-package com.example.cs309android.fragments.settings;
+package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.activities.MainActivity.CALLBACK_START_LOGIN;
 import static com.example.cs309android.activities.MainActivity.PREF_NAME;

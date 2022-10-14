@@ -27,7 +27,7 @@ import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
-import com.example.cs309android.fragments.settings.SettingsFragment;
+import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
