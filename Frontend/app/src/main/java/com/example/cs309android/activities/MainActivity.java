@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Gets stored username and password hash, if they exist
         SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String token = pref.getString(PREF_TOKEN, "").trim();
-
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
         if (!token.equals("")) {

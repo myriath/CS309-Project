@@ -16,9 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
-import com.example.cs309android.models.USDA.models.Nutrient;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.util.Util;
@@ -174,6 +172,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
         // Body CardView
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
+        Space space = new Space(this);
+        space.setMinimumHeight((int) dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
         layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
@@ -185,6 +185,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         layout.addView(generateNutritionRow("Total fat", nutrients.getFat(), "g"));
         layout.addView(generateNutritionRow("Total protein", nutrients.getProtein(), "g"));
         detailsLayout.addView(cardView);
+        detailsLayout.addView(space);
 
         // Micro nutrients
         // Body CardView
@@ -234,6 +235,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
      * @param ingredientsText Ingredients of the item
      */
     private void fillIngredients(String ingredientsText) {
+        if (ingredientsText == null || ingredientsText.equals("")) return;
         // Title TextView
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.ingredients));
