@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
@@ -80,35 +82,39 @@ public class RecipesFragment extends BaseFragment {
             return WindowInsetsCompat.CONSUMED;
         });
 
+        ListView listView = view.findViewById(R.id.recipes_list);
+        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+
         //Search button triggers search by RID
-        view.findViewById(R.id.recipe_search_button).setOnClickListener(view1 -> {
-            TextView ridInput = view.findViewById(R.id.recipeRidInput);
-            TextView recipes = view.findViewById(R.id.recipeName);
-
-            if(!(ridInput.getText().toString().matches("[0-9]+"))) {
-                recipes.setText("Invalid Search");
-                return;
-            }
-            int ridValue = Integer.parseInt(ridInput.getText().toString());
-            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
-                try {
-                    System.out.print(response.toString(4));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
-
-
-                if (recipeResponse.getResult() == Constants.RESULT_OK) {
-                    String stuff = recipeResponse.getRecipe().getRecipeName() + recipeResponse.getRecipe().getSteps();
-                    recipes.setText(stuff);
-                }
-                else {
-                    recipes.setText("Invalid RID");
-                }
-            },getContext());
-        });
+//        view.findViewById(R.id.recipe_search_button).setOnClickListener(view1 -> {
+//            TextView ridInput = view.findViewById(R.id.recipeRidInput);
+//            TextView recipes = view.findViewById(R.id.recipeName);
+//
+//            if(!(ridInput.getText().toString().matches("[0-9]+"))) {
+//                recipes.setText("Invalid Search");
+//                return;
+//            }
+//            int ridValue = Integer.parseInt(ridInput.getText().toString());
+//            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
+//                try {
+//                    System.out.print(response.toString(4));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
+//
+//
+//                if (recipeResponse.getResult() == Constants.RESULT_OK) {
+//                    String stuff = recipeResponse.getRecipe().getRecipeName() + recipeResponse.getRecipe().getSteps();
+//                    recipes.setText(stuff);
+//                }
+//                else {
+//                    recipes.setText("Invalid RID");
+//                }
+//            },getContext());
+//        });
 
         //Add button adds recipe to db
         FloatingActionButton addRecipe = view.findViewById(R.id.add_recipe);

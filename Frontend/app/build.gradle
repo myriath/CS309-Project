@@ -6,11 +6,11 @@ apply from: 'common-properties.gradle'
 
 android {
     signingConfigs {
-        mock {
+        demodev {
+        }
+        demo {
         }
         release {
-        }
-        build {
         }
     }
     

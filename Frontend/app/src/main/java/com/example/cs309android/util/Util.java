@@ -129,21 +129,13 @@ public class Util {
         global.getPreferences().edit().putString(MainActivity.PREF_TOKEN, token).apply();
         global.setToken(token);
 
-//        SharedPreferences preferences = global.getPreferences();
-//        SharedPreferences.Editor editor = preferences.edit();
+//        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());
+//        global.setBanner(BitmapFactory.decodeByteArray(bannerBytes, 0, bannerBytes.length));
 
-//        editor.putString(PREF_BANNER, login.getBanner());
-        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());
-        global.setBanner(BitmapFactory.decodeByteArray(bannerBytes, 0, bannerBytes.length));
+//        byte[] pfpBytes = Hasher.B64_URL_DECODER.decode(login.getPfp());
+//        global.setPfp(BitmapFactory.decodeByteArray(pfpBytes, 0, pfpBytes.length));
 
-//        editor.putString(PREF_PFP, login.getPfp());
-        byte[] pfpBytes = Hasher.B64_URL_DECODER.decode(login.getPfp());
-        global.setPfp(BitmapFactory.decodeByteArray(pfpBytes, 0, pfpBytes.length));
-
-//        editor.putString(PREF_UNM, login.getUsername());
         global.setUsername(login.getUsername());
-
-//        editor.apply();
     }
 
     /**

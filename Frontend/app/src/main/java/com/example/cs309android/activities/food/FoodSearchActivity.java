@@ -186,28 +186,20 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         Util.spin(this);
         searchResults.clear();
         searchResults.add(new SimpleFoodItem(query, "Add custom item"));
-        new FoodSearchCriteria(query, Constants.DataType.FOUNDATION).request(response -> {
-            SearchResult result = Util.objFromJson(response, SearchResult.class);
+        new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
+            SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
-            for (SearchResultFood food : result.getFoods()) {
-                searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), null));
+            for (SearchResultFood food : result1.getFoods()) {
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
             }
 
-            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
-                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
-
-                for (SearchResultFood food : result1.getFoods()) {
-                    searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
-                }
-
-                if (!searchResults.isEmpty()) {
-                    findViewById(R.id.empty_text).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                }
-                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-            }, FoodSearchActivity.this, getWindow().getDecorView());
-        }, FoodSearchActivity.this);
+            if (!searchResults.isEmpty()) {
+                findViewById(R.id.empty_text).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+            }
+            ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+        }, FoodSearchActivity.this, getWindow().getDecorView());
         return true;
     }
 
