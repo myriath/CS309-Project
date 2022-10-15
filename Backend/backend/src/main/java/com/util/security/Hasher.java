@@ -1,6 +1,4 @@
-package com.example.cs309android.util.security;
-
-import com.example.cs309android.models.Hash;
+package com.util.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -59,11 +57,6 @@ public class Hasher {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Header for the JWT
-     */
-    private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
 
     /**
      * Static util class

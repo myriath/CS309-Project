@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
 import com.example.cs309android.models.gson.DeleteRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -17,21 +16,21 @@ public class RemoveRecipeRequest extends DeleteRequest {
     @Expose
     private final int index;
     /**
-     * Authentication model of the user
+     * Authentication token of the user
      */
     @Expose
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
      * @param index Index of recipe to remove
-     * @param auth Authentication model for the user
+     * @param token Authentication token for the user
      */
-    public RemoveRecipeRequest(int index, AuthModel auth) {
+    public RemoveRecipeRequest(int index, String token) {
         super(Constants.REMOVE_RECIPES_URL);
         this.index = index;
-        this.auth = auth;
+        this.token = token;
     }
 
     /**
@@ -44,11 +43,11 @@ public class RemoveRecipeRequest extends DeleteRequest {
     }
 
     /**
-     * Getter for the authentication model
+     * Getter for the authentication token
      *
-     * @return authentication model
+     * @return authentication token
      */
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 }

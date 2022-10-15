@@ -1,8 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.gson.DeleteRequest;
 import com.example.cs309android.models.gson.PutRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -17,22 +15,16 @@ public class RemoveRequest extends PutRequest {
      */
     @Expose
     private final String itemName;
-    /**
-     * Authentication model of the user
-     */
-    @Expose
-    private final AuthModel auth;
 
     /**
      * Public constructor
      *
      * @param itemName Name of the item to remove
-     * @param auth  Authentication model for the user
+     * @param token  Token for authentication
      */
-    public RemoveRequest(String itemName, AuthModel auth) {
-        super(Constants.REMOVE_SHOPPING_URL);
+    public RemoveRequest(String itemName, String token) {
+        super(Constants.REMOVE_SHOPPING_URL + "/" + token);
         this.itemName = itemName;
-        this.auth = auth;
     }
 
     /**
@@ -41,14 +33,5 @@ public class RemoveRequest extends PutRequest {
      */
     public String getIndex() {
         return itemName;
-    }
-
-    /**
-     * Getter for the authentication model
-     *
-     * @return Authentication model
-     */
-    public AuthModel getAuth() {
-        return auth;
     }
 }

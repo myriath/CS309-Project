@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
-import static com.requests.backend.ResultCodes.RESULT_ERROR;
-import static com.requests.backend.ResultCodes.RESULT_OK;
+import static com.util.Constants.RESULT_ERROR;
 
 
 @RestController

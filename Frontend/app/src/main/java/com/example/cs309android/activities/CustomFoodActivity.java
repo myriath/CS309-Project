@@ -10,6 +10,7 @@ import android.widget.Space;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
@@ -74,7 +75,7 @@ public class CustomFoodActivity extends AppCompatActivity {
             CustomFoodItem customFoodItem = new CustomFoodItem(ITEM_ID_NULL, name, ingredients, calories, fat, carbs, protein);
 
             Util.spin(this);
-            new CustomFoodAddRequest(customFoodItem).unspinOnComplete(response -> {
+            new CustomFoodAddRequest(customFoodItem, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                         CustomFoodAddResponse addResponse = Util.objFromJson(response, CustomFoodAddResponse.class);
                         if (addResponse.getResult() == Constants.RESULT_OK) {
                             Intent intent1 = new Intent();
@@ -83,7 +84,8 @@ public class CustomFoodActivity extends AppCompatActivity {
                             Toaster.toastShort("Error!", this);
                         }
                     }, error -> Toaster.toastShort("Error!", this),
-                    CustomFoodActivity.this, getWindow().getDecorView().getRootView());
+                    CustomFoodActivity.this,
+                    getWindow().getDecorView().getRootView());
         });
     }
 
