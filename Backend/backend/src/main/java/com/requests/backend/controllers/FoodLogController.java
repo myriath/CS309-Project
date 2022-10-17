@@ -134,7 +134,7 @@ public class FoodLogController {
      * @param logId  The logId of the entry the user wants to remove
      * @return
      */
-    @DeleteMapping (path = "/remove/{token}")
+    @DeleteMapping (path = "/remove/{token}")   // /remove/{token}?logId=
     public @ResponseBody String removeFromLog(@PathVariable String token, @RequestParam int logId) {
 
         String hashedToken = Hasher.sha256(token);
