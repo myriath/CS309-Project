@@ -41,6 +41,8 @@ import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -107,9 +109,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final String PARCEL_INTENT_CODE = "intentCode";
 
     /**
-     * Preference key strings for the username and hash
+     * Preference key for user map
      */
-    public static final String PREF_TOKEN = "token";
+    public static final String PREF_LOGIN = "users";
+    /**
+     * Key for user map for latest user
+     */
+    public static final String USERS_LATEST = "latest";
 
     /**
      * Used to launch various activities.
@@ -184,11 +190,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
-        // Gets stored username and password hash, if they exist
-        String token = global.getPreferences().getString(PREF_TOKEN, "").trim();
+        // Gets stored password hash, if it exists
+        System.out.println(global.getPreferences().getString(MainActivity.PREF_LOGIN, ""));
+        Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
+        if (users == null) {
+            users = new HashMap<>();
+            global.setUsers(users);
+            global.updateLoginPrefs();
+        }
+        String token = users.get(users.get(USERS_LATEST));
+        users.forEach((username, tokenString) -> {
+            System.out.println(username + " " + tokenString);
+        });
+
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        if (!token.equals("")) {
+        if (token != null) {
             new LoginTokenRequest(token).unspinOnComplete(response -> {
                 LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
                 // Checks if the result is valid or not. If not, opens the login page

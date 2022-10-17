@@ -126,16 +126,40 @@ public class Util {
      * @param login  LoginResponse for other values from the server
      */
     public static void login(GlobalClass global, String token, LoginResponse login) {
-        global.getPreferences().edit().putString(MainActivity.PREF_TOKEN, token).apply();
+        String username = login.getUsername();
+        global.setUsername(username);
         global.setToken(token);
+        global.updateLoginPrefs();
 
+        // TODO: uncomment when backend is in place
 //        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());
 //        global.setBanner(BitmapFactory.decodeByteArray(bannerBytes, 0, bannerBytes.length));
 
 //        byte[] pfpBytes = Hasher.B64_URL_DECODER.decode(login.getPfp());
 //        global.setPfp(BitmapFactory.decodeByteArray(pfpBytes, 0, pfpBytes.length));
+    }
 
-        global.setUsername(login.getUsername());
+    /**
+     * Logs out of the given account
+     *
+     * @param global Global class for variables
+     * @param username Username to log out of
+     */
+    public static void logout(GlobalClass global, String username) {
+        global.setUsername(null);
+        global.removeToken(username);
+        global.updateLoginPrefs();
+    }
+
+    /**
+     * Switches the active user to the new username
+     *
+     * @param global Global class for variables
+     * @param username New username to switch to
+     */
+    public static void switchUser(GlobalClass global, String username) {
+        global.getUsers().put(MainActivity.USERS_LATEST, username);
+        global.updateLoginPrefs();
     }
 
     /**

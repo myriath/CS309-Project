@@ -20,6 +20,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
+import com.example.cs309android.util.Util;
 
 import java.util.Objects;
 
@@ -38,12 +39,12 @@ public class SettingsFragment extends BasePreferenceFragment {
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.settings_screen, rootKey);
-        SharedPreferences preferences = ((GlobalClass) requireActivity().getApplicationContext()).getPreferences();
+        GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
 
         // Logout button removes stored creds and prompts login
         Preference logout = Objects.requireNonNull(findPreference("logout"));
         logout.setOnPreferenceClickListener(preference -> {
-            preferences.edit().remove(MainActivity.PREF_TOKEN).apply();
+            Util.logout(global, global.getUsername());
             ShoppingFragment.clearItems();
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;

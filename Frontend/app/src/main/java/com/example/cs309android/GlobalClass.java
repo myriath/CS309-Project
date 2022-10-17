@@ -4,20 +4,17 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.util.Util;
+
+import java.util.Map;
+
 /**
  * Global class for holding onto the token for the application
  *
  * @author Mitch Hudson
  */
 public class GlobalClass extends Application {
-    /**
-     * Token string for authentication
-     */
-    private String token;
-    /**
-     * Username used for the account page
-     */
-    private String username;
     /**
      * Profile picture used for the account page
      */
@@ -26,6 +23,10 @@ public class GlobalClass extends Application {
      * Banner image used for the account page
      */
     private Bitmap banner;
+    /**
+     * User map for storing login data
+     */
+    private Map<String, String> users;
 
     /**
      * Shared preferences for the app
@@ -33,12 +34,24 @@ public class GlobalClass extends Application {
     private SharedPreferences preferences;
 
     /**
+     * Updates the login prefs with a json string of
+     * the users map
+     */
+    public void updateLoginPrefs() {
+        preferences.edit()
+                .putString(
+                    MainActivity.PREF_LOGIN,
+                    Util.GSON.toJson(users)
+                ).apply();
+    }
+
+    /**
      * Getter for the token string
      *
      * @return authentication token
      */
     public String getToken() {
-        return token;
+        return users.get(getUsername());
     }
 
     /**
@@ -47,7 +60,16 @@ public class GlobalClass extends Application {
      * @param token authentication token
      */
     public void setToken(String token) {
-        this.token = token;
+        users.put(getUsername(), token);
+    }
+
+    /**
+     * Removes the login details of the username given
+     *
+     * @param username username to remove from the table
+     */
+    public void removeToken(String username) {
+        users.remove(username);
     }
 
     /**
@@ -56,7 +78,7 @@ public class GlobalClass extends Application {
      * @return username
      */
     public String getUsername() {
-        return username;
+        return users.get(MainActivity.USERS_LATEST);
     }
 
     /**
@@ -65,7 +87,7 @@ public class GlobalClass extends Application {
      * @param username new username
      */
     public void setUsername(String username) {
-        this.username = username;
+        users.put(MainActivity.USERS_LATEST, username);
     }
 
     /**
@@ -120,5 +142,23 @@ public class GlobalClass extends Application {
      */
     public void setPreferences(SharedPreferences preferences) {
         this.preferences = preferences;
+    }
+
+    /**
+     * Getter for the users map
+     *
+     * @return Map of users
+     */
+    public Map<String, String> getUsers() {
+        return users;
+    }
+
+    /**
+     * Setter for the users map
+     *
+     * @param users Map of users
+     */
+    public void setUsers(Map<String, String> users) {
+        this.users = users;
     }
 }
