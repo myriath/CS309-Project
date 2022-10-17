@@ -2,18 +2,17 @@ package com.requests.backend.models;
 
 public class RecipeAddRequest {
 
-    private String username;
+    private int rid;
     private String recipeName;
     private String instructions;
 
-    public RecipeAddRequest(String username, String recipeName, String instructions) {
-        this.username = username;
+    public RecipeAddRequest(int rid, String recipeName, String instructions) {
+        this.rid = rid;
         this.recipeName = recipeName;
         this.instructions = instructions;
     }
-
-    public String getUsername() {
-        return username;
+    public int getRid() {
+        return rid;
     }
 
     public String getRecipeName() {
