@@ -1,7 +1,6 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
-import java.sql.Blob;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="users")
@@ -14,6 +13,11 @@ public class User {
     private String pSalt;
 
     private String userType;
+
+    private String token;
+
+    public User() {
+    }
 
     public String getUsername() {
         return username;

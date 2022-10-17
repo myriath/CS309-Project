@@ -1,14 +1,14 @@
 package com.example.cs309android.util.security;
 
-import android.util.Base64;
-
 import com.example.cs309android.models.Hash;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Base64;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -36,6 +36,34 @@ public class Hasher {
      * Number of bytes for the salt.
      */
     private static final int SALT_LENGTH = 16;
+
+    /**
+     * Base64 url encoder.
+     * Encodes to a url-safe base64 string
+     */
+    public static final Base64.Encoder B64_URL_ENCODER = Base64.getUrlEncoder();
+    /**
+     * Base64 url decoder.
+     * Decodes from an url-safe base64 string
+     */
+    public static final Base64.Decoder B64_URL_DECODER = Base64.getUrlDecoder();
+
+    /**
+     * SHA256 message digest
+     */
+    public static MessageDigest SHA_256;
+    static {
+        try {
+            SHA_256 = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Header for the JWT
+     */
+    private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
 
     /**
      * Static util class
@@ -75,12 +103,23 @@ public class Hasher {
     }
 
     /**
+     * Generates a new random token (32 chars / 24 bytes)
+     *
+     * @return new token
+     */
+    public static String genToken() {
+        byte[] randomBytes = new byte[24];
+        RANDOM.nextBytes(randomBytes);
+        return B64_URL_ENCODER.encodeToString(randomBytes);
+    }
+
+    /**
      * Encodes the given bytes into base64
      *
      * @return B64 encoded string
      */
     public static String getEncoded(byte[] bytes) {
-        return Base64.encodeToString(bytes, Base64.DEFAULT).trim();
+        return B64_URL_ENCODER.encodeToString(bytes).trim();
     }
 
     /**
@@ -94,5 +133,14 @@ public class Hasher {
         byte[] hash = hash(plaintext, salt);
 
         return new Hash(salt, hash);
+    }
+
+    /**
+     * Puts a simple hash on top of the hashed data.
+     * @param b64 Base64 encoded string
+     * @return Base64 encoded string.
+     */
+    public static String sha256(String b64) {
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64)));
     }
 }

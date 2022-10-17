@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
 import com.example.cs309android.models.gson.PostRequest;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
@@ -18,21 +17,21 @@ public class AddRecipeRequest extends PostRequest {
     @Expose
     private final SimpleRecipeItem recipe;
     /**
-     * Authentication model of the user
+     * Authentication token of the user
      */
     @Expose
-    private final AuthModel auth;
+    private final String token;
 
     /**
      * Public constructor
      *
      * @param recipe recipe to add to the db
-     * @param auth Authentication model for the user
+     * @param token  Authentication token for the user
      */
-    public AddRecipeRequest(SimpleRecipeItem recipe, AuthModel auth) {
+    public AddRecipeRequest(SimpleRecipeItem recipe, String token) {
         super(Constants.ADD_RECIPES_URL);
         this.recipe = recipe;
-        this.auth = auth;
+        this.token = token;
     }
 
     /**
@@ -45,11 +44,11 @@ public class AddRecipeRequest extends PostRequest {
     }
 
     /**
-     * Getter for the authentication model
+     * Getter for the authentication token
      *
-     * @return authentication model
+     * @return authentication token
      */
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 }

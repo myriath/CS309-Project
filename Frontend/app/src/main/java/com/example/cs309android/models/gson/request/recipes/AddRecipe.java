@@ -12,10 +12,10 @@ import com.google.gson.annotations.Expose;
 public class AddRecipe extends PostRequest {
 
     /**
-     * Username as a string to add recipe under.
+     * Token as a string to authenticate the new recipe with
      */
     @Expose
-    private final String username;
+    private final String token;
     /**
      * Recipe name as a string
      */
@@ -30,24 +30,24 @@ public class AddRecipe extends PostRequest {
     /**
      * Constructor to be used by GSON
      *
-     * @param username Username to register
-     * @param recipeName    Recipe name
-     * @param instructions    Recipe Instructions
+     * @param token        token to authenticate
+     * @param recipeName   Recipe name
+     * @param instructions Recipe Instructions
      */
-    public AddRecipe(String username, String recipeName, String instructions) {
+    public AddRecipe(String token, String recipeName, String instructions) {
         super(Constants.ADD_RECIPES_URL);
-        this.username = username;
+        this.token = token;
         this.recipeName = recipeName;
         this.instructions = instructions;
     }
 
     /**
-     * Getter for the username
+     * Getter for the token
      *
-     * @return username to register
+     * @return authentication token
      */
-    public String getUsername() {
-        return username;
+    public String getToken() {
+        return token;
     }
 
     /**

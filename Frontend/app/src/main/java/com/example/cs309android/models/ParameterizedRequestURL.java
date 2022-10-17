@@ -12,7 +12,7 @@ import java.util.Arrays;
  *
  * @author Mitch Hudson
  */
-public class GetRequestURL {
+public class ParameterizedRequestURL {
     /**
      * ArrayList of parameters to encode into the url
      */
@@ -26,7 +26,7 @@ public class GetRequestURL {
     /**
      * Constructor for a new GetRequestURL that only outputs encoded parameters.
      */
-    public GetRequestURL() {
+    public ParameterizedRequestURL() {
         this.params = new ArrayList<>();
         this.url = null;
     }
@@ -36,7 +36,7 @@ public class GetRequestURL {
      *
      * @param url Base url (no '?')
      */
-    public GetRequestURL(String url) {
+    public ParameterizedRequestURL(String url) {
         this.params = new ArrayList<>();
         this.url = url;
     }
@@ -47,7 +47,7 @@ public class GetRequestURL {
      * @param params ArrayList of params
      * @param url    Base url (no '?')
      */
-    public GetRequestURL(String url, ArrayList<RequestParam> params) {
+    public ParameterizedRequestURL(String url, ArrayList<RequestParam> params) {
         this.params = params;
         this.url = url;
     }
@@ -58,7 +58,7 @@ public class GetRequestURL {
      * @param param parameter to add
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addParam(RequestParam param) {
+    public ParameterizedRequestURL addParam(RequestParam param) {
         if (param == null) return this;
         params.add(param);
         return this;
@@ -71,7 +71,7 @@ public class GetRequestURL {
      * @param value Value of the parameter
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addParam(String name, Object value) {
+    public ParameterizedRequestURL addParam(String name, Object value) {
         if (value == null) return this;
         params.add(new RequestParam(name, value));
         return this;
@@ -83,7 +83,7 @@ public class GetRequestURL {
      * @param params Array to add
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addArray(RequestParam[] params) {
+    public ParameterizedRequestURL addArray(RequestParam[] params) {
         if (params == null) return this;
         this.params.addAll(Arrays.asList(params));
         return this;
@@ -96,7 +96,7 @@ public class GetRequestURL {
      * @param index  index of param to add (-1 = all)
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addArray(RequestParam[] params, int index) {
+    public ParameterizedRequestURL addArray(RequestParam[] params, int index) {
         if (params == null) return this;
         if (index == -1) {
             this.params.addAll(Arrays.asList(params));
@@ -114,7 +114,7 @@ public class GetRequestURL {
      * @param values Values for the parameter
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addArray(String name, Object[] values) {
+    public ParameterizedRequestURL addArray(String name, Object[] values) {
         if (values == null) return this;
         StringBuilder builder = new StringBuilder();
         for (Object value : values) {
@@ -132,7 +132,7 @@ public class GetRequestURL {
      * @param index  Index of the array to add (-1 = all)
      * @return this (allows stacking calls)
      */
-    public GetRequestURL addArray(String name, Object[] values, int index) {
+    public ParameterizedRequestURL addArray(String name, Object[] values, int index) {
         if (values == null) return this;
         if (index == -1) {
             StringBuilder builder = new StringBuilder();
@@ -156,7 +156,11 @@ public class GetRequestURL {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         if (url != null) {
-            builder.append(url).append("?");
+            builder.append(url);
+            if (params.size() == 0) {
+                return builder.toString();
+            }
+            builder.append("?");
         }
 
         for (RequestParam param : params) {

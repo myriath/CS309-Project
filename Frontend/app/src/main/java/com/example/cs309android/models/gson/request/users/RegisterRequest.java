@@ -30,6 +30,11 @@ public class RegisterRequest extends PostRequest {
      */
     @Expose
     private final String pSalt;
+    /**
+     * Token for authenticating logins.
+     */
+    @Expose
+    private final String token;
 
     /**
      * Constructor to be used by GSON
@@ -39,12 +44,13 @@ public class RegisterRequest extends PostRequest {
      * @param pHash    Hashed password + salt for new account
      * @param pSalt    Salt used for hashing
      */
-    public RegisterRequest(String email, String username, String pHash, String pSalt) {
+    public RegisterRequest(String email, String username, String pHash, String pSalt, String token) {
         super(Constants.REGISTER_URL);
         this.email = email;
         this.username = username;
         this.pHash = pHash;
         this.pSalt = pSalt;
+        this.token = token;
     }
 
     /**
@@ -81,5 +87,14 @@ public class RegisterRequest extends PostRequest {
      */
     public String getSalt() {
         return pSalt;
+    }
+
+    /**
+     * Getter for the token
+     *
+     * @return Token used for authentication
+     */
+    public String getToken() {
+        return token;
     }
 }
