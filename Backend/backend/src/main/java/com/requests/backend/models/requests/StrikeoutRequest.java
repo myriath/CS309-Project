@@ -5,7 +5,7 @@ import com.requests.backend.models.AuthModel;
 public class StrikeoutRequest {
     private String itemName;
 
-    private AuthModel auth;
+    private String token;
 
     public String getItemName() {
         return itemName;
@@ -15,11 +15,11 @@ public class StrikeoutRequest {
         this.itemName = itemName;
     }
 
-    public AuthModel getAuth() {
-        return auth;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuth(AuthModel auth) {
-        this.auth = auth;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

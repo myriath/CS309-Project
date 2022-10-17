@@ -2,6 +2,7 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Util.spin;
 
 import android.content.Context;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
@@ -28,12 +30,13 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.users.LoginRequest;
+import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
+import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -74,11 +77,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private int currentFragment = 2;
 
     /**
-     * Auth model for the whole app
-     */
-    public static AuthModel AUTH_MODEL;
-
-    /**
      * Response codes for callback method. Used by Fragments for this class
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
@@ -105,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Preference key strings for the username and hash
      */
-    public static final String PREF_USERNAME = "username";
-    public static final String PREF_HASH = "enc_hash";
+    public static final String PREF_TOKEN = "token";
 
     /**
      * Used to launch various activities.
@@ -180,20 +177,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Gets stored username and password hash, if they exist
         SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String username = pref.getString(PREF_USERNAME, "").trim();
-        String hash = pref.getString(PREF_HASH, "").trim();
-
+        String token = pref.getString(PREF_TOKEN, "").trim();
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        new LoginRequest(username, hash).unspinOnComplete(response -> {
-            // Checks if the result is valid or not. If not, opens the login page
-            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-            if (result != RESULT_LOGGED_IN) startLoginFragment();
-            AUTH_MODEL = new AuthModel(username, hash);
-        }, error -> {
-            error.printStackTrace();
-            startLoginFragment();
-        }, MainActivity.this, getWindow().getDecorView());
+        if (!token.equals("")) {
+            new LoginTokenRequest(token).unspinOnComplete(response -> {
+                // Checks if the result is valid or not. If not, opens the login page
+                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
+                else if (result != RESULT_LOGGED_IN) startLoginFragment();
+                else ((GlobalClass) getApplicationContext()).setToken(token);
+            }, error -> {
+                error.printStackTrace();
+                startLoginFragment();
+            }, MainActivity.this, getWindow().getDecorView());
+        } else startLoginFragment();
 
         navbar = findViewById(R.id.navbar);
         navbar.setSelectedItemId(R.id.home);
@@ -370,5 +368,29 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                 .add(R.id.loginPopup, (Fragment) loginWindowFragment)
                 .commit();
+    }
+
+    public void regenToken(String oldToken, int depth) {
+        String newToken = Hasher.genToken();
+
+        new RegenTokenRequest(newToken, oldToken).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            int result = genericResponse.getResult();
+            if (result == RESULT_REGEN_TOKEN && depth < 5) {
+                regenToken(oldToken, depth + 1);
+            } else if (result == RESULT_LOGGED_IN) {
+                SharedPreferences pref = getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(MainActivity.PREF_TOKEN, newToken);
+                editor.apply();
+
+                ((GlobalClass) getApplicationContext()).setToken(newToken);
+            } else {
+                startLoginFragment();
+            }
+        }, error -> {
+            error.printStackTrace();
+            startLoginFragment();
+        }, MainActivity.this);
     }
 }

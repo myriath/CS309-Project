@@ -1,5 +1,7 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+
 import android.content.Intent;
 import android.databinding.tool.util.StringUtils;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
@@ -56,6 +59,10 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
      * Launches the food details activity for a food item clicked in the search results
      */
     private ActivityResultLauncher<Intent> foodDetailsLauncher;
+    /**
+     * Launches the add custom food activity for the custom food item button in the search results
+     */
+    private ActivityResultLauncher<Intent> customDetailsLauncher;
 
     /**
      * Callback codes used by children to tell this fragment what to do
@@ -116,14 +123,13 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        System.out.println(result);
                         Intent intent = result.getData();
                         switch (intentCode) {
                             case INTENT_SHOPPING_LIST: {
                                 SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
 
                                 Util.spin(getWindow().getDecorView());
-                                new AddRequest(item, MainActivity.AUTH_MODEL).unspinOnComplete(response -> {
+                                new AddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                                     if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
                                         items.add(item);
@@ -135,6 +141,16 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                                 break;
                             }
                         }
+                    }
+                }
+        );
+
+        customDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        SimpleFoodItem item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
                     }
                 }
         );
@@ -166,29 +182,22 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
         findViewById(R.id.search_bar).clearFocus();
 
         Util.spin(this);
-        new FoodSearchCriteria(query, Constants.DataType.FOUNDATION).request(response -> {
-            SearchResult result = Util.objFromJson(response, SearchResult.class);
+        searchResults.clear();
+        searchResults.add(new SimpleFoodItem(query, "Add custom item"));
+        new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
+            SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
-            searchResults.clear();
-            for (SearchResultFood food : result.getFoods()) {
-                searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), null));
+            for (SearchResultFood food : result1.getFoods()) {
+                searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
             }
 
-            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
-                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
-
-                for (SearchResultFood food : result1.getFoods()) {
-                    searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
-                }
-
-                if (!searchResults.isEmpty()) {
-                    findViewById(R.id.empty_text).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                }
-                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-            }, FoodSearchActivity.this, getWindow().getDecorView());
-        }, FoodSearchActivity.this);
+            if (!searchResults.isEmpty()) {
+                findViewById(R.id.empty_text).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+            }
+            ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+        }, FoodSearchActivity.this, getWindow().getDecorView());
         return true;
     }
 
@@ -214,14 +223,19 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
      */
     @Override
     public void callback(int op, Bundle bundle) {
-        // TODO: Open details page
-        // TODO: select and deselect methods
         switch (op) {
             case (CALLBACK_FOOD_DETAIL): {
-                Intent intent = new Intent(this, FoodDetailsActivity.class);
-                intent.putExtra(MainActivity.PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(MainActivity.PARCEL_FOODITEM));
-                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
-                foodDetailsLauncher.launch(intent);
+                SimpleFoodItem item = bundle.getParcelable(MainActivity.PARCEL_FOODITEM);
+                if (item.getFdcId() == ITEM_ID_NULL && item.getDbId() == ITEM_ID_NULL) {
+                    Intent intent = new Intent(this, CustomFoodActivity.class);
+                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    customDetailsLauncher.launch(intent);
+                } else {
+                    Intent intent = new Intent(this, FoodDetailsActivity.class);
+                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                    foodDetailsLauncher.launch(intent);
+                }
                 break;
             }
             case (CALLBACK_CLOSE_DETAIL): {

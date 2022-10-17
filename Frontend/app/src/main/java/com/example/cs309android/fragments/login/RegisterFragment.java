@@ -2,12 +2,12 @@ package com.example.cs309android.fragments.login;
 
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
+import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
-import com.example.cs309android.models.gson.models.AuthModel;
 import com.example.cs309android.models.gson.request.users.RegisterRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Toaster;
@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 public class RegisterFragment extends BaseFragment {
     Button registerButton;
-    TextInputLayout usernameField, emailField, passwordField, passwordField2;
+    TextInputLayout usernameField, emailField, passwordField;
 
     /**
      * Ran whenever the fragment is shown.
@@ -65,7 +65,6 @@ public class RegisterFragment extends BaseFragment {
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
         passwordField = view.findViewById(R.id.passwordField);
-        passwordField2 = view.findViewById(R.id.passwordField2);
 
         registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
@@ -74,11 +73,9 @@ public class RegisterFragment extends BaseFragment {
             emailField.setError(null);
             usernameField.setError(null);
             passwordField.setError(null);
-            passwordField2.setError(null);
             String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();
             String email = Objects.requireNonNull(emailField.getEditText()).getText().toString();
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
-            String pwd2 = Objects.requireNonNull(passwordField2.getEditText()).getText().toString();
 
             // Basic checks for empty/non-matching fields.
             // More checks should be ran serverside for duplicate accounts.
@@ -103,35 +100,7 @@ public class RegisterFragment extends BaseFragment {
             String hash = Hasher.getEncoded(pwdHash.getHash());
             String salt = Hasher.getEncoded(pwdHash.getSalt());
 
-            new RegisterRequest(email, unm, hash, salt).unspinOnComplete(response -> {
-                // Check for errors.
-                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-                if (result == RESULT_ERROR_USERNAME_TAKEN) {
-                    usernameField.setError("Username taken");
-                    return;
-                } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
-                    emailField.setError("Account already exists");
-                    return;
-                } else if (result != RESULT_USER_CREATED) {
-                    Toaster.toastShort("Unexpected error", getActivity());
-                    return;
-                }
-
-                // If there was no error, store valid creds and close the page.
-                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("username", unm);
-                editor.putString("enc_hash", Base64.encodeToString(pwdHash.getHash(), Base64.DEFAULT));
-                editor.apply();
-
-                MainActivity.AUTH_MODEL = new AuthModel(unm, hash);
-
-                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-            }, error -> {
-                Toaster.toastShort("Unexpected error", getActivity());
-                error.printStackTrace();
-            }, requireActivity(), view);
+            register(email, unm, hash, salt, view, 0);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {
@@ -142,5 +111,52 @@ public class RegisterFragment extends BaseFragment {
 
         // Inflate the layout for this fragment
         return view;
+
+    }
+
+    /**
+     * Performs a register attempt
+     * Stops after being told to regen the token 5 times, and throws an error
+     *
+     * @param email email for the new user
+     * @param unm   username for the new user
+     * @param hash  hash for the new user
+     * @param salt  salt for the new user
+     * @param view  view to find views by id with
+     * @param depth number of failed token generations
+     */
+    public void register(String email, String unm, String hash, String salt, View view, int depth) {
+        String token = Hasher.genToken();
+
+        new RegisterRequest(email, unm, hash, salt, token).unspinOnComplete(response -> {
+            // Check for errors.
+            int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
+            if (result == RESULT_ERROR_USERNAME_TAKEN) {
+                usernameField.setError("Username taken");
+                return;
+            } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
+                emailField.setError("Account already exists");
+                return;
+            } else if (result == RESULT_REGEN_TOKEN && depth < 5) {
+                register(email, unm, hash, salt, view, depth + 1);
+            } else if (result != RESULT_USER_CREATED) {
+                Toaster.toastShort("Unexpected error", getActivity());
+                return;
+            }
+
+            // If there was no error, store valid creds and close the page.
+            SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString(MainActivity.PREF_TOKEN, token);
+            editor.apply();
+
+            ((GlobalClass) requireActivity().getApplicationContext()).setToken(token);
+
+            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+            callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
+        }, error -> {
+            Toaster.toastShort("Unexpected error", getActivity());
+            error.printStackTrace();
+        }, requireActivity(), view);
     }
 }

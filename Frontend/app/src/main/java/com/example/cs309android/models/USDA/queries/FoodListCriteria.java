@@ -3,7 +3,7 @@ package com.example.cs309android.models.USDA.queries;
 import static com.example.cs309android.models.USDA.Constants.API_KEY;
 import static com.example.cs309android.models.USDA.Constants.API_URL_LIST_ENDPOINT;
 
-import com.example.cs309android.models.GetRequestURL;
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.gson.GetRequest;
 import com.google.gson.annotations.Expose;
@@ -65,7 +65,7 @@ public class FoodListCriteria extends GetRequest {
 
     @Override
     public String getURL() {
-        return new GetRequestURL(API_URL_LIST_ENDPOINT)
+        return new ParameterizedRequestURL(API_URL_LIST_ENDPOINT)
                 .addArray("dataType", dataType)
                 .addParam("pageSize", pageSize)
                 .addParam("pageNumber", pageNumber)

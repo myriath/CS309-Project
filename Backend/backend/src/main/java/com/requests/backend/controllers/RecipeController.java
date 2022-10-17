@@ -6,12 +6,14 @@ import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.repositories.RecipeRepository;
+import com.requests.backend.repositories.TokenRepository;
+import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
-import static com.requests.backend.ResultCodes.RESULT_ERROR;
-import static com.requests.backend.ResultCodes.RESULT_OK;
+import static com.util.Constants.RESULT_ERROR;
+import static com.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
 
 
 @RestController
@@ -27,6 +29,9 @@ public class RecipeController {
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Recipe> getAllRecipes() {
@@ -72,23 +77,33 @@ public class RecipeController {
     }
 
 
-    @PostMapping(path="/add")
+    @PostMapping(path="/add/{token}")
     @ResponseBody
-    public String addNewRecipe(@RequestBody String json) {
+    public String addNewRecipe(@PathVariable String token, @RequestBody String json) {
+
+        String hashedToken = Hasher.sha256(token);
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
         RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
-        String username = req.getUsername();
         String recipeName = req.getRecipeName();
         String instructions = req.getInstructions();
 
         ResultResponse res = new ResultResponse();
 
-        try {
-            recipeRepository.queryCreateRecipe(username, recipeName, instructions);
-            res.setResult(RESULT_RECIPE_CREATED);
-        } catch (Exception e) {
-            res.setResult(RESULT_ERROR_RID_TAKEN);
+
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        }
+        else {
+            String username = tokenQueryRes[0].getUsername();
+
+            try {
+                recipeRepository.queryCreateRecipe(username, recipeName, instructions);
+                res.setResult(RESULT_RECIPE_CREATED);
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR_RID_TAKEN);
+            }
         }
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
