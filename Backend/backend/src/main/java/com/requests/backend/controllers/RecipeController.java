@@ -82,7 +82,7 @@ public class RecipeController {
     public String addNewRecipe(@PathVariable String token, @RequestBody String json) {
 
         String hashedToken = Hasher.sha256(token);
-        Token[] tokenQueryRes = tokenRepository.queryGetToken(token);
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
         RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
