@@ -17,6 +17,28 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true">
 
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_settings"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/settings" />
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_edit"
+                app:layout_constraintEnd_toStartOf="@id/settingsButton"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/settings" />
+
             <ImageView
                 android:id="@+id/banner"
                 android:layout_width="match_parent"

@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
+            android:name=".AccountEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.recipe.AddRecipeActivity"
             android:exported="false" />
         <activity
@@ -23,7 +26,7 @@
             android:name=".activities.food.FoodDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.food.FoodSearchActivity"
+            android:name=".activities.SearchActivity"
             android:exported="false"
             android:label="@string/title_activity_food_search"
             android:launchMode="singleTop"

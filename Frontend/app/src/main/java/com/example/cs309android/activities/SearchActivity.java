@@ -1,4 +1,4 @@
-package com.example.cs309android.activities.food;
+package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 
@@ -22,8 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.custom.CustomFoodActivity;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
@@ -44,7 +44,7 @@ import java.util.Objects;
  *
  * @author Mitch Hudson
  */
-public class FoodSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, CallbackFragment {
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, CallbackFragment {
     /**
      * List of existing items from whatever called this.
      * Completing a search adds that item to this list.
@@ -139,7 +139,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                                     } else {
                                         Toaster.toastShort("Error", this);
                                     }
-                                }, FoodSearchActivity.this, getWindow().getDecorView());
+                                }, SearchActivity.this, getWindow().getDecorView());
                                 break;
                             }
                         }
@@ -199,7 +199,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
             }
             ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-        }, FoodSearchActivity.this, getWindow().getDecorView());
+        }, SearchActivity.this, getWindow().getDecorView());
         return true;
     }
 

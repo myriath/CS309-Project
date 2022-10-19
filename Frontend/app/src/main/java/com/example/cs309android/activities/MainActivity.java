@@ -22,8 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
-import com.example.cs309android.activities.food.FoodSearchActivity;
 import com.example.cs309android.fragments.account.AccountFragment;
+import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_MOVE_TO_HOME = 3;
     public static final int CALLBACK_FOOD_DETAIL = 4;
     public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_EDIT_ACCOUNT = 7;
 //    public static final int CALLBACK_ = 0;
 
     /**
@@ -346,10 +348,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_MOVE_TO_HOME): {
                 mainFragment = new HomeFragment();
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
-                transaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
                 break;
@@ -362,10 +364,24 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
-                Intent intent = new Intent(this, FoodSearchActivity.class);
+                Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
+                break;
+            }
+            case (CALLBACK_MOVE_TO_SETTINGS): {
+                mainFragment = new SettingsFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
+                currentFragment = 5;
+                break;
+            }
+            case (CALLBACK_EDIT_ACCOUNT): {
+                Intent intent = new Intent(this, AccountEditActivity.class);
+                startActivity(intent);
                 break;
             }
         }

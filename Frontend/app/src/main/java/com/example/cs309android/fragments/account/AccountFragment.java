@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 
 /**
@@ -49,6 +51,14 @@ public class AccountFragment extends BaseFragment {
         ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
         ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
         ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+
+        ((ImageButton) view.findViewById(R.id.settingsButton)).setOnClickListener(view1 -> {
+            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
+        });
+
+        ((ImageButton) view.findViewById(R.id.editButton)).setOnClickListener(view1 -> {
+            callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
+        });
 
         return view;
     }
