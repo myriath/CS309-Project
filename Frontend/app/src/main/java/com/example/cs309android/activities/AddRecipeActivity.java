@@ -5,17 +5,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.request.recipes.AddRecipe;
+import com.example.cs309android.models.gson.request.recipes.AddRecipeRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -44,7 +41,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             if(!validateFields(RnameInput, RInstructionsInput)) {
                 return;
             }
-            new AddRecipe(((GlobalClass) getApplicationContext()).getToken(), RnameInput.getEditText().getText().toString(), RInstructionsInput.getEditText().getText().toString()).request(response -> {
+            new AddRecipeRequest(((GlobalClass) getApplicationContext()).getToken(), RnameInput.getEditText().getText().toString(), RInstructionsInput.getEditText().getText().toString()).request(response -> {
                 try {
                     System.out.print(response.toString(4));
                 } catch (JSONException e) {
@@ -85,7 +82,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     private boolean validateFields(TextInputLayout RecipeName, TextInputLayout RecipeInstructions) {
         boolean notEmpty = true;
         if (RecipeName.getEditText().getText().length() <= 0) {
-            RecipeName.setError("Input cannot be empty");
+            RecipeName.setError("Recipe Name cannot be empty");
             notEmpty = false;
         }
         else {
@@ -93,7 +90,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         }
 
         if (RecipeInstructions.getEditText().getText().length() <= 0) {
-            RecipeInstructions.setError("Input cannot be empty");
+            RecipeInstructions.setError("Recipe Instructions cannot be empty");
             notEmpty = false;
         }
         else{
