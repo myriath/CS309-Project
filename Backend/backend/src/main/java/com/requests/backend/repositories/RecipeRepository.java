@@ -28,6 +28,12 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
+    @Query(
+            value = "SELECT * FROM user_recipes r WHERE r.rid = :rid",
+            nativeQuery = true)
+    Recipe[] queryGetImageByrid(@Param("rid") int rid);
+
+
     @Modifying
     @Query(
             value =
@@ -35,6 +41,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     @Transactional
     void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname, @Param("instructions") String instructions);
+
+
+
+
+
+
+
 
 }
 

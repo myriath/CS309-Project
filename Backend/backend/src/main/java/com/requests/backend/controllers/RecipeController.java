@@ -112,4 +112,32 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
+    @GetMapping(path="/getImage/{rid}")
+    @ResponseBody
+    public String GetImage(@PathVariable int rid) {
+        Recipe[] recipe = recipeRepository.queryGetImageByrid(rid);
+
+        RecipeResponse res = new RecipeResponse();
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        if (recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        }
+        else {
+            res.setRecipe(recipe[0]);
+            res.setResult(RESULT_OK);
+        }
+
+        return gson.toJson(res.getRecipeImage());
+    }
+
+
+
+
+
+
+
+
+
 }

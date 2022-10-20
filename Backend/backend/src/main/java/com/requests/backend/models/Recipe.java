@@ -13,6 +13,14 @@ public class Recipe {
     private String rname;
     private String instructions;
 
+    private String image;
+
+    public String getImage() {return image;}
+
+    public void setImage(String image) {
+        this.username = image;
+    }
+
     public String getUsername() {
         return username;
     }
