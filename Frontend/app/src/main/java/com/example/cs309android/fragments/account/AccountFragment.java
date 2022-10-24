@@ -19,6 +19,10 @@ import com.example.cs309android.fragments.BaseFragment;
  * @author Mitch Hudson
  */
 public class AccountFragment extends BaseFragment {
+    public static final String ARGS_USERNAME = "username";
+    private String username;
+    public static final String ARGS_OWNER = "owner";
+    private boolean owner;
 
     /**
      * Use this factory method to create a new instance of
@@ -26,9 +30,11 @@ public class AccountFragment extends BaseFragment {
      *
      * @return A new instance of fragment AccountFragment.
      */
-    public static AccountFragment newInstance() {
+    public static AccountFragment newInstance(String username, boolean owner) {
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
+        args.putString(ARGS_USERNAME, username);
+        args.putBoolean(ARGS_OWNER, owner);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,7 +42,10 @@ public class AccountFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        Bundle args = getArguments();
+        if (args != null) {
+            username = args.getString(ARGS_USERNAME);
+            owner = args.getBoolean(ARGS_OWNER);
         }
     }
 
@@ -46,19 +55,27 @@ public class AccountFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
+        // TODO: Get images, etc, from db with username
+
         GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
 
         ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
         ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
         ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
 
-        ((ImageButton) view.findViewById(R.id.settingsButton)).setOnClickListener(view1 -> {
-            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
-        });
+        ImageButton settingsButton = view.findViewById(R.id.settingsButton);
+        ImageButton editButton = view.findViewById(R.id.editButton);
+        if (owner) {
+            settingsButton.setOnClickListener(view1 -> {
+                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
+            });
+            settingsButton.setVisibility(View.VISIBLE);
 
-        ((ImageButton) view.findViewById(R.id.editButton)).setOnClickListener(view1 -> {
-            callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
-        });
+            editButton.setOnClickListener(view1 -> {
+                callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
+            });
+            editButton.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }
