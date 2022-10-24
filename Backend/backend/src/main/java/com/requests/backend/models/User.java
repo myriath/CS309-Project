@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="users")
@@ -15,6 +16,12 @@ public class User {
     private String userType;
 
     private String token;
+
+    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
+    @JoinTable(name = "follows",
+            joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
+            inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
+    private Set<User> followers;
 
     public User() {
     }
