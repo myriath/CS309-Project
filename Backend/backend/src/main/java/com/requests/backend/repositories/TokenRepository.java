@@ -24,16 +24,17 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
                     "VALUES (:token, :creation_date, :username)",
             nativeQuery = true)
     @Transactional
-        void queryAddToken(@Param("token") String token, @Param("creation_date") Date creationDate, @Param("username") String username);
+        void queryAddToken(@Param("token") String token, @Param("creation_date") Date creationDate,  @Param("username") String username);
 
     // TODO Complete query logic
     @Modifying
     @Query(
             value = "UPDATE tokens " +
-                    "SET token = :newToken, creation_date = :creationDate " +
+                    "SET token = :newToken, " +
+                    "creation_date = :creation_date " +
                     "WHERE token = :oldToken",
             nativeQuery = true)
     @Transactional
-    void queryUpdateToken(@Param("oldToken") String oldToken, @Param("newToken") String newToken, @Param("creationDate") Date creationDate);
+    void queryUpdateToken(@Param("newToken") String newToken, @Param("creation_date") Date creationDate, @Param("oldToken") String oldToken);
 }
 

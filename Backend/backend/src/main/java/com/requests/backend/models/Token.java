@@ -1,10 +1,9 @@
 package com.requests.backend.models;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +14,7 @@ public class Token {
     private String token;
 
     private String username;
-    @CreationTimestamp
+
     private Date creationDate;
 
     public String getToken() {
@@ -38,9 +37,7 @@ public class Token {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+    public void setCreationDate(Date creationDate) { this.creationDate = creationDate; }
 
     public boolean isOutdated() {
 

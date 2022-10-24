@@ -155,18 +155,31 @@ public class BrandedFoodItem {
     }
 
     public static class LabelNutrients {
+        @Expose
         private final Nutrient fat;
+        @Expose
         private final Nutrient saturatedFat;
+        @Expose
         private final Nutrient transFat;
+        @Expose
         private final Nutrient cholesterol;
+        @Expose
         private final Nutrient sodium;
+        @Expose
         private final Nutrient carbohydrates;
+        @Expose
         private final Nutrient fiber;
+        @Expose
         private final Nutrient sugars;
+        @Expose
         private final Nutrient protein;
+        @Expose
         private final Nutrient calcium;
+        @Expose
         private final Nutrient iron;
+        @Expose
         private final Nutrient potassium;
+        @Expose
         private final Nutrient calories;
 
         public LabelNutrients(Nutrient fat, Nutrient saturatedFat, Nutrient transFat, Nutrient cholesterol, Nutrient sodium, Nutrient carbohydrates, Nutrient fiber, Nutrient sugars, Nutrient protein, Nutrient calcium, Nutrient iron, Nutrient potassium, Nutrient calories) {
@@ -238,13 +251,14 @@ public class BrandedFoodItem {
         }
 
         public static class Nutrient {
+            @Expose
             private final float value;
 
             public Nutrient(float value) {
                 this.value = value;
             }
 
-            public float getValue() {
+            public Float getValue() {
                 return value;
             }
         }

@@ -2,6 +2,7 @@ package com.requests.backend.controllers;
 
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
+import com.requests.backend.models.responses.LoginResponse;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
 import com.requests.backend.models.requests.RegisterRequest;
@@ -94,7 +95,7 @@ public class UserController {
     public @ResponseBody String validateTokenLogin(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
 
-        ResultResponse res = new ResultResponse();
+        LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(hashedToken);
 
@@ -113,10 +114,16 @@ public class UserController {
                 // If the difference is one day or greater, a new token needs to be generated.
                 if (outdatedToken) {
                     res.setResult(RESULT_REGEN_TOKEN);
+                    res.setUsername(dbToken.getUsername());
+                    res.setPfp("");     // TODO
+                    res.setBanner("");  // TODO
                 }
                 // Otherwise, the user should be logged in, as the token is valid.
                 else {
                     res.setResult(RESULT_LOGGED_IN);
+                    res.setUsername(dbToken.getUsername());
+                    res.setPfp("");     // TODO
+                    res.setBanner("");  // TODO
                 }
             }
 
@@ -138,7 +145,7 @@ public class UserController {
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
-        ResultResponse res = new ResultResponse(RESULT_OK);
+        LoginResponse res = new LoginResponse(RESULT_OK);
 
         if (userRes.isEmpty()) {
             res.setResult(RESULT_ERROR);
@@ -159,11 +166,17 @@ public class UserController {
                 // If the token already exists in the table, return RESULT_REGEN_TOKEN
                 if (tokenQueryRes.length > 0) {
                     res.setResult(RESULT_REGEN_TOKEN);
+                    res.setUsername(username);
+                    res.setPfp("");     // TODO
+                    res.setBanner("");  // TODO
                 }
                 // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
                 else {
                     tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                     res.setResult(RESULT_LOGGED_IN);
+                    res.setUsername(username);
+                    res.setPfp("");     // TODO
+                    res.setBanner("");  // TODO
                 }
 
                 //       Note: THIS DOES NOT REPLACE ANY OTHER TOKENS!
@@ -192,7 +205,7 @@ public class UserController {
         String pSalt = req.getPSalt();
         String tokenHash = Hasher.sha256(req.getToken()); // SHA-256's the incoming token
 
-        ResultResponse res = new ResultResponse();
+        LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
 
@@ -206,6 +219,9 @@ public class UserController {
                 userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
                 tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                 res.setResult(RESULT_USER_CREATED);
+                res.setUsername(username);
+                res.setPfp("");     // TODO: default pfp
+                res.setBanner("");  // TODO: default banner
 
             // If the username already exists in the user table, return an error result
             } catch (Exception e) {
@@ -243,7 +259,7 @@ public class UserController {
             // Otherwise, if the token is expired, replace the old token with the new token
             // in the tokens table
             else if (dbToken.isOutdated()) {
-                tokenRepository.queryUpdateToken(oldTokenHash, newTokenHash, new Date(System.currentTimeMillis()));
+                tokenRepository.queryUpdateToken(newTokenHash, new Date(System.currentTimeMillis()), oldTokenHash);
                 res.setResult(RESULT_LOGGED_IN);
             }
             // Otherwise, oldToken is not outdated, and does not need replacement -- return an error
