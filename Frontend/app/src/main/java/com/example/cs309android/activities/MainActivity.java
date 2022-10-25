@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
+    public static final String PREF_FIRST_TIME = "FirstTime";
 
     /**
      * Fragment containing the current login window.
@@ -198,8 +199,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
+        if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
+            // TODO: First time
+            global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();
+        }
+
         // Gets stored password hash, if it exists
-        System.out.println(global.getPreferences().getString(MainActivity.PREF_LOGIN, ""));
         Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
 
         if (users == null) users = new HashMap<>();

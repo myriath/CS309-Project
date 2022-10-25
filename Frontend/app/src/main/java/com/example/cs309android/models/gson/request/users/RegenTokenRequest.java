@@ -3,7 +3,7 @@ package com.example.cs309android.models.gson.request.users;
 import static com.example.cs309android.util.Constants.REGEN_TOKEN_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.PutRequest;
+import com.example.cs309android.models.gson.request.abstraction.PutRequest;
 
 /**
  * Gives the server a new token. This should happen weekly

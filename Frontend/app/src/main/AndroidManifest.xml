@@ -3,6 +3,7 @@
     package="com.example.cs309android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".GlobalClass"
@@ -20,7 +21,7 @@
             android:name=".activities.recipe.AddRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.custom.CustomFoodActivity"
+            android:name=".activities.food.CustomFoodActivity"
             android:exported="false" />
         <activity
             android:name=".activities.food.FoodDetailsActivity"
@@ -41,6 +42,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <provider
+            android:authorities="${applicationId}.provider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

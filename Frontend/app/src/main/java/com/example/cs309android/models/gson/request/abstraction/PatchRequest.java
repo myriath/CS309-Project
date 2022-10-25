@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson;
+package com.example.cs309android.models.gson.request.abstraction;
 
 import com.android.volley.Request;
 
@@ -7,13 +7,13 @@ import com.android.volley.Request;
  * <p>
  * Post requests need a method to get the json body
  */
-public abstract class DeleteRequest extends PostRequest {
+public abstract class PatchRequest extends PostRequest {
     /**
      * Public constructor
      *
      * @param url URL for the request
      */
-    public DeleteRequest(String url) {
-        super(url, Request.Method.DELETE);
+    public PatchRequest(String url) {
+        super(url, Request.Method.PATCH);
     }
 }

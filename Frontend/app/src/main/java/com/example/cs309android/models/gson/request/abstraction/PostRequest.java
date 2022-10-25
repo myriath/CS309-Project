@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson;
+package com.example.cs309android.models.gson.request.abstraction;
 
 import com.android.volley.Request;
 import com.example.cs309android.util.Util;
@@ -8,7 +8,7 @@ import com.example.cs309android.util.Util;
  * <p>
  * Post requests need a method to get the json body
  */
-public abstract class PostRequest extends com.example.cs309android.models.gson.Request {
+public abstract class PostRequest extends com.example.cs309android.models.gson.request.abstraction.Request {
     /**
      * URL for the request
      */

@@ -1,4 +1,4 @@
-package com.example.cs309android.activities.custom;
+package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 

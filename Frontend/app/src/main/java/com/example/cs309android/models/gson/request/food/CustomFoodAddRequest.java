@@ -2,7 +2,7 @@ package com.example.cs309android.models.gson.request.food;
 
 import static com.example.cs309android.util.Constants.ADD_FOOD_URL;
 
-import com.example.cs309android.models.gson.PostRequest;
+import com.example.cs309android.models.gson.request.abstraction.PostRequest;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 
 /**

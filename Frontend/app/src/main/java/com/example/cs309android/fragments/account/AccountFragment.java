@@ -83,11 +83,13 @@ public class AccountFragment extends BaseFragment {
                 callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
             });
             settingsButton.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.settingsCard).setVisibility(View.VISIBLE);
 
             editButton.setOnClickListener(view1 -> {
                 callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
             });
             editButton.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.editCard).setVisibility(View.VISIBLE);
 
             ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
             ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
@@ -111,6 +113,8 @@ public class AccountFragment extends BaseFragment {
                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_PROFILE, null);
             });
             backButton.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.backCard).setVisibility(View.VISIBLE);
+
             followButton.setOnClickListener(view1 -> {
                 callbackFragment.callback(MainActivity.CALLBACK_FOLLOW, null);
             });

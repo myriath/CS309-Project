@@ -3,7 +3,7 @@ package com.example.cs309android.models.gson.request.social;
 import static com.example.cs309android.util.Constants.BANNER_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.GetImageRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetImageRequest;
 
 /**
  * Gets the profile

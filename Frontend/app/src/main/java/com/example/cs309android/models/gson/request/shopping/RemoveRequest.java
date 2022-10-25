@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.gson.PutRequest;
+import com.example.cs309android.models.gson.request.abstraction.PutRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 

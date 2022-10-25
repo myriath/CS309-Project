@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.social;
 
-import com.example.cs309android.models.gson.GetRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 
 /**
  * Gets a list of users following this user

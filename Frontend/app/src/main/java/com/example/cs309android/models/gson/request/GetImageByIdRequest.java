@@ -3,7 +3,7 @@ package com.example.cs309android.models.gson.request;
 import static com.example.cs309android.util.Constants.IMAGE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.GetImageRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetImageRequest;
 
 /**
  * Abstract image get request handler

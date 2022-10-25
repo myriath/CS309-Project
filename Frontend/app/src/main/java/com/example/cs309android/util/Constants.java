@@ -150,6 +150,18 @@ public class Constants {
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
     /**
+     * URL for updating profile information
+     */
+    public static final String UPDATE_PROFILE_URL = SOCIAL_URL + "updateProfile/";
+    /**
+     * URL used to update a user's profile picture
+     */
+    public static final String UPDATE_PFP_URL = SOCIAL_URL + "updatePfp/";
+    /**
+     * URL used to update a user's banner image
+     */
+    public static final String UPDATE_BANNER_URL = SOCIAL_URL + "updateBanner/";
+    /**
      * URL for getting user posts
      */
     public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";

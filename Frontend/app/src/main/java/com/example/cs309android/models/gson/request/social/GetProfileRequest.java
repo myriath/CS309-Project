@@ -3,7 +3,7 @@ package com.example.cs309android.models.gson.request.social;
 import static com.example.cs309android.util.Constants.GET_PROFILE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.GetRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 
 /**
  * Request to get details for a profile's page

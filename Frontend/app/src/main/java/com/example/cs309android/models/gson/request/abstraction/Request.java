@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson;
+package com.example.cs309android.models.gson.request.abstraction;
 
 import android.content.Context;
 import android.view.View;

@@ -1,7 +1,7 @@
 package com.example.cs309android.models.gson.request.users;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.GetRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
