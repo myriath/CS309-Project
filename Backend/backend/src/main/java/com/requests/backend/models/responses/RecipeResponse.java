@@ -23,7 +23,6 @@ public class RecipeResponse {
         this.recipe = recipe;
     }
 
-    public String getRecipeImage(){ return recipe.getImage();}
 
 
 }

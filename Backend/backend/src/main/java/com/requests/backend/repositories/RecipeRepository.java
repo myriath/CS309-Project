@@ -33,6 +33,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetImageByrid(@Param("rid") int rid);
 
+    @Query(
+            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token != :token AND r.username != 'NULL' AND r.rname != 'NULL' AND r.instructions != 'NULL'",
+            nativeQuery = true)
+    Recipe[] queryrecipeList(@Param("token") String token);
+
+//recipeList(String token)
+
+
+
 
     @Modifying
     @Query(
