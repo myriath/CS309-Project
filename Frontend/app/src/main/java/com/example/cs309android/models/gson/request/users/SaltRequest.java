@@ -42,7 +42,7 @@ public class SaltRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.SALT_URL + "/" + username)
+        return new ParameterizedRequestURL(Constants.SALT_URL + username)
                 .toString();
     }
 }

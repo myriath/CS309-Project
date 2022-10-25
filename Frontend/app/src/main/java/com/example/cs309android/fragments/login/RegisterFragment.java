@@ -135,7 +135,7 @@ public class RegisterFragment extends BaseFragment {
             } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
                 emailField.setError("Account already exists");
                 return;
-            } else if (result == RESULT_REGEN_TOKEN && depth < 5) {
+            } else if (result == RESULT_REGEN_TOKEN && depth < MainActivity.TOKEN_MAX_DEPTH) {
                 register(global, email, unm, hash, salt, view, depth + 1);
             } else if (result != RESULT_USER_CREATED) {
                 Toaster.toastShort("Unexpected error", getActivity());
@@ -143,7 +143,7 @@ public class RegisterFragment extends BaseFragment {
             }
 
             // If there was no error, store valid creds and close the page.
-            Util.login(global, token, loginResponse);
+            Util.login(global, token, loginResponse, requireActivity());
 
             callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
             callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);

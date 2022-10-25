@@ -31,6 +31,6 @@ public class GetListRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.GET_SHOPPING_URL + "/" + token).toString();
+        return new ParameterizedRequestURL(Constants.GET_SHOPPING_URL + token).toString();
     }
 }

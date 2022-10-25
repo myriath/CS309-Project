@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_SEARCH_FOOD = 5;
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
     public static final int CALLBACK_EDIT_ACCOUNT = 7;
+    public static final int CALLBACK_CLOSE_PROFILE = 8;
+    public static final int CALLBACK_FOLLOW = 9;
 //    public static final int CALLBACK_ = 0;
 
     /**
@@ -118,6 +120,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Key for user map for latest user
      */
     public static final String USERS_LATEST = "latest";
+    /**
+     * Max retries for token generation
+     */
+    public static final int TOKEN_MAX_DEPTH = 5;
 
     /**
      * Used to launch various activities.
@@ -195,15 +201,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Gets stored password hash, if it exists
         System.out.println(global.getPreferences().getString(MainActivity.PREF_LOGIN, ""));
         Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
-        if (users == null) {
-            users = new HashMap<>();
-            global.setUsers(users);
-            global.updateLoginPrefs();
-        }
+
+        if (users == null) users = new HashMap<>();
+        global.setUsers(users);
+        global.updateLoginPrefs();
+
         String token = users.get(users.get(USERS_LATEST));
-        users.forEach((username, tokenString) -> {
-            System.out.println(username + " " + tokenString);
-        });
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
                 if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
-                else Util.login(global, token, loginResponse);
+                else Util.login(global, token, loginResponse, MainActivity.this);
             }, error -> {
                 error.printStackTrace();
                 startLoginFragment();
@@ -275,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.account) {
-                mainFragment = new AccountFragment();
+                mainFragment = AccountFragment.newInstance(global.getUsername(), true);
                 mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
@@ -413,6 +416,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 .commit();
     }
 
+    /**
+     * Regenerates a token (5 retries max)
+     *
+     * @param oldToken Old token for authentication
+     * @param depth    current retry counter
+     */
     public void regenToken(String oldToken, int depth) {
         String newToken = Hasher.genToken();
 
@@ -420,8 +429,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
             int result = loginResponse.getResult();
 
-            if (result == RESULT_REGEN_TOKEN && depth < 5) regenToken(oldToken, depth + 1);
-            else if (result == RESULT_LOGGED_IN) Util.login(global, newToken, loginResponse);
+            if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH)
+                regenToken(oldToken, depth + 1);
+            else if (result == RESULT_LOGGED_IN)
+                Util.login(global, newToken, loginResponse, MainActivity.this);
             else startLoginFragment();
         }, MainActivity.this);
     }

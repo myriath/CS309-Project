@@ -38,6 +38,6 @@ public class LoginTokenRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(TOKEN_URL + "/" + token).toString();
+        return new ParameterizedRequestURL(TOKEN_URL + token).toString();
     }
 }

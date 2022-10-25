@@ -60,7 +60,7 @@ public class LoginHashRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(LOGIN_URL + "/" + username)
+        return new ParameterizedRequestURL(LOGIN_URL + username)
                 .addParam("hash", hash)
                 .addParam("newToken", token)
                 .toString();

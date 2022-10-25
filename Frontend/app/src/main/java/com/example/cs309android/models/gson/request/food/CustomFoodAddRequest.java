@@ -23,7 +23,7 @@ public class CustomFoodAddRequest extends PostRequest {
      * @param item item to add
      */
     public CustomFoodAddRequest(CustomFoodItem item, String token) {
-        super(ADD_FOOD_URL + "/" + token);
+        super(ADD_FOOD_URL + token);
         this.item = item;
     }
 

@@ -6,12 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.FeedAdapter;
+import com.example.cs309android.models.gson.request.social.GetBannerRequest;
+import com.example.cs309android.models.gson.request.social.GetProfilePictureRequest;
+import com.example.cs309android.models.gson.request.social.GetProfileRequest;
+import com.example.cs309android.models.gson.request.social.GetUserPostsRequest;
+import com.example.cs309android.models.gson.response.social.GetProfileResponse;
+import com.example.cs309android.models.gson.response.social.GetUserPostsResponse;
+import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Fragment to display account details
@@ -59,12 +73,10 @@ public class AccountFragment extends BaseFragment {
 
         GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
 
-        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         ImageButton editButton = view.findViewById(R.id.editButton);
+        ImageButton backButton = view.findViewById(R.id.backButton);
+        ExtendedFloatingActionButton followButton = view.findViewById(R.id.followButton);
         if (owner) {
             settingsButton.setOnClickListener(view1 -> {
                 callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
@@ -75,7 +87,47 @@ public class AccountFragment extends BaseFragment {
                 callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
             });
             editButton.setVisibility(View.VISIBLE);
+
+            ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+            ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+            ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+            ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+        } else {
+            backButton.setOnClickListener(view1 -> {
+                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_PROFILE, null);
+            });
+            backButton.setVisibility(View.VISIBLE);
+            followButton.setOnClickListener(view1 -> {
+                callbackFragment.callback(MainActivity.CALLBACK_FOLLOW, null);
+            });
+            followButton.setVisibility(View.VISIBLE);
+
+            new GetProfileRequest(username).request(response -> {
+                GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
+
+                ((TextView) view.findViewById(R.id.unameView)).setText(profileResponse.getUsername());
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+                ((TextView) view.findViewById(R.id.followerCount))
+                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
+                ((TextView) view.findViewById(R.id.followingCount))
+                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+            }, requireActivity());
+
+            new GetProfilePictureRequest(username).request(response -> {
+                ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(response);
+            }, requireActivity());
+
+            new GetBannerRequest(username).request(response -> {
+                ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(response);
+            }, requireActivity());
         }
+
+        new GetUserPostsRequest(username).request(response -> {
+            GetUserPostsResponse postsResponse = Util.objFromJson(response, GetUserPostsResponse.class);
+            ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(requireContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+        }, requireActivity());
 
         return view;
     }

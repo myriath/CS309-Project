@@ -24,7 +24,7 @@ public class AddRequest extends PostRequest {
      * @param token Authentication token
      */
     public AddRequest(SimpleFoodItem item, String token) {
-        super(Constants.ADD_SHOPPING_URL + "/" + token);
+        super(Constants.ADD_SHOPPING_URL + token);
         this.item = item;
     }
 

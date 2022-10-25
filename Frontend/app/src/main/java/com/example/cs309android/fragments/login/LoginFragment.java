@@ -151,12 +151,12 @@ public class LoginFragment extends BaseFragment {
             } else if (result == RESULT_LOGGED_IN || result == RESULT_OK) {
                 // No errors, so store credentials for future use
                 // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                Util.login(global, token, loginResponse);
+                Util.login(global, token, loginResponse, requireActivity());
                 Util.unSpin(requireActivity());
 
                 callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-            } else if (result == RESULT_REGEN_TOKEN && depth < 5) {
+            } else if (result == RESULT_REGEN_TOKEN && depth < MainActivity.TOKEN_MAX_DEPTH) {
                 loginAttempt(global, unm, hash, depth + 1);
             } else {
                 Toaster.toastShort("Error", getContext());

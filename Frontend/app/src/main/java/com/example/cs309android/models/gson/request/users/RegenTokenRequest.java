@@ -19,7 +19,7 @@ public class RegenTokenRequest extends PutRequest {
      * @param oldToken Old token for authenticating this request
      */
     public RegenTokenRequest(String newToken, String oldToken) {
-        super(new ParameterizedRequestURL(REGEN_TOKEN_URL + "/" + oldToken)
+        super(new ParameterizedRequestURL(REGEN_TOKEN_URL + oldToken)
                 .addParam("newToken", newToken)
                 .toString());
     }

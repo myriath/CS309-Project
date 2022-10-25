@@ -23,7 +23,7 @@ public class RemoveRequest extends PutRequest {
      * @param token  Token for authentication
      */
     public RemoveRequest(String itemName, String token) {
-        super(Constants.REMOVE_SHOPPING_URL + "/" + token);
+        super(Constants.REMOVE_SHOPPING_URL + token);
         this.itemName = itemName;
     }
 

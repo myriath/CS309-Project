@@ -24,6 +24,10 @@ public class GlobalClass extends Application {
      */
     private Bitmap banner;
     /**
+     * Biography text for the account page
+     */
+    private String bio;
+    /**
      * User map for storing login data
      */
     private Map<String, String> users;
@@ -69,6 +73,7 @@ public class GlobalClass extends Application {
      * @param username username to remove from the table
      */
     public void removeToken(String username) {
+        if (MainActivity.USERS_LATEST.equals(username)) return;
         users.remove(username);
     }
 
@@ -87,6 +92,7 @@ public class GlobalClass extends Application {
      * @param username new username
      */
     public void setUsername(String username) {
+        if (MainActivity.USERS_LATEST.equals(username)) return;
         users.put(MainActivity.USERS_LATEST, username);
     }
 
@@ -124,6 +130,24 @@ public class GlobalClass extends Application {
      */
     public void setBanner(Bitmap banner) {
         this.banner = banner;
+    }
+
+    /**
+     * Gets the bio text
+     *
+     * @return bio text
+     */
+    public String getBio() {
+        return bio;
+    }
+
+    /**
+     * Sets the bio text
+     *
+     * @param bio new bio text
+     */
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     /**

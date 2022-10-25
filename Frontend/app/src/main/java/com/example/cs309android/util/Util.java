@@ -2,15 +2,15 @@ package com.example.cs309android.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.models.gson.request.social.GetBannerRequest;
+import com.example.cs309android.models.gson.request.social.GetProfilePictureRequest;
 import com.example.cs309android.models.gson.response.users.LoginResponse;
-import com.example.cs309android.util.security.Hasher;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -125,11 +125,15 @@ public class Util {
      * @param token  Token for authentication
      * @param login  LoginResponse for other values from the server
      */
-    public static void login(GlobalClass global, String token, LoginResponse login) {
+    public static void login(GlobalClass global, String token, LoginResponse login, Context context) {
         String username = login.getUsername();
+        System.out.println(username);
         global.setUsername(username);
         global.setToken(token);
         global.updateLoginPrefs();
+
+        new GetProfilePictureRequest(username).request(global::setPfp, context);
+        new GetBannerRequest(username).request(global::setBanner, context);
 
         // TODO: uncomment when backend is in place
 //        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());

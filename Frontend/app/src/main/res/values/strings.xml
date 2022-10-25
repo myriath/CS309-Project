@@ -87,5 +87,8 @@
     <string name="account">Account</string>
     <string name="profile_banner">Profile Banner</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="back">Back</string>
+    <string name="bio">Bio</string>
+    <string name="follow">FOLLOW</string>
 
 </resources>

@@ -23,7 +23,7 @@ public class StrikeRequest extends PatchRequest {
      * @param token Token for authentication
      */
     public StrikeRequest(String itemName, String token) {
-        super(Constants.STRIKE_SHOPPING_URL + "/" + token);
+        super(Constants.STRIKE_SHOPPING_URL + token);
         this.itemName = itemName;
     }
 
