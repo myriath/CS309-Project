@@ -28,6 +28,14 @@ public class GlobalClass extends Application {
      */
     private String bio;
     /**
+     * Follower count
+     */
+    private int followers;
+    /**
+     * Following count;
+     */
+    private int following;
+    /**
      * User map for storing login data
      */
     private Map<String, String> users;
@@ -148,6 +156,42 @@ public class GlobalClass extends Application {
      */
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    /**
+     * Gets the follower count
+     *
+     * @return follower count
+     */
+    public int getFollowers() {
+        return followers;
+    }
+
+    /**
+     * Sets the follower count
+     *
+     * @param followers new follower count
+     */
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
+
+    /**
+     * Gets the following count
+     *
+     * @return following count
+     */
+    public int getFollowing() {
+        return following;
+    }
+
+    /**
+     * Sets the following count
+     *
+     * @param following new following count
+     */
+    public void setFollowing(int following) {
+        this.following = following;
     }
 
     /**

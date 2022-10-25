@@ -377,6 +377,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new SettingsFragment();
                 getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
                         .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 5;

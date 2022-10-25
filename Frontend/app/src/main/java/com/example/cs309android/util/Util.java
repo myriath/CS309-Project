@@ -127,7 +127,6 @@ public class Util {
      */
     public static void login(GlobalClass global, String token, LoginResponse login, Context context) {
         String username = login.getUsername();
-        System.out.println(username);
         global.setUsername(username);
         global.setToken(token);
         global.updateLoginPrefs();

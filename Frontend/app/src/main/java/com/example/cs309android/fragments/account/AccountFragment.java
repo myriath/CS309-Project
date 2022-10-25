@@ -1,5 +1,7 @@
 package com.example.cs309android.fragments.account;
 
+import static com.example.cs309android.util.Util.objFromJson;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,6 @@ import com.example.cs309android.models.gson.request.social.GetProfileRequest;
 import com.example.cs309android.models.gson.request.social.GetUserPostsRequest;
 import com.example.cs309android.models.gson.response.social.GetProfileResponse;
 import com.example.cs309android.models.gson.response.social.GetUserPostsResponse;
-import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -92,6 +93,19 @@ public class AccountFragment extends BaseFragment {
             ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
             ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
             ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+
+            new GetProfileRequest(username).request(response -> {
+                GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+                global.setBio(profileResponse.getBio());
+                global.setFollowers(profileResponse.getFollowers());
+                global.setFollowing(profileResponse.getFollowing());
+
+                ((TextView) view.findViewById(R.id.followerCount))
+                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
+                ((TextView) view.findViewById(R.id.followingCount))
+                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+
+            }, requireContext());
         } else {
             backButton.setOnClickListener(view1 -> {
                 callbackFragment.callback(MainActivity.CALLBACK_CLOSE_PROFILE, null);
@@ -103,7 +117,7 @@ public class AccountFragment extends BaseFragment {
             followButton.setVisibility(View.VISIBLE);
 
             new GetProfileRequest(username).request(response -> {
-                GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
+                GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
 
                 ((TextView) view.findViewById(R.id.unameView)).setText(profileResponse.getUsername());
                 ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
@@ -125,7 +139,7 @@ public class AccountFragment extends BaseFragment {
         }
 
         new GetUserPostsRequest(username).request(response -> {
-            GetUserPostsResponse postsResponse = Util.objFromJson(response, GetUserPostsResponse.class);
+            GetUserPostsResponse postsResponse = objFromJson(response, GetUserPostsResponse.class);
             ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(requireContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
         }, requireActivity());
 

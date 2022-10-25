@@ -1,12 +1,9 @@
 package com.example.cs309android.models.gson;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.android.volley.Response;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
@@ -103,32 +100,5 @@ public abstract class Request {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Makes a request for the given image url
-     *
-     * @param listener  Runs when the request is completed
-     * @param maxWidth  Maximum width of the image in pixels
-     * @param maxHeight Maximum height of the image in pixels
-     * @param context   Context for volley
-     */
-    public void request(Response.Listener<Bitmap> listener, int maxWidth, int maxHeight, Context context) {
-        request(listener, maxWidth, maxHeight, Throwable::printStackTrace, context);
-    }
-
-    /**
-     * Makes a request for the given image url (custom error listener)
-     *
-     * @param listener      Runs when the request is completed
-     * @param maxWidth      Maximum width of the image in pixels
-     * @param maxHeight     Maximum height of the image in pixels
-     * @param errorListener Runs when volley throws an error
-     * @param context       Context for volley
-     */
-    public void request(Response.Listener<Bitmap> listener, int maxWidth, int maxHeight, Response.ErrorListener errorListener, Context context) {
-        new RequestHandler(context).add(
-                new ImageRequest(getURL(), listener, maxWidth, maxHeight, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.ARGB_8888, errorListener)
-        );
     }
 }

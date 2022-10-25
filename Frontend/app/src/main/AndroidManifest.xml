@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
-            android:name=".AccountEditActivity"
+            android:name=".activities.AccountEditActivity"
             android:exported="false" />
         <activity
             android:name=".activities.recipe.AddRecipeActivity"
