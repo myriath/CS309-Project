@@ -5,33 +5,33 @@ import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Removes the given index from the shopping list on the DB
+ * Removes the given item from the shopping list on the DB
  *
  * @author Mitch Hudson
  */
 public class RemoveRequest extends PutRequest {
     /**
-     * Index of the item to remove
+     * fdcId of the item to remove
      */
     @Expose
-    private final String itemName;
+    private final int fdcId;
 
     /**
      * Public constructor
      *
-     * @param itemName Name of the item to remove
+     * @param fdcId Id of the item to remove
      * @param token  Token for authentication
      */
-    public RemoveRequest(String itemName, String token) {
+    public RemoveRequest(int fdcId, String token) {
         super(Constants.REMOVE_SHOPPING_URL + token);
-        this.itemName = itemName;
+        this.fdcId = fdcId;
     }
 
     /**
-     * Getter for the index
-     * @return item index
+     * Getter for the fdcId
+     * @return item id
      */
-    public String getIndex() {
-        return itemName;
+    public int getFdcId() {
+        return fdcId;
     }
 }
