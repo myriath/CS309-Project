@@ -34,6 +34,7 @@ import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
 import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.users.LoginResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 // Checks if the result is valid or not. If not, opens the login page
                 int result = loginResponse.getResult();
 
-                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
+                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0, loginResponse);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
                 else Util.login(global, token, loginResponse, MainActivity.this);
             }, error -> {
@@ -429,17 +430,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * @param oldToken Old token for authentication
      * @param depth    current retry counter
      */
-    public void regenToken(String oldToken, int depth) {
+    public void regenToken(String oldToken, int depth, LoginResponse oldResponse) {
         String newToken = Hasher.genToken();
 
         new RegenTokenRequest(newToken, oldToken).request(response -> {
-            LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
+            GenericResponse loginResponse = Util.objFromJson(response, GenericResponse.class);
             int result = loginResponse.getResult();
 
             if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH)
-                regenToken(oldToken, depth + 1);
+                regenToken(oldToken, depth + 1, oldResponse);
             else if (result == RESULT_LOGGED_IN)
-                Util.login(global, newToken, loginResponse, MainActivity.this);
+                Util.login(global, newToken, oldResponse, MainActivity.this);
             else startLoginFragment();
         }, MainActivity.this);
     }

@@ -123,7 +123,6 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
     @Override
     public void callback(int op, Bundle bundle) {
-        System.out.println(op);
         switch(op) {
             case (OPCODE_IMAGE_URI): {
                 try {
@@ -132,7 +131,6 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                     if (imageDestination == BANNER) {
                         bannerImage = ImageDecoder.decodeBitmap(source);
                         ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);
-                        System.out.println(bannerImage);
                     } else if (imageDestination == PFP) {
                         profileImage = ImageDecoder.decodeBitmap(source);
                         ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);
