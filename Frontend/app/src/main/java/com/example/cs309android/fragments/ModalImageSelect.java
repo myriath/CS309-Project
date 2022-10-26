@@ -94,7 +94,7 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                         callbackFragment.callback(AccountEditActivity.OPCODE_IMAGE_URI, bundle);
                         dismiss();
                     } else {
-                        // TODO: CANCEL
+                        dismiss();
                     }
                 }
         );
@@ -108,7 +108,7 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                         callbackFragment.callback(AccountEditActivity.OPCODE_IMAGE_URI, bundle);
                         dismiss();
                     } else {
-                        // TODO: Cancel
+                        dismiss();
                     }
                 }
         );

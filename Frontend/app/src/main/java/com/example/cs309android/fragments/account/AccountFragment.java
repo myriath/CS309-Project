@@ -70,8 +70,6 @@ public class AccountFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
-        // TODO: Get images, etc, from db with username
-
         GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
@@ -96,6 +94,7 @@ public class AccountFragment extends BaseFragment {
             ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
             ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
 
+            // TODO: Test retrieval
             new GetProfileRequest(username).request(response -> {
                 GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
                 global.setBio(profileResponse.getBio());

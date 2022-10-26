@@ -133,13 +133,6 @@ public class Util {
 
         new GetProfilePictureRequest(username).request(global::setPfp, context);
         new GetBannerRequest(username).request(global::setBanner, context);
-
-        // TODO: uncomment when backend is in place
-//        byte[] bannerBytes = Hasher.B64_URL_DECODER.decode(login.getBanner());
-//        global.setBanner(BitmapFactory.decodeByteArray(bannerBytes, 0, bannerBytes.length));
-
-//        byte[] pfpBytes = Hasher.B64_URL_DECODER.decode(login.getPfp());
-//        global.setPfp(BitmapFactory.decodeByteArray(pfpBytes, 0, pfpBytes.length));
     }
 
     /**
