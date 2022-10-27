@@ -111,6 +111,30 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
+    @DeleteMapping(path="/remove")
+    @ResponseBody
+    public int removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
+        Recipe[] recipe = recipeRepository.queryRecipeDeleteCheck(token, username);
+        RecipeResponse res = new RecipeResponse();
+
+        if(recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+            recipeRepository.queryDeleteRecipe(rid);
+            res.setResult(RESULT_OK);
+        }
+
+        return res.getResult();
+    }
+
+
+
+
+
+
+
+
+
     /*  to be modified after database changed
     @GetMapping(path="/getImage/{rid}")
     @ResponseBody
