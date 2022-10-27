@@ -63,9 +63,17 @@ build-android:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "frontend-dev"
   tags:
     - android_tag
+  image: gjandres/android-ci:latest
   stage: android-build
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/gradlew
   script:
-    - echo "STUB!"
+    - cd Frontend
+    - ./gradlew build
+  artifacts:
+    paths:
+    - Android_test/app/build/outputs/
 
 ###### TEST JOBS ######
 
@@ -87,23 +95,19 @@ test-spring-main:
   script:
     - echo "STUB!"
 
-test-android-dev:
+test-android:
   rules:
-    - if: $CI_COMMIT_BRANCH == "frontend-dev"
+    - if: $CI_COMMIT_BRANCH == "frontend-dev" || $CI_COMMIT_BRANCH == "main"
   tags:
     - android_tag
+  image: gjandres/android-ci:latest
   stage: android-test
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/gradlew
   script:
-    - echo "STUB!"
-
-test-android-main:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - android_tag
-  stage: android-test
-  script:
-    - echo "STUB!"
+    - cd Frontend
+    - ./gradlew test
 
 ###### DEPLOY JOBS ######
 
