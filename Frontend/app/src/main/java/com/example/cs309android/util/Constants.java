@@ -150,35 +150,41 @@ public class Constants {
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
     /**
-     * URL for updating profile information
-     */
-    public static final String UPDATE_PROFILE_URL = SOCIAL_URL + "updateProfile/";
-    /**
-     * URL used to update a user's profile picture
-     */
-    public static final String UPDATE_PFP_URL = SOCIAL_URL + "updatePfp/";
-    /**
-     * URL used to update a user's banner image
-     */
-    public static final String UPDATE_BANNER_URL = SOCIAL_URL + "updateBanner/";
-    /**
      * URL for getting user posts
      */
     public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
+
+    // PROFILE
+    /**
+     * Base profile endpoints URL
+     */
+    public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+    /**
+     * URL for getting a profile picture
+     */
+    public static final String PROFILE_PICTURE_URL = PROFILE_API_URL + "profilePicture/";
+    /**
+     * URL for getting a profile banner
+     */
+    public static final String BANNER_URL = PROFILE_API_URL + "profileBanner/";
+    /**
+     * URL for updating profile information
+     */
+    public static final String UPDATE_PROFILE_URL = PROFILE_API_URL + "updateProfile/";
+    /**
+     * URL used to update a user's profile picture
+     */
+    public static final String UPDATE_PFP_URL = PROFILE_API_URL + "updatePfp/";
+    /**
+     * URL used to update a user's banner image
+     */
+    public static final String UPDATE_BANNER_URL = PROFILE_API_URL + "updateBanner/";
 
     // OTHER
     /**
      * URL for getting images
      */
     public static final String IMAGE_URL = BASE_API_URL + "images/";
-    /**
-     * URL for getting a profile picture
-     */
-    public static final String PROFILE_PICTURE_URL = BASE_API_URL + "profilePicture/";
-    /**
-     * URL for getting a profile banner
-     */
-    public static final String BANNER_URL = BASE_API_URL + "profileBanner/";
 
     /**
      * No fdc id associated with this item, used for custom items

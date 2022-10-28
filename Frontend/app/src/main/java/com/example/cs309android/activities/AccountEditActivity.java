@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,9 +13,12 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.request.social.UpdateBannerImageRequest;
-import com.example.cs309android.models.gson.request.social.UpdateProfileImageRequest;
-import com.example.cs309android.models.gson.request.social.UpdateProfileRequest;
+import com.example.cs309android.models.gson.request.profile.UpdateBannerImageRequest;
+import com.example.cs309android.models.gson.request.profile.UpdateProfileImageRequest;
+import com.example.cs309android.models.gson.request.profile.UpdateProfileRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
@@ -87,7 +89,10 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
         findViewById(R.id.saveButton).setOnClickListener(view -> {
             new UpdateProfileRequest(global.getToken(), bioInput.getEditText().getText().toString()).request(response -> {
-                // TODO: Parse response
+                GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                if (genericResponse.getResult() != RESULT_OK) {
+                    Toaster.toastShort("Unexpected error", this);
+                }
             }, AccountEditActivity.this);
 
             if (profileImage != null) {

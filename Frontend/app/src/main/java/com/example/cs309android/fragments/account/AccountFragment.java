@@ -16,12 +16,12 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.FeedAdapter;
-import com.example.cs309android.models.gson.request.social.GetBannerRequest;
-import com.example.cs309android.models.gson.request.social.GetProfilePictureRequest;
-import com.example.cs309android.models.gson.request.social.GetProfileRequest;
-import com.example.cs309android.models.gson.request.social.GetUserPostsRequest;
+import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
+import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.gson.request.profile.GetProfileRequest;
+import com.example.cs309android.models.gson.request.recipes.GetRecipesRequest;
 import com.example.cs309android.models.gson.response.social.GetProfileResponse;
-import com.example.cs309android.models.gson.response.social.GetUserPostsResponse;
+import com.example.cs309android.models.gson.response.recipes.GetRecipesResponse;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -141,8 +141,8 @@ public class AccountFragment extends BaseFragment {
             }, requireActivity());
         }
 
-        new GetUserPostsRequest(username).request(response -> {
-            GetUserPostsResponse postsResponse = objFromJson(response, GetUserPostsResponse.class);
+        new GetRecipesRequest(username).request(response -> {
+            GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
             ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(requireContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
         }, requireActivity());
 

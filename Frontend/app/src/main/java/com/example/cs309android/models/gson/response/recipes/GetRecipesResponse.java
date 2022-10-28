@@ -1,14 +1,14 @@
-package com.example.cs309android.models.gson.response.social;
+package com.example.cs309android.models.gson.response.recipes;
 
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.models.gson.response.GenericResponse;
 
 /**
- * Response for the GetUserPostsRequest
+ * Response for the GetRecipesRequest
  *
  * @author Mitch Hudson
  */
-public class GetUserPostsResponse extends GenericResponse {
+public class GetRecipesResponse extends GenericResponse {
     /**
      * Recipe list for the user
      */
@@ -20,7 +20,7 @@ public class GetUserPostsResponse extends GenericResponse {
      * @param result Result code from the request
      * @param items  Array of user posts
      */
-    public GetUserPostsResponse(int result, SimpleRecipeItem[] items) {
+    public GetRecipesResponse(int result, SimpleRecipeItem[] items) {
         super(result);
         this.items = items;
     }

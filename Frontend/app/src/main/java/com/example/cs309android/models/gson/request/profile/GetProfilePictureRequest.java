@@ -1,4 +1,4 @@
-package com.example.cs309android.models.gson.request.social;
+package com.example.cs309android.models.gson.request.profile;
 
 import static com.example.cs309android.util.Constants.PROFILE_PICTURE_URL;
 
