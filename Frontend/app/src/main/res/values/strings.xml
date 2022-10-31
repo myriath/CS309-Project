@@ -82,5 +82,7 @@
     <string name="total_calories">Calories in kcal</string>
     <string name="protein">Protein</string>
     <string name="total_protein">Total protein in grams</string>
+    <string name="barcode_view">Barcode View</string>
+    <string name="scan_barcode">Scan Barcode</string>
 
 </resources>

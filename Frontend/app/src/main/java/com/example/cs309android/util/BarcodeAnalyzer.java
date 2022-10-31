@@ -1,14 +1,14 @@
 package com.example.cs309android.util;
 
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.view.TransformExperimental;
-import androidx.camera.view.transform.ImageProxyTransformFactory;
-import androidx.camera.view.transform.OutputTransform;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Mitch Hudson (tutorial from https://developers.google.com/ml-kit/vision/barcode-scanning/android#java)
  */
-public class Analyzer implements ImageAnalysis.Analyzer {
+public class BarcodeAnalyzer {
     /**
      * Barcode scanner options.
      * Only care about upc barcodes
@@ -43,33 +43,34 @@ public class Analyzer implements ImageAnalysis.Analyzer {
      */
     private final OnFailureListener errorListener;
 
+//    public static float DP300;
+//    public static float DP150;
+//    public static float DP180;
+//    public static float DP90;
+
     /**
      * Public constructor
      * @param listener Runs when the barcodes are found
      * @param errorListener Runs when the analysis fails
      */
-    public Analyzer(OnSuccessListener<String[]> listener, OnFailureListener errorListener) {
+    public BarcodeAnalyzer(OnSuccessListener<String[]> listener, OnFailureListener errorListener) {
         this.listener = listener;
         this.errorListener = errorListener;
+
+//        DP300 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, getResources().getDisplayMetrics());
+//        DP150 = DP300 / 2;
+//        DP180 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180f, getResources().getDisplayMetrics());
+//        DP90 = DP180 / 2;
     }
 
-    /**
-     * Analyzes an image to read the barcodes
-     * @param proxy CameraX ImageProxy
-     */
-    @Override
-    @ExperimentalGetImage
-    @TransformExperimental
-    public void analyze(@NonNull ImageProxy proxy) {
-        Image media = proxy.getImage();
-        if (media != null) {
-            InputImage image = InputImage.fromMediaImage(media, proxy.getImageInfo().getRotationDegrees());
-            // Pass image to ML Kit
-            BarcodeScanner scanner = BarcodeScanning.getClient(BARCODE_SCANNER_OPTIONS);
-            scanner.process(image)
-                    .addOnSuccessListener(barcodes -> listener.onSuccess(readBarcodes(barcodes)))
-                    .addOnFailureListener(errorListener);
-        }
+    public void analyze(@NonNull Bitmap bitmap) {
+//        int x = (int) (bitmap.getWidth() / 2 - DP150);
+//        int y = (int) (bitmap.getHeight() / 2 - DP90);
+//        Bitmap cropped = Bitmap.createBitmap(bitmap, x, y, (int) DP300, (int) DP180);
+        BarcodeScanner scanner = BarcodeScanning.getClient(BARCODE_SCANNER_OPTIONS);
+        scanner.process(bitmap, 0)
+                .addOnSuccessListener(barcodes -> listener.onSuccess(readBarcodes(barcodes)))
+                .addOnFailureListener(errorListener);
     }
 
     /**

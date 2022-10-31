@@ -119,6 +119,11 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
             return WindowInsetsCompat.CONSUMED;
         });
 
+        findViewById(R.id.scanButton).setOnClickListener(view -> {
+            Intent intent = new Intent(this, CameraActivity.class);
+            startActivity(intent);
+        });
+
         foodDetailsLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {

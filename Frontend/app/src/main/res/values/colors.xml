@@ -39,6 +39,7 @@
     <color name="night_tertconton">#9CB1A0</color>
 
     <color name="bg">#1C1B1F</color>
+    <color name="dark_semi_trans">#4D0E0E0E</color>
     
 <!--    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/lightgray</color>-->
 </resources>
