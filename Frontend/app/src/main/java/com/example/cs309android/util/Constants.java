@@ -70,19 +70,23 @@ public class Constants {
     /**
      * URL to get an accounts salt. (Params: username)
      */
-    public static final String SALT_URL = AUTH_URL + "getSalt";
+    public static final String SALT_URL = AUTH_URL + "getSalt/";
     /**
      * URL to check for login. (Params: username, hash)
      */
-    public static final String LOGIN_URL = AUTH_URL + "validateLogin";
+    public static final String LOGIN_URL = AUTH_URL + "validateLogin/";
     /**
      * URL to check token login
      */
-    public static final String TOKEN_URL = AUTH_URL + "validateToken";
+    public static final String TOKEN_URL = AUTH_URL + "validateToken/";
     /**
      * URL to regen an expired token
      */
-    public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken";
+    public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
+    /**
+     * URL to get profile data
+     */
+    public static final String GET_PROFILE_URL = AUTH_URL + "getProfile/";
 
 
     // FOOD
@@ -93,11 +97,11 @@ public class Constants {
     /**
      * URL for adding a new custom food item
      */
-    public static final String ADD_FOOD_URL = FOOD_URL + "add";
+    public static final String ADD_FOOD_URL = FOOD_URL + "add/";
     /**
      * URL for getting a custom food item
      */
-    public static final String GET_FOOD_URL = FOOD_URL + "get";
+    public static final String GET_FOOD_URL = FOOD_URL + "get/";
 
 
     // SHOPPING
@@ -108,19 +112,19 @@ public class Constants {
     /**
      * Get url for getting shopping list
      */
-    public static final String GET_SHOPPING_URL = SHOPPING_URL + "get";
+    public static final String GET_SHOPPING_URL = SHOPPING_URL + "get/";
     /**
      * Add url for adding an item to a shopping list
      */
-    public static final String ADD_SHOPPING_URL = SHOPPING_URL + "add";
+    public static final String ADD_SHOPPING_URL = SHOPPING_URL + "add/";
     /**
      * Remove url for removing an item from a shopping list
      */
-    public static final String REMOVE_SHOPPING_URL = SHOPPING_URL + "remove";
+    public static final String REMOVE_SHOPPING_URL = SHOPPING_URL + "remove/";
     /**
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
-    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout";
+    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout/";
 
     // RECIPES
     /**
@@ -140,19 +144,50 @@ public class Constants {
      */
     public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
 
+    // SOCIAL
+    /**
+     * Base URL for social endpoints
+     */
+    public static final String SOCIAL_URL = BASE_API_URL + "social/";
+    /**
+     * URL for getting user posts
+     */
+    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
+
+    // PROFILE
+    /**
+     * Base profile endpoints URL
+     */
+    public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+    /**
+     * URL for getting a profile picture
+     */
+    public static final String PROFILE_PICTURE_URL = PROFILE_API_URL + "profilePicture/";
+    /**
+     * URL for getting a profile banner
+     */
+    public static final String BANNER_URL = PROFILE_API_URL + "profileBanner/";
+    /**
+     * URL for updating profile information
+     */
+    public static final String UPDATE_PROFILE_URL = PROFILE_API_URL + "updateProfile/";
+    /**
+     * URL used to update a user's profile picture
+     */
+    public static final String UPDATE_PFP_URL = PROFILE_API_URL + "updatePfp/";
+    /**
+     * URL used to update a user's banner image
+     */
+    public static final String UPDATE_BANNER_URL = PROFILE_API_URL + "updateBanner/";
+
     // OTHER
+    /**
+     * URL for getting images
+     */
+    public static final String IMAGE_URL = BASE_API_URL + "images/";
+
     /**
      * No fdc id associated with this item, used for custom items
      */
     public static final int ITEM_ID_NULL = -1;
-
-    // TAGS
-
-    /**
-     * Volley tags used to control
-     */
-    public enum TAGS {
-        TAG_GET,
-        TAG_POST,
-    }
 }

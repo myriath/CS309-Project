@@ -18,16 +18,19 @@
             android:name=".activities.CameraActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AddRecipeActivity"
+            android:name=".activities.AccountEditActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CustomFoodActivity"
+            android:name=".activities.recipe.AddRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.FoodDetailsActivity"
+            android:name=".activities.food.CustomFoodActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.FoodSearchActivity"
+            android:name=".activities.food.FoodDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SearchActivity"
             android:exported="false"
             android:label="@string/title_activity_food_search"
             android:launchMode="singleTop"
@@ -42,6 +45,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="${applicationId}.provider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

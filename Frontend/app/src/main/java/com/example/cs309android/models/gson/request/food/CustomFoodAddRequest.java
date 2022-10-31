@@ -2,8 +2,8 @@ package com.example.cs309android.models.gson.request.food;
 
 import static com.example.cs309android.util.Constants.ADD_FOOD_URL;
 
-import com.example.cs309android.models.gson.PostRequest;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
+import com.example.cs309android.models.gson.request.abstraction.PostRequest;
 
 /**
  * POST request for adding a custom food item to the database
@@ -23,7 +23,7 @@ public class CustomFoodAddRequest extends PostRequest {
      * @param item item to add
      */
     public CustomFoodAddRequest(CustomFoodItem item, String token) {
-        super(ADD_FOOD_URL + "/" + token);
+        super(ADD_FOOD_URL + token);
         this.item = item;
     }
 

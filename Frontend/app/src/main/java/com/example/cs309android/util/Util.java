@@ -5,7 +5,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
+import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.gson.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -110,6 +115,47 @@ public class Util {
     public static void hideKeyboard(View view, Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
+
+    /**
+     * Sets variables necessary for app functions after a login
+     * Also sets the preferences for a new token
+     *
+     * @param global GlobalClass for storing values
+     * @param token  Token for authentication
+     * @param login  LoginResponse for other values from the server
+     */
+    public static void login(GlobalClass global, String token, LoginResponse login, Context context) {
+        String username = login.getUsername();
+        global.setUsername(username);
+        global.setToken(token);
+        global.updateLoginPrefs();
+
+        new GetProfilePictureRequest(username).request(global::setPfp, context);
+        new GetBannerRequest(username).request(global::setBanner, context);
+    }
+
+    /**
+     * Logs out of the given account
+     *
+     * @param global   Global class for variables
+     * @param username Username to log out of
+     */
+    public static void logout(GlobalClass global, String username) {
+        global.setUsername(null);
+        global.removeToken(username);
+        global.updateLoginPrefs();
+    }
+
+    /**
+     * Switches the active user to the new username
+     *
+     * @param global   Global class for variables
+     * @param username New username to switch to
+     */
+    public static void switchUser(GlobalClass global, String username) {
+        global.getUsers().put(MainActivity.USERS_LATEST, username);
+        global.updateLoginPrefs();
     }
 
     /**

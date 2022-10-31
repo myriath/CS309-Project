@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putParcelable(MainActivity.PARCEL_FOODITEM, item);
-            ((FoodSearchActivity) parent.getContext()).callback(FoodSearchActivity.CALLBACK_FOOD_DETAIL, bundle);
+            ((SearchActivity) parent.getContext()).callback(SearchActivity.CALLBACK_FOOD_DETAIL, bundle);
         });
 
         TextView name = convertView.findViewById(R.id.name);
