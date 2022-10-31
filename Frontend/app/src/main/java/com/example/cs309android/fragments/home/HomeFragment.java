@@ -4,11 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Adapter;
+import android.widget.ListView;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.adapters.ShoppingListAdapter;
+import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +38,8 @@ public class HomeFragment extends BaseFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ArrayList<SimpleRecipeItem> recipes;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -55,12 +70,39 @@ public class HomeFragment extends BaseFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
+        recipes = new ArrayList<>();
+        recipes.add(item);
+        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff");
+        recipes.add(item);
+        item = new SimpleRecipeItem(3, "Meat", "Heat and stuff");
+        recipes.add(item);
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        ListView listView = view.findViewById(R.id.feed_item);
+        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        listView.setAdapter(adapter);
+
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = insets.top;
+            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+            mlp.bottomMargin = insets.bottom;
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        return view;
     }
 }
