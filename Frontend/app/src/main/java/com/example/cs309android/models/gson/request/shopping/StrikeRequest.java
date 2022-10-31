@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.gson.PatchRequest;
+import com.example.cs309android.models.gson.request.abstraction.PatchRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -14,17 +14,17 @@ public class StrikeRequest extends PatchRequest {
      * Index of the item to strikeout
      */
     @Expose
-    private final String itemName;
+    private final int fdcId;
 
     /**
      * Public constructor
      *
-     * @param itemName Name of the item
+     * @param fdcId Name of the item
      * @param token Token for authentication
      */
-    public StrikeRequest(String itemName, String token) {
-        super(Constants.STRIKE_SHOPPING_URL + "/" + token);
-        this.itemName = itemName;
+    public StrikeRequest(int fdcId, String token) {
+        super(Constants.STRIKE_SHOPPING_URL + token);
+        this.fdcId = fdcId;
     }
 
     /**
@@ -32,7 +32,7 @@ public class StrikeRequest extends PatchRequest {
      *
      * @return Index of the strikeout item.
      */
-    public String getItemName() {
-        return itemName;
+    public int getFdcId() {
+        return fdcId;
     }
 }

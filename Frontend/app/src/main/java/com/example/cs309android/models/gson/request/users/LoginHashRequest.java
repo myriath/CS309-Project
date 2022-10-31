@@ -3,7 +3,7 @@ package com.example.cs309android.models.gson.request.users;
 import static com.example.cs309android.util.Constants.LOGIN_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.gson.GetRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -60,7 +60,7 @@ public class LoginHashRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(LOGIN_URL + "/" + username)
+        return new ParameterizedRequestURL(LOGIN_URL + username)
                 .addParam("hash", hash)
                 .addParam("newToken", token)
                 .toString();

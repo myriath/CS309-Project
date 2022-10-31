@@ -8,8 +8,6 @@ import static com.example.cs309android.util.Util.hideKeyboard;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +23,8 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.gson.request.users.LoginHashRequest;
-import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
 import com.example.cs309android.models.gson.request.users.SaltRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.users.LoginHashResponse;
+import com.example.cs309android.models.gson.response.users.LoginResponse;
 import com.example.cs309android.models.gson.response.users.SaltResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -64,6 +60,7 @@ public class LoginFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
         usernameField = view.findViewById(R.id.unameField);
         passwordField = view.findViewById(R.id.passwordField);
 
@@ -106,39 +103,7 @@ public class LoginFragment extends BaseFragment {
                 // Use salt with given password to generate test hash
                 byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());
                 String hash = Hasher.getEncoded(Hasher.hash(pwd.toCharArray(), salt));
-                String token = Hasher.genToken();
-
-                new LoginHashRequest(unm, hash, token).unspinOnComplete(response1 -> {
-                    // Check for errors
-                    int result1 = ((GenericResponse) Util.objFromJson(response1, GenericResponse.class)).getResult();
-                    if (result1 == RESULT_ERROR_USER_HASH_MISMATCH) {
-                        passwordField.setError("Username / Password mismatch");
-                        return;
-                    } else if (result1 != RESULT_LOGGED_IN && result1 != RESULT_REGEN_TOKEN) {
-                        Toaster.toastShort("Unexpected error", getActivity());
-                        return;
-                    }
-
-                    if (result1 == RESULT_LOGGED_IN) {
-                        // No errors, so store credentials for future use
-                        // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                        SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString(MainActivity.PREF_TOKEN, token);
-                        editor.apply();
-
-                        ((GlobalClass) requireActivity().getApplicationContext()).setToken(token);
-                    } else {
-                        regenToken(unm, hash, 0);
-                    }
-
-                    // Close window
-                    callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-                    callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-                }, error -> {
-                    Toaster.toastShort("Unexpected error", getActivity());
-                    error.printStackTrace();
-                }, requireActivity(), view);
+                loginAttempt((GlobalClass) requireActivity().getApplicationContext(), unm, hash, 0);
             }, error -> {
                 Toaster.toastShort("Unexpected error", getActivity());
                 error.printStackTrace();
@@ -167,32 +132,40 @@ public class LoginFragment extends BaseFragment {
     }
 
     /**
-     * Recursive method for regenerating tokens
+     * Recursive method for login attempts
      * (recursive in case duplicates are generated)
      *
-     * @param unm Username for login attempt
-     * @param hash Hash for login attempt
+     * @param global GlobalClass for storing application variables
+     * @param unm    Username for login attempt
+     * @param hash   Hash for login attempt
      * @param depth  number of retries
      */
-    public void regenToken(String unm, String hash, int depth) {
+    public void loginAttempt(GlobalClass global, String unm, String hash, int depth) {
         String token = Hasher.genToken();
 
-        new LoginHashRequest(unm, hash, token).request(response2 -> {
-            GenericResponse genericResponse = Util.objFromJson(response2, GenericResponse.class);
-            if (genericResponse.getResult() == RESULT_OK) {
+        new LoginHashRequest(unm, hash, token).request(response -> {
+            LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
+            int result = loginResponse.getResult();
+            if (result == RESULT_ERROR_USER_HASH_MISMATCH) {
+                passwordField.setError("Username / Password mismatch");
+            } else if (result == RESULT_LOGGED_IN || result == RESULT_OK) {
                 // No errors, so store credentials for future use
                 // (HASH + USERNAME, NO PLAINTEXT PWD STORED!)
-                SharedPreferences pref = requireActivity().getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString(MainActivity.PREF_TOKEN, token);
-                editor.apply();
+                Util.login(global, token, loginResponse, requireActivity());
+                Util.unSpin(requireActivity());
 
-                ((GlobalClass) requireActivity().getApplicationContext()).setToken(token);
-            } else if (genericResponse.getResult() == RESULT_REGEN_TOKEN && depth < 5) {
-                regenToken(unm, hash, depth + 1);
+                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
+                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
+            } else if (result == RESULT_REGEN_TOKEN && depth < MainActivity.TOKEN_MAX_DEPTH) {
+                loginAttempt(global, unm, hash, depth + 1);
             } else {
                 Toaster.toastShort("Error", getContext());
+                Util.unSpin(requireActivity());
             }
+        }, error -> {
+            Toaster.toastShort("Unexpected error", getActivity());
+            error.printStackTrace();
+            Util.unSpin(requireActivity());
         }, getContext());
     }
 }

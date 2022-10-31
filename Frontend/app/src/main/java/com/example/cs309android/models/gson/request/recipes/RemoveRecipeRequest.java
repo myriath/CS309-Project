@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
-import com.example.cs309android.models.gson.DeleteRequest;
+import com.example.cs309android.models.gson.request.abstraction.DeleteRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 

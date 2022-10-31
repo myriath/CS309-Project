@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
-import com.example.cs309android.models.gson.PostRequest;
+import com.example.cs309android.models.gson.request.abstraction.PostRequest;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
