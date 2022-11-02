@@ -27,7 +27,10 @@ public class CustomController {
 
         customRepository.queryGetCustomFoods(query);
         FoodsResponse res = new FoodsResponse();
-        res.setItems(customRepository.queryGetCustomFoods(query));
+
+        CustomFood[] foods = customRepository.queryGetCustomFoods(query);
+
+        res.setItems(foods);
 
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
