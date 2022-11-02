@@ -30,6 +30,8 @@
     <string name="display_title">Display Settings</string>
     <!-- Strings related to Nutrition -->
     <string name="nutrition">Nutrition</string>
+    <string name="nutrition_food">Food</string>
+    <string name="nutrition_calories">Calories</string>
     <!-- Strings related to Recipes -->
     <string name="recipes">Recipes</string>
     <string name="recipes_id_input">Recipe ID</string>
