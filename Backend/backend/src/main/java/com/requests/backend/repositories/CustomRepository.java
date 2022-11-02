@@ -16,7 +16,7 @@ public interface CustomRepository extends JpaRepository<CustomFood, Integer> {
 
     @Modifying
     @Query(
-            value = "INSERT INTO custom_foods (name, name, calories, carbs, protein, fat) VALUES (:name, :calories, :carbs, :protein, :fat)",
+            value = "INSERT INTO custom_foods (name, calories, carbs, protein, fat) VALUES (:name, :calories, :carbs, :protein, :fat)",
             nativeQuery = true
     )
     @Transactional
