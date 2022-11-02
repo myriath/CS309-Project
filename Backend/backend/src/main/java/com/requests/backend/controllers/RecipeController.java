@@ -179,6 +179,23 @@ public class RecipeController {
     }
 
 
+    @GetMapping(path="/userRecipeList/{token}")
+    @ResponseBody
+    public String userRecipeList(@PathVariable String token) {
+        Recipe[] recipe = recipeRepository.queryuserRecipeList(token);
+        RecipeResponse res = new RecipeResponse();
+
+        if(recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+
+            res.setResult(RESULT_OK);
+        }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(recipe);
+    }
 
 
 

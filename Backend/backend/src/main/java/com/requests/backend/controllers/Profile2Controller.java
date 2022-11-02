@@ -50,6 +50,27 @@ public class Profile2Controller {
         return gson.toJson(res.getProfile().getBio());
     }
 
+    @GetMapping("/Profile/{username}")
+    public @ResponseBody String getProfile(@PathVariable String username) {
+        Profile[] profiles = profileRepository.queryGetBio(username);
+        ProfileResponse res = new ProfileResponse();
+
+        if (profiles.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        } else {
+            res.setProfile(profiles[0]);
+            res.setResult(RESULT_OK);
+
+        }
+
+        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(res.getProfile());
+    }
+
+
+
 
     @PostMapping(path = "/updateProfile/{token}")
     @ResponseBody
