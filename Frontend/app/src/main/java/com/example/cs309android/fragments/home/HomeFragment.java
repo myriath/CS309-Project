@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,6 +21,7 @@ import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -90,9 +92,7 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        ListView listView = view.findViewById(R.id.feed_item);
-        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
-        listView.setAdapter(adapter);
+        refreshList(view);
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -104,5 +104,12 @@ public class HomeFragment extends BaseFragment {
         });
 
         return view;
+    }
+
+    public void refreshList(View view) {
+        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        ((ListView) view.findViewById(R.id.feed_item)).setAdapter(adapter);
+
+
     }
 }

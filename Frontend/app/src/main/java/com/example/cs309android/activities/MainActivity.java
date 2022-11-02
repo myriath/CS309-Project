@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         } else startLoginFragment();
 
         navbar = findViewById(R.id.navbar);
-        navbar.setSelectedItemId(R.id.home);
+
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
@@ -260,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             return true;
         });
+        navbar.setSelectedItemId(R.id.home);
         navbar.setOnItemReselectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 System.out.println("shopping re");
