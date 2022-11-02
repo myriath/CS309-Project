@@ -28,7 +28,7 @@ public class CustomController {
         customRepository.queryGetCustomFoods(query);
         FoodsResponse res = new FoodsResponse();
 
-        CustomFood[] foods = customRepository.queryGetCustomFoods(query);
+        CustomFood[] foods = customRepository.findByNameLike("%" + query + "%");
 
         res.setItems(foods);
 

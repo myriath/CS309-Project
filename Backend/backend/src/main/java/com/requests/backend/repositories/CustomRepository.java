@@ -25,5 +25,7 @@ public interface CustomRepository extends JpaRepository<CustomFood, Integer> {
     @Transactional
     CustomFood queryCreateCustomFood(@Param("name") String name, @Param("calories") double calories, @Param("carbs") double carbs, @Param("protein") double protein, @Param("fat") double fat);
 
+    CustomFood[] findByNameLike(String query);
+
 
 }
