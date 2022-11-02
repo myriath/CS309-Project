@@ -24,8 +24,7 @@ public class CustomFood {
     public CustomFood() {
     }
 
-    public CustomFood(int dbId, String name, double calories, double carbs, double protein, double fat) {
-        this.dbId = dbId;
+    public CustomFood(String name, double calories, double carbs, double protein, double fat) {
         this.name = name;
         this.calories = calories;
         this.carbs = carbs;

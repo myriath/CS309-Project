@@ -7,9 +7,13 @@ import com.google.gson.GsonBuilder;
 import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.FoodsResponse;
 import com.requests.backend.models.requests.CustomFoodRequest;
+import com.requests.backend.models.responses.CustomFoodResponse;
 import com.requests.backend.repositories.CustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static com.util.Constants.RESULT_ERROR;
+import static com.util.Constants.RESULT_OK;
 
 @RestController
 @RequestMapping(path="/food")
@@ -40,7 +44,18 @@ public class CustomController {
 
         CustomFood food = req.getItem();
 
-        customRepository.queryCreateCustomFood(food.getName(), food.getCalories(), food.getFat(), food.getCarbs(), food.getProtein());
+        CustomFoodResponse res = new CustomFoodResponse();
+
+        try {
+            CustomFood savedFood = new CustomFood(food.getName(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
+            savedFood = customRepository.save(savedFood);
+            int dbId = savedFood.getDbId();
+
+            res.setResult(RESULT_OK);
+            res.setDbId(dbId);
+        } catch (Exception e) {
+            res.setResult(RESULT_ERROR);
+        }
     }
 
 
