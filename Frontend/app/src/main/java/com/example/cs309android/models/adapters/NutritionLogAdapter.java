@@ -11,15 +11,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
 
 import java.util.ArrayList;
 
-public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
+public class NutritionLogAdapter extends ArrayAdapter<SimpleFoodItem> {
+
     /**
-     * List of items in the recipe list
+     * List of items in the food log
      */
-    private final ArrayList<SimpleRecipeItem> items;
+    public final ArrayList<SimpleFoodItem> items;
+
 
     /**
      * Public constructor.
@@ -27,8 +29,8 @@ public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public HomeItemAdapter(Context context, ArrayList<SimpleRecipeItem> items) {
-        super(context, R.layout.home_item_modal, items);
+    public NutritionLogAdapter(Context context, ArrayList<SimpleFoodItem> items) {
+        super(context, R.layout.food_log_item, items);
         this.items = items;
     }
 
@@ -43,11 +45,11 @@ public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(getContext(), R.layout.home_item_modal, null);
+            convertView = View.inflate(getContext(), R.layout.food_log_item, null);
         }
 
-        TextView name = convertView.findViewById(R.id.recipe_instructions);
-        name.setText(items.get(position).getRecipeName());
+        TextView name = convertView.findViewById(R.id.log_item);
+        name.setText(items.get(position).getDescription());
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -57,4 +59,5 @@ public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
 
         return convertView;
     }
+
 }
