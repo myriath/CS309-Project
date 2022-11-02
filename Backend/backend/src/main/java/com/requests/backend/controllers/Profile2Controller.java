@@ -54,7 +54,7 @@ public class Profile2Controller {
     @PostMapping(path = "/updateProfile/{token}")
     @ResponseBody
     public String updateProfile(@PathVariable String token, @RequestBody String json) {
-        //String hashedToken = Hasher.sha256(token);
+        String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(token);
 
         Profile req =  new Gson().fromJson(json, Profile.class);

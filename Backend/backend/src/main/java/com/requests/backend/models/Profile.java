@@ -20,7 +20,6 @@ public class Profile {
         this.Bio = Bio;
     }
 
-
     public String getUserName() {return username;}
 
     public String getBio() {return Bio;}
