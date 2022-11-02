@@ -1,9 +1,13 @@
 package com.example.cs309android.fragments.login;
 
+import static com.example.cs309android.util.Constants.APP_NAME;
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
+import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +22,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.Hash;
 import com.example.cs309android.models.gson.request.users.RegisterRequest;
@@ -58,7 +61,7 @@ public class RegisterFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflates the view and sets class variables for buttons/edit texts
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-        ((TextView) view.findViewById(R.id.welcomeMsgTextView)).setText(getResources().getString(R.string.welcome_msg, MainActivity.APP_NAME));
+        ((TextView) view.findViewById(R.id.welcomeMsgTextView)).setText(getResources().getString(R.string.welcome_msg, APP_NAME));
 
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
@@ -135,7 +138,7 @@ public class RegisterFragment extends BaseFragment {
             } else if (result == RESULT_ERROR_EMAIL_TAKEN) {
                 emailField.setError("Account already exists");
                 return;
-            } else if (result == RESULT_REGEN_TOKEN && depth < MainActivity.TOKEN_MAX_DEPTH) {
+            } else if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH) {
                 register(global, email, unm, hash, salt, view, depth + 1);
             } else if (result != RESULT_USER_CREATED) {
                 Toaster.toastShort("Unexpected error", getActivity());
@@ -145,8 +148,8 @@ public class RegisterFragment extends BaseFragment {
             // If there was no error, store valid creds and close the page.
             Util.login(global, token, loginResponse, requireActivity());
 
-            callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-            callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
+            callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
+            callbackFragment.callback(CALLBACK_CLOSE_LOGIN, null);
         }, error -> {
             Toaster.toastShort("Unexpected error", getActivity());
             error.printStackTrace();

@@ -1,6 +1,6 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.activities.MainActivity.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

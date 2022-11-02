@@ -1,10 +1,12 @@
 package com.example.cs309android;
 
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.util.Util;
 
 import java.util.Map;
@@ -52,7 +54,7 @@ public class GlobalClass extends Application {
     public void updateLoginPrefs() {
         preferences.edit()
                 .putString(
-                        MainActivity.PREF_LOGIN,
+                        PREF_LOGIN,
                         Util.GSON.toJson(users)
                 ).apply();
     }
@@ -81,7 +83,7 @@ public class GlobalClass extends Application {
      * @param username username to remove from the table
      */
     public void removeToken(String username) {
-        if (MainActivity.USERS_LATEST.equals(username)) return;
+        if (USERS_LATEST.equals(username)) return;
         users.remove(username);
     }
 
@@ -91,7 +93,7 @@ public class GlobalClass extends Application {
      * @return username
      */
     public String getUsername() {
-        return users.get(MainActivity.USERS_LATEST);
+        return users.get(USERS_LATEST);
     }
 
     /**
@@ -100,8 +102,8 @@ public class GlobalClass extends Application {
      * @param username new username
      */
     public void setUsername(String username) {
-        if (MainActivity.USERS_LATEST.equals(username)) return;
-        users.put(MainActivity.USERS_LATEST, username);
+        if (USERS_LATEST.equals(username)) return;
+        users.put(USERS_LATEST, username);
     }
 
     /**

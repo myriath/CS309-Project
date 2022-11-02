@@ -1,6 +1,7 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Util.setSubtitle;
 
 import android.content.Intent;
@@ -16,7 +17,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
@@ -79,7 +79,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Util.spin(this);
 
         Intent intent = getIntent();
-        item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+        item = intent.getParcelableExtra(PARCEL_FOODITEM);
         detailsLayout = findViewById(R.id.details_layout);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -111,7 +111,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         fab.setOnClickListener(view -> {
             Intent intent1 = new Intent();
-            intent1.putExtra(MainActivity.PARCEL_FOODITEM, item);
+            intent1.putExtra(PARCEL_FOODITEM, item);
             setResult(RESULT_OK, intent1);
             finish();
         });

@@ -14,6 +14,61 @@ public class Constants {
     private Constants() {
     }
 
+    /**
+     * DEBUG variable for testing Logs
+     * TODO: False for prod
+     */
+    public static final boolean DEBUG = true;
+
+    /**
+     * Name of the app for all mentions in the app
+     */
+    public static final String APP_NAME = "Föd";
+
+    /**
+     * Preference name for this app's shared preferences.
+     */
+    public static final String PREF_NAME = "COMS309";
+    public static final String PREF_FIRST_TIME = "FirstTime";
+    public static final String PREF_LOGIN = "users";
+    public static final String USERS_LATEST = "latest";
+
+    /**
+     * Max retries for token generation
+     */
+    public static final int TOKEN_MAX_DEPTH = 5;
+
+    /**
+     * Response codes for callback method. Used by Fragments for this class
+     */
+    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    public static final int CALLBACK_CLOSE_LOGIN = 1;
+    public static final int CALLBACK_START_LOGIN = 2;
+    public static final int CALLBACK_MOVE_TO_HOME = 3;
+    public static final int CALLBACK_FOOD_DETAIL = 4;
+    public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_EDIT_ACCOUNT = 7;
+    public static final int CALLBACK_CLOSE_PROFILE = 8;
+    public static final int CALLBACK_FOLLOW = 9;
+    public static final int CALLBACK_IMAGE_URI = 10;
+    public static final int CALLBACK_CLOSE_DETAIL = 11;
+
+
+    public static final String PARCEL_IMAGE_URI = "image_uri";
+    /**
+     * This is used wherever a food item needs to be parceled.
+     */
+    public static final String PARCEL_FOODITEM = "fooditem";
+    /**
+     * This is used whenever a list of food items needs to be parceled.
+     */
+    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+    /**
+     * This is used to parcel the intent of opening an activity.
+     */
+    public static final String PARCEL_INTENT_CODE = "intentCode";
+
     // RESULT CODES
     /**
      * Indicates the request resulted in an error (generic)

@@ -82,7 +82,13 @@
         android:src="@drawable/ic_scan"
         android:contentDescription="@string/scan_barcode"
         android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
-        android:fitsSystemWindows="true"/>
+        android:layout_margin="32dp" />
+
+    <FrameLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

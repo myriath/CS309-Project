@@ -1,5 +1,8 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
@@ -72,8 +75,8 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, items.get(position));
-            ((MainActivity) parent.getContext()).callback(MainActivity.CALLBACK_FOOD_DETAIL, bundle);
+            bundle.putParcelable(PARCEL_FOODITEM, items.get(position));
+            ((MainActivity) parent.getContext()).callback(CALLBACK_FOOD_DETAIL, bundle);
         });
 
         TextView name = convertView.findViewById(R.id.name);

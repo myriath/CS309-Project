@@ -1,9 +1,19 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
 
 import android.content.Intent;
 import android.databinding.tool.util.StringUtils;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +34,7 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.CustomFoodActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
@@ -33,9 +44,11 @@ import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.shopping.AddRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.util.BarcodeAnalyzer;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -67,12 +80,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private ActivityResultLauncher<Intent> customDetailsLauncher;
 
     /**
-     * Callback codes used by children to tell this fragment what to do
-     */
-    public static final int CALLBACK_FOOD_DETAIL = 0;
-    public static final int CALLBACK_CLOSE_DETAIL = 1;
-
-    /**
      * Various intents tell the app what to do when certain things are done.
      */
     private int intentCode;
@@ -90,12 +97,12 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         setContentView(R.layout.activity_food_search);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        intentCode = getIntent().getIntExtra(MainActivity.PARCEL_INTENT_CODE, INTENT_NONE);
+        intentCode = getIntent().getIntExtra(PARCEL_INTENT_CODE, INTENT_NONE);
 
         ListView listView = findViewById(R.id.search_results);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-        items = getIntent().getParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST);
+        items = getIntent().getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -122,8 +129,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         });
 
         findViewById(R.id.scanButton).setOnClickListener(view -> {
-            Intent intent = new Intent(this, CameraActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, CameraActivity.class);
+//            startActivity(intent);
+            imageChooser();
         });
 
         foodDetailsLauncher = registerForActivityResult(
@@ -133,7 +141,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         Intent intent = result.getData();
                         switch (intentCode) {
                             case INTENT_SHOPPING_LIST: {
-                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
 
                                 Util.spin(getWindow().getDecorView());
                                 new AddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
@@ -157,10 +165,19 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        SimpleFoodItem item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+                        SimpleFoodItem item = intent.getParcelableExtra(PARCEL_FOODITEM);
                     }
                 }
         );
+    }
+
+    /**
+     * Shows the image source selection modal bottom sheet
+     */
+    public void imageChooser() {
+        ModalImageSelect select = new ModalImageSelect();
+        select.setCallbackFragment(this);
+        select.show(getSupportFragmentManager(), ModalImageSelect.TAG);
     }
 
     /**
@@ -170,7 +187,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST, items);
+        intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
         setResult(RESULT_OK, intent);
         finish();
         super.onBackPressed();
@@ -232,14 +249,14 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public void callback(int op, Bundle bundle) {
         switch (op) {
             case (CALLBACK_FOOD_DETAIL): {
-                SimpleFoodItem item = bundle.getParcelable(MainActivity.PARCEL_FOODITEM);
+                SimpleFoodItem item = bundle.getParcelable(PARCEL_FOODITEM);
                 if (item.getFdcId() == ITEM_ID_NULL && item.getDbId() == ITEM_ID_NULL) {
                     Intent intent = new Intent(this, CustomFoodActivity.class);
-                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    intent.putExtra(PARCEL_FOODITEM, item);
                     customDetailsLauncher.launch(intent);
                 } else {
                     Intent intent = new Intent(this, FoodDetailsActivity.class);
-                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    intent.putExtra(PARCEL_FOODITEM, item);
                     intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                     foodDetailsLauncher.launch(intent);
                 }
@@ -247,6 +264,20 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             }
             case (CALLBACK_CLOSE_DETAIL): {
                 getSupportFragmentManager().popBackStack();
+                break;
+            }
+            case (CALLBACK_IMAGE_URI): {
+                try {
+                    Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
+                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
+                    Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+                    BarcodeAnalyzer analyzer = new BarcodeAnalyzer(barcodes -> {
+                        // TODO: use analyzed barcodes for upc lookup
+                    }, Throwable::printStackTrace);
+                    analyzer.analyze(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
         }
