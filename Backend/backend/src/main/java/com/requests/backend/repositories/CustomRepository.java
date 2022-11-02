@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface CustomRepository extends JpaRepository<CustomFood, Integer> {
     @Query(
-            value = "SELECT * FROM custom_foods WHERE name LIKE '%" +
-                    ":search" +
-                    "%' LIMIT 10",
+            value = "SELECT * FROM custom_foods WHERE name LIKE \'%" +
+                    ":query" +
+                    "%\' LIMIT 10",
             nativeQuery = true
     )
-    CustomFood[] queryGetCustomFoods(@Param("search") String search);
+    CustomFood[] queryGetCustomFoods(@Param("query") String query);
 
     @Modifying
     @Query(
