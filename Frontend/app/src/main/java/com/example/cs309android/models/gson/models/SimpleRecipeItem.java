@@ -3,6 +3,7 @@ package com.example.cs309android.models.gson.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class SimpleRecipeItem implements Parcelable {
      * @param recipeName    Recipe Name
      */
     public SimpleRecipeItem(String recipeName, String instructions) {
-        this.rid = -1;
+        this.rid = Constants.ITEM_ID_NULL;
         this.recipeName = recipeName;
         this.instructions = instructions;
     }
