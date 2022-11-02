@@ -1,11 +1,13 @@
 package com.example.cs309android.fragments.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
@@ -42,6 +45,8 @@ public class HomeFragment extends BaseFragment {
     private String mParam2;
 
     ArrayList<SimpleRecipeItem> recipes;
+    HomeItemAdapter adapter;
+    ListView listView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -76,10 +81,11 @@ public class HomeFragment extends BaseFragment {
         SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
         recipes = new ArrayList<>();
         recipes.add(item);
-        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff");
+        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff asdf asdf jkl asdf als;jdk;flasdfjkl; as;ldf asdf  asdf asdf asdf asdf asdf asdf asdfsg sdfgs dg dgs dfgsdf g dfg sdf g sdfg dsfg sdg sdfg s sdfgsdfgsdfgsdf gsdfg s s fgsdfg sdfgsdfg sdfg sdfg dsg asdfas ddsf asdf asfd asdfasdf asdf a fas dfasd asdf asdf");
         recipes.add(item);
         item = new SimpleRecipeItem(3, "Meat", "Heat and stuff");
         recipes.add(item);
+
 
 
 
@@ -91,9 +97,19 @@ public class HomeFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        listView = view.findViewById(R.id.feed_item);
+        listView.setAdapter(adapter);
 
-        refreshList(view);
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SimpleRecipeItem selectedItem = (SimpleRecipeItem) parent.getItemAtPosition(position);
+                Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+                i.putExtra("HomeFragment.recipe", selectedItem);
+                startActivity(i);
+            }
+        });
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
@@ -106,10 +122,4 @@ public class HomeFragment extends BaseFragment {
         return view;
     }
 
-    public void refreshList(View view) {
-        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
-        ((ListView) view.findViewById(R.id.feed_item)).setAdapter(adapter);
-
-
-    }
 }

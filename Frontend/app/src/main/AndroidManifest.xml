@@ -3,6 +3,7 @@
     package="com.example.cs309android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".GlobalClass"
@@ -38,6 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.RecipeDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

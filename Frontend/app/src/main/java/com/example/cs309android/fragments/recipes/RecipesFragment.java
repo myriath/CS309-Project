@@ -20,15 +20,21 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.AddRecipeActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.models.gson.request.recipes.AddRecipe;
 import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
+import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
 import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +46,7 @@ public class RecipesFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static ArrayList<SimpleRecipeItem> recipes;
 
     private String mParam1;
     private String mParam2;
@@ -87,68 +94,32 @@ public class RecipesFragment extends BaseFragment {
         });
 
         ListView listView = view.findViewById(R.id.recipes_list);
-        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
+        new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
+            try {
+                System.out.print(response.toString(3));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
 
-        //Search button triggers search by RID
-//        view.findViewById(R.id.recipe_search_button).setOnClickListener(view1 -> {
-//            TextView ridInput = view.findViewById(R.id.recipeRidInput);
-//            TextView recipes = view.findViewById(R.id.recipeName);
-//
-//            if(!(ridInput.getText().toString().matches("[0-9]+"))) {
-//                recipes.setText("Invalid Search");
-//                return;
-//            }
-//            int ridValue = Integer.parseInt(ridInput.getText().toString());
-//            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
-//
-//
-//                if (recipeResponse.getResult() == Constants.RESULT_OK) {
-//                    String stuff = recipeResponse.getRecipe().getRecipeName() + recipeResponse.getRecipe().getSteps();
-//                    recipes.setText(stuff);
-//                }
-//                else {
-//                    recipes.setText("Invalid RID");
-//                }
-//            },getContext());
-//        });
-
+            if (recipeResponse == null) {
+                Toaster.toastShort("Error getting recipes", requireContext());
+                return;
+            }
+        }, requireContext());
         //Add button adds recipe to db
         FloatingActionButton addRecipe = view.findViewById(R.id.add_recipe);
         addRecipe.setOnClickListener(view1 -> {
             Intent myIntent = new Intent(view.getContext(), AddRecipeActivity.class);
-            startActivity(myIntent);
-
-//            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
-//
-//            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getToken(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
-//                TextView recipes = view.findViewById(R.id.recipeName);
-//                if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
-//                    recipes.setText("Recipe Created");
-//                }
-//                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
-//                    recipes.setText("That RID is taken");
-//                }
-//                else {
-//                    recipes.setText("Something went wrong");
-//                }
-//            },getContext());
+            startActivity(myIntent);;
         });
         return view;
     }
 
+    public void refreshList(View view) {
+        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        ((ListView) view.findViewById(R.id.recipes_list)).setAdapter(adapter);
+    }
 
 }
