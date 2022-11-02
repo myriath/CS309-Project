@@ -7,19 +7,24 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.FoodsResponse;
+import com.requests.backend.models.Token;
 import com.requests.backend.models.requests.CustomFoodRequest;
 import com.requests.backend.models.responses.CustomFoodResponse;
+import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.CustomRepository;
-import org.slf4j.LoggerFactory;
+import com.requests.backend.repositories.TokenRepository;
+import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.util.Constants.RESULT_ERROR;
-import static com.util.Constants.RESULT_OK;
+import static com.util.Constants.*;
 
 @RestController
 @RequestMapping(path="/food")
 public class CustomController {
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     @Autowired
     private CustomRepository customRepository;
@@ -40,26 +45,38 @@ public class CustomController {
         return gson.toJson(res);
     }
 
-    @PostMapping("/add")
-    public @ResponseBody String add(@RequestBody String json) throws JsonProcessingException {
+    @PostMapping("/add/{token}")
+    public @ResponseBody String add(@PathVariable String token, @RequestBody String json) throws JsonProcessingException {
+
+        String hashedToken = Hasher.sha256(token);
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
-
-        CustomFood food = req.getItem();
+        // Find token in table
+        Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
         CustomFoodResponse res = new CustomFoodResponse();
 
-        try {
-            CustomFood savedFood = new CustomFood(food.getName(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
-            savedFood = customRepository.save(savedFood);
-            int dbId = savedFood.getDbId();
+        // If the token doesn't exist in the table, return error.
+        if (tokenQueryRes.length == 0) {
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        }
+        else {
 
-            res.setResult(RESULT_OK);
-            res.setDbId(dbId);
-        } catch (Exception e) {
-            res.setResult(RESULT_ERROR);
+            CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
+
+            CustomFood food = req.getItem();
+
+            try {
+                CustomFood savedFood = new CustomFood(food.getName(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
+                savedFood = customRepository.save(savedFood);
+                int dbId = savedFood.getDbId();
+
+                res.setResult(RESULT_OK);
+                res.setDbId(dbId);
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return gson.toJson(res);
