@@ -38,7 +38,7 @@ public class CustomController {
 
         CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
 
-        CustomFood food = req.getItem()[0];
+        CustomFood food = req.getItem();
 
         customRepository.queryCreateCustomFood(food.getName(), food.getCalories(), food.getFat(), food.getCarbs(), food.getProtein());
     }

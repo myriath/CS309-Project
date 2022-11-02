@@ -1,9 +1,10 @@
 package com.requests.backend.models;
 
 public class FoodsResponse {
-    CustomFood[] items;
+    private CustomFood[] items;
 
     public FoodsResponse() {
+        this.items = new CustomFood[0];
     }
 
     public FoodsResponse(CustomFood[] items) {
