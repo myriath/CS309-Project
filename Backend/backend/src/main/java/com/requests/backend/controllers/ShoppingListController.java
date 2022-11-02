@@ -92,6 +92,7 @@ public class ShoppingListController {
         String itemName = foodItem.getDescription();
         int fdcId = foodItem.getFdcId();
         boolean stricken = false;
+        boolean isCustom = foodItem.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -107,7 +108,7 @@ public class ShoppingListController {
             String username = tokenQueryRes[0].getUsername();
 
             try {
-                shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken);
+                shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken, isCustom);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
