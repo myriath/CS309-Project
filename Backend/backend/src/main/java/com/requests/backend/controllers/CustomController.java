@@ -1,5 +1,6 @@
 package com.requests.backend.controllers;
 
+import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.google.gson.Gson;
@@ -9,6 +10,7 @@ import com.requests.backend.models.FoodsResponse;
 import com.requests.backend.models.requests.CustomFoodRequest;
 import com.requests.backend.models.responses.CustomFoodResponse;
 import com.requests.backend.repositories.CustomRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ public class CustomController {
         customRepository.queryGetCustomFoods(query);
         FoodsResponse res = new FoodsResponse();
 
-        CustomFood[] foods = customRepository.findByNameLike("%" + query + "%");
+        CustomFood[] foods = customRepository.findByNameContainingIgnoreCase(query);
 
         res.setItems(foods);
 
