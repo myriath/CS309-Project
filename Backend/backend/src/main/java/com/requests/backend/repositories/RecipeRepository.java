@@ -40,7 +40,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 
     @Query(
-            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token = :token AND r.username != 'NULL' AND r.rname != 'NULL' AND r.instructions != 'NULL'",
+            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token = :token",
             nativeQuery = true)
     Recipe[] queryuserRecipeList(@Param("token") String token);
 
