@@ -36,7 +36,7 @@ public class CustomController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody String json) throws JsonProcessingException {
+    public @ResponseBody String add(@RequestBody String json) throws JsonProcessingException {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
@@ -56,7 +56,12 @@ public class CustomController {
         } catch (Exception e) {
             res.setResult(RESULT_ERROR);
         }
+
+        return gson.toJson(res);
     }
+
+
+
 
 
 }
