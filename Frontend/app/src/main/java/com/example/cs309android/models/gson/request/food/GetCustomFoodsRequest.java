@@ -7,7 +7,7 @@ import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
- * POST request for adding a custom food item to the database
+ * Request for searching the custom food db
  *
  * @author Mitch Hudson
  */

@@ -192,15 +192,20 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response -> {
             SearchResult result = Util.objFromJson(response, SearchResult.class);
 
-            for (SearchResultFood food : result.getFoods()) {
-                searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
+            if (result.getFoods() != null) {
+                for (SearchResultFood food : result.getFoods()) {
+                    searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
+                }
             }
 
             new GetCustomFoodsRequest(query).request(response1 -> {
+                System.out.println(response1);
                 GetCustomFoodsResponse result1 = Util.objFromJson(response, GetCustomFoodsResponse.class);
 
-                for (CustomFoodItem food : result1.getItems()) {
-                    searchResults.add(new SimpleFoodItem(ITEM_ID_NULL, food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), "Custom Food"));
+                if (result1.getItems() != null) {
+                    for (CustomFoodItem food : result1.getItems()) {
+                        searchResults.add(new SimpleFoodItem(ITEM_ID_NULL, food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), "Custom Food"));
+                    }
                 }
 
                 if (!searchResults.isEmpty()) {

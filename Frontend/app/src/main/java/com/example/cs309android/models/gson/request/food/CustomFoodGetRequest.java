@@ -1,38 +1,41 @@
 package com.example.cs309android.models.gson.request.food;
 
-import static com.example.cs309android.util.Constants.ADD_FOOD_URL;
+import static com.example.cs309android.util.Constants.GET_FOOD_URL;
 
-import com.example.cs309android.models.gson.models.CustomFoodItem;
-import com.example.cs309android.models.gson.request.abstraction.PostRequest;
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 
 /**
- * POST request for adding a custom food item to the database
+ * Request to get a specific custom food item by ID
  *
  * @author Mitch Hudson
  */
-public class CustomFoodGetRequest extends PostRequest {
+public class CustomFoodGetRequest extends GetRequest {
     /**
-     * Item to add
-     * dbId should be ITEM_ID_NULL to allow the server to allocate the id
+     * Database id of the item to get
      */
-    private final CustomFoodItem item;
+    private final int dbId;
 
     /**
      * Public constructor
      *
-     * @param item item to add
+     * @param dbId database ID to look up
      */
-    public CustomFoodGetRequest(CustomFoodItem item, String token) {
-        super(ADD_FOOD_URL + token);
-        this.item = item;
+    public CustomFoodGetRequest(int dbId) {
+        this.dbId = dbId;
     }
 
     /**
-     * Getter for the item to add
-     *
-     * @return item to add
+     * Getter for the database id.
+     * @return dbId
      */
-    public CustomFoodItem getItem() {
-        return item;
+    public int getDbId() {
+        return dbId;
+    }
+
+    @Override
+    public String getURL() {
+        return new ParameterizedRequestURL(GET_FOOD_URL + "/" + dbId)
+                .toString();
     }
 }
