@@ -102,6 +102,10 @@ public class Constants {
      * URL for getting a custom food item
      */
     public static final String GET_FOOD_URL = FOOD_URL + "get/";
+    /**
+     * URL for getting querying the custom food items
+     */
+    public static final String QUERY_FOOD_DB = FOOD_URL + "get";
 
 
     // SHOPPING

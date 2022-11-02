@@ -30,9 +30,12 @@ import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
 import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
+import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.food.GetCustomFoodsRequest;
 import com.example.cs309android.models.gson.request.shopping.AddRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.food.GetCustomFoodsResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
@@ -186,19 +189,34 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         Util.spin(this);
         searchResults.clear();
         searchResults.add(new SimpleFoodItem(query, "Add custom item"));
-        new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
-            SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
+        new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response -> {
+            SearchResult result = Util.objFromJson(response, SearchResult.class);
 
-            for (SearchResultFood food : result1.getFoods()) {
+            for (SearchResultFood food : result.getFoods()) {
                 searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
             }
 
-            if (!searchResults.isEmpty()) {
-                findViewById(R.id.empty_text).setVisibility(View.GONE);
-            } else {
-                findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-            }
-            ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+            new GetCustomFoodsRequest(query).request(response1 -> {
+                GetCustomFoodsResponse result1 = Util.objFromJson(response, GetCustomFoodsResponse.class);
+
+                for (CustomFoodItem food : result1.getItems()) {
+                    searchResults.add(new SimpleFoodItem(ITEM_ID_NULL, food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), "Custom Food"));
+                }
+
+                if (!searchResults.isEmpty()) {
+                    findViewById(R.id.empty_text).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+                }
+                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+            }, error -> {
+                if (!searchResults.isEmpty()) {
+                    findViewById(R.id.empty_text).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+                }
+                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
+            }, SearchActivity.this);
         }, SearchActivity.this, getWindow().getDecorView());
         return true;
     }
