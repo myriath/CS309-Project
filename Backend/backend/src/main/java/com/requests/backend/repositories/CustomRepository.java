@@ -18,7 +18,7 @@ public interface CustomRepository extends JpaRepository<CustomFood, Integer> {
     CustomFood[] queryGetCustomFoods(@Param("query") String query);
 
     @Query(
-            value = "SELECT * FROM custom_foods WHERE id = :id",
+            value = "SELECT * FROM custom_foods WHERE db_id = :id",
             nativeQuery = true
     )
     CustomFood[] queryGetByID(@Param("id") int id);
