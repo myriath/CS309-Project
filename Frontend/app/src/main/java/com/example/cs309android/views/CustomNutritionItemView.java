@@ -22,6 +22,8 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class CustomNutritionItemView extends FrameLayout {
+    private TextInputLayout input;
+
     public CustomNutritionItemView(@NonNull Context context) {
         super(context);
     }
@@ -71,7 +73,9 @@ public class CustomNutritionItemView extends FrameLayout {
     public void initView(String name, String hint) {
         View view = inflate(getContext(), R.layout.custom_nutrition_item, this);
         ((TextView) view.findViewById(R.id.name)).setText(name);
-        ((TextInputLayout) view.findViewById(R.id.valueField)).setHint(hint);
+        input = view.findViewById(R.id.valueField);
+        input.setHint(hint);
+
     }
 
     /**
@@ -80,6 +84,6 @@ public class CustomNutritionItemView extends FrameLayout {
      * @return value of the nutrient
      */
     public float getValue() {
-        return Float.parseFloat(Objects.requireNonNull(((TextInputLayout) getRootView().findViewById(R.id.valueField)).getEditText()).getText().toString());
+        return Float.parseFloat(Objects.requireNonNull(input.getEditText()).getText().toString());
     }
 }
