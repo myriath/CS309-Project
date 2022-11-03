@@ -163,7 +163,7 @@ public class ShoppingListController {
         String hashedToken = Hasher.sha256(token);
 
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
-        String itemName = req.getItemName();
+        int reqId = req.getId();
 
         ResultResponse res = new ResultResponse();
 
@@ -181,7 +181,7 @@ public class ShoppingListController {
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(username, itemName);
+                shoppingRepository.queryDeleteListItem(username, reqId);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);

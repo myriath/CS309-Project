@@ -12,10 +12,10 @@ public class ShoppingList {
     @Id
     private String username;
 
+    @Id
     @Expose
     private Integer id;
 
-    @Id
     @Expose
     private String description;
 

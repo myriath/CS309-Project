@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
 public class SimpleFoodItem {
 
     /**
-     * FDC ID from the api
+     * FDC ID from the api or Custom Food Id
      */
     @Expose
     private int id;
@@ -26,7 +26,8 @@ public class SimpleFoodItem {
     @Expose
     private boolean stricken;
 
-    @Expose boolean isCustom;
+    @Expose
+    private boolean isCustom;
 
     /**
      * Constructor for gson

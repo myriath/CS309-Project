@@ -33,8 +33,8 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Inte
     @Modifying
     @Query(
             value =
-                    "DELETE FROM shopping_list WHERE username = :username AND description = :description",
+                    "DELETE FROM shopping_list WHERE username = :username AND id = :id",
             nativeQuery = true)
     @Transactional
-    void queryDeleteListItem(@Param("username") String username, @Param("description") String description);
+    void queryDeleteListItem(@Param("username") String username, @Param("id") int id);
 }
