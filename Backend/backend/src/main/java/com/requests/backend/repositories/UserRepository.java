@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Collection<User> queryGetUserByUsername(@Param("username") String username);
 
     @Query(
-            value = "SELECT *" +
+            value = "SELECT * " +
                     "FROM users " +
                     "WHERE username = :username",
             nativeQuery = true)
@@ -45,12 +45,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     void queryUpdateBio(@Param("username") String username, @Param("bio") String bio);
 
     @Query(
-            value = "SELECT bio FROM users WHERE username = :username"
+            value = "SELECT bio FROM users WHERE username = :username",
+            nativeQuery = true
     )
     void queryGetBio(@Param("username") String username);
 
     @Query(
-            value = "SELECT * FROM follows WHERE follower = :username"
+            value = "SELECT * FROM follows WHERE follower = :username",
+            nativeQuery = true
     )
     Collection<User> queryGetFollowing(@Param("username") String username);
 }
