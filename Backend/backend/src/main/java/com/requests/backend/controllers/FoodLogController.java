@@ -62,15 +62,13 @@ public class FoodLogController {
     /**
      * Gets the food log entries for a user for a specific date
      * @param token     The provided token of the user
-     * @param json      A JSON object containing the desired date
+     * @param date      A request parameter containing the desired date
      * @return          A JSON array containing all food log entries for the given date
      */
     @GetMapping (path = "/getDay/{token}")
-    public @ResponseBody String getLogByDay(@PathVariable String token, @RequestBody String json) {
+    public @ResponseBody String getLogByDay(@PathVariable String token, @RequestParam String date) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
-
-        FoodLogGetDayRequest req = gson.fromJson(json, FoodLogGetDayRequest.class);
 
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -82,7 +80,6 @@ public class FoodLogController {
         }
         else {
             String username = tokenQueryRes[0].getUsername();
-            String date = req.getDate();
 
             FoodLog[] foodLog = foodLogRepository.queryGetLogByDay(username, date);
 
