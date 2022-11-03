@@ -1,2 +1,4 @@
-package com.example.cs309android.models.gson.request.nutrition;public class GetFoodLogRequest {
+package com.example.cs309android.models.gson.request.nutrition;
+
+public class GetFoodLogRequest {
 }

@@ -11,16 +11,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
+import com.example.cs309android.models.gson.models.FoodLogItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 
 import java.util.ArrayList;
 
-public class NutritionLogAdapter extends ArrayAdapter<SimpleFoodItem> {
+public class NutritionLogAdapter extends ArrayAdapter<FoodLogItem> {
 
     /**
      * List of items in the food log
      */
-    public final ArrayList<SimpleFoodItem> items;
+    public final ArrayList<FoodLogItem> items;
 
 
     /**
@@ -29,7 +30,7 @@ public class NutritionLogAdapter extends ArrayAdapter<SimpleFoodItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public NutritionLogAdapter(Context context, ArrayList<SimpleFoodItem> items) {
+    public NutritionLogAdapter(Context context, ArrayList<FoodLogItem> items) {
         super(context, R.layout.food_log_item, items);
         this.items = items;
     }
@@ -49,7 +50,7 @@ public class NutritionLogAdapter extends ArrayAdapter<SimpleFoodItem> {
         }
 
         TextView name = convertView.findViewById(R.id.log_item);
-        name.setText(items.get(position).getDescription());
+        name.setText(items.get(position).getFoodName());
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());

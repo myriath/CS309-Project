@@ -106,7 +106,7 @@ public class HomeFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
 
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
@@ -115,8 +115,13 @@ public class HomeFragment extends BaseFragment {
 
             SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
-            for (SimpleRecipeItem item : newItems) {
-                recipes.add(item);
+            if(newItems != null) {
+                for (SimpleRecipeItem item : newItems) {
+                    recipes.add(item);
+                }
+            }
+            else {
+                System.out.println("HELLOOOOOOOO");
             }
 
         }, requireContext());

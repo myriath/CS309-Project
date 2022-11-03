@@ -2,11 +2,13 @@ package com.example.cs309android.models.gson.request.home;
 
 import com.example.cs309android.models.gson.GetRequest;
 import com.example.cs309android.util.Constants;
+import com.google.gson.annotations.Expose;
 
 public class GetUserFeedRequest extends GetRequest {
     /**
      * Authentication token of the user
      */
+    @Expose
     private final String token;
 
     /**

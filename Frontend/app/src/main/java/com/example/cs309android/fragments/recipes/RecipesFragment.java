@@ -117,7 +117,7 @@ public class RecipesFragment extends BaseFragment {
     public void refreshList(View view) {
         new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
-                System.out.print(response.toString(3));
+                System.out.println(response.toString(3));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

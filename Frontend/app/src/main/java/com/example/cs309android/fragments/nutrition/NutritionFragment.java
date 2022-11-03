@@ -32,6 +32,8 @@ import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.NutritionLogAdapter;
+import com.example.cs309android.models.adapters.ShoppingListAdapter;
+import com.example.cs309android.models.gson.models.FoodLogItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.models.gson.request.home.GetUserFeedRequest;
@@ -39,10 +41,12 @@ import com.example.cs309android.models.gson.request.nutrition.GetDayFoodLogReque
 import com.example.cs309android.models.gson.request.nutrition.GetFoodLogRequest;
 import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.models.gson.response.shopping.GetListResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
@@ -55,9 +59,9 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NutritionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+// * Use the {@link NutritionFragment#newInstance} factory method to
 public class NutritionFragment extends BaseFragment {
 
 
@@ -70,7 +74,7 @@ public class NutritionFragment extends BaseFragment {
     /**
      * Used to store the list of simple food items
      */
-    private static ArrayList<SimpleFoodItem> foods;
+    private static ArrayList<FoodLogItem> foods;
 
     /**
      * Main window fragment
@@ -86,18 +90,18 @@ public class NutritionFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment NutritionFragment.
-     */
-    public static NutritionFragment newInstance(ArrayList<SimpleFoodItem> items) {
-        NutritionFragment fragment = new NutritionFragment();
-        NutritionFragment.foods = items;
-        System.out.println(foods.toString());
-        return fragment;
-    }
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @return A new instance of fragment NutritionFragment.
+//     */
+//    public static NutritionFragment newInstance(ArrayList<SimpleFoodItem> items) {
+//        NutritionFragment fragment = new NutritionFragment();
+//        NutritionFragment.foods = items;
+//        System.out.println(foods.toString());
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,32 +112,32 @@ public class NutritionFragment extends BaseFragment {
 
         //THIS IS JUST TEST DATA
         foods = new ArrayList<>();
-        SimpleFoodItem foodLog = new SimpleFoodItem("Chicken", "Walmart");
+        FoodLogItem foodLog = new FoodLogItem("papajohn", "chicken");
         foods.add(foodLog);
-        foodLog = new SimpleFoodItem("Turkey", "Target");
+        foodLog = new FoodLogItem("papajohn", "turkey");
         foods.add(foodLog);
-        foodLog = new SimpleFoodItem("Beef", "Shopko");
+        foodLog = new FoodLogItem("papajohn", "mayo");
         foods.add(foodLog);
-        foodLog = new SimpleFoodItem("Pork", "Kroger");
+        foodLog = new FoodLogItem("papajohn", "bread");
         foods.add(foodLog);
 
-        foodSearchLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        nutritionFragment = NutritionFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST));
-                        System.out.println("Food search result okay");
-                        Toaster.toastShort("Food search result okay", requireContext());
-                    } else {
-                        System.out.println("Food search result not okay");
-                        nutritionFragment = new NutritionFragment();
-                    }
-                    System.out.println(result.getData());
-
-                    nutritionFragment.setCallbackFragment(this);
-
-                }
-        );
+//        foodSearchLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -> {
+//                    if (result.getResultCode() == RESULT_OK) {
+//                        nutritionFragment = NutritionFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST));
+//                        System.out.println("Food search result okay");
+//                        Toaster.toastShort("Food search result okay", requireContext());
+//                    } else {
+//                        System.out.println("Food search result not okay");
+//                        nutritionFragment = new NutritionFragment();
+//                    }
+//                    System.out.println(result.getData());
+//
+//                    nutritionFragment.setCallbackFragment(this);
+//
+//                }
+//        );
     }
 
     private void updateDate() {
@@ -141,7 +145,7 @@ public class NutritionFragment extends BaseFragment {
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, yyyy");
         dateText.setText(format.format(date.getTime()));
 
-        format = new SimpleDateFormat("MM/dd/yyyy");
+        format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date.getTime());
         new GetDayFoodLogRequest(dateStr,((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -149,16 +153,12 @@ public class NutritionFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            GetListResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+            GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
 
-            if (recipeResponse == null) {
-                Toaster.toastShort("Error getting recipes", requireContext());
-                return;
-            }
-            SimpleFoodItem[] newItems = recipeResponse.getShoppingList();
+            FoodLogItem[] newItems = recipeResponse.getFoodLog();
             foods = new ArrayList<>();
-            for (SimpleFoodItem item : newItems) {
+            for (FoodLogItem item : newItems) {
                 foods.add(item);
             }
 
@@ -186,7 +186,7 @@ public class NutritionFragment extends BaseFragment {
         TextView dateText = view.findViewById(R.id.date);
         FloatingActionButton fab = view.findViewById(R.id.fab);
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date.getTime());
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -194,11 +194,11 @@ public class NutritionFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            GetListResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+            GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
-            SimpleFoodItem[] newItems = recipeResponse.getShoppingList();
+            FoodLogItem[] newItems = recipeResponse.getFoodLog();
             foods = new ArrayList<>();
-            for (SimpleFoodItem item : newItems) {
+            for (FoodLogItem item : newItems) {
                 foods.add(item);
             }
             if (recipeResponse == null) {
@@ -219,21 +219,22 @@ public class NutritionFragment extends BaseFragment {
         leftButton.setOnClickListener(v -> {
             date.add(Calendar.DATE, -1);
             updateDate();
+            refreshList(view);
         });
 
         rightButton.setOnClickListener(v -> {
             date.add(Calendar.DATE, 1);
             updateDate();
+            refreshList(view);
         });
 
         dateText.setOnClickListener(v -> {
             date = Calendar.getInstance();
             updateDate();
+            refreshList(view);
         });
 
-        adapter = new NutritionLogAdapter(this.getActivity(), foods);
-        listView = view.findViewById(R.id.log_list);
-        listView.setAdapter(adapter);
+        refreshList(view);
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             SimpleFoodItem selectedItem = (SimpleFoodItem) parent.getItemAtPosition(position);
@@ -246,6 +247,13 @@ public class NutritionFragment extends BaseFragment {
         dateText.setText(format.format(date.getTime()));
 
         return view;
+    }
+
+    public void refreshList(View view) {
+        adapter = new NutritionLogAdapter(this.getActivity(), foods);
+        listView = view.findViewById(R.id.log_list);
+        listView.setAdapter(adapter);
+
     }
 
 
