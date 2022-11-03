@@ -101,10 +101,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
             }, FoodDetailsActivity.this, getWindow().getDecorView());
         } else {
             new CustomFoodGetRequest(item.getId()).unspinOnComplete(response -> {
-                System.out.println(response);
                 CustomFoodGetResponse customFoodGetResponse = Util.objFromJson(response, CustomFoodGetResponse.class);
                 CustomFoodItem foodItem = customFoodGetResponse.getItem();
-                System.out.println(foodItem);
 
                 if (customFoodGetResponse.getResult() == Constants.RESULT_OK) {
                     setSubtitle("User added", toolbar);
