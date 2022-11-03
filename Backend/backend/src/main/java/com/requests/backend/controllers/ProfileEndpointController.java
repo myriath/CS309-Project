@@ -52,8 +52,8 @@ public class ProfileEndpointController {
     @GetMapping(path="/profilePicture/{username}", produces="image/webp")
     public @ResponseBody byte[] getPFP(@PathVariable String username) throws IOException {
         File img = new File(PFP_SOURCE, Hasher.sha256plaintext(username) + ".webp");
-        LOGGER.debug(username);
-        LOGGER.debug(img.getAbsolutePath());
+        LOGGER.info(username);
+        LOGGER.info(img.getAbsolutePath());
         if (!img.exists()) {
             img = new File(DEFAULT_PFP);
         }
@@ -64,8 +64,6 @@ public class ProfileEndpointController {
     @GetMapping(path="/profileBanner/{username}", produces="image/webp")
     public @ResponseBody byte[] getBanner(@PathVariable String username) throws IOException {
         File img = new File(BANNER_SOURCE, Hasher.sha256plaintext(username) + ".webp");
-        LOGGER.debug(username);
-        LOGGER.debug(img.getAbsolutePath());
         if (!img.exists()) {
             img = new File(DEFAULT_BANNER);
         }
