@@ -83,10 +83,6 @@ public class Constants {
      * URL to regen an expired token
      */
     public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
-    /**
-     * URL to get profile data
-     */
-    public static final String GET_PROFILE_URL = AUTH_URL + "getProfile/";
 
 
     // FOOD
@@ -167,6 +163,10 @@ public class Constants {
      * Base profile endpoints URL
      */
     public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+    /**
+     * URL to get profile data
+     */
+    public static final String GET_PROFILE_URL = PROFILE_API_URL + "getProfile/";
     /**
      * URL for getting a profile picture
      */
