@@ -1,22 +1,22 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.gson.request.abstraction.PatchRequest;
+import com.example.cs309android.models.gson.request.abstraction.PutRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Strikeout request for the /shopping/strikeout endpoint
+ * Removes the given item from the shopping list on the DB
  *
  * @author Mitch Hudson
  */
-public class StrikeRequest extends PatchRequest {
+public class ShoppingRemoveRequest extends PutRequest {
     /**
-     * ID of the item to strikeout
+     * Id of the item to remove
      */
     @Expose
     private final int id;
     /**
-     * True if the item to strike is custom
+     * True if the item is a custom item
      */
     @Expose
     private final boolean isCustom;
@@ -24,20 +24,20 @@ public class StrikeRequest extends PatchRequest {
     /**
      * Public constructor
      *
-     * @param id       ID of the item
+     * @param id       Id of the item to remove
      * @param isCustom True if the item is custom
      * @param token    Token for authentication
      */
-    public StrikeRequest(int id, boolean isCustom, String token) {
-        super(Constants.STRIKE_SHOPPING_URL + token);
+    public ShoppingRemoveRequest(int id, boolean isCustom, String token) {
+        super(Constants.REMOVE_SHOPPING_URL + token);
         this.id = id;
         this.isCustom = isCustom;
     }
 
     /**
-     * Getter for the index
+     * Getter for the fdcId
      *
-     * @return Index of the strikeout item.
+     * @return item id
      */
     public int getId() {
         return id;
@@ -46,7 +46,7 @@ public class StrikeRequest extends PatchRequest {
     /**
      * Getter for the custom bool
      *
-     * @return True if the item to strike is custom, false if it is fdc
+     * @return True if the item to remove is custom
      */
     public boolean isCustom() {
         return isCustom;

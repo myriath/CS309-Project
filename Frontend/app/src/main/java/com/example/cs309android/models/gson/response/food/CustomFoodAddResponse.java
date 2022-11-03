@@ -1,6 +1,7 @@
 package com.example.cs309android.models.gson.response.food;
 
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.google.gson.annotations.Expose;
 
 /**
  * Response for the {@link com.example.cs309android.models.gson.request.food.CustomFoodAddRequest} request
@@ -11,6 +12,7 @@ public class CustomFoodAddResponse extends GenericResponse {
     /**
      * New database id for the food item
      */
+    @Expose
     private final int dbId;
 
     /**
