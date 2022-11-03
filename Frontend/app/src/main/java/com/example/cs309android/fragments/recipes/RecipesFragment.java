@@ -7,24 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
-import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
-import com.example.cs309android.util.Constants;
-import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONException;
 
 /**
  * A simple {@link Fragment} subclass.

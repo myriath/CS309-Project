@@ -3,6 +3,7 @@ package com.example.cs309android.models.gson.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -22,33 +23,45 @@ public class SimpleRecipeItem implements Parcelable {
      * Name of the recipe
      */
     @Expose
-    private final String rname;
+    private final String recipeName;
     /**
      * Name of the recipe
      */
     @Expose
-    private String steps;
+    private final String instructions;
 
     /**
      * Constructor for gson
      * @param rid    Recipe id
-     * @param rname  Recipe Name
-     * @param steps  Steps of recipe
+     * @param recipeName  Recipe Name
+     * @param instructions  Steps of recipe
      */
-    public SimpleRecipeItem(int rid, String rname, String steps) {
+    public SimpleRecipeItem(int rid, String recipeName, String instructions) {
         this.rid = rid;
-        this.rname = rname;
-        this.steps = steps;
+        this.recipeName = recipeName;
+        this.instructions = instructions;
     }
 
     /**
      * Constructor for gson
      * @param rid     Recipe id
-     * @param rname    Recipe Name
+     * @param recipeName    Recipe Name
      */
-    public SimpleRecipeItem(int rid, String rname) {
+    public SimpleRecipeItem(int rid, String recipeName) {
         this.rid = rid;
-        this.rname = rname;
+        this.recipeName = recipeName;
+        this.instructions = "";
+    }
+
+    /**
+     * Constructor for gson
+     * @param instructions     Recipe instructions
+     * @param recipeName    Recipe Name
+     */
+    public SimpleRecipeItem(String recipeName, String instructions) {
+        this.rid = Constants.ITEM_ID_NULL;
+        this.recipeName = recipeName;
+        this.instructions = instructions;
     }
 
 
@@ -59,8 +72,8 @@ public class SimpleRecipeItem implements Parcelable {
      */
     protected SimpleRecipeItem(Parcel in) {
         rid = in.readInt();
-        rname = in.readString();
-        steps = in.readString();
+        recipeName = in.readString();
+        instructions = in.readString();
     }
 
     /**
@@ -92,7 +105,7 @@ public class SimpleRecipeItem implements Parcelable {
      * @return recipe name
      */
     public String getRecipeName() {
-        return rname;
+        return recipeName;
     }
 
     /**
@@ -100,8 +113,8 @@ public class SimpleRecipeItem implements Parcelable {
      *
      * @return recipe steps
      */
-    public String getSteps() {
-        return steps;
+    public String getInstructions() {
+        return instructions;
     }
 
 
@@ -124,7 +137,7 @@ public class SimpleRecipeItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(rid);
-        parcel.writeString(rname);
-        parcel.writeString(steps);
+        parcel.writeString(recipeName);
+        parcel.writeString(instructions);
     }
 }
