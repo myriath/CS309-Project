@@ -3,11 +3,13 @@ package com.requests.backend.controllers;
 import com.requests.backend.models.Favorite;
 import com.requests.backend.models.User;
 import com.requests.backend.models.requests.UpdateProfileRequest;
+import com.requests.backend.models.responses.ProfileResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,24 @@ public class ProfileEndpointController {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @GetMapping(path="/getProfile/{username}")
+    public @ResponseBody String getProfile(@PathVariable String username) {
+        ProfileResponse res = new ProfileResponse();
+
+        Collection<User> users = userRepository.queryGetUserByUsername(username);
+        if (users.isEmpty()) {
+            res.setResult(RESULT_ERROR);
+        } else {
+            User user = (User) users.toArray()[0];
+            res.setResult(RESULT_OK);
+            res.setFollowers(user.getFollowers().size());
+            res.setFollowing(userRepository.queryGetFollowing(username).size());
+            res.setBio(user.getBio());
+        }
+
+        return GSON.toJson(res);
+    }
 
     @GetMapping(path="/profilePicture/{username}", produces="image/webp")
     public @ResponseBody byte[] getPFP(@PathVariable String username) throws IOException {

@@ -61,4 +61,20 @@ public class User {
     public void setUserType(String userType) {
         this.userType = userType;
     }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Set<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
 }
