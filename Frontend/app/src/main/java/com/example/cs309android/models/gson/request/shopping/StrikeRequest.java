@@ -11,20 +11,27 @@ import com.google.gson.annotations.Expose;
  */
 public class StrikeRequest extends PatchRequest {
     /**
-     * Index of the item to strikeout
+     * ID of the item to strikeout
      */
     @Expose
-    private final int fdcId;
+    private final int id;
+    /**
+     * True if the item to strike is custom
+     */
+    @Expose
+    private final boolean isCustom;
 
     /**
      * Public constructor
      *
-     * @param fdcId Name of the item
-     * @param token Token for authentication
+     * @param id       ID of the item
+     * @param isCustom True if the item is custom
+     * @param token    Token for authentication
      */
-    public StrikeRequest(int fdcId, String token) {
+    public StrikeRequest(int id, boolean isCustom, String token) {
         super(Constants.STRIKE_SHOPPING_URL + token);
-        this.fdcId = fdcId;
+        this.id = id;
+        this.isCustom = isCustom;
     }
 
     /**
@@ -32,7 +39,16 @@ public class StrikeRequest extends PatchRequest {
      *
      * @return Index of the strikeout item.
      */
-    public int getFdcId() {
-        return fdcId;
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Getter for the custom bool
+     *
+     * @return True if the item to strike is custom, false if it is fdc
+     */
+    public boolean isCustom() {
+        return isCustom;
     }
 }
