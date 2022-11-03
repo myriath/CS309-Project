@@ -16,7 +16,7 @@ public class FoodResponse extends ResultResponse {
         return item;
     }
 
-    public void setItems(CustomFood item) {
+    public void setItem(CustomFood item) {
         this.item = item;
     }
 }

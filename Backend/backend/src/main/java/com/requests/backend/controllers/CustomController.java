@@ -55,7 +55,7 @@ public class CustomController {
         if (foods.length == 0) {
             res.setResult(RESULT_ERROR);
         } else {
-            res.setItems(foods[0]);
+            res.setItem(foods[0]);
             res.setResult(RESULT_OK);
         }
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
