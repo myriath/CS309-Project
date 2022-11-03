@@ -15,7 +15,7 @@ public class User {
 
     private String userType;
 
-    private String token;
+    private String bio;
 
     @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
     @JoinTable(name = "follows",
