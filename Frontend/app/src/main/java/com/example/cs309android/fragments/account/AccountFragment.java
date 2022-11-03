@@ -2,6 +2,7 @@ package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Util.objFromJson;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.AccountEditActivity;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.FeedAdapter;
@@ -20,8 +25,8 @@ import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
 import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.gson.request.profile.GetProfileRequest;
 import com.example.cs309android.models.gson.request.recipes.GetRecipesRequest;
-import com.example.cs309android.models.gson.response.social.GetProfileResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipesResponse;
+import com.example.cs309android.models.gson.response.social.GetProfileResponse;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -38,6 +43,8 @@ public class AccountFragment extends BaseFragment {
     private String username;
     public static final String ARGS_OWNER = "owner";
     private boolean owner;
+
+    private ActivityResultLauncher<Intent> accountEditLauncher;
 
     /**
      * Use this factory method to create a new instance of
@@ -72,6 +79,11 @@ public class AccountFragment extends BaseFragment {
 
         GlobalClass global = ((GlobalClass) requireActivity().getApplicationContext());
 
+        accountEditLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> refreshAccount(view, global)
+        );
+
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         ImageButton editButton = view.findViewById(R.id.editButton);
         ImageButton backButton = view.findViewById(R.id.backButton);
@@ -84,15 +96,13 @@ public class AccountFragment extends BaseFragment {
             view.findViewById(R.id.settingsCard).setVisibility(View.VISIBLE);
 
             editButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(MainActivity.CALLBACK_EDIT_ACCOUNT, null);
+                Intent intent = new Intent(requireContext(), AccountEditActivity.class);
+                accountEditLauncher.launch(intent);
             });
             editButton.setVisibility(View.VISIBLE);
             view.findViewById(R.id.editCard).setVisibility(View.VISIBLE);
 
-            ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-            ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-            ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-            ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+            refreshAccount(view, global);
 
             // TODO: Test retrieval
             new GetProfileRequest(username).request(response -> {
@@ -105,6 +115,8 @@ public class AccountFragment extends BaseFragment {
                         .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
                 ((TextView) view.findViewById(R.id.followingCount))
                         .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+                ((TextView) view.findViewById(R.id.bioTextView))
+                        .setText(global.getBio());
 
             }, requireContext());
         } else {
@@ -122,7 +134,7 @@ public class AccountFragment extends BaseFragment {
             new GetProfileRequest(username).request(response -> {
                 GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
 
-                ((TextView) view.findViewById(R.id.unameView)).setText(profileResponse.getUsername());
+                ((TextView) view.findViewById(R.id.unameView)).setText(username);
                 ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
                 ((TextView) view.findViewById(R.id.followerCount))
                         .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
@@ -147,5 +159,18 @@ public class AccountFragment extends BaseFragment {
         }, requireActivity());
 
         return view;
+    }
+
+    /**
+     * Refresh the account page
+     * @param view view to find subviews
+     * @param global global containing account data
+     */
+    public static void refreshAccount(View view, GlobalClass global) {
+        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+
     }
 }

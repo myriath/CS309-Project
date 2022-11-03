@@ -5,11 +5,14 @@ import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
 import static com.example.cs309android.util.Util.spin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -96,9 +99,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_FOOD_DETAIL = 4;
     public static final int CALLBACK_SEARCH_FOOD = 5;
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_EDIT_ACCOUNT = 7;
-    public static final int CALLBACK_CLOSE_PROFILE = 8;
-    public static final int CALLBACK_FOLLOW = 9;
+    public static final int CALLBACK_CLOSE_PROFILE = 7;
+    public static final int CALLBACK_FOLLOW = 8;
 //    public static final int CALLBACK_ = 0;
 
     /**
@@ -381,6 +383,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_MOVE_TO_SETTINGS): {
                 mainFragment = new SettingsFragment();
+                mainFragment.setCallbackFragment(this);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -388,11 +391,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 5;
-                break;
-            }
-            case (CALLBACK_EDIT_ACCOUNT): {
-                Intent intent = new Intent(this, AccountEditActivity.class);
-                startActivity(intent);
                 break;
             }
         }

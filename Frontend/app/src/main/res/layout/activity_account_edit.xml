@@ -183,7 +183,8 @@
                 <TextView
                     android:id="@+id/bioTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -223,5 +224,26 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/spinnerBlocker"
+        android:elevation="50dp"
+        android:backgroundTint="?android:colorBackground"
+        android:background="?android:colorBackground"
+        android:alpha="0">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/loginSpinner"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?colorPrimary"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:elevation="100dp"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
