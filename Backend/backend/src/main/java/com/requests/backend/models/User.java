@@ -16,8 +16,11 @@ public class User {
 
     private String token;
 
+
+
     public User() {
     }
+
 
     public String getUsername() {
         return username;

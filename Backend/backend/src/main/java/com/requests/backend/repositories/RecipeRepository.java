@@ -28,6 +28,31 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     Recipe[] queryGetRecipeByRid(@Param("rid") int rid);
 
+    @Query(
+            value = "SELECT * FROM user_recipes r WHERE r.rid = :rid",
+            nativeQuery = true)
+    Recipe[] queryGetImageByrid(@Param("rid") int rid);
+
+    @Query(
+            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token != :token AND r.username != 'NULL' AND r.rname != 'NULL' AND r.instructions != 'NULL'",
+            nativeQuery = true)
+    Recipe[] queryrecipeList(@Param("token") String token);
+
+
+    @Query(
+            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token = :token",
+            nativeQuery = true)
+    Recipe[] queryuserRecipeList(@Param("token") String token);
+
+
+
+
+    @Query (
+
+            value = "SELECT DISTINCT(rid), instructions, rname, r.username  FROM user_recipes r join tokens t on r.username = t.username where t.token = :Token and t.username = :username",
+            nativeQuery = true)
+    Recipe[] queryRecipeDeleteCheck(@Param("Token") String Token, @Param("username") String username);
+
     @Modifying
     @Query(
             value =
@@ -35,6 +60,18 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
             nativeQuery = true)
     @Transactional
     void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname, @Param("instructions") String instructions);
+
+    @Modifying
+    @Query(
+            value = "DELETE FROM `fod_db`.`user_recipes` WHERE (`rid` = :rid);",
+            nativeQuery = true)
+    @Transactional
+    void queryDeleteRecipe(@Param("rid") int rid);
+
+
+//'1', 'put this in that and do stuff', 'cheese pizza', 'papajohn', NULL
+
+
 
 }
 

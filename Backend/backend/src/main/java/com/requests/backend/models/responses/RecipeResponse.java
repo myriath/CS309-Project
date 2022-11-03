@@ -22,4 +22,7 @@ public class RecipeResponse {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
+
+
 }
