@@ -1,36 +1,24 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.requests.backend.models.Favorite;
-import com.requests.backend.models.Token;
 import com.requests.backend.models.User;
-import com.requests.backend.models.requests.RegisterRequest;
 import com.requests.backend.models.requests.UpdateProfileRequest;
-import com.requests.backend.models.responses.LoginResponse;
-import com.requests.backend.models.responses.ResultResponse;
-import com.requests.backend.models.responses.SaltResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
 import java.util.Collection;
 
 import static com.util.Constants.*;
 
 @RestController
 @RequestMapping(path="/profile")
-public class ProfileController {
+public class ProfileEndpointController {
 
     @Autowired
     private UserRepository userRepository;
