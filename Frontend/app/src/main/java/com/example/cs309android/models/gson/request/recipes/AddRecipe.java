@@ -35,7 +35,7 @@ public class AddRecipe extends PostRequest {
      * @param instructions Recipe Instructions
      */
     public AddRecipe(String token, String recipeName, String instructions) {
-        super(Constants.ADD_RECIPES_URL);
+        super(Constants.ADD_RECIPES_URL + token);
         this.token = token;
         this.recipeName = recipeName;
         this.instructions = instructions;

@@ -5,26 +5,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.adapters.ShoppingListAdapter;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.example.cs309android.models.gson.request.home.GetUserFeedRequest;
+import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -78,6 +80,7 @@ public class HomeFragment extends BaseFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        //THIS IS JUST TEST DATA
         SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
         recipes = new ArrayList<>();
         recipes.add(item);
@@ -96,6 +99,27 @@ public class HomeFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        new GetUserFeedRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
+            try {
+                System.out.print(response.toString(3));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+
+            if (recipeResponse == null) {
+                Toaster.toastShort("Error getting recipes", requireContext());
+                return;
+            }
+
+            SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
+            recipes = new ArrayList<>();
+            for (SimpleRecipeItem item : newItems) {
+                recipes.add(item);
+            }
+
+        }, requireContext());
 
         adapter = new HomeItemAdapter(this.getActivity(), recipes);
         listView = view.findViewById(R.id.feed_item);
