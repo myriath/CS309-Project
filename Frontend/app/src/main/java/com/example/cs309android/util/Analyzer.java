@@ -7,8 +7,6 @@ import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.view.TransformExperimental;
-import androidx.camera.view.transform.ImageProxyTransformFactory;
-import androidx.camera.view.transform.OutputTransform;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

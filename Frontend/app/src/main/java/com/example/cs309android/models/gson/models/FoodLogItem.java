@@ -3,7 +3,6 @@ package com.example.cs309android.models.gson.models;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 

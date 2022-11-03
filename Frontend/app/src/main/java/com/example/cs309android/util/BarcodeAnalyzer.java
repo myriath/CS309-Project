@@ -1,14 +1,8 @@
 package com.example.cs309android.util;
 
 import android.graphics.Bitmap;
-import android.media.Image;
-import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
-import androidx.camera.core.ExperimentalGetImage;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageProxy;
-import androidx.camera.view.TransformExperimental;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,7 +10,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
-import com.google.mlkit.vision.common.InputImage;
 
 import java.util.List;
 
@@ -42,11 +35,6 @@ public class BarcodeAnalyzer {
      * Runs if there is an error in analysis
      */
     private final OnFailureListener errorListener;
-
-//    public static float DP300;
-//    public static float DP150;
-//    public static float DP180;
-//    public static float DP90;
 
     /**
      * Public constructor

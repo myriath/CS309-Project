@@ -17,7 +17,6 @@ import androidx.core.content.FileProvider;
 
 import com.example.cs309android.BuildConfig;
 import com.example.cs309android.R;
-import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.util.Toaster;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -59,39 +58,9 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
      */
     public static final String PARCEL_IMAGE_URI = "image_uri";
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipesFragment.
-     */
-
-    public static RecipesFragment newInstance(String param1, String param2) {
-        RecipesFragment fragment = new RecipesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         File file = new File(requireActivity().getExternalFilesDir("images"), "camera_img");
         Uri uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", file);
@@ -103,10 +72,8 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(PARCEL_IMAGE_URI, Objects.requireNonNull(result.getData()).getData());
                         callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);
-                        dismiss();
-                    } else {
-                        dismiss();
                     }
+                    dismiss();
                 }
         );
 
@@ -117,10 +84,8 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(PARCEL_IMAGE_URI, uri);
                         callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);
-                        dismiss();
-                    } else {
-                        dismiss();
                     }
+                    dismiss();
                 }
         );
 
@@ -142,9 +107,9 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.bottom_sheet_choose_photo, container, false);
 
-        view.findViewById(R.id.take_photo).setOnClickListener(view1 -> {
-            permissionsLauncher.launch(Manifest.permission.CAMERA);
-        });
+        view.findViewById(R.id.take_photo).setOnClickListener(view1 ->
+                permissionsLauncher.launch(Manifest.permission.CAMERA)
+        );
 
         view.findViewById(R.id.from_gallery).setOnClickListener(view1 -> {
             Intent i = new Intent();

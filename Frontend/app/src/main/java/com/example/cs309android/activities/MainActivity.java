@@ -1,14 +1,6 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
-import static com.example.cs309android.util.Constants.CALLBACK_EDIT_ACCOUNT;
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
-import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
@@ -21,14 +13,11 @@ import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;

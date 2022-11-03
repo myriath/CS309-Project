@@ -1,7 +1,5 @@
 package com.example.cs309android.fragments.nutrition;
 
-import static android.app.Activity.RESULT_OK;
-
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
@@ -9,14 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,38 +19,25 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.NutritionLogAdapter;
-import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.gson.models.FoodLogItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.example.cs309android.models.gson.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.gson.request.nutrition.GetDayFoodLogRequest;
-import com.example.cs309android.models.gson.request.nutrition.GetFoodLogRequest;
-import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.nutrition.GetFoodLogResponse;
-import com.example.cs309android.models.gson.response.shopping.GetListResponse;
-import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -158,9 +140,7 @@ public class NutritionFragment extends BaseFragment {
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
             foods = new ArrayList<>();
-            for (FoodLogItem item : newItems) {
-                foods.add(item);
-            }
+            foods.addAll(Arrays.asList(newItems));
 
         }, requireContext());
 
@@ -198,12 +178,9 @@ public class NutritionFragment extends BaseFragment {
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
             foods = new ArrayList<>();
-            for (FoodLogItem item : newItems) {
-                foods.add(item);
-            }
+            foods.addAll(Arrays.asList(newItems));
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
-                return;
             }
             else {
                 Toaster.toastShort("Added Food", requireContext());

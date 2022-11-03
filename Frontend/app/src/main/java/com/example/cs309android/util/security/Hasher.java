@@ -7,8 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.Base64;
+import java.util.Random;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -51,7 +51,7 @@ public class Hasher {
     /**
      * SHA256 message digest
      */
-    public static MessageDigest SHA_256;
+    public static final MessageDigest SHA_256;
     static {
         try {
             SHA_256 = MessageDigest.getInstance("SHA-256");

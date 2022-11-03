@@ -132,8 +132,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         });
 
         findViewById(R.id.scanButton).setOnClickListener(view -> {
-//            Intent intent = new Intent(this, CameraActivity.class);
-//            startActivity(intent);
             imageChooser();
         });
 

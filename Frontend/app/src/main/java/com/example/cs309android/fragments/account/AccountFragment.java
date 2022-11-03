@@ -1,7 +1,6 @@
 package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_PROFILE;
-import static com.example.cs309android.util.Constants.CALLBACK_EDIT_ACCOUNT;
 import static com.example.cs309android.util.Constants.CALLBACK_FOLLOW;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Util.objFromJson;
@@ -22,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.AccountEditActivity;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.FeedAdapter;
 import com.example.cs309android.models.gson.request.profile.GetBannerRequest;

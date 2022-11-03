@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
-import java.util.ArrayList;
-
 /**
  * Simple recipe item used for displaying and moving data in the app
  *

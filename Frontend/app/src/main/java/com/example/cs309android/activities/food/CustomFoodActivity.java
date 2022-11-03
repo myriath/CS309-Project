@@ -27,10 +27,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 public class CustomFoodActivity extends AppCompatActivity {
-    /**
-     * Layout for displaying the food details
-     */
-    private LinearLayout detailsLayout;
 
     /**
      * Food item to display details for
@@ -55,7 +51,10 @@ public class CustomFoodActivity extends AppCompatActivity {
         item = intent.getParcelableExtra(PARCEL_FOODITEM);
         Space spacer = new Space(this);
         spacer.setMinimumHeight((int) dp16 * 10);
-        detailsLayout = findViewById(R.id.details_layout);
+        /**
+         * Layout for displaying the food details
+         */
+        LinearLayout detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.addView(spacer);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);

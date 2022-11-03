@@ -18,10 +18,8 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
 import com.example.cs309android.models.gson.request.home.GetUserFeedRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -29,6 +27,7 @@ import com.example.cs309android.util.Util;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,9 +115,7 @@ public class HomeFragment extends BaseFragment {
             SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
             if(newItems != null) {
-                for (SimpleRecipeItem item : newItems) {
-                    recipes.add(item);
-                }
+                recipes.addAll(Arrays.asList(newItems));
             }
             else {
                 System.out.println("HELLOOOOOOOO");

@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.response.nutrition;
 
 import com.example.cs309android.models.gson.models.FoodLogItem;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 

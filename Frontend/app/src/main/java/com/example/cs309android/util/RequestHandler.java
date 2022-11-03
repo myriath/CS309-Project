@@ -67,10 +67,6 @@ public class RequestHandler {
      */
     public RequestQueue getQueue() {
         if (queue == null) {
-//            cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), 1024 * 1024);
-//            network = new BasicNetwork(new HurlStack());
-//
-//            queue = new RequestQueue(cache, network);
             queue = Volley.newRequestQueue(context);
         }
         return queue;

@@ -1,17 +1,14 @@
 package com.example.cs309android.fragments.recipes;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -23,15 +20,10 @@ import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.example.cs309android.models.gson.request.recipes.AddRecipeRequest;
-import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
 import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
 import com.example.cs309android.models.gson.response.recipes.GetRecipeListResponse;
-import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -130,9 +123,7 @@ public class RecipesFragment extends BaseFragment {
 
             SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
-            for (SimpleRecipeItem item : newItems) {
-                recipes.add(item);
-            }
+            recipes.addAll(Arrays.asList(newItems));
         }, requireContext());
 
         TextView emptyText = view.findViewById(R.id.emptyText);
