@@ -16,7 +16,7 @@ import static com.util.Constants.*;
 
 @RestController
 @RequestMapping(path="/profile")
-public class Profile2Controller {
+public class ProfileController {
     public static final int RESULT_ERROR_USERNAME_NON_EXISTANT = -43;
 
     public static final int RESULT_PROFILE_CREATED = 44;
@@ -30,7 +30,7 @@ public class Profile2Controller {
     @Autowired
     private TokenRepository tokenRepository;
 
-
+/*
     @GetMapping("/getBio/{username}")
     public @ResponseBody String getBio(@PathVariable String username) {
         Profile[] profiles = profileRepository.queryGetBio(username);
@@ -39,7 +39,7 @@ public class Profile2Controller {
         if (profiles.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         } else {
-            res.setProfile(profiles[0]);
+            res.Profile(profiles[0]);
             res.setResult(RESULT_OK);
 
         }
@@ -47,7 +47,7 @@ public class Profile2Controller {
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        return gson.toJson(res.getProfile().getBio());
+        //return gson.toJson(res.getProfile().getBio());
     }
 
     @GetMapping("/Profile/{username}")
@@ -68,7 +68,7 @@ public class Profile2Controller {
 
         return gson.toJson(res.getProfile());
     }
-
+*/
 
 
 
