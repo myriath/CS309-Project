@@ -2,6 +2,8 @@ package com.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Util constants class
@@ -15,6 +17,8 @@ public class Constants {
     public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
             .serializeNulls();
     public static final Gson GSON = GSON_BUILDER.create();
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
 
     /**
      * Private constructor (Util class)
