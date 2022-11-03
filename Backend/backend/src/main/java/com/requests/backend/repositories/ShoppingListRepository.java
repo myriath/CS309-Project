@@ -25,10 +25,10 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Inte
     @Modifying
     @Query(
             value =
-                    "UPDATE shopping_list SET stricken = NOT stricken WHERE username = :username AND description = :description",
+                    "UPDATE shopping_list SET stricken = NOT stricken WHERE username = :username AND id = :id AND is_custom = :isCustom",
             nativeQuery = true)
     @Transactional
-    void queryShoppingChangeStricken(@Param("username") String username, @Param("description") String description);
+    void queryShoppingChangeStricken(@Param("id") int id, @Param("isCustom") boolean isCustom, @Param("username") String username);
 
     @Modifying
     @Query(
