@@ -1,11 +1,13 @@
 package com.requests.backend.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "upc")
 public class UPC {
+    @Id
     private int fdc_id;
     private int upc;
 
