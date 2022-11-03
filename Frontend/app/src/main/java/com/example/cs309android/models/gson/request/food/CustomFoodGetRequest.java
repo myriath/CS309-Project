@@ -35,7 +35,7 @@ public class CustomFoodGetRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(GET_FOOD_URL + "/" + dbId)
+        return new ParameterizedRequestURL(GET_FOOD_URL + dbId)
                 .toString();
     }
 }

@@ -2,6 +2,7 @@ package com.example.cs309android.models.gson.response.food;
 
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.google.gson.annotations.Expose;
 
 /**
  * Response for the GetCustomFoods request
@@ -12,6 +13,7 @@ public class GetCustomFoodsResponse extends GenericResponse {
     /**
      * Array of food items matching the query
      */
+    @Expose
     private final CustomFoodItem[] items;
 
     /**

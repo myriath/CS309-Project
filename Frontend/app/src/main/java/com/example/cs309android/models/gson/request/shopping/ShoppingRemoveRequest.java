@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class RemoveRequest extends PutRequest {
+public class ShoppingRemoveRequest extends PutRequest {
     /**
      * fdcId of the item to remove
      */
@@ -22,7 +22,7 @@ public class RemoveRequest extends PutRequest {
      * @param fdcId Id of the item to remove
      * @param token  Token for authentication
      */
-    public RemoveRequest(int fdcId, String token) {
+    public ShoppingRemoveRequest(int fdcId, String token) {
         super(Constants.REMOVE_SHOPPING_URL + token);
         this.fdcId = fdcId;
     }

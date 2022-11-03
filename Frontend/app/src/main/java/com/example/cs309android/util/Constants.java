@@ -129,6 +129,10 @@ public class Constants {
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout/";
+    /**
+     * Strikeout url when the user interacts with custom food items
+     */
+    public static final String STRIKE_SHOPPING_DB_URL = SHOPPING_URL + "strikeoutDb/";
 
     // RECIPES
     /**

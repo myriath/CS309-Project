@@ -1,5 +1,6 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.activities.MainActivity.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 
 import android.content.Intent;
@@ -33,7 +34,7 @@ import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.food.GetCustomFoodsRequest;
-import com.example.cs309android.models.gson.request.shopping.AddRequest;
+import com.example.cs309android.models.gson.request.shopping.ShoppingAddRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.models.gson.response.food.GetCustomFoodsResponse;
 import com.example.cs309android.util.Toaster;
@@ -131,10 +132,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         Intent intent = result.getData();
                         switch (intentCode) {
                             case INTENT_SHOPPING_LIST: {
-                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
 
                                 Util.spin(getWindow().getDecorView());
-                                new AddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
+                                new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                                     if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
                                         items.add(item);
@@ -155,7 +156,17 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        SimpleFoodItem item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+                        SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
+                        Util.spin(getWindow().getDecorView());
+                        new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
+                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                items.add(item);
+                                Toaster.toastShort("Added", this);
+                            } else {
+                                Toaster.toastShort("Error", this);
+                            }
+                        }, SearchActivity.this, getWindow().getDecorView());
                     }
                 }
         );
@@ -188,23 +199,22 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         Util.spin(this);
         searchResults.clear();
-        searchResults.add(new SimpleFoodItem(query, "Add custom item"));
-        new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response -> {
-            SearchResult result = Util.objFromJson(response, SearchResult.class);
+        searchResults.add(new SimpleFoodItem(StringUtils.capitalize(query.toLowerCase()), "Add custom item"));
+        new GetCustomFoodsRequest(query).request(response -> {
+            GetCustomFoodsResponse result = Util.objFromJson(response, GetCustomFoodsResponse.class);
 
-            if (result.getFoods() != null) {
-                for (SearchResultFood food : result.getFoods()) {
-                    searchResults.add(new SimpleFoodItem(food.getFdcId(), ITEM_ID_NULL, StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner()));
+            if (result.getItems() != null) {
+                for (CustomFoodItem food : result.getItems()) {
+                    searchResults.add(new SimpleFoodItem(food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), "User added", true));
                 }
             }
 
-            new GetCustomFoodsRequest(query).request(response1 -> {
-                System.out.println(response1);
-                GetCustomFoodsResponse result1 = Util.objFromJson(response, GetCustomFoodsResponse.class);
+            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -> {
+                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);
 
-                if (result1.getItems() != null) {
-                    for (CustomFoodItem food : result1.getItems()) {
-                        searchResults.add(new SimpleFoodItem(ITEM_ID_NULL, food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), "Custom Food"));
+                if (result1.getFoods() != null) {
+                    for (SearchResultFood food : result1.getFoods()) {
+                        searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner(), false));
                     }
                 }
 
@@ -221,8 +231,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                 }
                 ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);
-            }, SearchActivity.this);
-        }, SearchActivity.this, getWindow().getDecorView());
+            }, SearchActivity.this, getWindow().getDecorView());
+        }, SearchActivity.this);
         return true;
     }
 
@@ -250,14 +260,14 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public void callback(int op, Bundle bundle) {
         switch (op) {
             case (CALLBACK_FOOD_DETAIL): {
-                SimpleFoodItem item = bundle.getParcelable(MainActivity.PARCEL_FOODITEM);
-                if (item.getFdcId() == ITEM_ID_NULL && item.getDbId() == ITEM_ID_NULL) {
+                SimpleFoodItem item = bundle.getParcelable(PARCEL_FOODITEM);
+                if (item.getId() == ITEM_ID_NULL) {
                     Intent intent = new Intent(this, CustomFoodActivity.class);
-                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    intent.putExtra(PARCEL_FOODITEM, item);
                     customDetailsLauncher.launch(intent);
                 } else {
                     Intent intent = new Intent(this, FoodDetailsActivity.class);
-                    intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
+                    intent.putExtra(PARCEL_FOODITEM, item);
                     intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                     foodDetailsLauncher.launch(intent);
                 }
