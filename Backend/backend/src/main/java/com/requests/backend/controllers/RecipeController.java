@@ -76,7 +76,6 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
-
     @PostMapping(path="/add/{token}")
     @ResponseBody
     public String addNewRecipe(@PathVariable String token, @RequestBody String json) {
@@ -111,5 +110,94 @@ public class RecipeController {
 
         return gson.toJson(res);
     }
+
+    @DeleteMapping(path="/remove")
+    @ResponseBody
+    public int removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
+        Recipe[] recipe = recipeRepository.queryRecipeDeleteCheck(token, username);
+        RecipeResponse res = new RecipeResponse();
+
+        if(recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+            recipeRepository.queryDeleteRecipe(rid);
+            res.setResult(RESULT_OK);
+        }
+
+        return res.getResult();
+    }
+
+
+
+
+
+
+
+
+
+    /*  to be modified after database changed
+    @GetMapping(path="/getImage/{rid}")
+    @ResponseBody
+    public String GetImage(@PathVariable int rid) {
+        Recipe[] recipe = recipeRepository.queryGetImageByrid(rid);
+
+        RecipeResponse res = new RecipeResponse();
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        if (recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        }
+        else {
+            res.setRecipe(recipe[0]);
+            res.setResult(RESULT_OK);
+        }
+
+        return gson.toJson(recipe[0]);
+        //return null;
+    }
+
+
+     */
+
+    @GetMapping(path="/recipeList/{token}")
+    @ResponseBody
+    public String recipeList(@PathVariable String token) {
+        Recipe[] recipe = recipeRepository.queryrecipeList(token);
+        RecipeResponse res = new RecipeResponse();
+
+        if(recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+
+            res.setResult(RESULT_OK);
+        }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(recipe);
+    }
+
+
+    @GetMapping(path="/userRecipeList/{token}")
+    @ResponseBody
+    public String userRecipeList(@PathVariable String token) {
+        Recipe[] recipe = recipeRepository.queryuserRecipeList(token);
+        RecipeResponse res = new RecipeResponse();
+
+        if(recipe.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+
+            res.setResult(RESULT_OK);
+        }
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(recipe);
+    }
+
+
+
 
 }
