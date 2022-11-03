@@ -13,8 +13,7 @@ public class Constants {
      * Gson object used by the entire application.
      */
     public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
-            .serializeNulls()
-            .excludeFieldsWithoutExposeAnnotation();
+            .serializeNulls();
     public static final Gson GSON = GSON_BUILDER.create();
 
     /**
