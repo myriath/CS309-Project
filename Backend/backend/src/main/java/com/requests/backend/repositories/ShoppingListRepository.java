@@ -20,7 +20,7 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Inte
                     "INSERT INTO shopping_list (description, username, id, is_custom, stricken) VALUES (:description, :username, :id, :is_custom, :stricken)",
             nativeQuery = true)
     @Transactional
-    void queryCreateShoppingListEntry(@Param("username") String username, @Param("description") String description, @Param("id") Integer id, @Param("stricken") Boolean stricken, @Param("is_custom") Boolean isCustom);
+    void queryCreateShoppingListEntry(@Param("description") String description, @Param("username") String username, @Param("id") Integer id, @Param("is_custom") Boolean isCustom, @Param("stricken") Boolean stricken);
 
     @Modifying
     @Query(
