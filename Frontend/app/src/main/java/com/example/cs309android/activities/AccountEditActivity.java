@@ -1,5 +1,8 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -36,16 +39,6 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
      * Images to be filled in when a user sets an image
      */
     private Bitmap profileImage, bannerImage;
-
-    /**
-     * Parcel constants
-     */
-    public static final String PARCEL_IMAGE_URI = "image_uri";
-
-    /**
-     * Opcodes
-     */
-    public static final int OPCODE_IMAGE_URI = 0;
 
     /**
      * Image intent constants
@@ -150,8 +143,8 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
     @Override
     public void callback(int op, Bundle bundle) {
-        switch(op) {
-            case (OPCODE_IMAGE_URI): {
+        switch (op) {
+            case (CALLBACK_IMAGE_URI): {
                 try {
                     Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
                     ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
@@ -172,8 +165,10 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Do nothing, no parent
+     *
      * @param fragment Callback fragment.
      */
     @Override
-    public void setCallbackFragment(CallbackFragment fragment) {}
+    public void setCallbackFragment(CallbackFragment fragment) {
+    }
 }

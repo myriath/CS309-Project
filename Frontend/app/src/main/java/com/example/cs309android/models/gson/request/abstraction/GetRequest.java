@@ -24,6 +24,7 @@ public abstract class GetRequest extends Request {
 
     /**
      * Get requests have no body
+     *
      * @return null
      */
     @Override

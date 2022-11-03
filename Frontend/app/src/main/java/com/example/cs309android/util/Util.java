@@ -1,5 +1,7 @@
 package com.example.cs309android.util;
 
+import static com.example.cs309android.util.Constants.USERS_LATEST;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -7,7 +9,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
 import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.gson.response.users.LoginResponse;
@@ -138,7 +139,7 @@ public class Util {
     /**
      * Logs out of the given account
      *
-     * @param global Global class for variables
+     * @param global   Global class for variables
      * @param username Username to log out of
      */
     public static void logout(GlobalClass global, String username) {
@@ -150,11 +151,11 @@ public class Util {
     /**
      * Switches the active user to the new username
      *
-     * @param global Global class for variables
+     * @param global   Global class for variables
      * @param username New username to switch to
      */
     public static void switchUser(GlobalClass global, String username) {
-        global.getUsers().put(MainActivity.USERS_LATEST, username);
+        global.getUsers().put(USERS_LATEST, username);
         global.updateLoginPrefs();
     }
 

@@ -1,5 +1,9 @@
 package com.example.cs309android.fragments.account;
 
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_PROFILE;
+import static com.example.cs309android.util.Constants.CALLBACK_EDIT_ACCOUNT;
+import static com.example.cs309android.util.Constants.CALLBACK_FOLLOW;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -90,7 +94,7 @@ public class AccountFragment extends BaseFragment {
         ExtendedFloatingActionButton followButton = view.findViewById(R.id.followButton);
         if (owner) {
             settingsButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_SETTINGS, null);
+                callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null);
             });
             settingsButton.setVisibility(View.VISIBLE);
             view.findViewById(R.id.settingsCard).setVisibility(View.VISIBLE);
@@ -121,13 +125,13 @@ public class AccountFragment extends BaseFragment {
             }, requireContext());
         } else {
             backButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_PROFILE, null);
+                callbackFragment.callback(CALLBACK_CLOSE_PROFILE, null);
             });
             backButton.setVisibility(View.VISIBLE);
             view.findViewById(R.id.backCard).setVisibility(View.VISIBLE);
 
             followButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(MainActivity.CALLBACK_FOLLOW, null);
+                callbackFragment.callback(CALLBACK_FOLLOW, null);
             });
             followButton.setVisibility(View.VISIBLE);
 

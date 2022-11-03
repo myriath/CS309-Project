@@ -27,6 +27,7 @@ public abstract class PatchImageRequest extends ImageSendRequest {
 
     /**
      * Getter for the url
+     *
      * @return url for the request
      */
     @Override

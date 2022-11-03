@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.profile;
 
 import static com.example.cs309android.util.Constants.UPDATE_BANNER_URL;
-import static com.example.cs309android.util.Constants.UPDATE_PROFILE_URL;
 
 import android.graphics.Bitmap;
 
@@ -16,7 +15,7 @@ public class UpdateBannerImageRequest extends PatchImageRequest {
     /**
      * Public constructor
      *
-     * @param token authentication token
+     * @param token  authentication token
      * @param bitmap Image to send
      */
     public UpdateBannerImageRequest(String token, Bitmap bitmap) {

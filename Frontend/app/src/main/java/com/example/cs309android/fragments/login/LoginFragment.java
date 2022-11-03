@@ -1,9 +1,13 @@
 package com.example.cs309android.fragments.login;
 
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_OK;
 import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Util.hideKeyboard;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
@@ -20,7 +24,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.gson.request.users.LoginHashRequest;
 import com.example.cs309android.models.gson.request.users.SaltRequest;
@@ -118,7 +121,7 @@ public class LoginFragment extends BaseFragment {
             passwordField.setError(null);
             // If the register button is pressed, switch screens
             if (callbackFragment == null) return;
-            callbackFragment.callback(MainActivity.CALLBACK_SWITCH_TO_REGISTER, null);
+            callbackFragment.callback(CALLBACK_SWITCH_TO_REGISTER, null);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.loginTextView), (v, windowInsets) -> {
@@ -154,9 +157,9 @@ public class LoginFragment extends BaseFragment {
                 Util.login(global, token, loginResponse, requireActivity());
                 Util.unSpin(requireActivity());
 
-                callbackFragment.callback(MainActivity.CALLBACK_MOVE_TO_HOME, null);
-                callbackFragment.callback(MainActivity.CALLBACK_CLOSE_LOGIN, null);
-            } else if (result == RESULT_REGEN_TOKEN && depth < MainActivity.TOKEN_MAX_DEPTH) {
+                callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
+                callbackFragment.callback(CALLBACK_CLOSE_LOGIN, null);
+            } else if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH) {
                 loginAttempt(global, unm, hash, depth + 1);
             } else {
                 Toaster.toastShort("Error", getContext());

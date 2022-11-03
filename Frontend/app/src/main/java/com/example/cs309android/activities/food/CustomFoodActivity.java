@@ -1,6 +1,7 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.food.CustomFoodAddRequest;
@@ -52,7 +52,7 @@ public class CustomFoodActivity extends AppCompatActivity {
         dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
 
         Intent intent = getIntent();
-        item = intent.getParcelableExtra(MainActivity.PARCEL_FOODITEM);
+        item = intent.getParcelableExtra(PARCEL_FOODITEM);
         Space spacer = new Space(this);
         spacer.setMinimumHeight((int) dp16 * 10);
         detailsLayout = findViewById(R.id.details_layout);
@@ -80,7 +80,7 @@ public class CustomFoodActivity extends AppCompatActivity {
                         CustomFoodAddResponse addResponse = Util.objFromJson(response, CustomFoodAddResponse.class);
                         if (addResponse.getResult() == Constants.RESULT_OK) {
                             Intent intent1 = new Intent();
-                            intent1.putExtra(MainActivity.PARCEL_FOODITEM, new SimpleFoodItem(addResponse.getDbId(), name, "User added", true));
+                            intent1.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(addResponse.getDbId(), name, "User added", true));
                             setResult(RESULT_OK, intent1);
                         } else {
                             Toaster.toastShort("Error!", this);

@@ -29,7 +29,7 @@ public abstract class PostRequest extends com.example.cs309android.models.gson.r
      * Public constructor
      * Creates new request with given type (used by subclasses)
      *
-     * @param url URL for the request
+     * @param url    URL for the request
      * @param method Method type for the request
      */
     protected PostRequest(String url, int method) {

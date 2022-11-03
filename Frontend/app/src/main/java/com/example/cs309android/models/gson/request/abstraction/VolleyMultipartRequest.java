@@ -51,9 +51,10 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Constructor
-     * @param method Request.Method
-     * @param url URL for the request
-     * @param listener Runs when the request completes successfully
+     *
+     * @param method        Request.Method
+     * @param url           URL for the request
+     * @param listener      Runs when the request completes successfully
      * @param errorListener Runs when the request completes with an error
      */
     public VolleyMultipartRequest(int method, String url, Response.Listener<NetworkResponse> listener, @Nullable Response.ErrorListener errorListener) {
@@ -64,6 +65,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Gets the headers
+     *
      * @return header mapping
      * @throws AuthFailureError
      */
@@ -74,6 +76,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Gets the content type
+     *
      * @return content type
      */
     @Override
@@ -83,6 +86,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Gets the body
+     *
      * @return body bytes
      * @throws AuthFailureError
      */
@@ -113,6 +117,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Overridden by children
+     *
      * @return Map data part label with data byte
      * @throws AuthFailureError
      */
@@ -122,6 +127,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Handles the network response
+     *
      * @param response Response from the request
      * @return Either success or error
      */
@@ -136,6 +142,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Delivers the response to the listener
+     *
      * @param response Response from the request
      */
     @Override
@@ -145,6 +152,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Delivers the error to the listener
+     *
      * @param error Error from the request
      */
     @Override
@@ -154,8 +162,9 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Parse string map into data output stream by key and value
-     * @param dos data output stream
-     * @param params inputs collection
+     *
+     * @param dos      data output stream
+     * @param params   inputs collection
      * @param encoding encode the inputs, default UTF-8
      * @throws IOException
      */
@@ -171,7 +180,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Parses data into the data output stream
-     * @param dos Data output stream
+     *
+     * @param dos  Data output stream
      * @param data Data to parse
      * @throws IOException
      */
@@ -183,7 +193,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Writes string data into the header and data output stream
-     * @param dos Data output stream
+     *
+     * @param dos   Data output stream
      * @param param name of the input
      * @param value value of the input
      * @throws IOException
@@ -197,7 +208,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     /**
      * Write data into the header and data output stream
-     * @param dos Data output stream
+     *
+     * @param dos  Data output stream
      * @param data Data to write
      * @param name Name of the input
      * @throws IOException
@@ -250,11 +262,13 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
         /**
          * Default constructor
          */
-        public DataPart() {}
+        public DataPart() {
+        }
 
         /**
          * Constructor
-         * @param name name of the data
+         *
+         * @param name    name of the data
          * @param content bytes of the content
          */
         DataPart(String name, byte[] content) {
@@ -264,6 +278,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
         /**
          * Getter for the name
+         *
          * @return data name
          */
         public String getName() {
@@ -272,6 +287,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
         /**
          * Getter for the content
+         *
          * @return content bytes
          */
         public byte[] getContent() {
@@ -280,6 +296,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
         /**
          * Getter for the type
+         *
          * @return MIME type
          */
         public String getType() {

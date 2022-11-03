@@ -1,6 +1,7 @@
 package com.example.cs309android.fragments;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,7 +17,6 @@ import androidx.core.content.FileProvider;
 
 import com.example.cs309android.BuildConfig;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AccountEditActivity;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.util.Toaster;
@@ -45,8 +45,19 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
      * Launcher for the gallery select activity
      */
     ActivityResultLauncher<Intent> imageChooserLauncher;
+    /**
+     * Launcher for the camera app
+     */
     ActivityResultLauncher<Uri> cameraLauncher;
+    /**
+     * Checks for permissions
+     */
     ActivityResultLauncher<String> permissionsLauncher;
+
+    /**
+     * Parcel constants
+     */
+    public static final String PARCEL_IMAGE_URI = "image_uri";
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,8 +101,8 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable(AccountEditActivity.PARCEL_IMAGE_URI, Objects.requireNonNull(result.getData()).getData());
-                        callbackFragment.callback(AccountEditActivity.OPCODE_IMAGE_URI, bundle);
+                        bundle.putParcelable(PARCEL_IMAGE_URI, Objects.requireNonNull(result.getData()).getData());
+                        callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);
                         dismiss();
                     } else {
                         dismiss();
@@ -104,8 +115,8 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
                 success -> {
                     if (success) {
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable(AccountEditActivity.PARCEL_IMAGE_URI, uri);
-                        callbackFragment.callback(AccountEditActivity.OPCODE_IMAGE_URI, bundle);
+                        bundle.putParcelable(PARCEL_IMAGE_URI, uri);
+                        callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);
                         dismiss();
                     } else {
                         dismiss();
@@ -150,10 +161,12 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
      * Do nothing, no children
      */
     @Override
-    public void callback(int op, Bundle bundle) {}
+    public void callback(int op, Bundle bundle) {
+    }
 
     /**
      * Sets the callback fragment
+     *
      * @param fragment Callback fragment.
      */
     @Override

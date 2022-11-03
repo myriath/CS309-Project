@@ -49,7 +49,7 @@ public abstract class ImageSendRequest {
      * Base request method
      *
      * @param listener Runs when completed successfully
-     * @param context Context for volley
+     * @param context  Context for volley
      */
     public void request(Response.Listener<NetworkResponse> listener, Context context) {
         request(listener, Throwable::printStackTrace, context);
@@ -80,6 +80,7 @@ public abstract class ImageSendRequest {
 
     /**
      * Turns an image into a byte array
+     *
      * @param bitmap Bitmap to compress and convert
      * @return byte[] of the compressed image
      */

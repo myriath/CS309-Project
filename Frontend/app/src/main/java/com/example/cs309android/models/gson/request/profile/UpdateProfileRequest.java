@@ -2,8 +2,6 @@ package com.example.cs309android.models.gson.request.profile;
 
 import static com.example.cs309android.util.Constants.UPDATE_PROFILE_URL;
 
-import com.example.cs309android.models.gson.request.abstraction.ImageSendRequest;
-import com.example.cs309android.models.gson.request.abstraction.PatchImageRequest;
 import com.example.cs309android.models.gson.request.abstraction.PatchRequest;
 import com.google.gson.annotations.Expose;
 
@@ -31,6 +29,7 @@ public class UpdateProfileRequest extends PatchRequest {
 
     /**
      * Getter for the new bio
+     *
      * @return new bio for the profile
      */
     public String getNewBio() {

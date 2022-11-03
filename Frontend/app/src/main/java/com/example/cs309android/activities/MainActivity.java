@@ -1,8 +1,24 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_EDIT_ACCOUNT;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.PREF_NAME;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 
 import android.app.Activity;
@@ -57,23 +73,6 @@ import java.util.Objects;
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
     /**
-     * DEBUG variable for testing Logs
-     * TODO: False for prod
-     */
-    public static final boolean DEBUG = true;
-
-    /**
-     * Name of the app for all mentions in the app
-     */
-    public static final String APP_NAME = "Föd";
-
-    /**
-     * Preference name for this app's shared preferences.
-     */
-    public static final String PREF_NAME = "COMS309";
-    public static final String PREF_FIRST_TIME = "FirstTime";
-
-    /**
      * Fragment containing the current login window.
      */
     private CallbackFragment loginWindowFragment;
@@ -102,32 +101,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_CLOSE_PROFILE = 7;
     public static final int CALLBACK_FOLLOW = 8;
 //    public static final int CALLBACK_ = 0;
-
-    /**
-     * This is used wherever a food item needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEM = "fooditem";
-    /**
-     * This is used whenever a list of food items needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
-    /**
-     * This is used to parcel the intent of opening an activity.
-     */
-    public static final String PARCEL_INTENT_CODE = "intentCode";
-
-    /**
-     * Preference key for user map
-     */
-    public static final String PREF_LOGIN = "users";
-    /**
-     * Key for user map for latest user
-     */
-    public static final String USERS_LATEST = "latest";
-    /**
-     * Max retries for token generation
-     */
-    public static final int TOKEN_MAX_DEPTH = 5;
 
     /**
      * Used to launch various activities.

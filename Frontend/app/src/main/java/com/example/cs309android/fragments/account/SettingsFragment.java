@@ -1,8 +1,7 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.activities.MainActivity.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.preference.Preference;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.util.Util;
