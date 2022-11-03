@@ -3,23 +3,13 @@ package com.requests.backend.models.requests;
 import com.requests.backend.models.AuthModel;
 
 public class StrikeoutRequest {
-    private String itemName;
-
-    private String token;
+    private String description;
 
     public String getItemName() {
-        return itemName;
+        return description;
     }
 
     public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+        this.description = itemName;
     }
 }
