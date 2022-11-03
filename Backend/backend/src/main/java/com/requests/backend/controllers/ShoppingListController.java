@@ -127,7 +127,8 @@ public class ShoppingListController {
         String hashedToken = Hasher.sha256(token);
 
         StrikeoutRequest req = gson.fromJson(json, StrikeoutRequest.class);
-        String itemName = req.getItemName();
+        int id = req.getId();
+        boolean isCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -145,7 +146,7 @@ public class ShoppingListController {
             // User does not exist
             try {
                 // User already passed authentication from token earlier
-                shoppingRepository.queryShoppingChangeStricken(username, itemName);
+                shoppingRepository.queryShoppingChangeStricken(id, isCustom, username);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
