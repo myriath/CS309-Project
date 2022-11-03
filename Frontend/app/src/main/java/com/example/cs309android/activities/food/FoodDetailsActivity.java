@@ -22,6 +22,7 @@ import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.food.CustomFoodGetRequest;
+import com.example.cs309android.models.gson.response.food.CustomFoodGetResponse;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.NutritionItemView;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -99,7 +100,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
             }, FoodDetailsActivity.this, getWindow().getDecorView());
         } else {
             new CustomFoodGetRequest(item.getId()).unspinOnComplete(response -> {
-                CustomFoodItem foodItem = Util.objFromJson(response, CustomFoodItem.class);
+                System.out.println(response);
+                CustomFoodGetResponse customFoodGetResponse = Util.objFromJson(response, CustomFoodGetResponse.class);
+                CustomFoodItem foodItem = customFoodGetResponse.getItem();
+                System.out.println(foodItem);
+
                 setSubtitle("User added", toolbar);
                 fillIngredients(foodItem.getIngredients());
                 fillNutrition(foodItem);
