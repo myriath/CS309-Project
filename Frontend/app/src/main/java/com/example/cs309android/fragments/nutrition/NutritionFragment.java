@@ -2,6 +2,8 @@ package com.example.cs309android.fragments.nutrition;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,11 +24,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AddRecipeActivity;
-import com.example.cs309android.activities.FoodDetailsActivity;
-import com.example.cs309android.activities.FoodSearchActivity;
 import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.activities.RecipeDetailsActivity;
+import com.example.cs309android.activities.SearchActivity;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
@@ -212,7 +212,7 @@ public class NutritionFragment extends BaseFragment {
         }, requireContext());
 
         fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), FoodSearchActivity.class);
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
             foodSearchLauncher.launch(intent);
         });
 
@@ -239,7 +239,7 @@ public class NutritionFragment extends BaseFragment {
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             SimpleFoodItem selectedItem = (SimpleFoodItem) parent.getItemAtPosition(position);
             Intent i = new Intent(getActivity(), FoodDetailsActivity.class);
-            i.putExtra(MainActivity.PARCEL_FOODITEM, selectedItem);
+            i.putExtra(PARCEL_FOODITEM, selectedItem);
             startActivity(i);
         });
 

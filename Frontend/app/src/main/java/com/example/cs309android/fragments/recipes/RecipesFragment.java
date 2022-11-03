@@ -19,13 +19,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AddRecipeActivity;
-import com.example.cs309android.activities.RecipeDetailsActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.example.cs309android.models.gson.request.recipes.AddRecipe;
+import com.example.cs309android.models.gson.request.recipes.AddRecipeRequest;
 import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
 import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;

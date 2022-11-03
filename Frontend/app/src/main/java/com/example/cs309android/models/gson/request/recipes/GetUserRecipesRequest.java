@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
-import com.example.cs309android.models.gson.GetRequest;
+import com.example.cs309android.models.gson.request.abstraction.GetRequest;
 import com.example.cs309android.util.Constants;
 
 public class GetUserRecipesRequest extends GetRequest {

@@ -46,10 +46,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         ImageView image = findViewById(R.id.image_view);
         TextView recipeInstructions = findViewById(R.id.recipe_instructions);
-        recipeInstructions.setText(item.getSteps());
-
-
-
+        recipeInstructions.setText(item.getInstructions());
 
 //        MaterialToolbar toolbar = findViewById(R.id.toolbar);
 //        toolbar.setTitle(item.getFoodName().substring(0, Math.min(item.getFoodName().length(), 18)).trim() + (item.getFoodName().length() > 18 ? "..." : ""));

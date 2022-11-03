@@ -240,15 +240,15 @@ public class Constants {
     public static final String GET_FOOD_LOG_BY_DAY_URL = FOOD_LOG_URL + "getDay/";
 
 
-    // SOCIAL
-    /**
-     * Base URL for social endpoints
-     */
-    public static final String SOCIAL_URL = BASE_API_URL + "social/";
-    /**
-     * URL for getting user posts
-     */
-    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
+//    // SOCIAL
+//    /**
+//     * Base URL for social endpoints
+//     */
+//    public static final String SOCIAL_URL = BASE_API_URL + "social/";
+//    /**
+//     * URL for getting user posts
+//     */
+//    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
 
     // PROFILE
     /**
