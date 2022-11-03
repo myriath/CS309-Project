@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.requests.backend.models.CustomFood;
+import com.requests.backend.models.FoodResponse;
 import com.requests.backend.models.FoodsResponse;
 import com.requests.backend.models.Token;
 import com.requests.backend.models.requests.CustomFoodRequest;
@@ -39,6 +40,24 @@ public class CustomController {
 
         res.setItems(foods);
 
+        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(res);
+    }
+
+    @GetMapping("/get/{id}")
+    public String get(@PathVariable int id) throws JsonProcessingException {
+        FoodResponse res = new FoodResponse();
+
+        CustomFood[] foods = customRepository.queryGetByID(id);
+
+        if (foods.length == 0) {
+            res.setResult(RESULT_ERROR);
+        } else {
+            res.setItems(foods[0]);
+            res.setResult(RESULT_OK);
+        }
         // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 

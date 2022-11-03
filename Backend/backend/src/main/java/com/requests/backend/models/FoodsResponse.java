@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.requests.backend.models.responses.ResultResponse;
+
 public class FoodsResponse {
     private CustomFood[] items;
 
