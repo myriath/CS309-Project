@@ -1,11 +1,22 @@
 package com.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  * Util constants class
  *
  * @author Mitch Hudson
  */
 public class Constants {
+    /**
+     * Gson object used by the entire application.
+     */
+    public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .serializeNulls()
+            .excludeFieldsWithoutExposeAnnotation();
+    public static final Gson GSON = GSON_BUILDER.create();
+
     /**
      * Private constructor (Util class)
      */
@@ -92,6 +103,29 @@ public class Constants {
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "/strikeout";
+
+
+    // IMAGE PATHS
+    /**
+     * Profile picture storage location
+     */
+    public static final String PFP_SOURCE = "/media/pfps/";
+    /**
+     * Default pfp image path
+     */
+    public static final String DEFAULT_PFP = "/media/defaultpfp.webp";
+    /**
+     * Banner image storage location
+     */
+    public static final String BANNER_SOURCE = "/media/banner/";
+    /**
+     * Default banner image path
+     */
+    public static final String DEFAULT_BANNER = "/media/defaultbanner.webp";
+    /**
+     * Regular image storage location
+     */
+    public static final String MEDIA_SOURCE = "/media/images/";
 
 
     // TAGS
