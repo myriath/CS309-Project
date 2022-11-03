@@ -138,7 +138,7 @@ public class Constants {
     /**
      * Add url for adding an item to recipes
      */
-    public static final String ADD_RECIPES_URL = RECIPES_URL + "add";
+    public static final String ADD_RECIPES_URL = RECIPES_URL + "add/";
     /**
      * Remove url for removing an item from recipes
      */
@@ -147,6 +147,43 @@ public class Constants {
      * Url for getting an item from recipes
      */
     public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
+    /**
+     * Url for getting an item from recipes
+     */
+    public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+
+    // SOCIAL
+    /**
+     * Base social url for all social based requests
+     */
+    public static final String SOCIAL_URL = BASE_API_URL + "social/";
+    /**
+     * Add url for getting a users feed
+     */
+    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed/";
+
+    //FOOD LOG
+    /**
+     * Base food log url for all food log based requests
+     */
+    public static final String FOOD_LOG_URL = BASE_API_URL + "log/";
+    /**
+     * Add url for adding an item to food log
+     */
+    public static final String ADD_FOOD_LOG_URL = FOOD_LOG_URL + "add/";
+    /**
+     * Remove url for removing an item from food log
+     */
+    public static final String REMOVE_FOOD_LOG_URL = FOOD_LOG_URL + "remove/";
+    /**
+     * Get url for getting an item from food log
+     */
+    public static final String GET_FOOD_LOG_URL = FOOD_LOG_URL + "get/";
+    /**
+     * Get url for getting an item by day from food log
+     */
+    public static final String GET_FOOD_LOG_BY_DAY_URL = FOOD_LOG_URL + "getDay/";
+
 
     // SOCIAL
     /**
