@@ -99,13 +99,13 @@ public class Constants {
      */
     public static final String ADD_FOOD_URL = FOOD_URL + "add/";
     /**
-     * URL for getting a custom food item
-     */
-    public static final String GET_FOOD_URL = FOOD_URL + "get/";
-    /**
      * URL for getting querying the custom food items
      */
     public static final String QUERY_FOOD_DB = FOOD_URL + "get";
+    /**
+     * URL for getting a custom food item
+     */
+    public static final String GET_FOOD_URL = QUERY_FOOD_DB + "/";
 
 
     // SHOPPING
