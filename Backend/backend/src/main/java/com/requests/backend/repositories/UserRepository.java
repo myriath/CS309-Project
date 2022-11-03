@@ -28,6 +28,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     Collection<User> queryValidateUsername(@Param("username") String username);
 
+
+
+
+
+
     @Modifying
     @Query(
             value =

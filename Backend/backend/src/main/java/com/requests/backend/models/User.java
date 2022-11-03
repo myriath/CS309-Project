@@ -23,8 +23,11 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
     private Set<User> followers;
 
+
+
     public User() {
     }
+
 
     public String getUsername() {
         return username;
