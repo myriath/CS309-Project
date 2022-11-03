@@ -17,13 +17,19 @@ public interface CustomRepository extends JpaRepository<CustomFood, Integer> {
     )
     CustomFood[] queryGetCustomFoods(@Param("query") String query);
 
-    @Modifying
     @Query(
-            value = "INSERT INTO custom_foods (name, calories, carbs, protein, fat) VALUES (:name, :calories, :carbs, :protein, :fat)",
+            value = "SELECT * FROM custom_foods WHERE db_id = :id",
             nativeQuery = true
     )
-    @Transactional
-    CustomFood queryCreateCustomFood(@Param("name") String name, @Param("calories") double calories, @Param("carbs") double carbs, @Param("protein") double protein, @Param("fat") double fat);
+    CustomFood[] queryGetByID(@Param("id") int id);
+
+//    @Modifying
+//    @Query(
+//            value = "INSERT INTO custom_foods (name, ingredients, calories, carbs, protein, fat) VALUES (:name, :ingredients, :calories, :carbs, :protein, :fat)",
+//            nativeQuery = true
+//    )
+//    @Transactional
+//    CustomFood queryCreateCustomFood(@Param("name") String name, @Param("ingredients") String ingredients, @Param("calories") double calories, @Param("carbs") double carbs, @Param("protein") double protein, @Param("fat") double fat);
 
     CustomFood[] findByNameContainingIgnoreCase(String query);
 

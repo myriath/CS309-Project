@@ -13,6 +13,8 @@ public class CustomFood {
 
     String name;
 
+    String ingredients;
+
     double calories;
 
     double carbs;
@@ -24,8 +26,9 @@ public class CustomFood {
     public CustomFood() {
     }
 
-    public CustomFood(String name, double calories, double carbs, double protein, double fat) {
+    public CustomFood(String name, String ingredients, double calories, double carbs, double protein, double fat) {
         this.name = name;
+        this.ingredients = ingredients;
         this.calories = calories;
         this.carbs = carbs;
         this.protein = protein;
@@ -80,4 +83,11 @@ public class CustomFood {
         this.fat = fat;
     }
 
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
 }
