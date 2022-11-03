@@ -20,7 +20,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.shopping.RemoveRequest;
+import com.example.cs309android.models.gson.request.shopping.ShoppingRemoveRequest;
 import com.example.cs309android.models.gson.request.shopping.StrikeRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Constants;
@@ -90,8 +90,10 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
 
         convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
             CheckBox checkBox = (CheckBox) view;
+
+            SimpleFoodItem item = items.get(position);
             if (checkBox.isChecked()) {
-                new StrikeRequest(items.get(position).getFdcId(), globalVariable.getToken()).request(response -> {
+                new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -102,7 +104,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
                     }
                 }, getContext());
             } else {
-                new StrikeRequest(items.get(position).getFdcId(), globalVariable.getToken()).request(response -> {
+                new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() == Constants.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
@@ -116,22 +118,23 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             items.get(position).setStricken(checkBox.isChecked());
         });
 
-        convertView.findViewById(R.id.remove).setOnClickListener(view1 ->
-                new RemoveRequest(items.get(position).getFdcId(), globalVariable.getToken()).request(response -> {
-                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                    if (genericResponse.getResult() == Constants.RESULT_OK) {
-                        if (ShoppingFragment.removeItem(position)) {
-                            ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
-                            ((TextView) view1.getRootView().findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
-                        } else {
-                            ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
-                        }
-                        ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
+        convertView.findViewById(R.id.remove).setOnClickListener(view1 -> {
+            SimpleFoodItem item = items.get(position);
+            new ShoppingRemoveRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
+                GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                if (genericResponse.getResult() == Constants.RESULT_OK) {
+                    if (ShoppingFragment.removeItem(position)) {
+                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
+                        ((TextView) view1.getRootView().findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
                     } else {
-                        Toaster.toastShort("Error", getContext());
+                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
                     }
-                }, getContext())
-        );
+                    ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
+                } else {
+                    Toaster.toastShort("Error", getContext());
+                }
+            }, getContext());
+        });
 
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray array = parent.getContext().obtainStyledAttributes(attrs);

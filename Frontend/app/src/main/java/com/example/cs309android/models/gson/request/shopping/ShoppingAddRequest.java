@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class AddRequest extends PostRequest {
+public class ShoppingAddRequest extends PostRequest {
     /**
      * Simple food item to add
      */
@@ -23,7 +23,7 @@ public class AddRequest extends PostRequest {
      * @param item Item to add to the list
      * @param token Authentication token
      */
-    public AddRequest(SimpleFoodItem item, String token) {
+    public ShoppingAddRequest(SimpleFoodItem item, String token) {
         super(Constants.ADD_SHOPPING_URL + token);
         this.item = item;
     }
