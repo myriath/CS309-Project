@@ -6,13 +6,13 @@ import java.sql.Date;
 
 public class FoodLogGetDayRequest {
     @Expose
-    private Date date;
+    private String date;
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

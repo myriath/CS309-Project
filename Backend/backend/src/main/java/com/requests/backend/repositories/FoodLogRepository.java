@@ -26,7 +26,7 @@ public interface FoodLogRepository extends JpaRepository<FoodLog, Integer> {
                     "WHERE username = :username " +
                     "AND date = :date",
             nativeQuery = true)
-    FoodLog[] queryGetLogByDay(@Param("username") String username, @Param("date") Date date);
+    FoodLog[] queryGetLogByDay(@Param("username") String username, @Param("date") String date);
 
     @Modifying
     @Query(

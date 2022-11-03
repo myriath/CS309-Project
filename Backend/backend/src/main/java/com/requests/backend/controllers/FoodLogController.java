@@ -68,7 +68,7 @@ public class FoodLogController {
     @GetMapping (path = "/getDay/{token}")
     public @ResponseBody String getLogByDay(@PathVariable String token, @RequestBody String json) {
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().setDateFormat("YYYY-MM-DD").create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
 
         FoodLogGetDayRequest req = gson.fromJson(json, FoodLogGetDayRequest.class);
 
@@ -82,7 +82,7 @@ public class FoodLogController {
         }
         else {
             String username = tokenQueryRes[0].getUsername();
-            Date date = req.getDate();
+            String date = req.getDate();
 
             FoodLog[] foodLog = foodLogRepository.queryGetLogByDay(username, date);
 
