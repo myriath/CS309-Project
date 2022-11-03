@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //
+import com.requests.backend.repositories.UPCRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,12 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping(path="/usda")
 class FoodController {
+
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private UPCRepository upcRepository;
 
     // Finds top 8 search results
     @GetMapping("/usdaFoodSearch/{foodName}")
@@ -40,6 +45,30 @@ class FoodController {
     @GetMapping("/foodByID")
     public String foodByID(@RequestParam String fdcId) throws JsonProcessingException {
         String uri = "https://api.nal.usda.gov/fdc/v1/food/" + fdcId + "?api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
+
+        // Initialize a new rest template and a new set of headers
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Create a new HttpEntity using the headers
+        final HttpEntity<Void> entity = new HttpEntity<>(null);
+
+        // Gather a response entity from the designated URI as a String
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri, HttpMethod.GET, entity, String.class);
+
+        String res = responseEntity.getBody().toString();
+
+        return res;
+    }
+
+    @GetMapping("/foodByUpc")
+    public String foodByUpc(@RequestParam String upc) throws JsonProcessingException {
+
+        String[] fdcIds = upcRepository.queryUPCtoID(upc);
+
+        String fdcId = fdcIds[0];
+
+        String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + fdcId + "&pageSize=1&requireAllWords=true&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers
         RestTemplate restTemplate = new RestTemplate();
