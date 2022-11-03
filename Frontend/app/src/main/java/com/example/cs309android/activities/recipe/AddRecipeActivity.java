@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
