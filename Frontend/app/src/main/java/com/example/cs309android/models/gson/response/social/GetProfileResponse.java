@@ -10,21 +10,6 @@ import com.google.gson.annotations.Expose;
  */
 public class GetProfileResponse extends GenericResponse {
     /**
-     * Rotating token to be used instead of hash
-     */
-    @Expose
-    private final String username;
-    /**
-     * Rotating token to be used instead of hash
-     */
-    @Expose
-    private final String banner;
-    /**
-     * Rotating token to be used instead of hash
-     */
-    @Expose
-    private final String pfp;
-    /**
      * Follower count
      */
     @Expose
@@ -44,49 +29,15 @@ public class GetProfileResponse extends GenericResponse {
      * Public constructor
      *
      * @param result    request result code (OK for success, ERROR for fail)
-     * @param username  username of the profile
-     * @param banner    banner image of the profile
-     * @param pfp       profile picture
      * @param followers follower count
      * @param following number of users this user is following
      * @param bio       biography text
-     * @param recipes   recipe array (most recent first)
      */
-    public GetProfileResponse(int result, String username, String banner, String pfp, int followers, int following, String bio) {
+    public GetProfileResponse(int result, int followers, int following, String bio) {
         super(result);
-        this.username = username;
-        this.banner = banner;
-        this.pfp = pfp;
         this.followers = followers;
         this.following = following;
         this.bio = bio;
-    }
-
-    /**
-     * Username for reference
-     *
-     * @return username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Profile banner image as base64 encoded string
-     *
-     * @return banner image b64
-     */
-    public String getBanner() {
-        return banner;
-    }
-
-    /**
-     * Profile picture as base64 encoded string
-     *
-     * @return profile picture b64
-     */
-    public String getPfp() {
-        return pfp;
     }
 
     /**

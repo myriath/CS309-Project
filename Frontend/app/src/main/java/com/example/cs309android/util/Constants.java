@@ -138,10 +138,6 @@ public class Constants {
      * URL to regen an expired token
      */
     public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
-    /**
-     * URL to get profile data
-     */
-    public static final String GET_PROFILE_URL = AUTH_URL + "getProfile/";
 
 
     // FOOD
@@ -154,9 +150,13 @@ public class Constants {
      */
     public static final String ADD_FOOD_URL = FOOD_URL + "add/";
     /**
+     * URL for getting querying the custom food items
+     */
+    public static final String QUERY_FOOD_DB = FOOD_URL + "get";
+    /**
      * URL for getting a custom food item
      */
-    public static final String GET_FOOD_URL = FOOD_URL + "get/";
+    public static final String GET_FOOD_URL = QUERY_FOOD_DB + "/";
 
 
     // SHOPPING
@@ -180,6 +180,10 @@ public class Constants {
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout/";
+    /**
+     * Strikeout url when the user interacts with custom food items
+     */
+    public static final String STRIKE_SHOPPING_DB_URL = SHOPPING_URL + "strikeoutDb/";
 
     // RECIPES
     /**
@@ -214,6 +218,10 @@ public class Constants {
      * Base profile endpoints URL
      */
     public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+    /**
+     * URL to get profile data
+     */
+    public static final String GET_PROFILE_URL = PROFILE_API_URL + "getProfile/";
     /**
      * URL for getting a profile picture
      */

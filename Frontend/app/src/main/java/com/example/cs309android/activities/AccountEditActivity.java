@@ -20,6 +20,7 @@ import com.example.cs309android.models.gson.request.profile.UpdateBannerImageReq
 import com.example.cs309android.models.gson.request.profile.UpdateProfileImageRequest;
 import com.example.cs309android.models.gson.request.profile.UpdateProfileRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
@@ -81,27 +82,48 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                 .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
 
         findViewById(R.id.saveButton).setOnClickListener(view -> {
+            Util.spin(this);
             new UpdateProfileRequest(global.getToken(), bioInput.getEditText().getText().toString()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                if (genericResponse.getResult() != RESULT_OK) {
+                if (genericResponse.getResult() == Constants.RESULT_OK) {
+                    global.setBio(bioInput.getEditText().getText().toString());
+
+                    if (profileImage == null) {
+                        profileImage = global.getPfp();
+                    }
+                    new UpdateProfileImageRequest(global.getToken(), profileImage).request(response1 -> {
+                        String json = new String(response1.data);
+                        GenericResponse genericResponse1 = Util.objFromJson(json, GenericResponse.class);
+                        if (genericResponse1.getResult() == Constants.RESULT_OK) {
+                            global.setPfp(profileImage);
+
+                            if (bannerImage == null) {
+                                bannerImage = global.getBanner();
+                            }
+                            new UpdateBannerImageRequest(global.getToken(), bannerImage).request(response2 -> {
+                                String json1 = new String(response2.data);
+                                GenericResponse genericResponse2 = Util.objFromJson(json1, GenericResponse.class);
+                                if (genericResponse2.getResult() == Constants.RESULT_OK) {
+                                    global.setBanner(bannerImage);
+                                    setResult(RESULT_OK);
+                                } else {
+                                    Toaster.toastShort("Unexpected error", this);
+                                    setResult(RESULT_CANCELED);
+                                }
+                                finish();
+                            }, AccountEditActivity.this);
+                        } else {
+                            Toaster.toastShort("Unexpected error", this);
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    }, AccountEditActivity.this);
+                } else {
                     Toaster.toastShort("Unexpected error", this);
+                    setResult(RESULT_CANCELED);
+                    finish();
                 }
             }, AccountEditActivity.this);
-
-            if (profileImage != null) {
-                new UpdateProfileImageRequest(global.getToken(), profileImage).request(response -> {
-                    // TODO: Parse response
-                }, AccountEditActivity.this);
-            }
-
-            if (bannerImage != null) {
-                new UpdateBannerImageRequest(global.getToken(), bannerImage).request(response -> {
-                    // TODO: Parse response
-                }, AccountEditActivity.this);
-            }
-
-            setResult(RESULT_OK);
-            finish();
         });
 
         findViewById(R.id.backButton).setOnClickListener(view -> {

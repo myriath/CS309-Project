@@ -80,10 +80,13 @@ public class CustomFoodActivity extends AppCompatActivity {
                         CustomFoodAddResponse addResponse = Util.objFromJson(response, CustomFoodAddResponse.class);
                         if (addResponse.getResult() == Constants.RESULT_OK) {
                             Intent intent1 = new Intent();
-                            intent1.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(ITEM_ID_NULL, addResponse.getDbId(), name, null));
+                            intent1.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(addResponse.getDbId(), name, "User added", true));
+                            setResult(RESULT_OK, intent1);
                         } else {
                             Toaster.toastShort("Error!", this);
+                            setResult(RESULT_CANCELED);
                         }
+                        finish();
                     }, error -> Toaster.toastShort("Error!", this),
                     CustomFoodActivity.this,
                     getWindow().getDecorView().getRootView());

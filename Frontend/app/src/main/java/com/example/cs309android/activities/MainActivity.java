@@ -21,11 +21,14 @@ import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -85,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     private GlobalClass global;
 
+    /**
+     * Response codes for callback method. Used by Fragments for this class
+     */
+    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    public static final int CALLBACK_CLOSE_LOGIN = 1;
+    public static final int CALLBACK_START_LOGIN = 2;
+    public static final int CALLBACK_MOVE_TO_HOME = 3;
+    public static final int CALLBACK_FOOD_DETAIL = 4;
+    public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_CLOSE_PROFILE = 7;
+    public static final int CALLBACK_FOLLOW = 8;
 //    public static final int CALLBACK_ = 0;
 
     /**
@@ -341,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_MOVE_TO_SETTINGS): {
                 mainFragment = new SettingsFragment();
+                mainFragment.setCallbackFragment(this);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -348,11 +364,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 5;
-                break;
-            }
-            case (CALLBACK_EDIT_ACCOUNT): {
-                Intent intent = new Intent(this, AccountEditActivity.class);
-                startActivity(intent);
                 break;
             }
         }

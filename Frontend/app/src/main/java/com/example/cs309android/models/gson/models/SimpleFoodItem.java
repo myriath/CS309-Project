@@ -18,13 +18,12 @@ public class SimpleFoodItem implements Parcelable {
      * -1 if it is a Custom food item
      */
     @Expose
-    private final int fdcId;
+    private final int id;
     /**
-     * Database id for the custom foods table
-     * -1 if it is a USDA food item
+     * True for custom, false for fdcId
      */
     @Expose
-    private final int dbId;
+    private final boolean isCustom;
     /**
      * Description / Item name from api
      */
@@ -49,45 +48,44 @@ public class SimpleFoodItem implements Parcelable {
      * @param brand       Brand of the item (null for none)
      */
     public SimpleFoodItem(String description, String brand) {
-        this.fdcId = ITEM_ID_NULL;
-        this.dbId = ITEM_ID_NULL;
+        this.id = ITEM_ID_NULL;
         this.description = description;
         this.brand = brand;
         this.stricken = false;
+        this.isCustom = true;
     }
 
     /**
      * Public constructor
      *
-     * @param fdcId       fdc item id
-     * @param dbId        custom item id
+     * @param id          item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
+     * @param isCustom    True if the id is dbId, false if it is fdcId
      */
-    public SimpleFoodItem(int fdcId, int dbId, String description, String brand) {
-        this.fdcId = fdcId;
-        this.dbId = dbId;
+    public SimpleFoodItem(int id, String description, String brand, boolean isCustom) {
+        this.id = id;
         this.description = description;
         this.brand = brand;
         this.stricken = false;
+        this.isCustom = isCustom;
     }
 
     /**
      * Public constructor
      * stricken is set
      *
-     * @param fdcId       fdc item id
-     * @param dbId        custom item id
+     * @param id          item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int fdcId, int dbId, String description, String brand, boolean stricken) {
-        this.fdcId = fdcId;
-        this.dbId = dbId;
+    public SimpleFoodItem(int id, int dbId, String description, String brand, boolean stricken, boolean isCustom) {
+        this.id = id;
         this.description = description;
         this.brand = brand;
         this.stricken = stricken;
+        this.isCustom = isCustom;
     }
 
     /**
@@ -96,11 +94,11 @@ public class SimpleFoodItem implements Parcelable {
      * @param in Parcel to unpack
      */
     protected SimpleFoodItem(Parcel in) {
-        fdcId = in.readInt();
-        dbId = in.readInt();
+        id = in.readInt();
         description = in.readString();
         brand = in.readString();
         stricken = in.readBoolean();
+        isCustom = in.readBoolean();
     }
 
     /**
@@ -119,21 +117,12 @@ public class SimpleFoodItem implements Parcelable {
     };
 
     /**
-     * Getter for the fdc id
+     * Getter for the id
      *
      * @return item id
      */
-    public int getFdcId() {
-        return fdcId;
-    }
-
-    /**
-     * Getter for the custom id
-     *
-     * @return item id
-     */
-    public int getDbId() {
-        return dbId;
+    public int getId() {
+        return id;
     }
 
     /**
@@ -164,6 +153,15 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
+     * Gets the isCustom bool
+     *
+     * @return True if the item uses dbIds, false if it uses fdcId
+     */
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    /**
      * Setter for the stricken boolean
      *
      * @param stricken true if this item should be rendered with strikeout
@@ -190,10 +188,10 @@ public class SimpleFoodItem implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(fdcId);
-        parcel.writeInt(dbId);
+        parcel.writeInt(id);
         parcel.writeString(description);
         parcel.writeString(brand);
         parcel.writeBoolean(stricken);
+        parcel.writeBoolean(isCustom);
     }
 }
