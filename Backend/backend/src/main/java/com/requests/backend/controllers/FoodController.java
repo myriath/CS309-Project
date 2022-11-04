@@ -61,8 +61,8 @@ class FoodController {
         return res;
     }
 
-    @GetMapping("/foodByUpc")
-    public String foodByUpc(@RequestParam String upc) throws JsonProcessingException {
+    @GetMapping("/foodByUpc/{upc}")
+    public String foodByUpc(@PathVariable String upc) throws JsonProcessingException {
 
         String[] fdcIds = upcRepository.queryUPCtoID(upc);
 
