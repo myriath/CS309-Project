@@ -114,7 +114,7 @@ public class RecipesFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
+            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
 
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
