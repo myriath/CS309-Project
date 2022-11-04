@@ -157,6 +157,10 @@ public class Constants {
      * URL for getting a custom food item
      */
     public static final String GET_FOOD_URL = QUERY_FOOD_DB + "/";
+    /**
+     * URL for getting fdc id from a upc code
+     */
+    public static final String UPC_URL = FOOD_URL + "foodByUpc/";
 
 
     // SHOPPING

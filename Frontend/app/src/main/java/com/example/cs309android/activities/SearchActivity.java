@@ -37,15 +37,19 @@ import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
+import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.gson.models.CustomFoodItem;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.gson.request.food.FDCByUPCRequest;
 import com.example.cs309android.models.gson.request.food.GetCustomFoodsRequest;
 import com.example.cs309android.models.gson.request.shopping.ShoppingAddRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.food.FDCByUPCResponse;
 import com.example.cs309android.models.gson.response.food.GetCustomFoodsResponse;
 import com.example.cs309android.util.BarcodeAnalyzer;
 import com.example.cs309android.util.Toaster;
@@ -97,7 +101,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_search);
+        setContentView(R.layout.activity_search);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         intentCode = getIntent().getIntExtra(PARCEL_INTENT_CODE, INTENT_NONE);
@@ -302,8 +306,28 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
                     Bitmap bitmap = ImageDecoder.decodeBitmap(source);
                     BarcodeAnalyzer analyzer = new BarcodeAnalyzer(barcodes -> {
-                        // TODO: use analyzed barcodes for upc lookup
-                    }, Throwable::printStackTrace);
+                        if (barcodes == null || barcodes.length == 0) {
+                            Toaster.toastShort("Error reading barcode", this);
+                            return;
+                        }
+                        new FDCByUPCRequest(barcodes[0]).request(response -> {
+                            FDCByUPCResponse fdcResponse = Util.objFromJson(response, FDCByUPCResponse.class);
+                            if (fdcResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                new FoodsCriteria(fdcResponse.getFdcId(), Constants.Format.FULL, null).request(response1 -> {
+                                    BrandedFoodItem item = Util.objFromJson(response, BrandedFoodItem.class);
+                                    Intent intent = new Intent(this, FoodDetailsActivity.class);
+                                    intent.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(item.getFdcId(), item.getDescription(), item.getBrandOwner(), false));
+                                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                                    foodDetailsLauncher.launch(intent);
+                                }, SearchActivity.this);
+                            } else {
+                                Toaster.toastShort("Error reading barcode", this);
+                            }
+                        }, SearchActivity.this);
+                    }, error -> {
+                        Toaster.toastShort("Error reading barcode", this);
+                        error.printStackTrace();
+                    });
                     analyzer.analyze(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
