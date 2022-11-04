@@ -1,7 +1,6 @@
 package com.example.cs309android.models.gson.request.recipes;
 
-import com.example.cs309android.models.gson.PostRequest;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.gson.request.abstraction.PostRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -11,44 +10,43 @@ import com.google.gson.annotations.Expose;
  * @author Travis Massner
  */
 public class AddRecipeRequest extends PostRequest {
+
+    @Expose
+    private final String recipeName;
     /**
-     * Simple recipe to add
+     * Recipe instructions as a string
      */
     @Expose
-    private final SimpleRecipeItem recipe;
-    /**
-     * Authentication token of the user
-     */
-    @Expose
-    private final String token;
+    private final String instructions;
 
     /**
-     * Public constructor
+     * Constructor to be used by GSON
      *
-     * @param recipe recipe to add to the db
-     * @param token  Authentication token for the user
+     * @param token        token to authenticate
+     * @param recipeName   Recipe name
+     * @param instructions Recipe Instructions
      */
-    public AddRecipeRequest(SimpleRecipeItem recipe, String token) {
-        super(Constants.ADD_RECIPES_URL);
-        this.recipe = recipe;
-        this.token = token;
+    public AddRecipeRequest(String token, String recipeName, String instructions) {
+        super(Constants.ADD_RECIPES_URL + "/" + token);
+        this.recipeName = recipeName;
+        this.instructions = instructions;
     }
 
     /**
-     * Getter for the recipe
+     * Getter for the recipe name
      *
-     * @return item to add
+     * @return recipeName
      */
-    public SimpleRecipeItem getItem() {
-        return recipe;
+    public String getRecipeName() {
+        return recipeName;
     }
 
     /**
-     * Getter for the authentication token
+     * Getter for the recipe instructions
      *
-     * @return authentication token
+     * @return instructions
      */
-    public String getToken() {
-        return token;
+    public String getInstructions() {
+        return instructions;
     }
 }

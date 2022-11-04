@@ -14,6 +14,61 @@ public class Constants {
     private Constants() {
     }
 
+    /**
+     * DEBUG variable for testing Logs
+     * TODO: False for prod
+     */
+    public static final boolean DEBUG = true;
+
+    /**
+     * Name of the app for all mentions in the app
+     */
+    public static final String APP_NAME = "Föd";
+
+    /**
+     * Preference name for this app's shared preferences.
+     */
+    public static final String PREF_NAME = "COMS309";
+    public static final String PREF_FIRST_TIME = "FirstTime";
+    public static final String PREF_LOGIN = "users";
+    public static final String USERS_LATEST = "latest";
+
+    /**
+     * Max retries for token generation
+     */
+    public static final int TOKEN_MAX_DEPTH = 5;
+
+    /**
+     * Response codes for callback method. Used by Fragments for this class
+     */
+    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    public static final int CALLBACK_CLOSE_LOGIN = 1;
+    public static final int CALLBACK_START_LOGIN = 2;
+    public static final int CALLBACK_MOVE_TO_HOME = 3;
+    public static final int CALLBACK_FOOD_DETAIL = 4;
+    public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_EDIT_ACCOUNT = 7;
+    public static final int CALLBACK_CLOSE_PROFILE = 8;
+    public static final int CALLBACK_FOLLOW = 9;
+    public static final int CALLBACK_IMAGE_URI = 10;
+    public static final int CALLBACK_CLOSE_DETAIL = 11;
+
+
+    public static final String PARCEL_IMAGE_URI = "image_uri";
+    /**
+     * This is used wherever a food item needs to be parceled.
+     */
+    public static final String PARCEL_FOODITEM = "fooditem";
+    /**
+     * This is used whenever a list of food items needs to be parceled.
+     */
+    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
+    /**
+     * This is used to parcel the intent of opening an activity.
+     */
+    public static final String PARCEL_INTENT_CODE = "intentCode";
+
     // RESULT CODES
     /**
      * Indicates the request resulted in an error (generic)
@@ -70,19 +125,19 @@ public class Constants {
     /**
      * URL to get an accounts salt. (Params: username)
      */
-    public static final String SALT_URL = AUTH_URL + "getSalt";
+    public static final String SALT_URL = AUTH_URL + "getSalt/";
     /**
      * URL to check for login. (Params: username, hash)
      */
-    public static final String LOGIN_URL = AUTH_URL + "validateLogin";
+    public static final String LOGIN_URL = AUTH_URL + "validateLogin/";
     /**
      * URL to check token login
      */
-    public static final String TOKEN_URL = AUTH_URL + "validateToken";
+    public static final String TOKEN_URL = AUTH_URL + "validateToken/";
     /**
      * URL to regen an expired token
      */
-    public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken";
+    public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
 
 
     // FOOD
@@ -93,11 +148,19 @@ public class Constants {
     /**
      * URL for adding a new custom food item
      */
-    public static final String ADD_FOOD_URL = FOOD_URL + "add";
+    public static final String ADD_FOOD_URL = FOOD_URL + "add/";
+    /**
+     * URL for getting querying the custom food items
+     */
+    public static final String QUERY_FOOD_DB = FOOD_URL + "get";
     /**
      * URL for getting a custom food item
      */
-    public static final String GET_FOOD_URL = FOOD_URL + "get";
+    public static final String GET_FOOD_URL = QUERY_FOOD_DB + "/";
+    /**
+     * URL for getting fdc id from a upc code
+     */
+    public static final String UPC_URL = FOOD_URL + "foodByUpc/";
 
 
     // SHOPPING
@@ -108,19 +171,23 @@ public class Constants {
     /**
      * Get url for getting shopping list
      */
-    public static final String GET_SHOPPING_URL = SHOPPING_URL + "get";
+    public static final String GET_SHOPPING_URL = SHOPPING_URL + "get/";
     /**
      * Add url for adding an item to a shopping list
      */
-    public static final String ADD_SHOPPING_URL = SHOPPING_URL + "add";
+    public static final String ADD_SHOPPING_URL = SHOPPING_URL + "add/";
     /**
      * Remove url for removing an item from a shopping list
      */
-    public static final String REMOVE_SHOPPING_URL = SHOPPING_URL + "remove";
+    public static final String REMOVE_SHOPPING_URL = SHOPPING_URL + "remove/";
     /**
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
-    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout";
+    public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "strikeout/";
+    /**
+     * Strikeout url when the user interacts with custom food items
+     */
+    public static final String STRIKE_SHOPPING_DB_URL = SHOPPING_URL + "strikeoutDb/";
 
     // RECIPES
     /**
@@ -130,7 +197,7 @@ public class Constants {
     /**
      * Add url for adding an item to recipes
      */
-    public static final String ADD_RECIPES_URL = RECIPES_URL + "add";
+    public static final String ADD_RECIPES_URL = RECIPES_URL + "add/";
     /**
      * Remove url for removing an item from recipes
      */
@@ -139,20 +206,92 @@ public class Constants {
      * Url for getting an item from recipes
      */
     public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
+    /**
+     * Url for getting an item from recipes
+     */
+    public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+
+    // SOCIAL
+    /**
+     * Base social url for all social based requests
+     */
+    public static final String SOCIAL_URL = BASE_API_URL + "social/";
+    /**
+     * Add url for getting a users feed
+     */
+    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed/";
+
+    //FOOD LOG
+    /**
+     * Base food log url for all food log based requests
+     */
+    public static final String FOOD_LOG_URL = BASE_API_URL + "log/";
+    /**
+     * Add url for adding an item to food log
+     */
+    public static final String ADD_FOOD_LOG_URL = FOOD_LOG_URL + "add/";
+    /**
+     * Remove url for removing an item from food log
+     */
+    public static final String REMOVE_FOOD_LOG_URL = FOOD_LOG_URL + "remove/";
+    /**
+     * Get url for getting an item from food log
+     */
+    public static final String GET_FOOD_LOG_URL = FOOD_LOG_URL + "get/";
+    /**
+     * Get url for getting an item by day from food log
+     */
+    public static final String GET_FOOD_LOG_BY_DAY_URL = FOOD_LOG_URL + "getDay/";
+
+
+//    // SOCIAL
+//    /**
+//     * Base URL for social endpoints
+//     */
+//    public static final String SOCIAL_URL = BASE_API_URL + "social/";
+//    /**
+//     * URL for getting user posts
+//     */
+//    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
+
+    // PROFILE
+    /**
+     * Base profile endpoints URL
+     */
+    public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+    /**
+     * URL to get profile data
+     */
+    public static final String GET_PROFILE_URL = PROFILE_API_URL + "getProfile/";
+    /**
+     * URL for getting a profile picture
+     */
+    public static final String PROFILE_PICTURE_URL = PROFILE_API_URL + "profilePicture/";
+    /**
+     * URL for getting a profile banner
+     */
+    public static final String BANNER_URL = PROFILE_API_URL + "profileBanner/";
+    /**
+     * URL for updating profile information
+     */
+    public static final String UPDATE_PROFILE_URL = PROFILE_API_URL + "updateProfile/";
+    /**
+     * URL used to update a user's profile picture
+     */
+    public static final String UPDATE_PFP_URL = PROFILE_API_URL + "updatePfp/";
+    /**
+     * URL used to update a user's banner image
+     */
+    public static final String UPDATE_BANNER_URL = PROFILE_API_URL + "updateBanner/";
 
     // OTHER
+    /**
+     * URL for getting images
+     */
+    public static final String IMAGE_URL = BASE_API_URL + "images/";
+
     /**
      * No fdc id associated with this item, used for custom items
      */
     public static final int ITEM_ID_NULL = -1;
-
-    // TAGS
-
-    /**
-     * Volley tags used to control
-     */
-    public enum TAGS {
-        TAG_GET,
-        TAG_POST,
-    }
 }

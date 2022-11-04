@@ -1,5 +1,9 @@
 package com.example.cs309android.fragments.shopping;
 
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.FoodSearchActivity;
-import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
@@ -90,9 +93,9 @@ public class ShoppingFragment extends BaseFragment {
 
         view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(MainActivity.PARCEL_FOODITEMS_LIST, items);
-            bundle.putInt(MainActivity.PARCEL_INTENT_CODE, FoodSearchActivity.INTENT_SHOPPING_LIST);
-            callbackFragment.callback(MainActivity.CALLBACK_SEARCH_FOOD, bundle);
+            bundle.putParcelableArrayList(PARCEL_FOODITEMS_LIST, items);
+            bundle.putInt(PARCEL_INTENT_CODE, SearchActivity.INTENT_SHOPPING_LIST);
+            callbackFragment.callback(CALLBACK_SEARCH_FOOD, bundle);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.shopping_list), (v, windowInsets) -> {

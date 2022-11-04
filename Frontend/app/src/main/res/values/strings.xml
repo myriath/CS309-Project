@@ -30,6 +30,8 @@
     <string name="display_title">Display Settings</string>
     <!-- Strings related to Nutrition -->
     <string name="nutrition">Nutrition</string>
+    <string name="nutrition_food">Food</string>
+    <string name="nutrition_calories">Calories</string>
     <!-- Strings related to Recipes -->
     <string name="recipes">Recipes</string>
     <string name="recipes_id_input">Recipe ID</string>
@@ -82,5 +84,21 @@
     <string name="total_calories">Calories in kcal</string>
     <string name="protein">Protein</string>
     <string name="total_protein">Total protein in grams</string>
+    <string name="barcode_view">Barcode View</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="account">Account</string>
+    <string name="profile_banner">Profile Banner</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="back">Back</string>
+    <string name="bio">Bio</string>
+    <string name="follow">FOLLOW</string>
+    <string name="edit">Edit</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="take_photo">Take photo</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="select_image_source">Select image source</string>
+    <string name="save">SAVE</string>
 
 </resources>

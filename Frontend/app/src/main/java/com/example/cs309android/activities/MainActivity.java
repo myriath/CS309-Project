@@ -1,13 +1,20 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.PREF_NAME;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
 import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
@@ -22,24 +29,29 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.fragments.account.AccountFragment;
+import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
 import com.example.cs309android.fragments.login.LoginFragment;
 import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
-import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.gson.models.SimpleFoodItem;
 import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
 import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
 import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.gson.response.users.LoginResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -49,22 +61,6 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
-    /**
-     * DEBUG variable for testing Logs
-     * TODO: False for prod
-     */
-    public static final boolean DEBUG = true;
-
-    /**
-     * Name of the app for all mentions in the app
-     */
-    public static final String APP_NAME = "Föd";
-
-    /**
-     * Preference name for this app's shared preferences.
-     */
-    public static final String PREF_NAME = "COMS309";
-
     /**
      * Fragment containing the current login window.
      */
@@ -77,6 +73,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private int currentFragment = 2;
 
     /**
+     * GlobalClass for storing universal values
+     */
+    private GlobalClass global;
+
+    /**
      * Response codes for callback method. Used by Fragments for this class
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
@@ -85,25 +86,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public static final int CALLBACK_MOVE_TO_HOME = 3;
     public static final int CALLBACK_FOOD_DETAIL = 4;
     public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_CLOSE_PROFILE = 7;
+    public static final int CALLBACK_FOLLOW = 8;
 //    public static final int CALLBACK_ = 0;
-
-    /**
-     * This is used wherever a food item needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEM = "fooditem";
-    /**
-     * This is used whenever a list of food items needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
-    /**
-     * This is used to parcel the intent of opening an activity.
-     */
-    public static final String PARCEL_INTENT_CODE = "intentCode";
-
-    /**
-     * Preference key strings for the username and hash
-     */
-    public static final String PREF_TOKEN = "token";
 
     /**
      * Used to launch various activities.
@@ -146,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        global = ((GlobalClass) getApplicationContext());
+        global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
+
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
         if (SSL_OFF) {
@@ -175,18 +164,31 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
-        // Gets stored username and password hash, if they exist
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String token = pref.getString(PREF_TOKEN, "").trim();
+        if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
+            // TODO: First time
+            global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();
+        }
+
+        // Gets stored password hash, if it exists
+        Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
+
+        if (users == null) users = new HashMap<>();
+        global.setUsers(users);
+        global.updateLoginPrefs();
+
+        String token = users.get(users.get(USERS_LATEST));
+
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        if (!token.equals("")) {
+        if (token != null) {
             new LoginTokenRequest(token).unspinOnComplete(response -> {
+                LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
                 // Checks if the result is valid or not. If not, opens the login page
-                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
+                int result = loginResponse.getResult();
+
+                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0, loginResponse);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
-                else ((GlobalClass) getApplicationContext()).setToken(token);
+                else Util.login(global, token, loginResponse, MainActivity.this);
             }, error -> {
                 error.printStackTrace();
                 startLoginFragment();
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         } else startLoginFragment();
 
         navbar = findViewById(R.id.navbar);
-        navbar.setSelectedItemId(R.id.home);
+
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
@@ -245,8 +247,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
-            } else if (item.getItemId() == R.id.settings) {
-                mainFragment = new SettingsFragment();
+            } else if (item.getItemId() == R.id.account) {
+                mainFragment = AccountFragment.newInstance(global.getUsername(), true);
                 mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
@@ -260,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             return true;
         });
+        navbar.setSelectedItemId(R.id.home);
         navbar.setOnItemReselectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 System.out.println("shopping re");
@@ -269,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 System.out.println("home re");
             } else if (item.getItemId() == R.id.recipes) {
                 System.out.println("recipes re");
-            } else if (item.getItemId() == R.id.settings) {
+            } else if (item.getItemId() == R.id.account) {
                 System.out.println("settings re");
             }
         });
@@ -319,10 +322,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             case (CALLBACK_MOVE_TO_HOME): {
                 mainFragment = new HomeFragment();
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
-                transaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
                 break;
@@ -335,10 +338,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
-                Intent intent = new Intent(this, FoodSearchActivity.class);
+                Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
+                break;
+            }
+            case (CALLBACK_MOVE_TO_SETTINGS): {
+                mainFragment = new SettingsFragment();
+                mainFragment.setCallbackFragment(this);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
+                currentFragment = 5;
                 break;
             }
         }
@@ -370,27 +385,24 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 .commit();
     }
 
-    public void regenToken(String oldToken, int depth) {
+    /**
+     * Regenerates a token (5 retries max)
+     *
+     * @param oldToken Old token for authentication
+     * @param depth    current retry counter
+     */
+    public void regenToken(String oldToken, int depth, LoginResponse oldResponse) {
         String newToken = Hasher.genToken();
 
         new RegenTokenRequest(newToken, oldToken).request(response -> {
-            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-            int result = genericResponse.getResult();
-            if (result == RESULT_REGEN_TOKEN && depth < 5) {
-                regenToken(oldToken, depth + 1);
-            } else if (result == RESULT_LOGGED_IN) {
-                SharedPreferences pref = getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString(MainActivity.PREF_TOKEN, newToken);
-                editor.apply();
+            GenericResponse loginResponse = Util.objFromJson(response, GenericResponse.class);
+            int result = loginResponse.getResult();
 
-                ((GlobalClass) getApplicationContext()).setToken(newToken);
-            } else {
-                startLoginFragment();
-            }
-        }, error -> {
-            error.printStackTrace();
-            startLoginFragment();
+            if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH)
+                regenToken(oldToken, depth + 1, oldResponse);
+            else if (result == RESULT_LOGGED_IN)
+                Util.login(global, newToken, oldResponse, MainActivity.this);
+            else startLoginFragment();
         }, MainActivity.this);
     }
 }

@@ -165,6 +165,46 @@ public class CustomFoodItem implements Parcelable {
     }
 
     /**
+     * Getter for the ingredients
+     * @return ingredients
+     */
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    /**
+     * Getter for the calories
+     * @return calories
+     */
+    public float getCalories() {
+        return calories;
+    }
+
+    /**
+     * Getter for the fat
+     * @return fat
+     */
+    public float getFat() {
+        return fat;
+    }
+
+    /**
+     * Getter for the carbs
+     * @return carbs
+     */
+    public float getCarbs() {
+        return carbs;
+    }
+
+    /**
+     * Getter for the protein
+     * @return protein
+     */
+    public float getProtein() {
+        return protein;
+    }
+
+    /**
      * Parcelable required method
      *
      * @return 0

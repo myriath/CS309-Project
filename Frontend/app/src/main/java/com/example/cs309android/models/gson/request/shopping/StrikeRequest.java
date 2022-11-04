@@ -1,6 +1,6 @@
 package com.example.cs309android.models.gson.request.shopping;
 
-import com.example.cs309android.models.gson.PatchRequest;
+import com.example.cs309android.models.gson.request.abstraction.PatchRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
@@ -11,20 +11,27 @@ import com.google.gson.annotations.Expose;
  */
 public class StrikeRequest extends PatchRequest {
     /**
-     * Index of the item to strikeout
+     * ID of the item to strikeout
      */
     @Expose
-    private final String itemName;
+    private final int id;
+    /**
+     * True if the item to strike is custom
+     */
+    @Expose
+    private final boolean isCustom;
 
     /**
      * Public constructor
      *
-     * @param itemName Name of the item
-     * @param token Token for authentication
+     * @param id       ID of the item
+     * @param isCustom True if the item is custom
+     * @param token    Token for authentication
      */
-    public StrikeRequest(String itemName, String token) {
-        super(Constants.STRIKE_SHOPPING_URL + "/" + token);
-        this.itemName = itemName;
+    public StrikeRequest(int id, boolean isCustom, String token) {
+        super(Constants.STRIKE_SHOPPING_URL + token);
+        this.id = id;
+        this.isCustom = isCustom;
     }
 
     /**
@@ -32,7 +39,16 @@ public class StrikeRequest extends PatchRequest {
      *
      * @return Index of the strikeout item.
      */
-    public String getItemName() {
-        return itemName;
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Getter for the custom bool
+     *
+     * @return True if the item to strike is custom, false if it is fdc
+     */
+    public boolean isCustom() {
+        return isCustom;
     }
 }
