@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="user_recipes")
@@ -36,10 +37,8 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-
-
-
-
-
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="rid")
+    private Set<Comment> comments;
 
 }

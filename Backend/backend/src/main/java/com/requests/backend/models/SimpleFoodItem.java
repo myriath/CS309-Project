@@ -10,10 +10,10 @@ import com.google.gson.annotations.Expose;
 public class SimpleFoodItem {
 
     /**
-     * FDC ID from the api
+     * FDC ID from the api or Custom Food Id
      */
     @Expose
-    private int fdcId;
+    private int id;
 
     /**
      * Description / Item name from api
@@ -26,6 +26,9 @@ public class SimpleFoodItem {
     @Expose
     private boolean stricken;
 
+    @Expose
+    private boolean isCustom;
+
     /**
      * Constructor for gson
      *
@@ -33,7 +36,7 @@ public class SimpleFoodItem {
      * @param description description / title
      */
     public SimpleFoodItem(int fdcId, String description) {
-        this.fdcId = fdcId;
+        this.id = fdcId;
         this.description = description;
         this.stricken = false;
     }
@@ -46,7 +49,7 @@ public class SimpleFoodItem {
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
     public SimpleFoodItem(int fdcId, String description, boolean stricken) {
-        this.fdcId = fdcId;
+        this.id = fdcId;
         this.description = description;
         this.stricken = stricken;
     }
@@ -57,7 +60,7 @@ public class SimpleFoodItem {
      * @return item id
      */
     public int getFdcId() {
-        return fdcId;
+        return id;
     }
 
     /**
@@ -85,6 +88,14 @@ public class SimpleFoodItem {
      */
     public void setStricken(boolean stricken) {
         this.stricken = stricken;
+    }
+
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public void setCustom(boolean isCustom) {
+        this.isCustom = isCustom;
     }
 
 }

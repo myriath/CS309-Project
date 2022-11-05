@@ -77,23 +77,14 @@ build-android:
 
 ###### TEST JOBS ######
 
-test-spring-dev:
+test-spring:
   rules:
-    - if: $CI_COMMIT_BRANCH == "backend-dev"
+    - if: $CI_COMMIT_BRANCH == "backend-dev" || $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
   stage: maven-test
   script:
-    - echo "STUB!"
-
-test-spring-main:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - springboot_tag
-  stage: maven-test
-  script:
-    - echo "STUB!"
+    - mvn $MAVEN_CLI_OPTS test
 
 test-android:
   rules:

@@ -12,15 +12,18 @@ public class ShoppingList {
     @Id
     private String username;
 
-    @Expose
-    private Integer fdcId;
-
     @Id
+    @Expose
+    private Integer id;
+
     @Expose
     private String description;
 
     @Expose
     private Boolean  stricken;
+
+    @Expose
+    private Boolean isCustom;
 
     public ShoppingList() {
 
@@ -34,12 +37,12 @@ public class ShoppingList {
         this.username = username;
     }
 
-    public Integer getFdcId() {
-        return fdcId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setFdcId(Integer fdcId) {
-        this.fdcId = fdcId;
+    public void setId(Integer fdcId) {
+        this.id = fdcId;
     }
 
     public String getItemName() {
@@ -57,6 +60,10 @@ public class ShoppingList {
     public void setStricken(Boolean stricken) {
         this.stricken = stricken;
     }
+
+    public void setIsCustom(Boolean isCustom) { this.isCustom = isCustom; }
+
+    public Boolean getIsCustom() { return isCustom; }
 }
 
 

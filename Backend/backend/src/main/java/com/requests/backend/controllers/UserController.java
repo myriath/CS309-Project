@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Collection;
 
@@ -279,9 +282,34 @@ public class UserController {
         return gson.toJson(res);
     }
 
+    public static String getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
+        String hashedToken = Hasher.sha256(token);
 
+        ResultResponse res = new ResultResponse();
 
+        Token[] tokenQuery = tokenRepository.queryGetToken(hashedToken);
 
+        try {
+            // If the token is not valid, return RESULT_USER_HASH_MISMATCH
+            if (tokenQuery.length == 0) {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            }
+            else {
+                runner.run(tokenQuery[0].getUsername(), res);
+            }
 
+            // If the server encounters an error, return RESULT_ERROR
+        } catch (Exception e) {
+            e.printStackTrace();
+            res.setResult(RESULT_ERROR);
+        }
 
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(res);
+    }
+
+    public interface RunWithUsername {
+        void run(String username, ResultResponse res);
+    }
 }

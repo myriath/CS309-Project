@@ -1,11 +1,25 @@
 package com.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Util constants class
  *
  * @author Mitch Hudson
  */
 public class Constants {
+    /**
+     * Gson object used by the entire application.
+     */
+    public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .serializeNulls();
+    public static final Gson GSON = GSON_BUILDER.create();
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
+
     /**
      * Private constructor (Util class)
      */
@@ -92,6 +106,30 @@ public class Constants {
      * Strikeout url for telling the server whether the item should be struck out or not.
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "/strikeout";
+
+
+    // IMAGE PATHS
+    public static final String MEDIA_BASE = "/springMedia/";
+    /**
+     * Profile picture storage location
+     */
+    public static final String PFP_SOURCE = MEDIA_BASE + "pfps/";
+    /**
+     * Default pfp image path
+     */
+    public static final String DEFAULT_PFP = MEDIA_BASE + "defaultpfp.webp";
+    /**
+     * Banner image storage location
+     */
+    public static final String BANNER_SOURCE = MEDIA_BASE + "banner/";
+    /**
+     * Default banner image path
+     */
+    public static final String DEFAULT_BANNER = MEDIA_BASE + "defaultbanner.webp";
+    /**
+     * Regular image storage location
+     */
+    public static final String MEDIA_SOURCE = MEDIA_BASE + "images/";
 
 
     // TAGS

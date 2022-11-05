@@ -92,6 +92,7 @@ public class ShoppingListController {
         String itemName = foodItem.getDescription();
         int fdcId = foodItem.getFdcId();
         boolean stricken = false;
+        boolean isCustom = foodItem.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -107,7 +108,7 @@ public class ShoppingListController {
             String username = tokenQueryRes[0].getUsername();
 
             try {
-                shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken);
+                shoppingRepository.queryCreateShoppingListEntry(itemName, username, fdcId, isCustom, stricken);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -126,7 +127,8 @@ public class ShoppingListController {
         String hashedToken = Hasher.sha256(token);
 
         StrikeoutRequest req = gson.fromJson(json, StrikeoutRequest.class);
-        String itemName = req.getItemName();
+        int id = req.getId();
+        boolean isCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -144,7 +146,7 @@ public class ShoppingListController {
             // User does not exist
             try {
                 // User already passed authentication from token earlier
-                shoppingRepository.queryShoppingChangeStricken(username, itemName);
+                shoppingRepository.queryShoppingChangeStricken(id, isCustom, username);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -162,7 +164,7 @@ public class ShoppingListController {
         String hashedToken = Hasher.sha256(token);
 
         ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
-        String itemName = req.getItemName();
+        int reqId = req.getId();
 
         ResultResponse res = new ResultResponse();
 
@@ -180,7 +182,7 @@ public class ShoppingListController {
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(username, itemName);
+                shoppingRepository.queryDeleteListItem(username, reqId);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
