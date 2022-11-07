@@ -100,5 +100,7 @@
     <string name="from_gallery">From gallery</string>
     <string name="select_image_source">Select image source</string>
     <string name="save">SAVE</string>
+    <string name="title">Title</string>
+    <string name="recipe_name">Recipe Name</string>
 
 </resources>

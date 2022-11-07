@@ -13,6 +13,7 @@ import com.example.cs309android.models.gson.response.GenericResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
-        Button addRecipe = findViewById(R.id.add_recipe_button);
+        FloatingActionButton addRecipe = findViewById(R.id.add_recipe_button);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
