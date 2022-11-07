@@ -35,9 +35,9 @@
     <!-- Strings related to Recipes -->
     <string name="recipes">Recipes</string>
     <string name="recipes_id_input">Recipe ID</string>
-    <string name="recipes_name_input">Recipe Name</string>
+    <string name="recipes_name_input">Name</string>
     <string name="recipes_search">Search</string>
-    <string name="recipes_instructions">Recipe Instructions</string>
+    <string name="recipes_instructions">Instructions</string>
     <string name="recipes_add_recipe">ADD RECIPE</string>
     <string name="recipes_new_recipe_title">New Recipe</string>
     <!-- Strings related to Shopping -->
@@ -102,5 +102,9 @@
     <string name="save">SAVE</string>
     <string name="title">Title</string>
     <string name="recipe_name">Recipe Name</string>
+    <string name="create_recipe">CREATE RECIPE</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="description">Description</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Util.setSubtitle;
 
@@ -38,10 +39,6 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class FoodDetailsActivity extends AppCompatActivity {
-    /**
-     * Used to parcel the control variable
-     */
-    public static final String PARCEL_BUTTON_CONTROL = "button-control";
     /**
      * Used to tell the activity to display no fab
      */
@@ -118,7 +115,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.add_item);
-        int control = intent.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
+        int control = intent.getIntExtra(PARCEL_BUTTON_CONTROL, CONTROL_NONE);
         if (control == CONTROL_ADD) {
             fab.setVisibility(View.VISIBLE);
             spacer.setMinimumHeight((int) dp16 * 10);

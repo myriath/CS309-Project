@@ -1,6 +1,14 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
@@ -76,20 +84,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * GlobalClass for storing universal values
      */
     private GlobalClass global;
-
-    /**
-     * Response codes for callback method. Used by Fragments for this class
-     */
-    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
-    public static final int CALLBACK_CLOSE_LOGIN = 1;
-    public static final int CALLBACK_START_LOGIN = 2;
-    public static final int CALLBACK_MOVE_TO_HOME = 3;
-    public static final int CALLBACK_FOOD_DETAIL = 4;
-    public static final int CALLBACK_SEARCH_FOOD = 5;
-    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_CLOSE_PROFILE = 7;
-    public static final int CALLBACK_FOLLOW = 8;
-//    public static final int CALLBACK_ = 0;
 
     /**
      * Used to launch various activities.
@@ -333,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
-                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
+                intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }

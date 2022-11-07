@@ -5,6 +5,10 @@
       <map>
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Experiments/Mitch/Android/app/src/main/res/layout/fragment_navbar.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add.xml" value="0.196" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add_photo.xml" value="0.3415" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_back.xml" value="0.3415" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_camera.xml" value="0.3415" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_edit.xml" value="0.3415" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_favorite.xml" value="0.1835" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_home.xml" value="0.228" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_home_selected.xml" value="0.228" />
@@ -17,16 +21,22 @@
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-v24/light_cursor.xml" value="0.228" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable/ic_launcher_background.xml" value="0.14" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout-v28/fragment_login.xml" value="0.23097826086956522" />
-        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_custom_food.xml" value="0.1734375" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_account_edit.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_add_recipe.xml" value="0.25" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_camera.xml" value="0.1503623188405797" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_custom_food.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.18" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_search.xml" value="0.2667572463768116" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.27330173775671407" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_recipe_details.xml" value="0.20729166666666668" />
-        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/custom_nutrition_item.xml" value="0.2667572463768116" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_search.xml" value="0.1503623188405797" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/bottom_sheet_choose_photo.xml" value="0.1503623188405797" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/custom_nutrition_item.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/dark_cursor.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/food_search_branded.xml" value="0.2667572463768116" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/food_search_foundation.xml" value="0.225" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/food_search_item.xml" value="0.2667572463768116" />
+        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_account.xml" value="0.33" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_home.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_navbar.xml" value="0.14722222222222223" />
@@ -56,49 +66,9 @@
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/layout/fragment_navbar.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/layout/fragment_register.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_account.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add_photo.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_back.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_camera.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_edit.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_home.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_image_search.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_recipes.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_remove.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_save.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_settings.xml" value="0.2265" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_account_edit.xml" value="0.264" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_add_recipe.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_custom_food.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_search.xml" value="0.1458966565349544" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.11503623188405797" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_recipe_details.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_search.xml" value="0.11503623188405797" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/bottom_sheet_choose_photo.xml" value="0.2989583333333333" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_account.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_bottom_sheet_get_photo.xml" value="0.11503623188405797" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_home.xml" value="0.14375" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_login.xml" value="0.1" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_nutrition.xml" value="0.11503623188405797" />
-        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.11503623188405797" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_add_recipe.xml" value="0.33" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_custom_food.xml" value="0.3473731884057971" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.3473731884057971" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_food_search.xml" value="0.3473731884057971" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/activity_recipe_details.xml" value="0.1" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/custom_nutrition_item.xml" value="0.21693840579710144" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/food_search_branded.xml" value="0.425" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_home.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_shopping.xml" value="0.12182971014492754" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/nutrition_item.xml" value="0.1" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/recipe_item.xml" value="0.14666666666666667" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/shopping_list_item.xml" value="0.1" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/menu/bottom_nav_menu.xml" value="0.425" />
-        <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/xml/settings_screen.xml" value="0.425" />
       </map>
     </option>
   </component>

@@ -71,6 +71,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="?attr/colorSecondaryContainer"
+            app:tint="?attr/colorOnSecondaryContainer"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,6 +83,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_scan"
         android:contentDescription="@string/scan_barcode"
+        android:elevation="0dp"
         android:layout_gravity="top|end"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="96dp" />

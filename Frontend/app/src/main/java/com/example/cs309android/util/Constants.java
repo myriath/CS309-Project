@@ -48,11 +48,16 @@ public class Constants {
     public static final int CALLBACK_FOOD_DETAIL = 4;
     public static final int CALLBACK_SEARCH_FOOD = 5;
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_EDIT_ACCOUNT = 7;
-    public static final int CALLBACK_CLOSE_PROFILE = 8;
-    public static final int CALLBACK_FOLLOW = 9;
-    public static final int CALLBACK_IMAGE_URI = 10;
-    public static final int CALLBACK_CLOSE_DETAIL = 11;
+    public static final int CALLBACK_CLOSE_PROFILE = 7;
+    public static final int CALLBACK_FOLLOW = 8;
+    public static final int CALLBACK_IMAGE_URI = 9;
+    public static final int CALLBACK_CLOSE_DETAIL = 10;
+
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    public static final int INTENT_NONE = -1;
+    public static final int INTENT_SHOPPING_LIST = 0;
 
 
     public static final String PARCEL_IMAGE_URI = "image_uri";
@@ -68,6 +73,10 @@ public class Constants {
      * This is used to parcel the intent of opening an activity.
      */
     public static final String PARCEL_INTENT_CODE = "intentCode";
+    /**
+     * Used to parcel the control variable
+     */
+    public static final String PARCEL_BUTTON_CONTROL = "button-control";
 
     // RESULT CODES
     /**

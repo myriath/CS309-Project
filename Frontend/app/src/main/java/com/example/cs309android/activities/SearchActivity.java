@@ -3,7 +3,10 @@ package com.example.cs309android.activities;
 import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.INTENT_NONE;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
@@ -90,8 +93,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
      * Various intents tell the app what to do when certain things are done.
      */
     private int intentCode;
-    public static final int INTENT_NONE = -1;
-    public static final int INTENT_SHOPPING_LIST = 0;
 
     /**
      * Ran when the activity is created.
@@ -291,7 +292,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 } else {
                     Intent intent = new Intent(this, FoodDetailsActivity.class);
                     intent.putExtra(PARCEL_FOODITEM, item);
-                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                     foodDetailsLauncher.launch(intent);
                 }
                 break;
@@ -317,7 +318,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                     BrandedFoodItem item = Util.objFromJson(response, BrandedFoodItem.class);
                                     Intent intent = new Intent(this, FoodDetailsActivity.class);
                                     intent.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(item.getFdcId(), item.getDescription(), item.getBrandOwner(), false));
-                                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                                     foodDetailsLauncher.launch(intent);
                                 }, SearchActivity.this);
                             } else {
