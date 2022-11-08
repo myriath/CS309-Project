@@ -188,22 +188,32 @@
                 android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
-                <ListView
-                    android:id="@+id/ingredients"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    app:tint="?attr/colorOnSecondary"
-                    android:backgroundTint="?attr/colorSecondaryContainer"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_add"
-                    android:contentDescription="@string/add_ingredient" />
+                    <LinearLayout
+                        android:id="@+id/ingredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+
+                    <ImageButton
+                        android:id="@+id/addIngredient"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:tint="?attr/colorOnSecondary"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="?attr/colorSecondaryContainer"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="@string/add_ingredient" />
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -220,22 +230,32 @@
                 android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
-                <ListView
-                    android:id="@+id/instructions"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    app:tint="?attr/colorOnSecondary"
-                    android:backgroundTint="?attr/colorSecondaryContainer"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_add"
-                    android:contentDescription="@string/add_ingredient" />
+                    <LinearLayout
+                        android:id="@+id/instructions"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+
+                    <ImageButton
+                        android:id="@+id/addInstruction"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:tint="?attr/colorOnSecondary"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="?attr/colorSecondaryContainer"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="@string/add_ingredient" />
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

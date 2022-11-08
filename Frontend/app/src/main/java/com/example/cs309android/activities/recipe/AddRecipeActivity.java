@@ -1,62 +1,111 @@
 package com.example.cs309android.activities.recipe;
 
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
 
+import android.content.Intent;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.cs309android.R;
+import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.util.Constants;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class AddRecipeActivity extends AppCompatActivity implements CallbackFragment {
+    /**
+     * Launcher for adding ingredients
+     */
+    private ActivityResultLauncher<Intent> foodSearchLauncher;
+
+    private float dp16;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
+        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
+
+        LinearLayout ingredientList = findViewById(R.id.ingredients);
+        LinearLayout instructionList = findViewById(R.id.instructions);
+
+        foodSearchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        SimpleFoodItem item = Objects.requireNonNull(data).getParcelableExtra(Constants.PARCEL_FOODITEM);
+
+                        View inflatedView = View.inflate(this, R.layout.ingredient_add_list_item, null);
+                        ((TextView) inflatedView.findViewById(R.id.name)).setText(item.getCappedDescription(25));
+                        ingredientList.addView(inflatedView);
+                    }
+                }
+        );
+
+        findViewById(R.id.addIngredient).setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(PARCEL_INTENT_CODE, INTENT_RECIPE_ADD);
+            foodSearchLauncher.launch(intent);
+        });
+
+        findViewById(R.id.addInstruction).setOnClickListener(view -> {
+            View inflatedView = View.inflate(this, R.layout.text_layout, null);
+            TextInputLayout inputLayout = inflatedView.findViewById(R.id.inputLayout);
+            TextInputEditText editText = inflatedView.findViewById(R.id.editText);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, (int) dp16);
+            inputLayout.setLayoutParams(params);
+
+            editText.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+            editText.setHint("Step " + (instructionList.getChildCount() + 1) + ".");
+
+            instructionList.addView(inflatedView);
+        });
+
         ExtendedFloatingActionButton addRecipe = findViewById(R.id.add_recipe_button);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-//        setSupportActionBar(toolbar);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
 //        addRecipe.setOnClickListener(view1 -> {
-//            TextInputLayout RnameInput = findViewById(R.id.recipeName);
-//            TextInputLayout RInstructionsInput = findViewById(R.id.recipeInstructionsInput);
-//            if(!validateFields(RnameInput, RInstructionsInput)) {
-//                return;
-//            }
-//            new AddRecipeRequest(((GlobalClass) getApplicationContext()).getToken(), RnameInput.getEditText().getText().toString(), RInstructionsInput.getEditText().getText().toString()).request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+//            TextInputLayout nameInput = findViewById(R.id.recipeName);
+//            TextInputLayout descriptionInput = findViewById(R.id.recipeDescription);
+//            if (!validateFields(nameInput, descriptionInput)) return;
+//
+//            String name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
+//            String description = Objects.requireNonNull(descriptionInput.getEditText()).getText().toString();
+//            Ingredient[] ingredients = ;
+//            String[] instructions;
+//            new AddRecipeRequest(((GlobalClass) getApplicationContext()).getToken(), name, description, ingredients, instructions).request(response -> {
 //                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
 //
 //                if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
 //                    Toaster.toastShort("Recipe Added", this);
-//                    RnameInput.getEditText().setText("");
-//                    RInstructionsInput.getEditText().setText("");
+//                    finish();
 //                }
 //                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
 //                    Toaster.toastShort("That recipe is already taken", this);
-//
 //                }
 //                else {
 //                    Toaster.toastShort("Something went wrong", this);
@@ -70,6 +119,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             select.show(getSupportFragmentManager(), ModalImageSelect.TAG);
         });
     }
+
     /**
      * Handles the back button on the toolbar
      *

@@ -58,6 +58,7 @@ public class Constants {
      */
     public static final int INTENT_NONE = -1;
     public static final int INTENT_SHOPPING_LIST = 0;
+    public static final int INTENT_RECIPE_ADD = 1;
 
 
     public static final String PARCEL_IMAGE_URI = "image_uri";
@@ -77,6 +78,10 @@ public class Constants {
      * Used to parcel the control variable
      */
     public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    /**
+     * Used to parcel an item's position in a list
+     */
+    public static final String PARCEL_ITEM_POSITION = "item_pos";
 
     // RESULT CODES
     /**

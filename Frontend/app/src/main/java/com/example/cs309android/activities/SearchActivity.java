@@ -4,6 +4,7 @@ import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.INTENT_NONE;
+import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
@@ -161,6 +162,15 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                 }, SearchActivity.this, getWindow().getDecorView());
                                 break;
                             }
+                            case INTENT_RECIPE_ADD: {
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
+
+                                Intent intent1 = new Intent();
+                                intent1.putExtra(PARCEL_FOODITEM, item);
+                                setResult(RESULT_OK, intent1);
+                                finish();
+                                break;
+                            }
                         }
                     }
                 }
@@ -203,8 +213,17 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
-        setResult(RESULT_OK, intent);
+        switch (intentCode) {
+            case INTENT_SHOPPING_LIST: {
+                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
+                setResult(RESULT_OK, intent);
+                break;
+            }
+            case INTENT_RECIPE_ADD: {
+                setResult(RESULT_CANCELED);
+                break;
+            }
+        }
         finish();
         super.onBackPressed();
     }

@@ -135,6 +135,23 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
+     * Gets the description capped at a given length
+     * If the description is longer than length it will be shortened to that and have ellipses added.
+     *
+     * @param length Max length for the description.
+     * @return Capped length string
+     */
+    public String getCappedDescription(int length) {
+        if (length < 3) return description;
+
+        int descriptionLength = description.length();
+        if (descriptionLength > length) {
+            return description.substring(0, length - 2) + "...";
+        }
+        return description;
+    }
+
+    /**
      * Getter for the brand
      *
      * @return item brand / null
