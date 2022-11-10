@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.Ingredient;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 
 /**
  * Custom view inflates the nutrition_item layout.

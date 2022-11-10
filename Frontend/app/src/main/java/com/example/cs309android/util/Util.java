@@ -9,9 +9,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.gson.response.users.LoginResponse;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -3,15 +3,13 @@ package com.example.cs309android.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.Instruction;
+import com.example.cs309android.models.api.models.Instruction;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

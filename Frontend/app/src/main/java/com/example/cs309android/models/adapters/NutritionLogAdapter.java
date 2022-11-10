@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.FoodLogItem;
+import com.example.cs309android.models.api.models.FoodLogItem;
 
 import java.util.ArrayList;
 

@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.SimpleRecipeItem;
 
 import java.util.ArrayList;
 

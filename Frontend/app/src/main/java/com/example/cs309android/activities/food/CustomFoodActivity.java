@@ -5,7 +5,6 @@ import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.widget.LinearLayout;
 import android.widget.Space;
 
@@ -13,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.CustomFoodItem;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.food.CustomFoodAddRequest;
-import com.example.cs309android.models.gson.response.food.CustomFoodAddResponse;
+import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.food.CustomFoodAddRequest;
+import com.example.cs309android.models.api.response.food.CustomFoodAddResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;

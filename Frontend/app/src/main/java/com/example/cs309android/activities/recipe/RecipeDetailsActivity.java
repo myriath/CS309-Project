@@ -10,9 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-
-import java.util.Objects;
+import com.example.cs309android.models.api.models.SimpleRecipeItem;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
     private int fdcId;
@@ -32,11 +30,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         Intent i = getIntent();
         item = i.getParcelableExtra("HomeFragment.recipe");
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(item.getRecipeName());
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle(item.getRecipeName());
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
 
         ImageView image = findViewById(R.id.image_view);
         TextView recipeInstructions = findViewById(R.id.recipe_instructions);

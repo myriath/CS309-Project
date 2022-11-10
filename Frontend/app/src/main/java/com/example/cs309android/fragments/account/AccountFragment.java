@@ -23,12 +23,12 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.AccountEditActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.FeedAdapter;
-import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfileRequest;
-import com.example.cs309android.models.gson.request.recipes.GetRecipesRequest;
-import com.example.cs309android.models.gson.response.recipes.GetRecipesResponse;
-import com.example.cs309android.models.gson.response.social.GetProfileResponse;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
