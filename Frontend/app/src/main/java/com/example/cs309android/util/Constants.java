@@ -224,6 +224,14 @@ public class Constants {
      * Url for getting an item from recipes
      */
     public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+    /**
+     * URL for setting a recipe's image
+     */
+    public static final String ADD_RECIPE_IMAGE_URL = RECIPES_URL + "addPicture/";
+    /**
+     * URL for getting a recipe's image
+     */
+    public static final String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
 
     // SOCIAL
     /**

@@ -88,21 +88,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!--                <com.google.android.material.textfield.TextInputLayout-->
-                <!--                    android:id="@+id/recipeName"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:hint="@string/recipe_name"-->
-                <!--                    android:padding="16dp">-->
-
-                <!--                    <com.google.android.material.textfield.TextInputEditText-->
-                <!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="48dp"-->
-<!--                        android:inputType="textCapWords"-->
-<!--                        android:maxLength="100" />-->
-
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -205,7 +190,7 @@
                         android:id="@+id/addIngredient"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        app:tint="?attr/colorOnSecondary"
+                        app:tint="?attr/colorOnSecondaryContainer"
                         android:layout_gravity="center_horizontal"
                         android:backgroundTint="?attr/colorSecondaryContainer"
                         android:layout_marginHorizontal="16dp"
@@ -247,7 +232,7 @@
                         android:id="@+id/addInstruction"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        app:tint="?attr/colorOnSecondary"
+                        app:tint="?attr/colorOnSecondaryContainer"
                         android:layout_gravity="center_horizontal"
                         android:backgroundTint="?attr/colorSecondaryContainer"
                         android:layout_marginHorizontal="16dp"

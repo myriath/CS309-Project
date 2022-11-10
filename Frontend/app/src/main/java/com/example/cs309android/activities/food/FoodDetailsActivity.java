@@ -48,11 +48,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
      */
     public static final int CONTROL_ADD = 1;
 
-    /**
-     * DP measurements
-     */
-    public float dp16;
-    public float dp8;
+    private int dp16;
+    private int dp8;
 
     /**
      * Layout for displaying the food details
@@ -72,8 +69,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
-        dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
+
+        dp16 = (int) Util.scalePixels(16);
+        dp8 = (int) Util.scalePixels(8);
 
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -118,10 +116,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         int control = intent.getIntExtra(PARCEL_BUTTON_CONTROL, CONTROL_NONE);
         if (control == CONTROL_ADD) {
             fab.setVisibility(View.VISIBLE);
-            spacer.setMinimumHeight((int) dp16 * 10);
+            spacer.setMinimumHeight((int) Util.scalePixels(160));
         } else {
             fab.setVisibility(View.GONE);
-            spacer.setMinimumHeight((int) dp16 * 4);
+            spacer.setMinimumHeight((int) Util.scalePixels(64));
         }
 
         fab.setOnClickListener(view -> {
@@ -172,7 +170,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         if (servingUnit != null) {
@@ -180,7 +178,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             subtitle.setText(String.format(Locale.getDefault(), "per %.02f %s serving", servingSize, servingUnit));
             subtitle.setTextSize(24f);
             subtitle.setEnabled(false);
-            subtitle.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+            subtitle.setPadding(dp16, dp8, dp16, dp8);
             detailsLayout.addView(subtitle);
         }
 
@@ -189,10 +187,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight((int) dp16);
+        space.setMinimumHeight(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -209,7 +207,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         // Linear layout inside CardView with details
         layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -235,7 +233,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         // Macro nutrients
@@ -243,10 +241,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight((int) dp16);
+        space.setMinimumHeight(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -309,7 +307,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.ingredients));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         // Body CardView
@@ -317,7 +315,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         TextView ingredients = new TextView(this);
         ingredients.setTextSize(20f);
-        ingredients.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        ingredients.setPadding(dp16, dp16, dp16, dp16);
         ingredients.setText(ingredientsText);
         cardView.addView(ingredients);
         detailsLayout.addView(cardView);

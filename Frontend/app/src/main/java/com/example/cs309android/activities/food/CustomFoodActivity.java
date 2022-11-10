@@ -33,24 +33,15 @@ public class CustomFoodActivity extends AppCompatActivity {
      */
     private SimpleFoodItem item;
 
-    /**
-     * DP measurements
-     */
-    public float dp16;
-    public float dp8;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_food);
 
-        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
-        dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
-
         Intent intent = getIntent();
         item = intent.getParcelableExtra(PARCEL_FOODITEM);
         Space spacer = new Space(this);
-        spacer.setMinimumHeight((int) dp16 * 10);
+        spacer.setMinimumHeight((int) Util.scalePixels(160));
         /**
          * Layout for displaying the food details
          */

@@ -1,6 +1,7 @@
 package com.example.cs309android.models.gson.request.recipes;
 
 import com.example.cs309android.models.gson.models.Ingredient;
+import com.example.cs309android.models.gson.models.Instruction;
 import com.example.cs309android.models.gson.request.abstraction.PostRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
@@ -28,7 +29,7 @@ public class AddRecipeRequest extends PostRequest {
      * Instruction array for the recipe
      */
     @Expose
-    private final String[] instructions;
+    private final Instruction[] instructions;
 
     /**
      * Constructor to be used by GSON
@@ -39,7 +40,7 @@ public class AddRecipeRequest extends PostRequest {
      * @param ingredients  Recipe ingredients
      * @param instructions Recipe Instructions
      */
-    public AddRecipeRequest(String token, String recipeName, String description, Ingredient[] ingredients, String[] instructions) {
+    public AddRecipeRequest(String token, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions) {
         super(Constants.ADD_RECIPES_URL + "/" + token);
         this.recipeName = recipeName;
         this.description = description;
@@ -79,7 +80,7 @@ public class AddRecipeRequest extends PostRequest {
      *
      * @return instructions array (ORDERED)
      */
-    public String[] getInstructions() {
+    public Instruction[] getInstructions() {
         return instructions;
     }
 }

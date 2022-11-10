@@ -4,33 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginEnd="48dp">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardCornerRadius="8dp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginVertical="8dp"-->
+<!--        android:layout_marginEnd="48dp">-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
             <EditText
                 android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:inputType="numberDecimal"
-                android:hint="@string/quantity"
-                android:layout_margin="8dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:autofillHints="" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints=""
+                android:hint="@string/quantity"
+                android:inputType="numberDecimal" />
 
             <TextView
                 android:id="@+id/unit"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
@@ -54,16 +57,16 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@id/unit"
+                android:layout_toStartOf="@id/remove"
                 android:textSize="24sp" />
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
 
     <ImageView
         android:id="@+id/remove"

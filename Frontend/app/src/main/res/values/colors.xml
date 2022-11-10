@@ -13,7 +13,7 @@
     <color name="primon">#D5E5F5</color>
     <color name="darkprim">#343B6E</color>
     <color name="primcont">#3A3C53</color>
-    <color name="primconton">#9694B3</color>
+    <color name="primconton">#E1DFFF</color>
     <color name="night_prim">#5C638F</color>
     <color name="night_primon">#C0CDDD</color>
     <color name="night_darkprim">#2E3149</color>
@@ -23,7 +23,7 @@
     <color name="seco">#6242AC</color>
     <color name="secoon">#A5A0CD</color>
     <color name="secocont">#4B377A</color>
-    <color name="secoconton">#C9B4E1</color>
+    <color name="secoconton">#E8D4FF</color>
     <color name="night_seco">#5D4C83</color>
     <color name="night_secoon">#A396B3</color>
     <color name="night_secocont">#4D4267</color>

@@ -35,6 +35,20 @@ public class Util {
     public static final Gson GSON = GSON_BUILDER.create();
 
     /**
+     * Scalar defined by MainActivity
+     */
+    public static float dpScalar;
+
+    /**
+     * Converts pixels to dip
+     * @param pixels pixel measurement
+     * @return dip
+     */
+    public static float scalePixels(float pixels) {
+        return pixels * dpScalar;
+    }
+
+    /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
      *
