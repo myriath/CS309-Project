@@ -7,13 +7,16 @@ import com.requests.backend.models.responses.RecipeResponse;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.repositories.RecipeRepository;
 import com.requests.backend.repositories.TokenRepository;
+import com.util.Constants;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
+import org.springframework.web.multipart.MultipartFile;
 
-import static com.util.Constants.RESULT_ERROR;
-import static com.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import java.io.*;
+
+import static com.util.Constants.*;
 
 
 @RestController
@@ -109,6 +112,37 @@ public class RecipeController {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
+    }
+
+    @PostMapping(path="/addPicture/{rid}/{token}")
+    @ResponseBody
+    public String addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
+        return UserController.getUsernameFromToken(token, (username, res) -> {
+            Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
+            if (recipes.length == 0 || !recipes[0].getUsername().equals(username)) {
+                res.setResult(RESULT_ERROR);
+            } else {
+                String filename = Hasher.sha256plaintext(rid) + ".webp";
+                File file1 = new File(RECIPE_SOURCE, filename);
+                try (FileOutputStream outputStream = new FileOutputStream(file1)) {
+                    outputStream.write(file.getBytes());
+                    res.setResult(RESULT_OK);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    res.setResult(RESULT_ERROR);
+                }
+            }
+        }, tokenRepository);
+    }
+
+    @GetMapping(path="/getPicture/{rid}", produces="image/webp")
+    public @ResponseBody byte[] getRecipePicture(@PathVariable String rid) throws IOException {
+        File img = new File(RECIPE_SOURCE, Hasher.sha256plaintext(rid) + ".webp");
+        if (!img.exists()) {
+            img = new File(DEFAULT_BANNER);
+        }
+        InputStream in = new DataInputStream(new FileInputStream(img));
+        return in.readAllBytes();
     }
 
     @DeleteMapping(path="/remove")

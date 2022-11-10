@@ -127,6 +127,10 @@ public class Constants {
      */
     public static final String DEFAULT_BANNER = MEDIA_BASE + "defaultbanner.webp";
     /**
+     * Recipe image storage location
+     */
+    public static final String RECIPE_SOURCE = MEDIA_BASE + "recipes/";
+    /**
      * Regular image storage location
      */
     public static final String MEDIA_SOURCE = MEDIA_BASE + "images/";
