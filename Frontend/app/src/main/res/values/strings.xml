@@ -108,5 +108,6 @@
     <string name="description">Description</string>
     <string name="quantity">QTY</string>
     <string name="update_recipe">UPDATE RECIPE</string>
+    <string name="unfollow">UNFOLLOW</string>
 
 </resources>

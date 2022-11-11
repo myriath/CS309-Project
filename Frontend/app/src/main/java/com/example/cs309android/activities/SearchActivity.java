@@ -1,6 +1,5 @@
 package com.example.cs309android.activities;
 
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.INTENT_NONE;
@@ -314,10 +313,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                     foodDetailsLauncher.launch(intent);
                 }
-                break;
-            }
-            case (CALLBACK_CLOSE_DETAIL): {
-                getSupportFragmentManager().popBackStack();
                 break;
             }
             case (CALLBACK_IMAGE_URI): {

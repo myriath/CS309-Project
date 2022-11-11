@@ -79,7 +79,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
         ((TextView) findViewById(R.id.followerCount))
                 .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
         ((TextView) findViewById(R.id.followingCount))
-                .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+                .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowingCount()));
 
         findViewById(R.id.saveButton).setOnClickListener(view -> {
             Util.spin(this);

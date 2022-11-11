@@ -39,25 +39,49 @@ public class Constants {
     public static final int TOKEN_MAX_DEPTH = 5;
 
     /**
-     * Response codes for callback method. Used by Fragments for this class
+     * Tells the MainActivity to move to the register page
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    /**
+     * Tells MainActivity to close the login page
+     */
     public static final int CALLBACK_CLOSE_LOGIN = 1;
+    /**
+     * Tells MainActivity to open the login page
+     */
     public static final int CALLBACK_START_LOGIN = 2;
+    /**
+     * Tells MainActivity to move to the homepage
+     */
     public static final int CALLBACK_MOVE_TO_HOME = 3;
+    /**
+     * Opens the food details page
+     */
     public static final int CALLBACK_FOOD_DETAIL = 4;
+    /**
+     * Opens the food search activity
+     */
     public static final int CALLBACK_SEARCH_FOOD = 5;
+    /**
+     * Tells MainActivity to move to the settings page
+     */
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_CLOSE_PROFILE = 7;
-    public static final int CALLBACK_FOLLOW = 8;
-    public static final int CALLBACK_IMAGE_URI = 9;
-    public static final int CALLBACK_CLOSE_DETAIL = 10;
+    /**
+     * Used to return an image uri from the Image loader bottom sheet
+     */
+    public static final int CALLBACK_IMAGE_URI = 7;
 
     /**
      * Various intents tell the app what to do when certain things are done.
      */
     public static final int INTENT_NONE = -1;
+    /**
+     * Intent code tells the SearchActivity it is from the shopping list
+     */
     public static final int INTENT_SHOPPING_LIST = 0;
+    /**
+     * Tells the SearchActivity it was opened from recipe add
+     */
     public static final int INTENT_RECIPE_ADD = 1;
 
 
@@ -87,9 +111,13 @@ public class Constants {
      */
     public static final String PARCEL_RECIPE = "HomeFragment.recipe";
     /**
-     * Used in the account page
+     * Used in the account page to tell if it is the owner or not
      */
     public static final String PARCEL_OWNER = "owner";
+    /**
+     * Used to tell the account page if the account is being followed
+     */
+    public static final String PARCEL_FOLLOWING = "following";
     /**
      * Used in the account page
      */
@@ -255,9 +283,33 @@ public class Constants {
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
     /**
+     * URL used when creating a comment
+     */
+    public static final String COMMENT_URL = SOCIAL_URL + "comment";
+    /**
+     * URL for deleting a comment
+     */
+    public static final String REMOVE_COMMENT_URL = SOCIAL_URL + "removeComment";
+    /**
+     * URL for following an account
+     */
+    public static final String FOLLOW_URL = SOCIAL_URL + "follow";
+    /**
+     * URL for unfollowing an account
+     */
+    public static final String UNFOLLOW_URL = SOCIAL_URL + "unfollow";
+    /**
+     * URL for getting the follower list
+     */
+    public static final String GET_FOLLOWERS_URL = SOCIAL_URL + "getFollowers";
+    /**
+     * URL for getting the following list
+     */
+    public static final String GET_FOLLOWING_URL = SOCIAL_URL + "getFollowing";
+    /**
      * Add url for getting a users feed
      */
-    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed/";
+    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed";
 
     //FOOD LOG
     /**

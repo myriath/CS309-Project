@@ -93,12 +93,11 @@ public class AccountFragment extends BaseFragment {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             global.setBio(profileResponse.getBio());
             global.setFollowers(profileResponse.getFollowers());
-            global.setFollowing(profileResponse.getFollowing());
 
             ((TextView) view.findViewById(R.id.followerCount))
                     .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
             ((TextView) view.findViewById(R.id.followingCount))
-                    .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+                    .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowingCount()));
             ((TextView) view.findViewById(R.id.bioTextView))
                     .setText(global.getBio());
 

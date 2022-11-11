@@ -11,6 +11,8 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.social.GetFollowingRequest;
+import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -146,8 +148,25 @@ public class Util {
         global.setToken(token);
         global.updateLoginPrefs();
 
+        new GetFollowingRequest(token).request(response -> {
+            System.out.println(response);
+            FollowResponse followResponse = objFromJson(response, FollowResponse.class);
+            global.setFollowing(followResponse.getUsers());
+        }, context);
+
         new GetProfilePictureRequest(username).request(global::setPfp, context);
         new GetBannerRequest(username).request(global::setBanner, context);
+    }
+
+    /**
+     * Switches the active user to the new username
+     *
+     * @param global   Global class for variables
+     * @param username New username to switch to
+     */
+    public static void switchUser(GlobalClass global, String username) {
+        global.getUsers().put(USERS_LATEST, username);
+        global.updateLoginPrefs();
     }
 
     /**
@@ -159,17 +178,6 @@ public class Util {
     public static void logout(GlobalClass global, String username) {
         global.setUsername(null);
         global.removeToken(username);
-        global.updateLoginPrefs();
-    }
-
-    /**
-     * Switches the active user to the new username
-     *
-     * @param global   Global class for variables
-     * @param username New username to switch to
-     */
-    public static void switchUser(GlobalClass global, String username) {
-        global.getUsers().put(USERS_LATEST, username);
         global.updateLoginPrefs();
     }
 

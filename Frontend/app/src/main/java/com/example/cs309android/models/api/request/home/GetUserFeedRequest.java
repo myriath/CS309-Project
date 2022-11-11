@@ -1,5 +1,6 @@
 package com.example.cs309android.models.api.request.home;
 
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
@@ -35,6 +36,9 @@ public class GetUserFeedRequest extends GetRequest {
      * @return URL with token
      */
     public String getURL() {
-        return Constants.GET_FEED_URL + token;
+//        return new ParameterizedRequestURL(Constants.GET_FEED_URL)
+//                .addPathVar(token)
+//                .toString();
+        return null;
     }
 }
