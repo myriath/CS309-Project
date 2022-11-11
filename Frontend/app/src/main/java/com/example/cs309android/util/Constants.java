@@ -217,6 +217,10 @@ public class Constants {
      */
     public static final String ADD_RECIPES_URL = RECIPES_URL + "add/";
     /**
+     * URL for updating recipes
+     */
+    public static final String UPDATE_RECIPES_URL = RECIPES_URL + "update/";
+    /**
      * Remove url for removing an item from recipes
      */
     public static final String REMOVE_RECIPES_URL = RECIPES_URL + "remove";
