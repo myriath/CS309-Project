@@ -24,6 +24,8 @@ import com.example.cs309android.models.api.request.profile.GetProfilePictureRequ
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
 import com.example.cs309android.models.api.request.social.FollowRequest;
+import com.example.cs309android.models.api.request.social.GetFollowersRequest;
+import com.example.cs309android.models.api.request.social.GetFollowingRequest;
 import com.example.cs309android.models.api.request.social.UnfollowRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
@@ -48,7 +50,11 @@ public class AccountActivity extends AppCompatActivity {
     /**
      * Used to track following status for the follow button
      */
-    private boolean following;
+    private boolean isFollowing;
+    /**
+     * Keeps track of the follower count to display
+     */
+    private int followers = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +65,7 @@ public class AccountActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         boolean owner = intent.getBooleanExtra(PARCEL_OWNER, false);
-        following = intent.getBooleanExtra(PARCEL_FOLLOWING, false);
+        isFollowing = intent.getBooleanExtra(PARCEL_FOLLOWING, false);
         String username = intent.getStringExtra(PARCEL_USERNAME);
 
         ImageButton backButton = findViewById(R.id.backButton);
@@ -67,7 +73,14 @@ public class AccountActivity extends AppCompatActivity {
         ExtendedFloatingActionButton followButton = findViewById(R.id.followButton);
         backButton.setOnClickListener(view1 -> onBackPressed());
 
+        TextView followerCount = findViewById(R.id.followerCount);
+        TextView followingCount = findViewById(R.id.followingCount);
+
         if (!owner) {
+            if (isFollowing) {
+                followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));
+                followButton.setText(getResources().getString(R.string.unfollow));
+            }
             followButton.setOnClickListener(view1 -> {
                 if (!isFollowing()) {
                     new FollowRequest(global.getToken(), username).request(response -> {
@@ -76,6 +89,8 @@ public class AccountActivity extends AppCompatActivity {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));
                             followButton.setText(getResources().getString(R.string.unfollow));
                             setFollowing(true);
+                            followers++;
+                            followerCount.setText(String.format(Locale.getDefault(), "%d Followers", followers));
                         } else {
                             Toaster.toastShort("Error", this);
                         }
@@ -87,6 +102,8 @@ public class AccountActivity extends AppCompatActivity {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite, getTheme()));
                             followButton.setText(getResources().getString(R.string.follow));
                             setFollowing(false);
+                            followers--;
+                            followerCount.setText(String.format(Locale.getDefault(), "%d Followers", followers));
                         } else {
                             Toaster.toastShort("Error", this);
                         }
@@ -96,15 +113,28 @@ public class AccountActivity extends AppCompatActivity {
             followButton.setVisibility(View.VISIBLE);
         }
 
+        followerCount.setOnClickListener(view -> {
+            new GetFollowersRequest(username).request(response -> {
+                FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+
+            }, AccountActivity.this);
+        });
+
+        followingCount.setOnClickListener(view -> {
+            new GetFollowingRequest(username).request(response -> {
+                FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+
+            }, AccountActivity.this);
+        });
+
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             if (profileResponse.getResult() == Constants.RESULT_OK) {
+                followers = profileResponse.getFollowers();
                 ((TextView) findViewById(R.id.unameView)).setText(username);
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
-                ((TextView) findViewById(R.id.followerCount))
-                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
-                ((TextView) findViewById(R.id.followingCount))
-                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+                followerCount.setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
+                followingCount.setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
 
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
             } else {
@@ -131,7 +161,7 @@ public class AccountActivity extends AppCompatActivity {
      * @return True if the account displayed is being followed
      */
     public boolean isFollowing() {
-        return following;
+        return isFollowing;
     }
 
     /**
@@ -139,6 +169,6 @@ public class AccountActivity extends AppCompatActivity {
      * @param following True if the account displayed is being followed
      */
     public void setFollowing(boolean following) {
-        this.following = following;
+        this.isFollowing = following;
     }
 }

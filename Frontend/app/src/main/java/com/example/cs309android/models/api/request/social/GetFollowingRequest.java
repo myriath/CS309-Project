@@ -13,17 +13,18 @@ import com.google.gson.annotations.Expose;
  */
 public class GetFollowingRequest extends GetRequest {
     /**
-     * Token for authentication
+     * Username to get following list of
      */
     @Expose
-    private final String token;
+    private final String username;
 
     /**
      * Public constructor
-     * @param token Authentication token
+     *
+     * @param username Username to get list from
      */
-    public GetFollowingRequest(String token) {
-        this.token = token;
+    public GetFollowingRequest(String username) {
+        this.username = username;
     }
 
     /**
@@ -33,7 +34,7 @@ public class GetFollowingRequest extends GetRequest {
     @Override
     public String getURL() {
         return new ParameterizedRequestURL(GET_FOLLOWING_URL)
-                .addPathVar(token)
+                .addPathVar(username)
                 .toString();
     }
 }

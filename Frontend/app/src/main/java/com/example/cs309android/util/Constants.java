@@ -299,6 +299,10 @@ public class Constants {
      */
     public static final String UNFOLLOW_URL = SOCIAL_URL + "unfollow";
     /**
+     * URL for checking follower status
+     */
+    public static final String IS_FOLLOWING_URL = SOCIAL_URL + "isFollowing";
+    /**
      * URL for getting the follower list
      */
     public static final String GET_FOLLOWERS_URL = SOCIAL_URL + "getFollowers";

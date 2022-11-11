@@ -36,7 +36,7 @@ public class GlobalClass extends Application {
     /**
      * Following count;
      */
-    private String[] following;
+    private int following;
     /**
      * User map for storing login data
      */
@@ -183,15 +183,7 @@ public class GlobalClass extends Application {
      *
      * @return following count
      */
-    public int getFollowingCount() {
-        return following.length;
-    }
-
-    /**
-     * Gets the following array
-     * @return Array of following users
-     */
-    public String[] getFollowing() {
+    public int getFollowing() {
         return following;
     }
 
@@ -200,7 +192,7 @@ public class GlobalClass extends Application {
      *
      * @param following new following count
      */
-    public void setFollowing(String[] following) {
+    public void setFollowing(int following) {
         this.following = following;
     }
 

@@ -1,5 +1,6 @@
 package com.example.cs309android.activities.recipe;
 
+import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
@@ -25,6 +26,9 @@ import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.IsFollowingRequest;
+import com.example.cs309android.util.Util;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -88,10 +92,20 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }, RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> {
-            Intent intent = new Intent(this, AccountActivity.class);
-            intent.putExtra(PARCEL_USERNAME, recipe.getUsername());
-            intent.putExtra(PARCEL_OWNER, recipe.getUsername().equals(global.getUsername()));
-            startActivity(intent);
+            new IsFollowingRequest(global.getUsername(), recipe.getUsername()).request(response -> {
+                FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+
+                Intent intent = new Intent(this, AccountActivity.class);
+                intent.putExtra(PARCEL_FOLLOWING, followResponse.getUsers() != null && followResponse.getUsers().length != 0);
+                intent.putExtra(PARCEL_USERNAME, recipe.getUsername());
+                intent.putExtra(PARCEL_OWNER, recipe.getUsername().equals(global.getUsername()));
+                startActivity(intent);
+            }, error -> {
+                Intent intent = new Intent(this, AccountActivity.class);
+                intent.putExtra(PARCEL_USERNAME, recipe.getUsername());
+                intent.putExtra(PARCEL_OWNER, recipe.getUsername().equals(global.getUsername()));
+                startActivity(intent);
+            }, RecipeDetailsActivity.this);
         });
 
         ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
