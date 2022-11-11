@@ -20,7 +20,10 @@ import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
@@ -126,10 +129,20 @@ public class RecipesFragment extends BaseFragment {
         }, requireContext());
 
         TextView emptyText = view.findViewById(R.id.emptyText);
-        if(recipes.isEmpty()){
+
+        // TODO: Temporary data until get list works
+        recipes = new ArrayList<>();
+        recipes.add(new Recipe(0, "Apples", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "apple"));
+
+        if (recipes.isEmpty()) {
             emptyText.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             emptyText.setVisibility(View.INVISIBLE);
         }
 

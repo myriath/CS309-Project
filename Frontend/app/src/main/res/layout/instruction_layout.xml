@@ -5,10 +5,11 @@
 
     <TextView
         android:id="@+id/stepNum"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:textAlignment="center"/>
+        android:textAlignment="textStart"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/stepText"
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/stepNum"
         android:layout_margin="8dp"
-        android:textAlignment="textStart"/>
+        android:textAlignment="textStart"
+        android:textSize="20sp" />
 
 </RelativeLayout>

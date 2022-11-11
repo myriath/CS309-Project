@@ -3,6 +3,7 @@ package com.example.cs309android.activities.recipe;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
 import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
@@ -13,18 +14,20 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.android.volley.Response;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.SearchActivity;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.Ingredient;
@@ -82,20 +85,15 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         SimpleFoodItem item = Objects.requireNonNull(data).getParcelableExtra(Constants.PARCEL_FOODITEM);
-
-                        final int ingredientNum = ingredientList.getChildCount();
-                        IngredientEditView ingredientView = new IngredientEditView(this);
-                        ingredientView.initView(item, "TODO", view1 -> {
-                            ingredientList.removeViewAt(ingredientView.getPosition());
-                            for (int i = ingredientView.getPosition(); i < ingredientList.getChildCount(); i++) {
-                                ((IngredientEditView) ingredientList.getChildAt(i)).setPosition(i);
-                            }
-                        }, ingredientNum);
-
-                        ingredientList.addView(ingredientView);
+                        // TODO: Get unit from db
+                        addToIngredientList(ingredientList, item, "TODO");
                     }
                 }
         );
+
+        findViewById(R.id.backButton).setOnClickListener(view -> {
+            onBackPressed();
+        });
 
         findViewById(R.id.addIngredient).setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
@@ -104,16 +102,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         });
 
         findViewById(R.id.addInstruction).setOnClickListener(view -> {
-            final int instNum = instructionList.getChildCount();
-            InstructionEditView instructionView = new InstructionEditView(this);
-            instructionView.initView(view1 -> {
-                instructionList.removeViewAt(instructionView.getPosition());
-                for (int i = instructionView.getPosition(); i < instructionList.getChildCount(); i++) {
-                    ((InstructionEditView) instructionList.getChildAt(i)).setPosition(i);
-                }
-            }, instNum);
-
-            instructionList.addView(instructionView);
+            addToInstructionList(instructionList);
         });
 
         ExtendedFloatingActionButton addRecipe = findViewById(R.id.add_recipe_button);
@@ -131,27 +120,27 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
                 ((ImageView) findViewById(R.id.image_view)).setImageBitmap(response);
             }, AddRecipeActivity.this);
 
-            ((TextView) findViewById(R.id.name)).setText(recipe.getRecipeName());
-            ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
+            Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeName)).getEditText()).setText(recipe.getRecipeName());
+            Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeDescription)).getEditText()).setText(recipe.getDescription());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                View view = View.inflate(this, R.layout.ingredient_display_list_item, null);
-                String text = ingredient.getQuantity() + " " + ingredient.getUnit();
-                ((TextView) view.findViewById(R.id.quantity)).setText(text);
-                ((TextView) view.findViewById(R.id.name)).setText(ingredient.getFood().getCappedDescription(25));
+            Ingredient[] ingredients = recipe.getIngredients();
+            for (Ingredient ingredient : ingredients) {
+                addToIngredientList(ingredientList, ingredient.getFood(), ingredient.getUnit());
 
-                ingredientList.addView(view);
+                ((EditText) ingredientList.getChildAt(ingredientList.getChildCount() - 1)
+                        .findViewById(R.id.quantity)).setText(String.valueOf(ingredient.getQuantity()));
             }
 
             Instruction[] instructions = recipe.getInstructions();
             Arrays.sort(instructions, new Instruction.Sorter());
             for (Instruction instruction : instructions) {
-                View view = View.inflate(this, R.layout.instruction_layout, null);
-                ((TextView) view.findViewById(R.id.stepNum)).setText(instruction.getStepNum());
-                ((TextView) view.findViewById(R.id.stepText)).setText(instruction.getStepText());
-
-                instructionList.addView(view);
+                addToInstructionList(instructionList);
+                ((EditText) instructionList.getChildAt(instructionList.getChildCount() - 1)
+                        .findViewById(R.id.editText)).setText(instruction.getStepText());
             }
+
+            addRecipe.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, getTheme()));
+            addRecipe.setText(getResources().getString(R.string.update_recipe));
         }
 
         addRecipe.setOnClickListener(view1 -> {
@@ -219,6 +208,58 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             new UpdateRecipeRequest(id, token, name, description, ingredients, instructions).request(listener,
                     AddRecipeActivity.this);
         }
+    }
+
+    /**
+     * Creates a new instruction entry
+     *
+     * @param instructionList Instruction list to add to
+     */
+    public void addToInstructionList(LinearLayout instructionList) {
+        final int instNum = instructionList.getChildCount();
+        InstructionEditView instructionView = new InstructionEditView(this);
+        instructionView.initView(view1 -> {
+            instructionList.removeViewAt(instructionView.getPosition());
+            for (int i = instructionView.getPosition(); i < instructionList.getChildCount(); i++) {
+                ((InstructionEditView) instructionList.getChildAt(i)).setPosition(i);
+            }
+        }, instNum);
+
+        instructionList.addView(instructionView);
+    }
+
+    /**
+     * Generates an entry for the ingredient list
+     *
+     * @param ingredientList Ingredient list to add to
+     * @param item           Item to add an ingredient for
+     */
+    public void addToIngredientList(LinearLayout ingredientList, SimpleFoodItem item, String unit) {
+        final int ingredientNum = ingredientList.getChildCount();
+        IngredientEditView ingredientView = new IngredientEditView(this);
+        ingredientView.initView(item, unit, view1 -> {
+            if (ingredientView.getPosition() == 0) {
+                IngredientEditView temp = (IngredientEditView) ingredientList.getChildAt(1);
+                if (temp != null) {
+                    temp.findViewById(R.id.divider).setVisibility(View.GONE);
+                }
+            }
+            ingredientList.removeViewAt(ingredientView.getPosition());
+            for (int i = ingredientView.getPosition(); i < ingredientList.getChildCount(); i++) {
+                ((IngredientEditView) ingredientList.getChildAt(i)).setPosition(i);
+            }
+        }, ingredientNum);
+        if (ingredientNum > 0) {
+            ingredientView.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+        }
+
+        ingredientView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(this, FoodDetailsActivity.class);
+            intent.putExtra(PARCEL_FOODITEM, item);
+            startActivity(intent);
+        });
+
+        ingredientList.addView(ingredientView);
     }
 
     /**

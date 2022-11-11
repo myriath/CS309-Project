@@ -81,9 +81,9 @@ public class HomeFragment extends BaseFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        //THIS IS JUST TEST DATA
-//        SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
-//        recipes = new ArrayList<>();
+//        THIS IS JUST TEST DATA
+//         item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
+        recipes = new ArrayList<>();
 //        recipes.add(item);
 //        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff asdf asdf jkl asdf als;jdk;flasdfjkl; as;ldf asdf  asdf asdf asdf asdf asdf asdf asdfsg sdfgs dg dgs dfgsdf g dfg sdf g sdfg dsfg sdg sdfg s sdfgsdfgsdfgsdf gsdfg s s fgsdfg sdfgsdfg sdfg sdfg dsg asdfas ddsf asdf asfd asdfasdf asdf a fas dfasd asdf asdf");
 //        recipes.add(item);

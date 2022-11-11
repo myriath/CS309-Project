@@ -51,7 +51,7 @@ public class IngredientEditView extends FrameLayout {
      * @param position  Position in the list
      */
     public void initView(SimpleFoodItem item, String unit, OnClickListener listener, int position) {
-        view = inflate(getContext(), R.layout.ingredient_add_list_item, this);
+        view = inflate(getContext(), R.layout.ingredient_add, this);
         ((TextView) view.findViewById(R.id.name)).setText(item.getCappedDescription(25));
         ((TextView) view.findViewById(R.id.unit)).setText(unit);
         view.findViewById(R.id.remove).setOnClickListener(listener);
