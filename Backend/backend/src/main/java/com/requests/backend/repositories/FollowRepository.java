@@ -9,14 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface FollowRepository extends JpaRepository<User, Integer> {
     @Query(
-            value = "SELECT username FROM users WHERE username " +
-                    "IN (SELECT follower FROM follows WHERE following = :username)",
+            value = "SELECT follower FROM follows WHERE following = :username",
             nativeQuery = true)
     String[] queryGetFollowers(@Param("username") String username);
 
     @Query(
-            value = "SELECT username FROM users WHERE username " +
-                    "IN (SELECT following FROM follows WHERE follower = :username)",
+            value = "SELECT following FROM follows WHERE follower = :username",
             nativeQuery = true)
     String[] queryGetFollowing(@Param("username") String username);
 
