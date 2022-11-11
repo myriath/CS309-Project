@@ -41,11 +41,17 @@ import java.util.Locale;
  * @author Mitch Hudson
  */
 public class AccountFragment extends BaseFragment {
+    /**
+     * Stores the profile details
+     */
     public static final String ARGS_USERNAME = "username";
     private String username;
     public static final String ARGS_OWNER = "owner";
     private boolean owner;
 
+    /**
+     * Launcher for the account edit activity
+     */
     private ActivityResultLauncher<Intent> accountEditLauncher;
 
     /**
@@ -63,6 +69,11 @@ public class AccountFragment extends BaseFragment {
         return fragment;
     }
 
+    /**
+     * Runs when the activity is created
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,14 @@ public class AccountFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

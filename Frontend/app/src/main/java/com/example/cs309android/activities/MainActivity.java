@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         new RequestHandler(MainActivity.this).cancelAll();
     }
 
+    /**
+     * Resumes when the application is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();

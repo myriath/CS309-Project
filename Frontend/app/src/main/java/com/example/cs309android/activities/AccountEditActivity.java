@@ -46,11 +46,17 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
     private static final int NONE = -1;
     private static final int BANNER = 0;
     private static final int PFP = 1;
+
     /**
      * Current intent
      */
     private int imageDestination;
 
+    /**
+     * Runs when the activity is started
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +147,12 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
         select.show(getSupportFragmentManager(), ModalImageSelect.TAG);
     }
 
+    /**
+     * Takes opcode and bundle and does something with it
+     *
+     * @param op Tells the activity what to do
+     * @param bundle
+     */
     @Override
     public void callback(int op, Bundle bundle) {
         switch (op) {

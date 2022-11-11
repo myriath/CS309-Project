@@ -182,9 +182,6 @@ public class NutritionFragment extends BaseFragment {
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
             }
-            else {
-                Toaster.toastShort("Added Food", requireContext());
-            }
 
         }, requireContext());
 
