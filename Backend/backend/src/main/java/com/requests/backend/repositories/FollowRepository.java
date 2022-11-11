@@ -20,6 +20,12 @@ public interface FollowRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     String[] queryGetFollowing(@Param("username") String username);
 
+    @Query(
+            value = "SELECT username FROM users WHERE username " +
+                    "IN (SELECT following FROM follows WHERE follower = :follower AND following = :following",
+            nativeQuery = true)
+    String[] queryIsFollowing(@Param("follower") String follower, @Param("following") String following);
+
     @Modifying
     @Query(
             value = "INSERT INTO follows (follower, following) VALUES (:follower, :following)",

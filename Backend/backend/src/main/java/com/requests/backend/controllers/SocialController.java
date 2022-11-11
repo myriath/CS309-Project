@@ -33,50 +33,42 @@ public class SocialController {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    @GetMapping (path="/getFollowers/{token}")
-    public @ResponseBody String getFollowers(@PathVariable String token) {
-        String tokenHash = Hasher.sha256(token);
-
-        Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
-
+    @GetMapping (path="/getFollowers/{username}")
+    public @ResponseBody String getFollowers(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
 
-        if (tokenQueryRes.length == 0) {
-            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-        }
-        else {
-            String username = tokenQueryRes[0].getUsername();
+        String[] followers = followRepository.queryGetFollowers(username);
 
-            String[] followers = followRepository.queryGetFollowers(username);
-
-            res.setUsers(followers);
-            res.setResult(RESULT_OK);
-        }
+        res.setUsers(followers);
+        res.setResult(RESULT_OK);
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         return gson.toJson(res);
     }
 
-    @GetMapping (path="/getFollowing/{token}")
-    public @ResponseBody String getFollowing(@PathVariable String token) {
-        String tokenHash = Hasher.sha256(token);
-
-        Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
-
+    @GetMapping (path="/getFollowing/{username}")
+    public @ResponseBody String getFollowing(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
 
-        if (tokenQueryRes.length == 0) {
-            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-        }
-        else {
-            String username = tokenQueryRes[0].getUsername();
+        String[] following = followRepository.queryGetFollowing(username);
 
-            String[] following = followRepository.queryGetFollowing(username);
+        res.setUsers(following);
+        res.setResult(RESULT_OK);
 
-            res.setUsers(following);
-            res.setResult(RESULT_OK);
-        }
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+        return gson.toJson(res);
+    }
+
+    @GetMapping (path="/isFollowing/{follower}/{following}")
+    public @ResponseBody String getIsFollowing(@PathVariable String follower, @PathVariable String following) {
+        FollowResponse res = new FollowResponse();
+
+        String[] query = followRepository.queryIsFollowing(follower, following);
+
+        res.setUsers(query);
+        res.setResult(RESULT_OK);
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
