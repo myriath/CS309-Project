@@ -82,6 +82,10 @@ public class Constants {
      * Used to parcel an item's position in a list
      */
     public static final String PARCEL_ITEM_POSITION = "item_pos";
+    /**
+     * Used to parcel a recipe
+     */
+    public static final String PARCEL_RECIPE = "HomeFragment.recipe";
 
     // RESULT CODES
     /**

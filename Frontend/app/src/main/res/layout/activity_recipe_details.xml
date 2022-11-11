@@ -50,6 +50,8 @@
                 app:subtitle="" >
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/editCard"
+                    android:visibility="gone"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginVertical="8dp"
@@ -60,11 +62,11 @@
                     android:layout_gravity="end">
 
                     <ImageButton
-                        android:id="@+id/addImageButton"
+                        android:id="@+id/editButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:src="@drawable/ic_add_photo"
+                        android:src="@drawable/ic_edit"
                         app:tint="@color/black"
                         android:layout_gravity="center"
                         android:contentDescription="@string/add_image" />
@@ -161,7 +163,7 @@
                 android:layout_margin="16dp" >
 
                 <LinearLayout
-                    android:id="@+id/ingredientsList"
+                    android:id="@+id/ingredients"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -183,7 +185,7 @@
                 android:layout_margin="16dp" >
 
                 <LinearLayout
-                    android:id="@+id/instructionsList"
+                    android:id="@+id/instructions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"

@@ -20,7 +20,7 @@ import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.api.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
@@ -42,7 +42,7 @@ public class RecipesFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static ArrayList<SimpleRecipeItem> recipes;
+    private static ArrayList<Recipe> recipes;
 
     private String mParam1;
     private String mParam2;
@@ -120,7 +120,7 @@ public class RecipesFragment extends BaseFragment {
                 return;
             }
 
-            SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
+            Recipe[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
             recipes.addAll(Arrays.asList(newItems));
         }, requireContext());
@@ -140,7 +140,7 @@ public class RecipesFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleRecipeItem selectedItem = (SimpleRecipeItem) parent.getItemAtPosition(position);
+                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
                 Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
                 i.putExtra("HomeFragment.recipe", selectedItem);
                 startActivity(i);

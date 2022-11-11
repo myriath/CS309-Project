@@ -1,5 +1,7 @@
 package com.example.cs309android.fragments.home;
 
+import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +20,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.api.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
@@ -45,7 +47,7 @@ public class HomeFragment extends BaseFragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<SimpleRecipeItem> recipes;
+    ArrayList<Recipe> recipes;
     HomeItemAdapter adapter;
     ListView listView;
 
@@ -80,17 +82,13 @@ public class HomeFragment extends BaseFragment {
         }
 
         //THIS IS JUST TEST DATA
-        SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
-        recipes = new ArrayList<>();
-        recipes.add(item);
-        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff asdf asdf jkl asdf als;jdk;flasdfjkl; as;ldf asdf  asdf asdf asdf asdf asdf asdf asdfsg sdfgs dg dgs dfgsdf g dfg sdf g sdfg dsfg sdg sdfg s sdfgsdfgsdfgsdf gsdfg s s fgsdfg sdfgsdfg sdfg sdfg dsg asdfas ddsf asdf asfd asdfasdf asdf a fas dfasd asdf asdf");
-        recipes.add(item);
-        item = new SimpleRecipeItem(3, "Meat", "Heat and stuff");
-        recipes.add(item);
-
-
-
-
+//        SimpleRecipeItem item = new SimpleRecipeItem(1, "String Cheese", "Cook and stuff");
+//        recipes = new ArrayList<>();
+//        recipes.add(item);
+//        item = new SimpleRecipeItem(2, "Cantelope", "Bake and stuff asdf asdf jkl asdf als;jdk;flasdfjkl; as;ldf asdf  asdf asdf asdf asdf asdf asdf asdfsg sdfgs dg dgs dfgsdf g dfg sdf g sdfg dsfg sdg sdfg s sdfgsdfgsdfgsdf gsdfg s s fgsdfg sdfgsdfg sdfg sdfg dsg asdfas ddsf asdf asfd asdfasdf asdf a fas dfasd asdf asdf");
+//        recipes.add(item);
+//        item = new SimpleRecipeItem(3, "Meat", "Heat and stuff");
+//        recipes.add(item);
     }
 
     @Override
@@ -112,7 +110,7 @@ public class HomeFragment extends BaseFragment {
                 return;
             }
 
-            SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
+            Recipe[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
             if(newItems != null) {
                 recipes.addAll(Arrays.asList(newItems));
@@ -130,9 +128,9 @@ public class HomeFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleRecipeItem selectedItem = (SimpleRecipeItem) parent.getItemAtPosition(position);
+                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
                 Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
-                i.putExtra("HomeFragment.recipe", selectedItem);
+                i.putExtra(PARCEL_RECIPE, selectedItem);
                 startActivity(i);
             }
         });

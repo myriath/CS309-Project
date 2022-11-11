@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.response.recipes;
 
-import com.example.cs309android.models.api.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
@@ -14,14 +14,14 @@ public class GetRecipeDetailsResponse extends GenericResponse {
      * Recipe Item from JSON
      */
     @Expose
-    private final SimpleRecipeItem recipe;
+    private final Recipe recipe;
 
     /**
      * Public constructor
      *
      * @param recipe recipe item
      */
-    public GetRecipeDetailsResponse(SimpleRecipeItem recipe, int result) {
+    public GetRecipeDetailsResponse(Recipe recipe, int result) {
         super(result);
         this.recipe = recipe;
     }
@@ -31,7 +31,7 @@ public class GetRecipeDetailsResponse extends GenericResponse {
      *
      * @return Simple recipe item
      */
-    public SimpleRecipeItem getRecipe() {
+    public Recipe getRecipe() {
         return recipe;
     }
 }

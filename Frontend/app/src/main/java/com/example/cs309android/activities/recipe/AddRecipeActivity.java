@@ -175,7 +175,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
      */
     private boolean validateFields(TextInputLayout RecipeName, TextInputLayout RecipeInstructions) {
         boolean notEmpty = true;
-        if (RecipeName.getEditText().getText().length() <= 0) {
+        if (Objects.requireNonNull(RecipeName.getEditText()).getText().length() <= 0) {
             RecipeName.setError("Recipe Name cannot be empty");
             notEmpty = false;
         }
@@ -183,7 +183,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             RecipeName.setError(null);
         }
 
-        if (RecipeInstructions.getEditText().getText().length() <= 0) {
+        if (Objects.requireNonNull(RecipeInstructions.getEditText()).getText().length() <= 0) {
             RecipeInstructions.setError("Recipe Instructions cannot be empty");
             notEmpty = false;
         } else {
