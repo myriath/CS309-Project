@@ -46,8 +46,8 @@ public class ProfileEndpointController {
             User user = (User) users.toArray()[0];
             res.setResult(RESULT_OK);
 
-            res.setFollowers(followRepository.queryGetFollowers(username));
-            res.setFollowing(followRepository.queryGetFollowing(username));
+            res.setFollowers(followRepository.queryGetFollowers(username).length);
+            res.setFollowing(followRepository.queryGetFollowing(username).length);
             res.setBio(user.getBio());
         }
 
