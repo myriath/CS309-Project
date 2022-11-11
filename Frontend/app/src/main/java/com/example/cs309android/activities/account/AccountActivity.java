@@ -45,7 +45,6 @@ public class AccountActivity extends AppCompatActivity {
 
         ExtendedFloatingActionButton followButton = findViewById(R.id.followButton);
         backButton.setOnClickListener(view1 -> onBackPressed());
-        findViewById(R.id.backCard).setVisibility(View.VISIBLE);
 
         if (!owner) {
             followButton.setOnClickListener(view1 -> {
