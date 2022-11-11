@@ -1,4 +1,4 @@
-package com.example.cs309android.activities;
+package com.example.cs309android.activities.account;
 
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;

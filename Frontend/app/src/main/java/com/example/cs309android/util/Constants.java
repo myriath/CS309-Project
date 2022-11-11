@@ -86,6 +86,14 @@ public class Constants {
      * Used to parcel a recipe
      */
     public static final String PARCEL_RECIPE = "HomeFragment.recipe";
+    /**
+     * Used in the account page
+     */
+    public static final String PARCEL_OWNER = "owner";
+    /**
+     * Used in the account page
+     */
+    public static final String PARCEL_USERNAME = "username";
 
     // RESULT CODES
     /**

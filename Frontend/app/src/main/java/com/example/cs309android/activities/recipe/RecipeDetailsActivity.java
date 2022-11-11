@@ -1,7 +1,9 @@
 package com.example.cs309android.activities.recipe;
 
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
@@ -85,7 +88,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }, RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> {
-            // TODO: Open account page
+            Intent intent = new Intent(this, AccountActivity.class);
+            intent.putExtra(PARCEL_USERNAME, recipe.getUsername());
+            intent.putExtra(PARCEL_OWNER, recipe.getUsername().equals(global.getUsername()));
+            startActivity(intent);
         });
 
         ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());

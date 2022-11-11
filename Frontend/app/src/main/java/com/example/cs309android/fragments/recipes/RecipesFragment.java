@@ -140,6 +140,14 @@ public class RecipesFragment extends BaseFragment {
                 new Instruction(2, "juicy juicer")
         }, "apple"));
 
+        recipes.add(new Recipe(0, "Apples2", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "papajohn"));
+
         if (recipes.isEmpty()) {
             emptyText.setVisibility(View.VISIBLE);
         } else {

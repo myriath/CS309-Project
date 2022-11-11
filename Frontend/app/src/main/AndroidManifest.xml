@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
-            android:name=".activities.AccountEditActivity"
+            android:name=".activities.account.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.AccountEditActivity"
             android:exported="false" />
         <activity
             android:name=".activities.recipe.AddRecipeActivity"
