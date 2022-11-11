@@ -5,6 +5,7 @@ import com.requests.backend.models.User;
 import com.requests.backend.models.requests.UpdateProfileRequest;
 import com.requests.backend.models.responses.ProfileResponse;
 import com.requests.backend.repositories.FavoriteRepository;
+import com.requests.backend.repositories.FollowRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
@@ -31,6 +32,9 @@ public class ProfileEndpointController {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private FollowRepository followRepository;
+
     @GetMapping(path="/getProfile/{username}")
     public @ResponseBody String getProfile(@PathVariable String username) {
         ProfileResponse res = new ProfileResponse();
@@ -41,8 +45,9 @@ public class ProfileEndpointController {
         } else {
             User user = (User) users.toArray()[0];
             res.setResult(RESULT_OK);
-            res.setFollowers(user.getFollowers().size());
-            res.setFollowing(userRepository.queryGetFollowing(username).size());
+
+            res.setFollowers(followRepository.queryGetFollowers(username));
+            res.setFollowing(followRepository.queryGetFollowing(username));
             res.setBio(user.getBio());
         }
 

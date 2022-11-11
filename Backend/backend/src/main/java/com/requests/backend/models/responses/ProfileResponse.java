@@ -1,23 +1,23 @@
 package com.requests.backend.models.responses;
 
 public class ProfileResponse extends ResultResponse {
-    private int followers;
-    private int following;
+    private String[] followers;
+    private String[] following;
     private String bio;
 
-    public int getFollowers() {
+    public String[] getFollowers() {
         return followers;
     }
 
-    public void setFollowers(int followers) {
+    public void setFollowers(String[] followers) {
         this.followers = followers;
     }
 
-    public int getFollowing() {
+    public String[] getFollowing() {
         return following;
     }
 
-    public void setFollowing(int following) {
+    public void setFollowing(String[] following) {
         this.following = following;
     }
 
