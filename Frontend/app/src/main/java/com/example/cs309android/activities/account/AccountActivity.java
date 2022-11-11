@@ -1,7 +1,9 @@
 package com.example.cs309android.activities.account;
 
+import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Util.objFromJson;
 
@@ -113,19 +115,23 @@ public class AccountActivity extends AppCompatActivity {
             followButton.setVisibility(View.VISIBLE);
         }
 
-        followerCount.setOnClickListener(view -> {
-            new GetFollowersRequest(username).request(response -> {
-                FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+        findViewById(R.id.followerCount).setOnClickListener(view1 ->
+                new GetFollowersRequest(username).request(response -> {
+                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+                    Intent intent1 = new Intent(this, AccountListActivity.class);
+                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());
+                    intent1.putExtra(PARCEL_TITLE, "Followers");
+                    startActivity(intent1);
+                }, AccountActivity.this));
 
-            }, AccountActivity.this);
-        });
-
-        followingCount.setOnClickListener(view -> {
-            new GetFollowingRequest(username).request(response -> {
-                FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
-
-            }, AccountActivity.this);
-        });
+        findViewById(R.id.followingCount).setOnClickListener(view1 ->
+                new GetFollowingRequest(username).request(response -> {
+                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+                    Intent intent1 = new Intent(this, AccountListActivity.class);
+                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());
+                    intent1.putExtra(PARCEL_TITLE, "Following");
+                    startActivity(intent1);
+                }, AccountActivity.this));
 
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);

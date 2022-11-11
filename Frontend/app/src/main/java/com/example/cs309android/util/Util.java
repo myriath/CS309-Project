@@ -1,16 +1,23 @@
 package com.example.cs309android.util;
 
+import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.IsFollowingRequest;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -146,14 +153,32 @@ public class Util {
         global.setToken(token);
         global.updateLoginPrefs();
 
-//        new GetFollowingRequest(token).request(response -> {
-//            System.out.println(response);
-//            FollowResponse followResponse = objFromJson(response, FollowResponse.class);
-//            global.setFollowing(followResponse.getUsers());
-//        }, context);
-
         new GetProfilePictureRequest(username).request(global::setPfp, context);
         new GetBannerRequest(username).request(global::setBanner, context);
+    }
+
+    /**
+     * Opens the account page based on the given parameters
+     *
+     * @param global   Used to get the current user's account details
+     * @param username Username of the account to open
+     * @param context  Context to start activity / volley with
+     */
+    public static void openAccountPage(GlobalClass global, String username, Context context) {
+        new IsFollowingRequest(global.getUsername(), username).request(response -> {
+            FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+
+            Intent intent = new Intent(context, AccountActivity.class);
+            intent.putExtra(PARCEL_FOLLOWING, followResponse.getUsers() != null && followResponse.getUsers().length != 0);
+            intent.putExtra(PARCEL_USERNAME, username);
+            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));
+            context.startActivity(intent);
+        }, error -> {
+            Intent intent = new Intent(context, AccountActivity.class);
+            intent.putExtra(PARCEL_USERNAME, username);
+            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));
+            context.startActivity(intent);
+        }, context);
     }
 
     /**

@@ -21,6 +21,9 @@
             android:name=".activities.account.AccountEditActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.account.AccountListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.recipe.AddRecipeActivity"
             android:exported="false" />
         <activity

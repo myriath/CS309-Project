@@ -29,8 +29,18 @@ public class Constants {
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
+    /**
+     * Preference key for the first time variable
+     * Used to see if the app should run the tutorial
+     */
     public static final String PREF_FIRST_TIME = "FirstTime";
+    /**
+     * Preference key for the users hash map
+     */
     public static final String PREF_LOGIN = "users";
+    /**
+     * Preference key for the latest user
+     */
     public static final String USERS_LATEST = "latest";
 
     /**
@@ -70,6 +80,10 @@ public class Constants {
      * Used to return an image uri from the Image loader bottom sheet
      */
     public static final int CALLBACK_IMAGE_URI = 7;
+    /**
+     * Used to open the account page
+     */
+    public static final int CALLBACK_OPEN_ACCOUNT = 8;
 
     /**
      * Various intents tell the app what to do when certain things are done.
@@ -122,6 +136,14 @@ public class Constants {
      * Used in the account page
      */
     public static final String PARCEL_USERNAME = "username";
+    /**
+     * Used in AccountListPage for transferring an array of usernames
+     */
+    public static final String PARCEL_ACCOUNT_LIST = "accounts";
+    /**
+     * Used to give the toolbar in AccountListView a title
+     */
+    public static final String PARCEL_TITLE = "title";
 
     // RESULT CODES
     /**
