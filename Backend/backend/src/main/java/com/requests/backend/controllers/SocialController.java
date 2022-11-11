@@ -47,7 +47,7 @@ public class SocialController {
         else {
             String username = tokenQueryRes[0].getUsername();
 
-            User[] followers = followRepository.queryGetFollowers(username);
+            String[] followers = followRepository.queryGetFollowers(username);
 
             res.setUsers(followers);
             res.setResult(RESULT_OK);
@@ -72,7 +72,7 @@ public class SocialController {
         else {
             String username = tokenQueryRes[0].getUsername();
 
-            User[] following = followRepository.queryGetFollowing(username);
+            String[] following = followRepository.queryGetFollowing(username);
 
             res.setUsers(following);
             res.setResult(RESULT_OK);
@@ -161,7 +161,7 @@ public class SocialController {
     }
 
     /**
-     * Gets all of the posts of a given user
+     * Gets all the posts of a given user
      * @return
      */
     @GetMapping (path="/getUserPosts/{token}")
