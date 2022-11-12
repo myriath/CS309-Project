@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.util.Util;
 
 /**
