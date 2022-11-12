@@ -120,15 +120,11 @@ public class UserController {
                 if (outdatedToken) {
                     res.setResult(RESULT_REGEN_TOKEN);
                     res.setUsername(dbToken.getUsername());
-                    res.setPfp("");     // TODO
-                    res.setBanner("");  // TODO
                 }
                 // Otherwise, the user should be logged in, as the token is valid.
                 else {
                     res.setResult(RESULT_LOGGED_IN);
                     res.setUsername(dbToken.getUsername());
-                    res.setPfp("");     // TODO
-                    res.setBanner("");  // TODO
                 }
             }
 
@@ -172,16 +168,12 @@ public class UserController {
                 if (tokenQueryRes.length > 0) {
                     res.setResult(RESULT_REGEN_TOKEN);
                     res.setUsername(username);
-                    res.setPfp("");     // TODO
-                    res.setBanner("");  // TODO
                 }
                 // Otherwise, the token doesn't already exist -- add the hashed token to the tokens table
                 else {
                     tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                     res.setResult(RESULT_LOGGED_IN);
                     res.setUsername(username);
-                    res.setPfp("");     // TODO
-                    res.setBanner("");  // TODO
                 }
 
                 //       Note: THIS DOES NOT REPLACE ANY OTHER TOKENS!
@@ -225,8 +217,6 @@ public class UserController {
                 tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
                 res.setResult(RESULT_USER_CREATED);
                 res.setUsername(username);
-                res.setPfp("");     // TODO: default pfp
-                res.setBanner("");  // TODO: default banner
 
             // If the username already exists in the user table, return an error result
             } catch (Exception e) {
