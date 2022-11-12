@@ -102,5 +102,8 @@
     <string name="save">SAVE</string>
     <string name="title">Title</string>
     <string name="recipe_name">Recipe Name</string>
+    <string name="switch_user_title">Switch user</string>
+    <string name="switch_user_msg">Switch to another user without logging out</string>
+    <string name="add_account">ADD ACCOUNT</string>
 
 </resources>

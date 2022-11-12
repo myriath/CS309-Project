@@ -78,6 +78,17 @@ public class LoginFragment extends BaseFragment {
             usernameField.setError(null);
             passwordField.setError(null);
 
+            GlobalClass global = (GlobalClass) requireActivity().getApplicationContext();
+
+            for (String account : global.getAccounts()) {
+                if (unm.equals(account)) {
+                    global.setUsername(unm);
+                    callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
+                    callbackFragment.callback(CALLBACK_CLOSE_LOGIN, null);
+                    return;
+                }
+            }
+
             // Checks for empty fields
             if (unm.equals("")) {
                 usernameField.setError("Username can't be empty");

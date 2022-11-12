@@ -39,7 +39,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
      * @param items   list of items to display.
      */
     public FoodSearchListAdapter(Context context, ArrayList<SimpleFoodItem> items) {
-        super(context, R.layout.shopping_list_item, items);
+        super(context, R.layout.food_search_branded, items);
         this.items = items;
     }
 
