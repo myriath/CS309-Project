@@ -10,31 +10,20 @@ import com.google.gson.annotations.Expose;
  */
 public class LoginResponse extends GenericResponse {
     /**
-     * Rotating token to be used instead of hash
+     * Username of the logged in account
      */
     @Expose
     private final String username;
-    /**
-     * Rotating token to be used instead of hash
-     */
-    @Expose
-    private final String banner;
-    /**
-     * Rotating token to be used instead of hash
-     */
-    @Expose
-    private final String pfp;
 
     /**
      * Constructor to be used by GSON
      *
-     * @param result Result code from the request
+     * @param result   Result code from the request
+     * @param username Username of the account logged into
      */
-    public LoginResponse(int result, String token, String banner, String pfp) {
+    public LoginResponse(int result, String username) {
         super(result);
-        this.username = token;
-        this.banner = banner;
-        this.pfp = pfp;
+        this.username = username;
     }
 
     /**
@@ -44,23 +33,5 @@ public class LoginResponse extends GenericResponse {
      */
     public String getUsername() {
         return username;
-    }
-
-    /**
-     * Profile banner image as base64 encoded string
-     *
-     * @return banner image b64
-     */
-    public String getBanner() {
-        return banner;
-    }
-
-    /**
-     * Profile picture as base64 encoded string
-     *
-     * @return profile picture b64
-     */
-    public String getPfp() {
-        return pfp;
     }
 }

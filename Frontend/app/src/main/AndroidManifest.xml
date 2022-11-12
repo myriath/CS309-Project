@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
+            android:name=".activities.AccountSwitchActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AccountEditActivity"
             android:exported="false" />
         <activity
@@ -47,8 +50,8 @@
         </activity>
 
         <provider
-            android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
