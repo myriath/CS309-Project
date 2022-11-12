@@ -30,7 +30,6 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/settingsCard"
-                android:visibility="gone"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
@@ -42,25 +41,24 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
-                    android:background="@null"
-                    android:visibility="gone"
                     android:id="@+id/settingsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/settings"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     android:src="@drawable/ic_settings"
-                    android:contentDescription="@string/settings" />
+                    app:tint="@color/black" />
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/editCard"
-                android:visibility="gone"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/white_half_opacity"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp"
@@ -68,41 +66,15 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
-                    android:background="@null"
-                    android:visibility="gone"
                     android:id="@+id/editButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/edit"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     android:src="@drawable/ic_edit"
-                    android:contentDescription="@string/edit" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/backCard"
-                android:visibility="gone"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                app:cardBackgroundColor="@color/white_half_opacity"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageButton
-                    android:background="@null"
-                    android:visibility="gone"
-                    android:id="@+id/backButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    android:src="@drawable/ic_back"
-                    android:contentDescription="@string/back" />
+                    app:tint="@color/black" />
 
             </androidx.cardview.widget.CardView>
 
@@ -210,18 +182,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/followButton"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary"
-        android:contentDescription="@string/follow"
-        android:text="@string/follow"
-        app:fabSize="auto"
-        android:layout_margin="32dp"
-        android:layout_gravity="bottom|end"
-        app:icon="@drawable/ic_add" />
 
 </FrameLayout>

@@ -20,10 +20,12 @@ import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,7 +45,7 @@ public class RecipesFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static ArrayList<SimpleRecipeItem> recipes;
+    private static ArrayList<Recipe> recipes;
 
     private String mParam1;
     private String mParam2;
@@ -121,16 +123,34 @@ public class RecipesFragment extends BaseFragment {
                 return;
             }
 
-            SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
+            Recipe[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
             recipes.addAll(Arrays.asList(newItems));
         }, requireContext());
 
         TextView emptyText = view.findViewById(R.id.emptyText);
-        if(recipes.isEmpty()){
+
+        // TODO: Temporary data until get list works
+        recipes = new ArrayList<>();
+        recipes.add(new Recipe(0, "Apples", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "apple"));
+
+        recipes.add(new Recipe(0, "Apples2", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "papajohn"));
+
+        if (recipes.isEmpty()) {
             emptyText.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             emptyText.setVisibility(View.INVISIBLE);
         }
 
@@ -141,7 +161,7 @@ public class RecipesFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleRecipeItem selectedItem = (SimpleRecipeItem) parent.getItemAtPosition(position);
+                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
                 Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
                 i.putExtra("HomeFragment.recipe", selectedItem);
                 startActivity(i);

@@ -24,6 +24,9 @@
         app:fabSize="auto"
         android:layout_margin="32dp"
         android:layout_gravity="bottom|end"
+        android:elevation="0dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:tint="?attr/colorOnSecondaryContainer"
         app:icon="@drawable/ic_add" />
 
     <TextView

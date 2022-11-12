@@ -1,9 +1,12 @@
 package com.example.cs309android.activities;
 
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.INTENT_NONE;
+import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
@@ -43,14 +46,14 @@ import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
-import com.example.cs309android.models.gson.models.CustomFoodItem;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.food.FDCByUPCRequest;
-import com.example.cs309android.models.gson.request.food.GetCustomFoodsRequest;
-import com.example.cs309android.models.gson.request.shopping.ShoppingAddRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.food.FDCByUPCResponse;
-import com.example.cs309android.models.gson.response.food.GetCustomFoodsResponse;
+import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.food.FDCByUPCRequest;
+import com.example.cs309android.models.api.request.food.GetCustomFoodsRequest;
+import com.example.cs309android.models.api.request.shopping.ShoppingAddRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.food.FDCByUPCResponse;
+import com.example.cs309android.models.api.response.food.GetCustomFoodsResponse;
 import com.example.cs309android.util.BarcodeAnalyzer;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -90,8 +93,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
      * Various intents tell the app what to do when certain things are done.
      */
     private int intentCode;
-    public static final int INTENT_NONE = -1;
-    public static final int INTENT_SHOPPING_LIST = 0;
 
     /**
      * Ran when the activity is created.
@@ -160,6 +161,15 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                 }, SearchActivity.this, getWindow().getDecorView());
                                 break;
                             }
+                            case INTENT_RECIPE_ADD: {
+                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
+
+                                Intent intent1 = new Intent();
+                                intent1.putExtra(PARCEL_FOODITEM, item);
+                                setResult(RESULT_OK, intent1);
+                                finish();
+                                break;
+                            }
                         }
                     }
                 }
@@ -202,8 +212,17 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
-        setResult(RESULT_OK, intent);
+        switch (intentCode) {
+            case INTENT_SHOPPING_LIST: {
+                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
+                setResult(RESULT_OK, intent);
+                break;
+            }
+            case INTENT_RECIPE_ADD: {
+                setResult(RESULT_CANCELED);
+                break;
+            }
+        }
         finish();
         super.onBackPressed();
     }
@@ -291,13 +310,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 } else {
                     Intent intent = new Intent(this, FoodDetailsActivity.class);
                     intent.putExtra(PARCEL_FOODITEM, item);
-                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                     foodDetailsLauncher.launch(intent);
                 }
-                break;
-            }
-            case (CALLBACK_CLOSE_DETAIL): {
-                getSupportFragmentManager().popBackStack();
                 break;
             }
             case (CALLBACK_IMAGE_URI): {
@@ -317,7 +332,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                     BrandedFoodItem item = Util.objFromJson(response, BrandedFoodItem.class);
                                     Intent intent = new Intent(this, FoodDetailsActivity.class);
                                     intent.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(item.getFdcId(), item.getDescription(), item.getBrandOwner(), false));
-                                    intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
+                                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);
                                     foodDetailsLauncher.launch(intent);
                                 }, SearchActivity.this);
                             } else {

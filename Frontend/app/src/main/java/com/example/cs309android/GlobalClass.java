@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 
 import com.example.cs309android.util.Util;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -94,6 +95,19 @@ public class GlobalClass extends Application {
      */
     public String getUsername() {
         return users.get(USERS_LATEST);
+    }
+
+    /**
+     * Getter for the list of logged in accounts
+     *
+     * @return Array of usernames
+     */
+    public String[] getAccounts() {
+        ArrayList<String> accounts = new ArrayList<>();
+        users.forEach((username, token) -> {
+            if (!username.equals(USERS_LATEST)) accounts.add(username);
+        });
+        return accounts.toArray(new String[0]);
     }
 
     /**

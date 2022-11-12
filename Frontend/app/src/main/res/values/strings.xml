@@ -35,9 +35,9 @@
     <!-- Strings related to Recipes -->
     <string name="recipes">Recipes</string>
     <string name="recipes_id_input">Recipe ID</string>
-    <string name="recipes_name_input">Recipe Name</string>
+    <string name="recipes_name_input">Name</string>
     <string name="recipes_search">Search</string>
-    <string name="recipes_instructions">Recipe Instructions</string>
+    <string name="recipes_instructions">Instructions</string>
     <string name="recipes_add_recipe">ADD RECIPE</string>
     <string name="recipes_new_recipe_title">New Recipe</string>
     <!-- Strings related to Shopping -->
@@ -73,7 +73,7 @@
         Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsum
         Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsum
     </string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">FAVORITE</string>
     <string name="title_activity_temp">TempActivity</string>
     <string name="ingredients">Ingredients</string>
     <string name="total_carbs">Total carbs in grams</string>
@@ -102,5 +102,15 @@
     <string name="save">SAVE</string>
     <string name="title">Title</string>
     <string name="recipe_name">Recipe Name</string>
+    <string name="create_recipe">CREATE RECIPE</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="description">Description</string>
+    <string name="quantity">QTY</string>
+    <string name="update_recipe">UPDATE RECIPE</string>
+    <string name="unfollow">UNFOLLOW</string>
+    <string name="switch_user_title">Switch user</string>
+    <string name="switch_user_msg">Switch to another user without logging out</string>
+    <string name="add_account">ADD ACCOUNT</string>
 
 </resources>

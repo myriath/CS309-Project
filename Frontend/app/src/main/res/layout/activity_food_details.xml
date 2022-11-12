@@ -29,6 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:backgroundTint="?attr/colorSecondaryContainer"
+            app:tint="?attr/colorOnSecondaryContainer"
             android:paddingHorizontal="16dp" />
 
     </androidx.core.widget.NestedScrollView>
@@ -41,6 +43,7 @@
         android:contentDescription="@string/add_item"
         android:text="@string/add_item"
         app:fabSize="auto"
+        android:elevation="0dp"
         android:layout_margin="32dp"
         android:layout_gravity="bottom|end"
         app:icon="@drawable/ic_add" />

@@ -15,7 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
-            android:name=".activities.AccountEditActivity"
+            android:name=".activities.account.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.AccountListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.AccountSwitchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.AccountEditActivity"
             android:exported="false" />
         <activity
             android:name=".activities.recipe.AddRecipeActivity"
@@ -47,8 +56,8 @@
         </activity>
 
         <provider
-            android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

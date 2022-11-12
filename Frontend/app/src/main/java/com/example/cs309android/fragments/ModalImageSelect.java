@@ -2,6 +2,7 @@ package com.example.cs309android.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
 
 import android.Manifest;
 import android.content.Intent;
@@ -52,11 +53,6 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
      * Checks for permissions
      */
     ActivityResultLauncher<String> permissionsLauncher;
-
-    /**
-     * Parcel constants
-     */
-    public static final String PARCEL_IMAGE_URI = "image_uri";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,14 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
@@ -17,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -39,11 +48,11 @@ import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
-import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.users.LoginResponse;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.users.LoginTokenRequest;
+import com.example.cs309android.models.api.request.users.RegenTokenRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
@@ -76,20 +85,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * GlobalClass for storing universal values
      */
     private GlobalClass global;
-
-    /**
-     * Response codes for callback method. Used by Fragments for this class
-     */
-    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
-    public static final int CALLBACK_CLOSE_LOGIN = 1;
-    public static final int CALLBACK_START_LOGIN = 2;
-    public static final int CALLBACK_MOVE_TO_HOME = 3;
-    public static final int CALLBACK_FOOD_DETAIL = 4;
-    public static final int CALLBACK_SEARCH_FOOD = 5;
-    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_CLOSE_PROFILE = 7;
-    public static final int CALLBACK_FOLLOW = 8;
-//    public static final int CALLBACK_ = 0;
 
     /**
      * Used to launch various activities.
@@ -134,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
 
         global = ((GlobalClass) getApplicationContext());
         global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
@@ -184,10 +181,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
         if (token != null) {
+            System.out.println(token);
             new LoginTokenRequest(token).unspinOnComplete(response -> {
                 LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
                 // Checks if the result is valid or not. If not, opens the login page
                 int result = loginResponse.getResult();
+                System.out.println(result);
 
                 if (result == RESULT_REGEN_TOKEN) regenToken(token, 0, loginResponse);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
@@ -336,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
-                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
+                intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }

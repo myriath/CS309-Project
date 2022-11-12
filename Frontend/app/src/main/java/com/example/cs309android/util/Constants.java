@@ -29,8 +29,18 @@ public class Constants {
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
+    /**
+     * Preference key for the first time variable
+     * Used to see if the app should run the tutorial
+     */
     public static final String PREF_FIRST_TIME = "FirstTime";
+    /**
+     * Preference key for the users hash map
+     */
     public static final String PREF_LOGIN = "users";
+    /**
+     * Preference key for the latest user
+     */
     public static final String USERS_LATEST = "latest";
 
     /**
@@ -39,20 +49,54 @@ public class Constants {
     public static final int TOKEN_MAX_DEPTH = 5;
 
     /**
-     * Response codes for callback method. Used by Fragments for this class
+     * Tells the MainActivity to move to the register page
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    /**
+     * Tells MainActivity to close the login page
+     */
     public static final int CALLBACK_CLOSE_LOGIN = 1;
+    /**
+     * Tells MainActivity to open the login page
+     */
     public static final int CALLBACK_START_LOGIN = 2;
+    /**
+     * Tells MainActivity to move to the homepage
+     */
     public static final int CALLBACK_MOVE_TO_HOME = 3;
+    /**
+     * Opens the food details page
+     */
     public static final int CALLBACK_FOOD_DETAIL = 4;
+    /**
+     * Opens the food search activity
+     */
     public static final int CALLBACK_SEARCH_FOOD = 5;
+    /**
+     * Tells MainActivity to move to the settings page
+     */
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_EDIT_ACCOUNT = 7;
-    public static final int CALLBACK_CLOSE_PROFILE = 8;
-    public static final int CALLBACK_FOLLOW = 9;
-    public static final int CALLBACK_IMAGE_URI = 10;
-    public static final int CALLBACK_CLOSE_DETAIL = 11;
+    /**
+     * Used to return an image uri from the Image loader bottom sheet
+     */
+    public static final int CALLBACK_IMAGE_URI = 7;
+    /**
+     * Used to open the account page
+     */
+    public static final int CALLBACK_OPEN_ACCOUNT = 8;
+
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    public static final int INTENT_NONE = -1;
+    /**
+     * Intent code tells the SearchActivity it is from the shopping list
+     */
+    public static final int INTENT_SHOPPING_LIST = 0;
+    /**
+     * Tells the SearchActivity it was opened from recipe add
+     */
+    public static final int INTENT_RECIPE_ADD = 1;
 
 
     public static final String PARCEL_IMAGE_URI = "image_uri";
@@ -68,6 +112,38 @@ public class Constants {
      * This is used to parcel the intent of opening an activity.
      */
     public static final String PARCEL_INTENT_CODE = "intentCode";
+    /**
+     * Used to parcel the control variable
+     */
+    public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    /**
+     * Used to parcel an item's position in a list
+     */
+    public static final String PARCEL_ITEM_POSITION = "item_pos";
+    /**
+     * Used to parcel a recipe
+     */
+    public static final String PARCEL_RECIPE = "HomeFragment.recipe";
+    /**
+     * Used in the account page to tell if it is the owner or not
+     */
+    public static final String PARCEL_OWNER = "owner";
+    /**
+     * Used to tell the account page if the account is being followed
+     */
+    public static final String PARCEL_FOLLOWING = "following";
+    /**
+     * Used in the account page
+     */
+    public static final String PARCEL_USERNAME = "username";
+    /**
+     * Used in AccountListPage for transferring an array of usernames
+     */
+    public static final String PARCEL_ACCOUNT_LIST = "accounts";
+    /**
+     * Used to give the toolbar in AccountListView a title
+     */
+    public static final String PARCEL_TITLE = "title";
 
     // RESULT CODES
     /**
@@ -199,6 +275,10 @@ public class Constants {
      */
     public static final String ADD_RECIPES_URL = RECIPES_URL + "add/";
     /**
+     * URL for updating recipes
+     */
+    public static final String UPDATE_RECIPES_URL = RECIPES_URL + "update/";
+    /**
      * Remove url for removing an item from recipes
      */
     public static final String REMOVE_RECIPES_URL = RECIPES_URL + "remove";
@@ -210,6 +290,14 @@ public class Constants {
      * Url for getting an item from recipes
      */
     public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+    /**
+     * URL for setting a recipe's image
+     */
+    public static final String ADD_RECIPE_IMAGE_URL = RECIPES_URL + "addPicture/";
+    /**
+     * URL for getting a recipe's image
+     */
+    public static final String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
 
     // SOCIAL
     /**
@@ -217,9 +305,37 @@ public class Constants {
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
     /**
+     * URL used when creating a comment
+     */
+    public static final String COMMENT_URL = SOCIAL_URL + "comment";
+    /**
+     * URL for deleting a comment
+     */
+    public static final String REMOVE_COMMENT_URL = SOCIAL_URL + "removeComment";
+    /**
+     * URL for following an account
+     */
+    public static final String FOLLOW_URL = SOCIAL_URL + "follow";
+    /**
+     * URL for unfollowing an account
+     */
+    public static final String UNFOLLOW_URL = SOCIAL_URL + "unfollow";
+    /**
+     * URL for checking follower status
+     */
+    public static final String IS_FOLLOWING_URL = SOCIAL_URL + "isFollowing";
+    /**
+     * URL for getting the follower list
+     */
+    public static final String GET_FOLLOWERS_URL = SOCIAL_URL + "getFollowers";
+    /**
+     * URL for getting the following list
+     */
+    public static final String GET_FOLLOWING_URL = SOCIAL_URL + "getFollowing";
+    /**
      * Add url for getting a users feed
      */
-    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed/";
+    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed";
 
     //FOOD LOG
     /**
