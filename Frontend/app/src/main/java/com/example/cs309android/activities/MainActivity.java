@@ -178,10 +178,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
         if (token != null) {
+            System.out.println(token);
             new LoginTokenRequest(token).unspinOnComplete(response -> {
                 LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
                 // Checks if the result is valid or not. If not, opens the login page
                 int result = loginResponse.getResult();
+                System.out.println(result);
 
                 if (result == RESULT_REGEN_TOKEN) regenToken(token, 0, loginResponse);
                 else if (result != RESULT_LOGGED_IN) startLoginFragment();
