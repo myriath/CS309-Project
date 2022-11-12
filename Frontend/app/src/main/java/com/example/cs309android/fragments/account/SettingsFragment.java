@@ -20,7 +20,7 @@ import androidx.preference.Preference;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AccountSwitchActivity;
+import com.example.cs309android.activities.account.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.util.Util;

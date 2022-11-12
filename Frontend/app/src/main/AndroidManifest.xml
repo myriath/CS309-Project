@@ -21,10 +21,10 @@
             android:name=".activities.account.AccountListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AccountSwitchActivity"
+            android:name=".activities.account.AccountSwitchActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AccountEditActivity"
+            android:name=".activities.account.AccountEditActivity"
             android:exported="false" />
         <activity
             android:name=".activities.recipe.AddRecipeActivity"
