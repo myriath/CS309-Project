@@ -1,13 +1,12 @@
 package com.util.security;
 
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.Base64;
+import java.util.Random;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -15,7 +14,6 @@ import javax.crypto.spec.PBEKeySpec;
 /**
  * Static utility class designed to streamline the secure generation of
  * hashes from plaintext passwords.
- *
  * @author Mitch Hudson
  */
 public class Hasher {
@@ -24,7 +22,7 @@ public class Hasher {
      */
     private static final Random RANDOM = new SecureRandom();
     /**
-     * Number of iterations to hash before returning the final hash.
+     * Number of iterations to hash passwords before returning the final hash.
      */
     private static final int ITERATIONS = 1000;
     /**
@@ -50,7 +48,7 @@ public class Hasher {
     /**
      * SHA256 message digest
      */
-    public static MessageDigest SHA_256;
+    public static final MessageDigest SHA_256;
     static {
         try {
             SHA_256 = MessageDigest.getInstance("SHA-256");
@@ -60,6 +58,11 @@ public class Hasher {
     }
 
     /**
+     * Header for the JWT
+     */
+    private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
+
+    /**
      * Static util class
      */
     private Hasher() {
@@ -67,7 +70,6 @@ public class Hasher {
 
     /**
      * Randomly generates a 16 byte salt using the SecureRandom java class
-     *
      * @return 16 byte array of the generated salt
      */
     public static byte[] generateSalt() {
@@ -78,7 +80,6 @@ public class Hasher {
 
     /**
      * Hashes the given password and salt with PBEKeySpec
-     *
      * @param plaintext Password to hash
      * @param slt       Randomly generated salt to use for hash
      * @return byte[] of salted hashed password
@@ -98,7 +99,6 @@ public class Hasher {
 
     /**
      * Generates a new random token (32 chars / 24 bytes)
-     *
      * @return new token
      */
     public static String genToken() {
@@ -109,7 +109,6 @@ public class Hasher {
 
     /**
      * Encodes the given bytes into base64
-     *
      * @return B64 encoded string
      */
     public static String getEncoded(byte[] bytes) {
@@ -118,7 +117,6 @@ public class Hasher {
 
     /**
      * Generates a new hash from a random salt and the given plaintext
-     *
      * @param plaintext Plaintext to hash
      * @return {@link Hash} object containing the salt used and the hashed value
      */
@@ -135,15 +133,6 @@ public class Hasher {
      * @return Base64 encoded string.
      */
     public static String sha256(String b64) {
-        return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64)));
-    }
-
-    /**
-     * Hashes a plaintext string with sha256
-     * @param plaintext Plaintext to hash
-     * @return B64 encoded string
-     */
-    public static String sha256plaintext(String plaintext) {
-        return B64_URL_ENCODER.encodeToString(SHA_256.digest(plaintext.getBytes(StandardCharsets.UTF_8)));
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64.trim()))).trim();
     }
 }
