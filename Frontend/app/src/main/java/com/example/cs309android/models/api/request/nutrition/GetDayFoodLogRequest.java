@@ -5,6 +5,11 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
+/**
+ * Request for getting a day's food log for a user
+ *
+ * @author Travis Massner
+ */
 public class GetDayFoodLogRequest extends GetRequest {
     /**
      * Authentication token
@@ -19,7 +24,6 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Public constructor
-     *
      * @param token Authentication token
      * @param date  Date of the food log
      */
@@ -30,7 +34,6 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the authentication token
-     *
      * @return authentication token
      */
     public String getToken() {
@@ -39,7 +42,6 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the date
-     *
      * @return date
      */
     public String getDate() {
@@ -48,11 +50,11 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the URL with token and date
-     *
      * @return URL with token and date
      */
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.GET_FOOD_LOG_BY_DAY_URL + token)
+        return new ParameterizedRequestURL(Constants.GET_FOOD_LOG_BY_DAY_URL)
+                .addPathVar(token)
                 .addParam("date", date)
                 .toString();
     }

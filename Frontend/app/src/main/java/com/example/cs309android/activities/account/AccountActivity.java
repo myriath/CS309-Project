@@ -45,7 +45,6 @@ import java.util.Locale;
  * Account activity used to view an account's details
  * when clicked on
  * (ex: from a recipe details page or search)
- *
  * @author Mitch Hudson
  */
 public class AccountActivity extends AppCompatActivity {
@@ -55,9 +54,15 @@ public class AccountActivity extends AppCompatActivity {
     private boolean isFollowing;
     /**
      * Keeps track of the follower count to display
+     * Default 0
      */
     private int followers = 0;
 
+    /**
+     * Runs when the activity is created
+     *
+     * @param savedInstanceState Saved state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

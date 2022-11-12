@@ -6,7 +6,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
 
 /**
- * Gets the profile
+ * Gets the banner image of a profile
  *
  * @author Mitch Hudson
  */
@@ -18,7 +18,6 @@ public class GetBannerRequest extends GetImageRequest {
 
     /**
      * Constructor
-     *
      * @param username Username to get the profile picture of
      */
     public GetBannerRequest(String username) {
@@ -34,9 +33,15 @@ public class GetBannerRequest extends GetImageRequest {
         return username;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(BANNER_URL + username)
+        return new ParameterizedRequestURL(BANNER_URL)
+                .addPathVar(username)
                 .toString();
     }
 }

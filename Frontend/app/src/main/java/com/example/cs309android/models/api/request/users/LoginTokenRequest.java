@@ -7,7 +7,7 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
- * GSON model for a login request
+ * Handles a token login attempt
  *
  * @author Mitch Hudson
  */
@@ -20,7 +20,6 @@ public class LoginTokenRequest extends GetRequest {
 
     /**
      * Public constructor
-     *
      * @param token Token for login
      */
     public LoginTokenRequest(String token) {
@@ -28,9 +27,9 @@ public class LoginTokenRequest extends GetRequest {
     }
 
     /**
-     * Username getter
+     * Token getter
      *
-     * @return username
+     * @return token
      */
     public String getToken() {
         return token;
@@ -38,6 +37,8 @@ public class LoginTokenRequest extends GetRequest {
 
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(TOKEN_URL + token).toString();
+        return new ParameterizedRequestURL(TOKEN_URL)
+                .addPathVar(token)
+                .toString();
     }
 }

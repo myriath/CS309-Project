@@ -40,8 +40,10 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class RegisterFragment extends BaseFragment {
-    Button registerButton;
-    TextInputLayout usernameField, emailField, passwordField;
+    /**
+     * Text input fields for the username and email
+     */
+    TextInputLayout usernameField, emailField;
 
     /**
      * Ran whenever the fragment is shown.
@@ -65,9 +67,9 @@ public class RegisterFragment extends BaseFragment {
 
         usernameField = view.findViewById(R.id.unameField);
         emailField = view.findViewById(R.id.emailField);
-        passwordField = view.findViewById(R.id.passwordField);
+        TextInputLayout passwordField = view.findViewById(R.id.passwordField);
 
-        registerButton = view.findViewById(R.id.buttonRegister);
+        Button registerButton = view.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {
             Util.hideKeyboard(view1, requireActivity());
 

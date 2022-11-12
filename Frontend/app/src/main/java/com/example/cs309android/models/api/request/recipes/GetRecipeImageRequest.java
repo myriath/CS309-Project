@@ -8,7 +8,7 @@ import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
 /**
  * Get image request for recipes
  *
- * @author Mitch Hudson
+ * @author Travis Massner
  */
 public class GetRecipeImageRequest extends GetImageRequest {
     /**
@@ -19,7 +19,7 @@ public class GetRecipeImageRequest extends GetImageRequest {
     /**
      * Constructor to be used by GSON
      *
-     * @param rid          rid for the recipe
+     * @param rid rid for the recipe
      */
     public GetRecipeImageRequest(String rid) {
         this.rid = rid;
@@ -27,12 +27,18 @@ public class GetRecipeImageRequest extends GetImageRequest {
 
     /**
      * Getter for the rid
-     * @return Rid
+     *
+     * @return rid
      */
     public String getRid() {
         return rid;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
     @Override
     public String getURL() {
         return new ParameterizedRequestURL(GET_RECIPE_IMAGE_URL)

@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response for the {@link com.example.cs309android.models.api.request.food.CustomFoodAddRequest} request
+ * Response object for the FDC by UPC request
  *
  * @author Mitch Hudson
  */
@@ -17,7 +17,6 @@ public class FDCByUPCResponse extends GenericResponse {
 
     /**
      * Constructor to be used by GSON
-     *
      * @param result Result code from the request
      */
     public FDCByUPCResponse(int result, int fdcId) {
@@ -27,7 +26,6 @@ public class FDCByUPCResponse extends GenericResponse {
 
     /**
      * Getter for the database id
-     *
      * @return Database id for the food item that was added
      */
     public int getFdcId() {

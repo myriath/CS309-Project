@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Simple food log item model
  *
- * @author Mitch Hudson
+ * @author Travis Massner
  */
 public class FoodLogItem {
     /**
@@ -88,62 +88,138 @@ public class FoodLogItem {
     @Expose
     private final String meal;
 
+    /**
+     * Getter for the log id
+     *
+     * @return log id
+     */
     public int getLogId() {
         return logId;
     }
 
+    /**
+     * Getter for the username
+     *
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
     public int getFdcId() {
         return fdcId;
     }
 
+    /**
+     * Getter for the food's name
+     *
+     * @return food name
+     */
     public String getFoodName() {
         return foodName;
     }
 
+    /**
+     * Getter for the serving amount
+     *
+     * @return serving amount
+     */
     public int getServingAmt() {
         return servingAmt;
     }
 
+    /**
+     * Getter for the serving unit
+     *
+     * @return serving unit
+     */
     public String getServingUnit() {
         return servingUnit;
     }
 
+    /**
+     * Getter for the fat
+     *
+     * @return fat
+     */
     public int getFat() {
         return fat;
     }
 
+    /**
+     * Getter for the saturated fat
+     *
+     * @return saturated fat
+     */
     public int getSat_fat() {
         return sat_fat;
     }
 
+    /**
+     * Getter for the sodium
+     *
+     * @return sodium
+     */
     public int getSodium() {
         return sodium;
     }
 
+    /**
+     * Getter for the carbohydrates
+     *
+     * @return carbs
+     */
     public int getCarbohydrates() {
         return carbohydrates;
     }
 
+    /**
+     * Getter for the fiber
+     *
+     * @return fiber
+     */
     public int getFiber() {
         return fiber;
     }
 
+    /**
+     * Getter for the sugars
+     *
+     * @return sugars
+     */
     public int getSugars() {
         return sugars;
     }
 
+    /**
+     * Getter for the protein
+     *
+     * @return protein
+     */
     public int getProtein() {
         return protein;
     }
 
+    /**
+     * Getter for the date
+     *
+     * @return date of the logged item
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * Getter for the meal value
+     * Ex: Lunch, Dinner
+     *
+     * @return meal value
+     */
     public String getMeal() {
         return meal;
     }
@@ -263,7 +339,4 @@ public class FoodLogItem {
         date = in.readString();
         meal = in.readString();
     }
-
-
-
 }

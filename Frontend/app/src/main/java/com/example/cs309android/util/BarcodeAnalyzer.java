@@ -14,7 +14,7 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import java.util.List;
 
 /**
- * Basic class to read barcodes from a CameraX ImageProxy
+ * Basic class to read barcodes from a Bitmap
  *
  * @author Mitch Hudson (tutorial from https://developers.google.com/ml-kit/vision/barcode-scanning/android#java)
  */

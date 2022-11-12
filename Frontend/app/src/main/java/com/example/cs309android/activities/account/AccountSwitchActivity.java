@@ -19,6 +19,11 @@ import com.example.cs309android.models.adapters.SwitchUserAdapter;
  * @author Mitch Hudson
  */
 public class AccountSwitchActivity extends AppCompatActivity implements CallbackFragment {
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +42,6 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
     /**
      * Used to set the result code
-     *
      * @param op     Used to tell the activity what the result code will be
      * @param bundle ignored
      */
@@ -51,7 +55,6 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
     /**
      * No parent, ignored
-     *
      * @param fragment ignored
      */
     @Override

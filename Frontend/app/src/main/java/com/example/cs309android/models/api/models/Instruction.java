@@ -9,7 +9,6 @@ import java.util.Comparator;
 
 /**
  * Instruction class that stores the step number and text
- *
  * @author Mitch Hudson
  */
 public class Instruction implements Parcelable {

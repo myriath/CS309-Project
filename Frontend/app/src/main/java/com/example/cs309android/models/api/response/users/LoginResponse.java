@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response class for the /users/validateLogin endpoint
+ * Response object for login requests
  *
  * @author Mitch Hudson
  */
@@ -16,7 +16,7 @@ public class LoginResponse extends GenericResponse {
     private final String username;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result   Result code from the request
      * @param username Username of the account logged into
@@ -28,7 +28,6 @@ public class LoginResponse extends GenericResponse {
 
     /**
      * Username for reference
-     *
      * @return username
      */
     public String getUsername() {

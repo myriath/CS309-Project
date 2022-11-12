@@ -21,9 +21,21 @@ import com.example.cs309android.models.api.models.SimpleFoodItem;
  * @author Mitch Hudson
  */
 public class IngredientEditView extends FrameLayout {
+    /**
+     * Item this view represents
+     */
     private SimpleFoodItem item;
+    /**
+     * View for finding sub-views
+     */
     private View view;
+    /**
+     * Unit for the ingredient
+     */
     private String unit;
+    /**
+     * Position in the list
+     */
     private int position;
 
     public IngredientEditView(@NonNull Context context) {
@@ -44,7 +56,6 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
-     *
      * @param item      Item for the ingredient
      * @param unit      Unit for the quantity
      * @param listener  Runs when the remove button is pressed

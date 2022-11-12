@@ -6,7 +6,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PutRequest;
 
 /**
- * Request used when a user unfollows another user
+ * Cause a user to unfollow another user
  *
  * @author Mitch Hudson
  */

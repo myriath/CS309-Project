@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Generic response class used for communication between front and back-ends
- *
  * @author Mitch Hudson
  */
 public class GenericResponse {
@@ -15,7 +14,7 @@ public class GenericResponse {
     private final int result;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result Result code from the request
      */
@@ -25,7 +24,6 @@ public class GenericResponse {
 
     /**
      * Getter for the result code
-     *
      * @return Code from util.Constants
      */
     public int getResult() {

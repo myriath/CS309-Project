@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
 
 /**
- * Response for the GetRecipesRequest
+ * Response object for the get recipes request
  *
  * @author Mitch Hudson
  */
@@ -16,7 +16,6 @@ public class GetRecipesResponse extends GenericResponse {
 
     /**
      * Constructor to be used by GSON
-     *
      * @param result Result code from the request
      * @param items  Array of user posts
      */
@@ -27,7 +26,6 @@ public class GetRecipesResponse extends GenericResponse {
 
     /**
      * Gets the response's items
-     *
      * @return array of user posts
      */
     public Recipe[] getItems() {

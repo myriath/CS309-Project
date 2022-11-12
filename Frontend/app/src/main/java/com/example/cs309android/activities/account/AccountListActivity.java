@@ -26,6 +26,11 @@ import com.example.cs309android.util.Util;
  * @author Mitch Hudson
  */
 public class AccountListActivity extends AppCompatActivity implements CallbackFragment {
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +55,8 @@ public class AccountListActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Used by the AccountAdapter class
-     *
      * @param op     Tells the class what to do.
-     * @param bundle Arguments
+     * @param bundle Callback arguments
      */
     @Override
     public void callback(int op, Bundle bundle) {
@@ -64,7 +68,6 @@ public class AccountListActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Does nothing, no parent
-     *
      * @param fragment Ignored
      */
     @Override

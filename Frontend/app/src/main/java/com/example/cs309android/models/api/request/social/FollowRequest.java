@@ -6,7 +6,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PostRequest;
 
 /**
- * Request used when a user follows another user
+ * Cause a user to follow another user
  *
  * @author Mitch Hudson
  */

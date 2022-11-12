@@ -9,7 +9,6 @@ import com.example.cs309android.util.RequestHandler;
 
 /**
  * Used for making requests with Bitmaps
- *
  * @author Mitch Hudson
  */
 public abstract class ImageRequest {
@@ -24,14 +23,12 @@ public abstract class ImageRequest {
 
     /**
      * Getter for the url
-     *
      * @return url for the request
      */
     public abstract String getURL();
 
     /**
      * Getter for the json body
-     *
      * @return body of the request
      */
     public String getBody() {
@@ -40,7 +37,6 @@ public abstract class ImageRequest {
 
     /**
      * Makes a request for the given image url, uses base max width/height
-     *
      * @param listener Runs when the request is completed
      * @param context  Context for volley
      */
@@ -51,7 +47,6 @@ public abstract class ImageRequest {
     /**
      * Makes a request for the given image url, uses base max width/height
      * (Custom errorListener)
-     *
      * @param listener      Runs when the request is completed
      * @param errorListener Runs when volley throws an error
      * @param context       Context for volley
@@ -62,7 +57,6 @@ public abstract class ImageRequest {
 
     /**
      * Makes a request for the given image url
-     *
      * @param listener  Runs when the request is completed
      * @param maxWidth  Maximum width of the image in pixels
      * @param maxHeight Maximum height of the image in pixels
@@ -74,7 +68,6 @@ public abstract class ImageRequest {
 
     /**
      * Makes a request for the given image url (custom error listener)
-     *
      * @param listener      Runs when the request is completed
      * @param maxWidth      Maximum width of the image in pixels
      * @param maxHeight     Maximum height of the image in pixels

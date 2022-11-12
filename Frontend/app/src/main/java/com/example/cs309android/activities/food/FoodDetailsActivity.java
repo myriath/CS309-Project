@@ -33,13 +33,13 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Food Details activity displays the information of a food from the USDA API
+ * Food Details activity displays the information of a food item
  *
  * @author Mitch Hudson
  */
 public class FoodDetailsActivity extends AppCompatActivity {
     /**
-     * Used to tell the activity to display no fab
+     * Used to tell the activity to display no floating button
      */
     public static final int CONTROL_NONE = 0;
     /**
@@ -47,7 +47,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
      */
     public static final int CONTROL_ADD = 1;
 
+    /**
+     * 16dp in pixels
+     */
     private int dp16;
+    /**
+     * 8dp in pixels
+     */
     private int dp8;
 
     /**
@@ -63,7 +69,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     /**
      * Runs when the activity is started
      *
-     * @param savedInstanceState savedInstanceState
+     * @param savedInstanceState saved state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +155,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Handles the back button on the toolbar
-     *
      * @return true
      */
     @Override
@@ -161,7 +166,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the nutrition values for the nutrition table
-     *
      * @param nutrients Nutrients of the item
      */
     private void fillNutrition(BrandedFoodItem.LabelNutrients nutrients, float servingSize, String servingUnit) {
@@ -224,7 +228,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the nutrition card for custom food items
-     *
      * @param foodItem Item to display nutrition info of
      */
     private void fillNutrition(CustomFoodItem foodItem) {
@@ -257,11 +260,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Generates a NutritionItemView to be used for the nutrition table
-     *
-     * @param name   Name of the nutrient
+     * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
-     * @param unit   Unit for the nutrient
-     * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
+     * @param unit     Unit for the nutrient
+     * @return Null if the amount is 0, or a NutritionItemView to
+     *                 display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, BrandedFoodItem.LabelNutrients.Nutrient nutrient, String unit) {
         NutritionItemView itemView;
@@ -277,11 +280,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Generates a NutritionItemView to be used for the nutrition table
-     *
-     * @param name   Name of the nutrient
+     * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
-     * @param unit   Unit for the nutrient
-     * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
+     * @param unit     Unit for the nutrient
+     * @return Null if the amount is 0, or a NutritionItemView
+     *                 to display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, Float nutrient, String unit) {
         NutritionItemView itemView;
@@ -297,7 +300,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the ingredient values for the ingredients table
-     *
      * @param ingredientsText Ingredients of the item
      */
     private void fillIngredients(String ingredientsText) {

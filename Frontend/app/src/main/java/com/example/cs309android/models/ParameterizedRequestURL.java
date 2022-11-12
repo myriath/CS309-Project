@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 /**
  * Class used to encode parameters to a valid Get request url.
- *
  * @author Mitch Hudson
  */
 public class ParameterizedRequestURL {
@@ -33,7 +32,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Constructor to construct a new GetRequestURL.
-     *
      * @param url Base url (no '?')
      */
     public ParameterizedRequestURL(String url) {
@@ -43,7 +41,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Constructor to construct a new GetRequestURL.
-     *
      * @param params ArrayList of params
      * @param url    Base url (no '?')
      */
@@ -53,7 +50,8 @@ public class ParameterizedRequestURL {
     }
 
     /**
-     * Used to add path variables to the url
+     * Adds the given path variable to the url
+     *
      * @param variable Variable to add
      * @return this
      */
@@ -65,6 +63,20 @@ public class ParameterizedRequestURL {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(int variable) {
+        if (url != null) {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(variable);
         }
         return this;
     }
@@ -83,7 +95,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Adds a parameter
-     *
      * @param name  Name of the parameter
      * @param value Value of the parameter
      * @return this (allows stacking calls)
@@ -96,7 +107,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Adds an array of parameters
-     *
      * @param params Array to add
      * @return this (allows stacking calls)
      */
@@ -108,7 +118,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Adds a specific item from an array of parameters
-     *
      * @param params Array to get param from
      * @param index  index of param to add (-1 = all)
      * @return this (allows stacking calls)
@@ -126,7 +135,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Adds an array of parameters
-     *
      * @param name   Name of the parameter
      * @param values Values for the parameter
      * @return this (allows stacking calls)
@@ -143,7 +151,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Adds an array of parameters
-     *
      * @param name   Name of the parameter
      * @param values Values for the parameter
      * @param index  Index of the array to add (-1 = all)
@@ -165,7 +172,6 @@ public class ParameterizedRequestURL {
 
     /**
      * Turns the GetRequestURL into an encoded url with all of the parameters.
-     *
      * @return Proper url with included parameters.
      */
     @NonNull
@@ -206,7 +212,6 @@ public class ParameterizedRequestURL {
 
         /**
          * Constructor to create a new RequestParam
-         *
          * @param name  Name of the parameter (stuff before the '=')
          * @param value Value of the parameter (stuff after the '=') [needs toString method]
          */
@@ -217,7 +222,6 @@ public class ParameterizedRequestURL {
 
         /**
          * Generate a url encoding for this request parameter.
-         *
          * @return URL encoded parameter
          */
         @NonNull

@@ -25,13 +25,22 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
+/**
+ * Activity for creating a custom food item
+ *
+ * @author Mitch Hudson
+ */
 public class CustomFoodActivity extends AppCompatActivity {
-
     /**
      * Food item to display details for
      */
     private SimpleFoodItem item;
 
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +50,7 @@ public class CustomFoodActivity extends AppCompatActivity {
         item = intent.getParcelableExtra(PARCEL_FOODITEM);
         Space spacer = new Space(this);
         spacer.setMinimumHeight((int) Util.scalePixels(160));
-        /**
-         * Layout for displaying the food details
-         */
+
         LinearLayout detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.addView(spacer);
 
@@ -84,7 +91,6 @@ public class CustomFoodActivity extends AppCompatActivity {
 
     /**
      * Handles the back button on the toolbar
-     *
      * @return true
      */
     @Override

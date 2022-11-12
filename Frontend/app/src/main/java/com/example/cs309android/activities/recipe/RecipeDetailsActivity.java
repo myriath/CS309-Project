@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Activity for viewing a recipe
+ * Activity for viewing a recipe's details
  *
  * @author Travis Massner
  * @author Mitch Hudson
@@ -39,6 +39,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
      */
     private ActivityResultLauncher<Intent> editLauncher;
 
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

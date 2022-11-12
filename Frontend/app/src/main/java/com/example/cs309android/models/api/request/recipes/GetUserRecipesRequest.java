@@ -1,8 +1,15 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import com.example.cs309android.models.api.request.abstraction.GetRequest;
-import com.example.cs309android.util.Constants;
+import static com.example.cs309android.util.Constants.GET_RECIPES_LIST_URL;
 
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.api.request.abstraction.GetRequest;
+
+/**
+ * Gets a list of a user's recipes
+ *
+ * @author Travis Massner
+ */
 public class GetUserRecipesRequest extends GetRequest {
     /**
      * Authentication token of the user
@@ -27,7 +34,15 @@ public class GetUserRecipesRequest extends GetRequest {
         return token;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
+    @Override
     public String getURL() {
-        return Constants.GET_RECIPES_LIST_URL + token;
+        return new ParameterizedRequestURL(GET_RECIPES_LIST_URL)
+                .addPathVar(token)
+                .toString();
     }
 }

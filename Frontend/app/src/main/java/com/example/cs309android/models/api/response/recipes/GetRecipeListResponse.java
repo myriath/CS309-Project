@@ -4,8 +4,12 @@ import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
+/**
+ * Response object for the get recipe list request
+ *
+ * @author Travis Massner
+ */
 public class GetRecipeListResponse extends GenericResponse {
-
     /**
      * Recipe list array from JSON
      */
@@ -14,7 +18,6 @@ public class GetRecipeListResponse extends GenericResponse {
 
     /**
      * Public constructor
-     *
      * @param recipes recipe item
      */
     public GetRecipeListResponse(Recipe[] recipes, int result) {
@@ -24,7 +27,6 @@ public class GetRecipeListResponse extends GenericResponse {
 
     /**
      * Getter for the recipe array
-     *
      * @return Array of simple recipe items.
      */
     public Recipe[] getRecipes() {

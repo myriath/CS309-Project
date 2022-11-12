@@ -5,7 +5,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * GSON model for the /recipe/get endpoint
+ * Response object for the get recipe details request
  *
  * @author Travis Massner
  */
@@ -18,7 +18,6 @@ public class GetRecipeDetailsResponse extends GenericResponse {
 
     /**
      * Public constructor
-     *
      * @param recipe recipe item
      */
     public GetRecipeDetailsResponse(Recipe recipe, int result) {
@@ -28,7 +27,6 @@ public class GetRecipeDetailsResponse extends GenericResponse {
 
     /**
      * Getter for the recipe
-     *
      * @return Simple recipe item
      */
     public Recipe getRecipe() {

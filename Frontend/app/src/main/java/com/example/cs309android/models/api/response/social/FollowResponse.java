@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 /**
  * A generic response class that has a response code and an
  * array of usernames
+ * Used for various requests in the social endpoints
  *
  * @author Mitch Hudson
  */
@@ -17,7 +18,7 @@ public class FollowResponse extends GenericResponse {
     private final String[] users;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result Result code from the request
      */

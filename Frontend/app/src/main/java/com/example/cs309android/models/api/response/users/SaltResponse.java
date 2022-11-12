@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Used by gson on response to the /getSalt endpoint
+ * Response object for the get salt request
  *
  * @author Mitch Hudson
  */
@@ -17,7 +17,7 @@ public class SaltResponse extends GenericResponse {
     private final String salt;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result Result code from the request
      * @param salt   Salt value from the request
@@ -29,7 +29,6 @@ public class SaltResponse extends GenericResponse {
 
     /**
      * Getter for the salt value
-     *
      * @return Salt value from the request
      */
     public String getSalt() {

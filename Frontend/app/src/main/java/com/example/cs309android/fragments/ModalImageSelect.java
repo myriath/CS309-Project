@@ -28,7 +28,6 @@ import java.util.Objects;
 /**
  * Modal bottom sheet for selecting image source
  * (camera or gallery)
- *
  * @author Mitch Hudson
  */
 public class ModalImageSelect extends BottomSheetDialogFragment implements CallbackFragment {
@@ -54,6 +53,11 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
      */
     ActivityResultLauncher<String> permissionsLauncher;
 
+    /**
+     * Runs when the dialog is created
+     *
+     * @param savedInstanceState Saved state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +101,14 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
         );
     }
 
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the dialog fragment
+     * @param container          Parent for the dialog fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated dialog fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,14 +132,16 @@ public class ModalImageSelect extends BottomSheetDialogFragment implements Callb
 
     /**
      * Do nothing, no children
+     *
+     * @param op     ignored
+     * @param bundle ignored
      */
     @Override
     public void callback(int op, Bundle bundle) {
     }
 
     /**
-     * Sets the callback fragment
-     *
+     * Sets the callback fragment=
      * @param fragment Callback fragment.
      */
     @Override

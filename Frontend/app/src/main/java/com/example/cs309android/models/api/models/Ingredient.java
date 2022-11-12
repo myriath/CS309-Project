@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 /**
  * Ingredient class contains a SimpleFoodItem and the quantity / units for it.
  * Used in recipes
- *
  * @author Mitch Hudson
  */
 public class Ingredient implements Parcelable {
@@ -30,7 +29,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Public constructor
-     *
      * @param food     Food item for nutrition details
      * @param quantity Quantity of the food item
      * @param unit     Unit the quantity is measured in
@@ -52,6 +50,9 @@ public class Ingredient implements Parcelable {
         unit = in.readString();
     }
 
+    /**
+     * CREATOR instance for the Parcelable interface
+     */
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
         @Override
         public Ingredient createFromParcel(Parcel in) {
@@ -66,7 +67,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Getter for the food item
-     *
      * @return food item
      */
     public SimpleFoodItem getFood() {
@@ -75,7 +75,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Getter for the quantity
-     *
      * @return quantity
      */
     public float getQuantity() {
@@ -84,7 +83,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Getter for the unit
-     *
      * @return units
      */
     public String getUnit() {
@@ -93,7 +91,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Setter for the quantity
-     *
      * @param quantity new quantity
      */
     public void setQuantity(float quantity) {
@@ -102,7 +99,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Setter for the unit
-     *
      * @param unit new unit
      */
     public void setUnit(String unit) {
@@ -111,7 +107,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Unused for this class
-     *
      * @return 0
      */
     @Override
@@ -121,7 +116,6 @@ public class Ingredient implements Parcelable {
 
     /**
      * Writes this object to the given parcel
-     *
      * @param parcel Parcel to write to
      * @param i      flags
      */

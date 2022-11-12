@@ -14,7 +14,6 @@ import java.util.Map;
 
 /**
  * Global class for holding onto the token for the application
- *
  * @author Mitch Hudson
  */
 public class GlobalClass extends Application {
@@ -62,7 +61,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the token string
-     *
      * @return authentication token
      */
     public String getToken() {
@@ -71,7 +69,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the token string
-     *
      * @param token authentication token
      */
     public void setToken(String token) {
@@ -80,7 +77,6 @@ public class GlobalClass extends Application {
 
     /**
      * Removes the login details of the username given
-     *
      * @param username username to remove from the table
      */
     public void removeToken(String username) {
@@ -90,7 +86,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the username
-     *
      * @return username
      */
     public String getUsername() {
@@ -99,7 +94,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the list of logged in accounts
-     *
      * @return Array of usernames
      */
     public String[] getAccounts() {
@@ -112,7 +106,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the username
-     *
      * @param username new username
      */
     public void setUsername(String username) {
@@ -122,7 +115,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the profile picture
-     *
      * @return profile picture
      */
     public Bitmap getPfp() {
@@ -131,7 +123,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the profile picture
-     *
      * @param pfp new profile picture
      */
     public void setPfp(Bitmap pfp) {
@@ -140,7 +131,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the banner image
-     *
      * @return banner image
      */
     public Bitmap getBanner() {
@@ -149,7 +139,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the banner image
-     *
      * @param banner new banner image
      */
     public void setBanner(Bitmap banner) {
@@ -158,7 +147,6 @@ public class GlobalClass extends Application {
 
     /**
      * Gets the bio text
-     *
      * @return bio text
      */
     public String getBio() {
@@ -167,7 +155,6 @@ public class GlobalClass extends Application {
 
     /**
      * Sets the bio text
-     *
      * @param bio new bio text
      */
     public void setBio(String bio) {
@@ -176,7 +163,6 @@ public class GlobalClass extends Application {
 
     /**
      * Gets the follower count
-     *
      * @return follower count
      */
     public int getFollowers() {
@@ -185,7 +171,6 @@ public class GlobalClass extends Application {
 
     /**
      * Sets the follower count
-     *
      * @param followers new follower count
      */
     public void setFollowers(int followers) {
@@ -194,7 +179,6 @@ public class GlobalClass extends Application {
 
     /**
      * Gets the following count
-     *
      * @return following count
      */
     public int getFollowing() {
@@ -203,7 +187,6 @@ public class GlobalClass extends Application {
 
     /**
      * Sets the following count
-     *
      * @param following new following count
      */
     public void setFollowing(int following) {
@@ -212,7 +195,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the shared preferences
-     *
      * @return shared preferences
      */
     public SharedPreferences getPreferences() {
@@ -221,7 +203,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the shared preferences
-     *
      * @param preferences new shared preferences
      */
     public void setPreferences(SharedPreferences preferences) {
@@ -230,7 +211,6 @@ public class GlobalClass extends Application {
 
     /**
      * Getter for the users map
-     *
      * @return Map of users
      */
     public Map<String, String> getUsers() {
@@ -239,7 +219,6 @@ public class GlobalClass extends Application {
 
     /**
      * Setter for the users map
-     *
      * @param users Map of users
      */
     public void setUsers(Map<String, String> users) {

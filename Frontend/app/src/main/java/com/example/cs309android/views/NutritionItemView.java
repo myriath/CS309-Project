@@ -14,7 +14,6 @@ import com.example.cs309android.R;
 /**
  * Custom view inflates the nutrition_item layout.
  * For nutrition list in FoodDetails
- *
  * @author Mitch Hudson
  */
 public class NutritionItemView extends FrameLayout {
@@ -36,7 +35,6 @@ public class NutritionItemView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
-     *
      * @param name   Name of the nutrient
      * @param amount String of the amount of the nutrient
      */

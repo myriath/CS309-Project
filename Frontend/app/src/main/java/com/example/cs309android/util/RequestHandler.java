@@ -15,7 +15,6 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Volley RequestQueue singleton class
- *
  * @author Mitch Hudson
  */
 public class RequestHandler {

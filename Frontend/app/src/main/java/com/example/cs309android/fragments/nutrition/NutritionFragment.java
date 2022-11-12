@@ -15,7 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
@@ -38,19 +37,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Nutrition page fragment to display nutrition info
+ *
+ * @author Travis Massner
  */
-// * Use the {@link NutritionFragment#newInstance} factory method to
 public class NutritionFragment extends BaseFragment {
-
-
+    /**
+     * Calendar for tracking the date
+     */
     Calendar date;
+    /**
+     * Button to go back in the calendar
+     */
     ImageButton leftButton;
+    /**
+     * Button to go forward in the calendar
+     */
     ImageButton rightButton;
+    /**
+     * Adapter for the list view
+     */
     NutritionLogAdapter adapter;
+    /**
+     * List view to display the nutrition log
+     */
     ListView listView;
 
     /**
@@ -68,27 +81,9 @@ public class NutritionFragment extends BaseFragment {
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
 
-    public NutritionFragment() {
-        // Required empty public constructor
-    }
-
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @return A new instance of fragment NutritionFragment.
-//     */
-//    public static NutritionFragment newInstance(ArrayList<SimpleFoodItem> items) {
-//        NutritionFragment fragment = new NutritionFragment();
-//        NutritionFragment.foods = items;
-//        System.out.println(foods.toString());
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         date = Calendar.getInstance();
 
@@ -122,14 +117,16 @@ public class NutritionFragment extends BaseFragment {
 //        );
     }
 
+    /**
+     * Updates the current date of the log
+     */
     private void updateDate() {
-        TextView dateText = getView().findViewById(R.id.date);
-        SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, yyyy");
+        TextView dateText = requireActivity().findViewById(R.id.date);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
-        format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date.getTime());
-        new GetDayFoodLogRequest(dateStr,((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
+        new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
             } catch (JSONException e) {
@@ -146,6 +143,14 @@ public class NutritionFragment extends BaseFragment {
 
     }
 
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the fragment view
+     * @param container          Parent for the fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -166,7 +171,7 @@ public class NutritionFragment extends BaseFragment {
         TextView dateText = view.findViewById(R.id.date);
         FloatingActionButton fab = view.findViewById(R.id.fab);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -217,18 +222,20 @@ public class NutritionFragment extends BaseFragment {
             startActivity(i);
         });
 
-        format = new SimpleDateFormat("EEE, MMM d, yyyy");
+        format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
         return view;
     }
 
+    /**
+     * Refreshes the nutrition log
+     *
+     * @param view
+     */
     public void refreshList(View view) {
         adapter = new NutritionLogAdapter(this.getActivity(), foods);
         listView = view.findViewById(R.id.log_list);
         listView.setAdapter(adapter);
-
     }
-
-
 }

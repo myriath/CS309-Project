@@ -1,4 +1,4 @@
-package com.example.cs309android.models.api.response.social;
+package com.example.cs309android.models.api.request.social;
 
 import static com.example.cs309android.util.Constants.IS_FOLLOWING_URL;
 
@@ -7,7 +7,6 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 
 /**
  * Checks if the given user is following the `following` user
- *
  * @author Mitch Hudson
  */
 public class IsFollowingRequest extends GetRequest {
@@ -31,6 +30,11 @@ public class IsFollowingRequest extends GetRequest {
         this.following = following;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
     @Override
     public String getURL() {
         return new ParameterizedRequestURL(IS_FOLLOWING_URL)

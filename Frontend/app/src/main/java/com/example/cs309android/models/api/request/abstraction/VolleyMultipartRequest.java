@@ -19,7 +19,6 @@ import java.util.Map;
 
 /**
  * Multipart request for sending images
- *
  * @author Mitch Hudson, based on code from https://www.maxester.com/blog/2019/10/04/upload-file-image-to-the-server-using-volley-in-android/
  */
 public class VolleyMultipartRequest extends Request<NetworkResponse> {

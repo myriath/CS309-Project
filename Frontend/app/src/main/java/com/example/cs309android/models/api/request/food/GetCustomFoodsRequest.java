@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Request for searching the custom food db
- *
  * @author Mitch Hudson
  */
 public class GetCustomFoodsRequest extends GetRequest {
@@ -20,7 +19,6 @@ public class GetCustomFoodsRequest extends GetRequest {
 
     /**
      * Public constructor
-     *
      * @param query Query to find the items
      */
     public GetCustomFoodsRequest(String query) {
@@ -29,7 +27,6 @@ public class GetCustomFoodsRequest extends GetRequest {
 
     /**
      * Getter for the parameterized url
-     *
      * @return Parameterized url
      */
     @Override

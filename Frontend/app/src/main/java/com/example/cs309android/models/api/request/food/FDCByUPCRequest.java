@@ -7,7 +7,7 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 import com.google.gson.annotations.Expose;
 
 /**
- * Request for searching the custom food db
+ * Request for getting an FDC id from a UPC code
  *
  * @author Mitch Hudson
  */
@@ -20,7 +20,6 @@ public class FDCByUPCRequest extends GetRequest {
 
     /**
      * Public constructor
-     *
      * @param upc UPC code to look up
      */
     public FDCByUPCRequest(String upc) {
@@ -29,12 +28,12 @@ public class FDCByUPCRequest extends GetRequest {
 
     /**
      * Getter for the parameterized url
-     *
      * @return Parameterized url
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(QUERY_FOOD_DB + upc)
+        return new ParameterizedRequestURL(QUERY_FOOD_DB)
+                .addPathVar(upc)
                 .toString();
     }
 }

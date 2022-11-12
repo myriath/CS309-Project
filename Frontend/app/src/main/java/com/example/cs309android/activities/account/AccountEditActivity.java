@@ -31,7 +31,6 @@ import java.util.Objects;
 
 /**
  * Activity used to edit a user's profile
- *
  * @author Mitch Hudson
  */
 public class AccountEditActivity extends AppCompatActivity implements CallbackFragment {
@@ -41,21 +40,28 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
     private Bitmap profileImage, bannerImage;
 
     /**
-     * Image intent constants
+     * The destination for the image is none
      */
     private static final int NONE = -1;
+    /**
+     * The target image for callback is the banner
+     */
     private static final int BANNER = 0;
+    /**
+     * The target image for callback is profile picture
+     */
     private static final int PFP = 1;
 
     /**
-     * Current intent
+     * Current target
+     * Default NONE
      */
-    private int imageDestination;
+    private int imageDestination = NONE;
 
     /**
      * Runs when the activity is started
      *
-     * @param savedInstanceState
+     * @param savedInstanceState saved state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,35 +156,32 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
     /**
      * Takes opcode and bundle and does something with it
      *
-     * @param op Tells the activity what to do
-     * @param bundle
+     * @param op     Tells the activity what to do
+     * @param bundle Callback args
      */
     @Override
     public void callback(int op, Bundle bundle) {
-        switch (op) {
-            case (CALLBACK_IMAGE_URI): {
-                try {
-                    Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
-                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
-                    if (imageDestination == BANNER) {
-                        bannerImage = ImageDecoder.decodeBitmap(source);
-                        ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);
-                    } else if (imageDestination == PFP) {
-                        profileImage = ImageDecoder.decodeBitmap(source);
-                        ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);
-                    }
-                    imageDestination = NONE;
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (op == CALLBACK_IMAGE_URI) {
+            try {
+                Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
+                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
+                if (imageDestination == BANNER) {
+                    bannerImage = ImageDecoder.decodeBitmap(source);
+                    ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);
+                } else if (imageDestination == PFP) {
+                    profileImage = ImageDecoder.decodeBitmap(source);
+                    ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);
                 }
+                imageDestination = NONE;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     /**
      * Do nothing, no parent
-     *
-     * @param fragment Callback fragment.
+     * @param fragment ignored
      */
     @Override
     public void setCallbackFragment(CallbackFragment fragment) {

@@ -2,13 +2,13 @@ package com.example.cs309android.models.api.request.food;
 
 import static com.example.cs309android.util.Constants.ADD_FOOD_URL;
 
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.CustomFoodItem;
 import com.example.cs309android.models.api.request.abstraction.PostRequest;
 import com.google.gson.annotations.Expose;
 
 /**
  * POST request for adding a custom food item to the database
- *
  * @author Mitch Hudson
  */
 public class CustomFoodAddRequest extends PostRequest {
@@ -21,17 +21,17 @@ public class CustomFoodAddRequest extends PostRequest {
 
     /**
      * Public constructor
-     *
      * @param item item to add
      */
     public CustomFoodAddRequest(CustomFoodItem item, String token) {
-        super(ADD_FOOD_URL + token);
+        super(new ParameterizedRequestURL(ADD_FOOD_URL)
+                .addPathVar(token)
+                .toString());
         this.item = item;
     }
 
     /**
      * Getter for the item to add
-     *
      * @return item to add
      */
     public CustomFoodItem getItem() {

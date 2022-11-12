@@ -15,17 +15,19 @@ import com.example.cs309android.models.api.models.FoodLogItem;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for the nutrition log list view
+ *
+ * @author Travis Massner
+ */
 public class NutritionLogAdapter extends ArrayAdapter<FoodLogItem> {
-
     /**
      * List of items in the food log
      */
     public final ArrayList<FoodLogItem> items;
 
-
     /**
      * Public constructor.
-     *
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
@@ -36,7 +38,6 @@ public class NutritionLogAdapter extends ArrayAdapter<FoodLogItem> {
 
     /**
      * Ran for each of the child views (items in the list)
-     *
      * @param position    index of the item in the list
      * @param convertView converted view of the item in the list
      * @param parent      ListView parent

@@ -22,7 +22,13 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class InstructionEditView extends FrameLayout {
+    /**
+     * View for finding sub-views
+     */
     private View view;
+    /**
+     * Position in the list view
+     */
     private int position;
 
     public InstructionEditView(@NonNull Context context) {
@@ -43,7 +49,6 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
-     *
      * @param listener Runs when the remove button is pressed
      * @param position Keeps track of the instruction number
      */

@@ -11,6 +11,11 @@ import com.example.cs309android.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Abstract request class to handle requests with Volley
+ *
+ * @author Mitch Hudson
+ */
 public abstract class Request {
     /**
      * Method type for the request
@@ -19,7 +24,6 @@ public abstract class Request {
 
     /**
      * Generates a new request with the given type and method
-     *
      * @param method request method
      */
     public Request(int method) {
@@ -28,21 +32,18 @@ public abstract class Request {
 
     /**
      * Getter for the url
-     *
      * @return url for the request
      */
     public abstract String getURL();
 
     /**
      * Getter for the json body
-     *
      * @return body of the request
      */
     public abstract String getBody();
 
     /**
      * Automatically calls unSpin when the response completes
-     *
      * @param listener What to do on response
      * @param context  Application context for volley
      * @param view     View to call unspin on
@@ -53,7 +54,6 @@ public abstract class Request {
 
     /**
      * Automatically calls unSpin when the response completes (Custom error listener)
-     *
      * @param listener What to do on response
      * @param context  Application context for volley
      * @param view     View to call unspin on
@@ -70,7 +70,6 @@ public abstract class Request {
 
     /**
      * Makes a request using Volley
-     *
      * @param listener Runs when completed successfully
      * @param context  Context for volley
      */
@@ -80,7 +79,6 @@ public abstract class Request {
 
     /**
      * Base request method
-     *
      * @param listener      Runs when completed successfully
      * @param errorListener Runs when volley throws an error
      * @param context       Context for volley

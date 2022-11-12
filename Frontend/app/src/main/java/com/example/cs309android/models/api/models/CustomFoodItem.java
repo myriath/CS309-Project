@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Simple food item used for displaying and moving data in the app
- *
  * @author Mitch Hudson
  */
 public class CustomFoodItem implements Parcelable {

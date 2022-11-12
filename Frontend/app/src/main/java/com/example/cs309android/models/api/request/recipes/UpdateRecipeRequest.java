@@ -6,12 +6,10 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.request.abstraction.PatchRequest;
-import com.example.cs309android.models.api.request.abstraction.PostRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Add request model for the /recipe/add endpoint
+ * Updates a recipe with new details
  *
  * @author Mitch Hudson
  */
@@ -60,7 +58,6 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the recipe name
-     *
      * @return recipeName
      */
     public String getRecipeName() {
@@ -69,7 +66,6 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the recipe instructions
-     *
      * @return instructions
      */
     public String getDescription() {
@@ -78,7 +74,6 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the ingredients
-     *
      * @return ingredients array
      */
     public Ingredient[] getIngredients() {
@@ -87,7 +82,6 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the instructions
-     *
      * @return instructions array (ORDERED)
      */
     public Instruction[] getInstructions() {

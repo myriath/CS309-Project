@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response for the AddRecipeRequest
+ * Response object for the add recipe request
  *
  * @author Mitch Hudson
  */
@@ -17,7 +17,6 @@ public class AddRecipeResponse extends GenericResponse {
 
     /**
      * Public constructor
-     *
      * @param rid recipe id
      */
     public AddRecipeResponse(int rid, int result) {
@@ -27,7 +26,6 @@ public class AddRecipeResponse extends GenericResponse {
 
     /**
      * Getter for the recipe id
-     *
      * @return recipe id
      */
     public int getRid() {

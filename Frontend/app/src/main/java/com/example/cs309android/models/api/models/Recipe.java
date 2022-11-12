@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
  * Simple recipe item used for displaying and moving data in the app
  *
  * @author Travis Massner
+ * @author Mitch Hudson
  */
 public class Recipe implements Parcelable {
     /**
@@ -105,7 +106,6 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the recipe ID
-     *
      * @return recipe ID
      */
     public int getRecipeID() {
@@ -139,7 +139,6 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the steps
-     *
      * @return recipe steps
      */
     public Instruction[] getInstructions() {
@@ -156,7 +155,6 @@ public class Recipe implements Parcelable {
 
     /**
      * Parcelable required method
-     *
      * @return 0
      */
     @Override

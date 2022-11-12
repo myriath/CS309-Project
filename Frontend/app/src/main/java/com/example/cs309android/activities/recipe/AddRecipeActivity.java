@@ -56,7 +56,6 @@ import java.util.Objects;
 
 /**
  * Activity for adding new recipes
- *
  * @author Travis Massner
  * @author Mitch Hudson
  */
@@ -71,6 +70,11 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
      */
     private Bitmap image;
 
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,9 +155,9 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
     /**
      * Checks for valid inputs and then either creates a new Recipe or updates it based on the rid given
      *
-     * @param ingredientList    LinearLayout to check
-     * @param instructionList   LinearLayout to check
-     * @param id                ID to update. If this is an add, use ITEM_ID_NULL
+     * @param ingredientList  LinearLayout to check
+     * @param instructionList LinearLayout to check
+     * @param id              ID to update. If this is an add, use ITEM_ID_NULL
      */
     public void save(LinearLayout ingredientList, LinearLayout instructionList, int id) {
         TextInputLayout nameInput = findViewById(R.id.recipeName);
@@ -212,7 +216,6 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Creates a new instruction entry
-     *
      * @param instructionList Instruction list to add to
      */
     public void addToInstructionList(LinearLayout instructionList) {
@@ -230,7 +233,6 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Generates an entry for the ingredient list
-     *
      * @param ingredientList Ingredient list to add to
      * @param item           Item to add an ingredient for
      */
@@ -264,7 +266,6 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Handles the back button on the toolbar
-     *
      * @return true
      */
     @Override
@@ -282,8 +283,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         if (Objects.requireNonNull(RecipeName.getEditText()).getText().length() <= 0) {
             RecipeName.setError("Recipe Name cannot be empty");
             notEmpty = false;
-        }
-        else {
+        } else {
             RecipeName.setError(null);
         }
 
@@ -296,6 +296,12 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         return notEmpty;
     }
 
+    /**
+     * Runs to when the image uri is retrieved from the bottom sheet
+     *
+     * @param op     Tells the class what to do.
+     * @param bundle Bundle of callback arguments
+     */
     @Override
     public void callback(int op, Bundle bundle) {
         if (op == CALLBACK_IMAGE_URI) {
