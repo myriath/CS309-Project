@@ -96,6 +96,9 @@
         android:layout_margin="32dp"
         android:clickable="true"
         android:contentDescription="@string/empty"
+        android:elevation="0dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:tint="?attr/colorOnSecondaryContainer"
         android:src="@drawable/ic_add" />
 
 </FrameLayout>

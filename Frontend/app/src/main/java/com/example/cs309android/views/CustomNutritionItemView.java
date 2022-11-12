@@ -75,7 +75,6 @@ public class CustomNutritionItemView extends FrameLayout {
         ((TextView) view.findViewById(R.id.name)).setText(name);
         input = view.findViewById(R.id.valueField);
         input.setHint(hint);
-
     }
 
     /**

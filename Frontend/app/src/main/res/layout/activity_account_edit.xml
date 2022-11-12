@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AccountEditActivity"
+    tools:context=".activities.account.AccountEditActivity"
     android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
@@ -47,6 +47,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     android:src="@drawable/ic_back"
+                    app:tint="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:contentDescription="@string/back" />
@@ -67,6 +68,7 @@
                 <ImageButton
                     android:background="@null"
                     android:src="@drawable/ic_add_photo"
+                    app:tint="@color/black"
                     android:id="@+id/add_banner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,8 +104,9 @@
                     android:contentDescription="@string/profile_picture" />
 
                 <ImageButton
-                    android:background="@color/white_low_opacity"
+                    android:background="@color/white_half_opacity"
                     android:src="@drawable/ic_add_photo"
+                    app:tint="@color/black"
                     android:id="@+id/add_pfp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -176,6 +179,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textMultiLine"
+                        android:maxLines="10"
                         android:maxLength="255" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -216,6 +220,9 @@
         app:fabSize="auto"
         android:layout_margin="32dp"
         android:layout_gravity="bottom|end"
+        android:elevation="0dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:tint="?attr/colorOnSecondaryContainer"
         app:icon="@drawable/ic_save" />
 
     <FrameLayout

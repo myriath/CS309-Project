@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
+            android:name=".activities.account.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.AccountListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AccountSwitchActivity"
             android:exported="false" />
         <activity
