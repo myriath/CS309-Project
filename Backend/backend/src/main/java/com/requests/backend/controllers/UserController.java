@@ -105,6 +105,7 @@ public class UserController {
         try {
             // If the token is not valid, return RESULT_USER_HASH_MISMATCH
             // TODO: Remove once bug is found
+            LOGGER.info(token);
             LOGGER.info(hashedToken);
             if (tokenQuery.length == 0) {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
