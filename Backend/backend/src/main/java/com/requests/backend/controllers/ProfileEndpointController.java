@@ -25,7 +25,7 @@ import static com.util.Constants.*;
  */
 @RestController
 @RequestMapping(path="/profile")
-public class ProfileController {
+public class ProfileEndpointController {
 
     @Autowired
     private UserRepository userRepository;
