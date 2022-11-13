@@ -85,12 +85,12 @@ public class CustomController {
     /**
      * Add a new custom food item to the database.
      * @param token
-     * @param json
+     * @param req
      * @return JSON string containing the result of the operation.
      * @throws JsonProcessingException
      */
     @PostMapping("/add/{token}")
-    public @ResponseBody String add(@PathVariable String token, @RequestBody String json) throws JsonProcessingException {
+    public @ResponseBody String add(@PathVariable String token, @RequestBody CustomFoodRequest req) throws JsonProcessingException {
 
         String hashedToken = Hasher.sha256(token);
 
@@ -107,7 +107,7 @@ public class CustomController {
         }
         else {
 
-            CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
+//            CustomFoodRequest req = gson.fromJson(req, CustomFoodRequest.class);
 
             CustomFood food = req.getItem();
                 CustomFood savedFood = new CustomFood(food.getName(), food.getIngredients(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
