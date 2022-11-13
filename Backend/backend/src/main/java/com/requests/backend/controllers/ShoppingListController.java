@@ -19,6 +19,11 @@ import java.util.Collection;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to the shopping list.
+ * @author Logan
+ * @author Mitch
+ */
 @RestController
 @RequestMapping(path="/shopping")
 public class ShoppingListController {
@@ -78,6 +83,12 @@ public class ShoppingListController {
 
     }
 
+    /**
+     * Adds an item to the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param json JSON request body containing the item to add to the shopping list
+     * @return Result code
+     */
     @PostMapping(path="/add/{token}")
     public @ResponseBody String addToShoppingList(@PathVariable String token, @RequestBody String json) {
 
@@ -119,6 +130,12 @@ public class ShoppingListController {
     }
 
 
+    /**
+     * Changes the strikeout status of an item in the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param json JSON request body containing identifying information for the item to change
+     * @return Result code
+     */
     @PatchMapping (path="/strikeout/{token}")
     public @ResponseBody String changeStrikeout(@PathVariable String token, @RequestBody String json) {
 
@@ -156,6 +173,12 @@ public class ShoppingListController {
         return gson.toJson(res);
     }
 
+    /**
+     * Deletes an item from the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param json JSON request body containing identifying information for the item to delete
+     * @return Result code
+     */
     @PutMapping (path = "/remove/{token}")
     public @ResponseBody String removeFromList(@PathVariable String token, @RequestBody String json) {
 

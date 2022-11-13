@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to custom foods.
+ *
+ * @author Logan
+ * @author Mitch
+ */
 @RestController
 @RequestMapping(path="/food")
 public class CustomController {
@@ -30,6 +36,12 @@ public class CustomController {
     @Autowired
     private CustomRepository customRepository;
 
+    /**
+     * Get custom foods that best match the given query.
+     * @param query
+     * @return JSON string containing the results.
+     * @throws JsonProcessingException
+     */
     @GetMapping("/get")
     public String get(@RequestParam String query) throws JsonProcessingException {
 
@@ -46,6 +58,12 @@ public class CustomController {
         return gson.toJson(res);
     }
 
+    /**
+     * Get information about a specific custom food by its ID.
+     * @param id
+     * @return JSON string containing information about the food item.
+     * @throws JsonProcessingException
+     */
     @GetMapping("/get/{id}")
     public String get(@PathVariable int id) throws JsonProcessingException {
         FoodResponse res = new FoodResponse();
@@ -64,6 +82,13 @@ public class CustomController {
         return gson.toJson(res);
     }
 
+    /**
+     * Add a new custom food item to the database.
+     * @param token
+     * @param json
+     * @return JSON string containing the result of the operation.
+     * @throws JsonProcessingException
+     */
     @PostMapping("/add/{token}")
     public @ResponseBody String add(@PathVariable String token, @RequestBody String json) throws JsonProcessingException {
 
@@ -85,17 +110,12 @@ public class CustomController {
             CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
 
             CustomFood food = req.getItem();
-
-//            try {
                 CustomFood savedFood = new CustomFood(food.getName(), food.getIngredients(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
                 savedFood = customRepository.save(savedFood);
                 int dbId = savedFood.getDbId();
 
                 res.setResult(RESULT_OK);
                 res.setDbId(dbId);
-//            } catch (Exception e) {
-//                res.setResult(RESULT_ERROR);
-//            }
         }
 
         return gson.toJson(res);

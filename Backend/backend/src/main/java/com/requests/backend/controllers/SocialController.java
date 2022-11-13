@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to recipes.
+ * @author Logan
+ * @author Mitch
+ */
 @RestController
 @RequestMapping(path="/social")
 public class SocialController {
@@ -33,6 +38,11 @@ public class SocialController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    /**
+     * This method gets a list of follows of a user given their username.
+     * @param username The username of the user to get the followers of.
+     * @return A list of followers of the user.
+     */
     @GetMapping (path="/getFollowers/{username}")
     public @ResponseBody String getFollowers(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
@@ -47,6 +57,11 @@ public class SocialController {
         return gson.toJson(res);
     }
 
+    /**
+     * Gets a list of users that a user is following.
+     * @param username The username of the user
+     * @return A list of users that the user is following.
+     */
     @GetMapping (path="/getFollowing/{username}")
     public @ResponseBody String getFollowing(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
@@ -61,6 +76,12 @@ public class SocialController {
         return gson.toJson(res);
     }
 
+    /**
+     * Checks if a user is following another user.
+     * @param follower The username of the user that is following.
+     * @param following The username of the user that is being followed.
+     * @return A boolean value indicating if the user is following the other user.
+     */
     @GetMapping (path="/isFollowing/{follower}/{following}")
     public @ResponseBody String getIsFollowing(@PathVariable String follower, @PathVariable String following) {
         FollowResponse res = new FollowResponse();
@@ -75,6 +96,12 @@ public class SocialController {
         return gson.toJson(res);
     }
 
+    /**
+     * Has one user follow another user.
+     * @param token The token of the user that is following.
+     * @param following The username of the user that is being followed.
+     * @return A result code indicating if the user was successfully followed.
+     */
     @PostMapping (path="/follow/{token}")
     public @ResponseBody String follow(@PathVariable String token, @RequestParam String following) {
         String tokenHash = Hasher.sha256(token);
@@ -99,6 +126,12 @@ public class SocialController {
         return gson.toJson(res);
     }
 
+    /**
+     * Has one user unfollow another user.
+     * @param token The token of the user that is unfollowing.
+     * @param following The username of the user that is being unfollowed.
+     * @return A result code indicating if the user was successfully unfollowed.
+     */
     @PutMapping (path="/unfollow/{token}")
     public @ResponseBody String unfollow(@PathVariable String token, @RequestParam String following) {
         String tokenHash = Hasher.sha256(token);
@@ -124,8 +157,9 @@ public class SocialController {
     }
 
     /**
-     * Gets a user's feed of posts from users they are following
-     * @return
+     * Gets the feed of recipes for a user based on a provided token.
+     * @param token The token of the user to get the feed for.
+     * @return A list of recipes for the user.
      */
     @GetMapping (path="/getFeed/{token}")
     public @ResponseBody String getFeed(@PathVariable String token) {
@@ -153,8 +187,9 @@ public class SocialController {
     }
 
     /**
-     * Gets all the posts of a given user
-     * @return
+     * Gets all the recipes posted by a user given their token.
+     * @param token The token of the user to get the recipes of.
+     * @return A list of recipes posted by the user.
      */
     @GetMapping (path="/getUserPosts/{token}")
     public @ResponseBody String getUserFeed(@PathVariable String token) {
@@ -181,6 +216,13 @@ public class SocialController {
         return gson.toJson(res);
     }
 
+    /**
+     * Add a comment to a recipe.
+     * @param token The token of the user that is commenting.
+     * @param rid The id of the recipe to comment on.
+     * @param body The body contents of the comment.
+     * @return A result code indicating if the comment was successfully added.
+     */
     @PostMapping (path="/comment/{token}")
     public @ResponseBody String comment(@PathVariable String token, @RequestParam int rid, @RequestParam String body) {
         String tokenHash = Hasher.sha256(token);

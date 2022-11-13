@@ -22,6 +22,12 @@ import java.util.Collection;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to users login, register, etc.
+ * @author Logan
+ * @author Mitch
+ * @author Joe
+ */
 @RestController
 @RequestMapping(path="/users")
 public class UserController {
@@ -35,42 +41,11 @@ public class UserController {
     @Autowired
     private TokenRepository tokenRepository;
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
-        // This returns a JSON or XML with the users
-        // TODO: Probably should remove this for security
-        return userRepository.findAll();
-    }
-
-    @GetMapping(path="/dbquery")
-    public @ResponseBody String dbQuery() {
-        Collection<User> users = userRepository.queryGetAllUsers();
-        User papa = users.iterator().next();
-        return papa.getUsername();
-    }
-
     /**
-     *
+     * Gets the salt for a given username.
      * @param username
-     * @return
+     * @return JSON string containing the salt for the given username.
      */
-    @GetMapping(path="/getFavoritesByUsername/{username}")
-    public @ResponseBody String getFavoritesByUsername(@PathVariable String username) {
-        Collection<Favorite> favorites = favoriteRepository.queryGetFavorites(username);
-        return favorites.iterator().next().getFoodName();
-    }
-
-    /**
-     *
-     * @param username
-     * @return
-     */
-    @GetMapping(path="/getUserByUsername/{username}")
-    public @ResponseBody String getUserByUsername(@PathVariable String username) {
-        Collection<User> user = userRepository.queryGetUserByUsername(username);
-        return user.iterator().next().getUsername();
-    }
-
     @GetMapping("/getSalt/{username}")
     @ResponseBody
     public String getSalt(@PathVariable String username) {
@@ -94,6 +69,12 @@ public class UserController {
         return gson.toJson(res);
     }
 
+    /**
+     * Checks validity of a given token and returns the username associated with it if valid.
+     * If invalid, returns an expired token status.
+     * @param token
+     * @return JSON string containing the username associated with the given token and a status code.
+     */
     @GetMapping(path="/validateToken/{token}") // /users/validateLogin/{token}
     public @ResponseBody String validateTokenLogin(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
@@ -140,6 +121,13 @@ public class UserController {
         return gson.toJson(res);
     }
 
+    /**
+     * Checks validity of a given username and password and returns a token if valid.
+     * @param username The username to check.
+     * @param hash The hash of the password.
+     * @param newToken Incoming token from the client. If the token is outdated, a new one will be generated.
+     * @return JSON string containing the token associated with the given username and password and a status code.
+     */
     @GetMapping(path="/validateLogin/{username}") // /users/validateLogin/{username}?hash=""&newToken=""
     public @ResponseBody String validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash, @RequestParam(name="newToken") String newToken) {
         String pHash = Hasher.sha256(hash); // SHA-256's the incoming hash
@@ -192,6 +180,11 @@ public class UserController {
         return gson.toJson(res);
     }
 
+    /**
+     * Adds a new user to the database.
+     * @param json JSON string containing the username, password, and salt.
+     * @return JSON string containing the result code.
+     */
     @PostMapping(path="/register")
     public @ResponseBody String addNewUser (@RequestBody String json) {
 
@@ -231,12 +224,12 @@ public class UserController {
         return gson.toJson(res);
     }
 
-
-
-
-
-
-
+    /**
+     * Regenerates a token for a given username given the old, outdated token.
+     * @param oldToken The old, outdated token.
+     * @param newToken The new token to replace the old one.
+     * @return JSON string containing the result code.
+     */
     @PutMapping(path="/regenToken/{oldToken}")
     public @ResponseBody String regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
         String oldTokenHash = Hasher.sha256(oldToken);
@@ -275,6 +268,13 @@ public class UserController {
         return gson.toJson(res);
     }
 
+    /**
+     * Get the username associated with a given token.
+     * @param token The token to query.
+     * @param runner The runner to query.
+     * @param tokenRepository The token repository.
+     * @return JSON string containing the result code and username.
+     */
     public static String getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
         String hashedToken = Hasher.sha256(token);
 

@@ -22,6 +22,11 @@ import java.sql.Date;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to the food log.
+ * All methods return a JSON string.
+ * @author Logan
+ */
 @RestController
 @RequestMapping(path = "/log")
 public class FoodLogController {

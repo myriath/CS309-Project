@@ -18,7 +18,12 @@ import java.io.*;
 
 import static com.util.Constants.*;
 
-
+/**
+ * This class is responsible for handling all requests related to recipes.
+ * @author Joe
+ * @author Mitch
+ * @author Logan
+ */
 @RestController
 @RequestMapping(path="/recipe")
 public class RecipeController {
@@ -36,11 +41,20 @@ public class RecipeController {
     @Autowired
     private TokenRepository tokenRepository;
 
+    /**
+     * Get a list of all recipes from the database.
+     * @return A list of all recipes.
+     */
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
+    /**
+     * Query a set of recipes based on recipe name.
+     * @param rname The name of the recipe to query.
+     * @return A list of recipes with the given name.
+     */
     @GetMapping(path="/getRecipeByRname/{rname}")
     public @ResponseBody String getRecipeByRname(@PathVariable String rname) {
         Recipe[] recipes = recipeRepository.queryGetRecipeByRname(rname);
@@ -60,6 +74,11 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
+    /**
+     * Get a recipe by its recipe ID.
+     * @param rid The recipe ID of the recipe to get.
+     * @return A JSON response containing the recipe with the given recipe ID.
+     */
     @GetMapping(path="/getRecipeByRid/{rid}")
     public @ResponseBody String getRecipeByRid(@PathVariable int rid) {
         Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
@@ -79,6 +98,12 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
+    /**
+     * Add a recipe to the database given recipe information.
+     * @param token The token of the user adding the recipe.
+     * @param json The JSON string containing the recipe information.
+     * @return A JSON response containing the result of the operation.
+     */
     @PostMapping(path="/add/{token}")
     @ResponseBody
     public String addNewRecipe(@PathVariable String token, @RequestBody String json) {
@@ -114,6 +139,13 @@ public class RecipeController {
         return gson.toJson(res);
     }
 
+    /**
+     * Add a picture associated with a recipe based on its recipe ID.
+     * @param token The token of the user adding the picture.
+     * @param rid The recipe ID of the recipe to add the picture to.
+     * @param file The picture file to add.
+     * @return A JSON response containing the result of the operation.
+     */
     @PostMapping(path="/addPicture/{rid}/{token}")
     @ResponseBody
     public String addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
@@ -135,6 +167,12 @@ public class RecipeController {
         }, tokenRepository);
     }
 
+    /**
+     * Get the picture associated with a recipe as a byte array based on its recipe ID.
+     * @param rid The recipe ID of the recipe to get the picture of.
+     * @return A JSON response containing the result of the operation and the picture as a byte array.
+     * @throws IOException
+     */
     @GetMapping(path="/getPicture/{rid}", produces="image/webp")
     public @ResponseBody byte[] getRecipePicture(@PathVariable String rid) throws IOException {
         File img = new File(RECIPE_SOURCE, Hasher.sha256plaintext(rid) + ".webp");
@@ -145,6 +183,13 @@ public class RecipeController {
         return in.readAllBytes();
     }
 
+    /**
+     * Remove a recipe from the database based on its recipe ID.
+     * @param rid The recipe ID of the recipe to remove.
+     * @param username The username of the user removing the recipe.
+     * @param token The token of the user removing the recipe.
+     * @return A JSON response containing the result of the operation.
+     */
     @DeleteMapping(path="/remove")
     @ResponseBody
     public int removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
@@ -160,14 +205,6 @@ public class RecipeController {
 
         return res.getResult();
     }
-
-
-
-
-
-
-
-
 
     /*  to be modified after database changed
     @GetMapping(path="/getImage/{rid}")
@@ -190,10 +227,13 @@ public class RecipeController {
         return gson.toJson(recipe[0]);
         //return null;
     }
-
-
      */
 
+    /**
+     * Get a list of recipes based on a given token
+     * @param token The token of the user to get the recipes of.
+     * @return A JSON response containing the result of the operation and the list of recipes.
+     */
     @GetMapping(path="/recipeList/{token}")
     @ResponseBody
     public String recipeList(@PathVariable String token) {
@@ -211,27 +251,4 @@ public class RecipeController {
 
         return gson.toJson(recipe);
     }
-
-
-    @GetMapping(path="/userRecipeList/{token}")
-    @ResponseBody
-    public String userRecipeList(@PathVariable String token) {
-        Recipe[] recipe = recipeRepository.queryuserRecipeList(token);
-        RecipeResponse res = new RecipeResponse();
-
-        if(recipe.length == 0) {
-            res.setResult(RESULT_ERROR);
-        } else {
-
-            res.setResult(RESULT_OK);
-        }
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(recipe);
-    }
-
-
-
-
 }
