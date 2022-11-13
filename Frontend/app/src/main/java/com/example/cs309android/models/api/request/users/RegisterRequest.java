@@ -5,7 +5,7 @@ import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * GSON model for the register endpoint POST request body
+ * Registers a new account with the server
  *
  * @author Mitch Hudson
  */

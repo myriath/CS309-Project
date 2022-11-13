@@ -41,7 +41,7 @@ public class SettingsFragment extends BasePreferenceFragment {
     /**
      * Runs when the window is created. Here is where preference code is written
      *
-     * @param savedInstanceState Instance state
+     * @param savedInstanceState Saved state
      * @param rootKey            For building the preferences screen.
      */
     @Override
@@ -84,9 +84,9 @@ public class SettingsFragment extends BasePreferenceFragment {
      * Runs when the view is created. Here is where you do stuff to the view of the fragment (like
      * add window insets)
      *
-     * @param inflater           Unused
-     * @param container          Unused
-     * @param savedInstanceState Unused
+     * @param inflater           Inflates the view for the preferences
+     * @param container          Parent of the preferences page
+     * @param savedInstanceState Saved state
      * @return View of the preferences screen created by super
      */
     @NonNull

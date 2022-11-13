@@ -5,7 +5,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response for the CustomFoodGet request
+ * Response object for the custom food get request
  *
  * @author Mitch Hudson
  */
@@ -17,10 +17,10 @@ public class CustomFoodGetResponse extends GenericResponse {
     private final CustomFoodItem item;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result Result code from the request
-     * @param item Food item from the request
+     * @param item   Food item from the request
      */
     public CustomFoodGetResponse(int result, CustomFoodItem item) {
         super(result);

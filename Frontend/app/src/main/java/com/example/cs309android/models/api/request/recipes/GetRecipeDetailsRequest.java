@@ -1,8 +1,9 @@
 package com.example.cs309android.models.api.request.recipes;
 
+import static com.example.cs309android.util.Constants.GET_RECIPES_URL;
+
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -58,6 +59,8 @@ public class GetRecipeDetailsRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.GET_RECIPES_URL) + String.valueOf(rid);
+        return new ParameterizedRequestURL(GET_RECIPES_URL)
+                .addPathVar(rid)
+                .toString();
     }
 }

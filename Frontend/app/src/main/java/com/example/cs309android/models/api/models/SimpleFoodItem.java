@@ -14,6 +14,20 @@ import com.google.gson.annotations.Expose;
  */
 public class SimpleFoodItem implements Parcelable {
     /**
+     * Parcelable required CREATOR object
+     */
+    public static final Creator<SimpleFoodItem> CREATOR = new Creator<SimpleFoodItem>() {
+        @Override
+        public SimpleFoodItem createFromParcel(Parcel in) {
+            return new SimpleFoodItem(in);
+        }
+
+        @Override
+        public SimpleFoodItem[] newArray(int size) {
+            return new SimpleFoodItem[size];
+        }
+    };
+    /**
      * FDC ID from the api
      * -1 if it is a Custom food item
      */
@@ -102,21 +116,6 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
-     * Parcelable required CREATOR object
-     */
-    public static final Creator<SimpleFoodItem> CREATOR = new Creator<SimpleFoodItem>() {
-        @Override
-        public SimpleFoodItem createFromParcel(Parcel in) {
-            return new SimpleFoodItem(in);
-        }
-
-        @Override
-        public SimpleFoodItem[] newArray(int size) {
-            return new SimpleFoodItem[size];
-        }
-    };
-
-    /**
      * Getter for the id
      *
      * @return item id
@@ -170,21 +169,21 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
-     * Gets the isCustom bool
-     *
-     * @return True if the item uses dbIds, false if it uses fdcId
-     */
-    public boolean isCustom() {
-        return isCustom;
-    }
-
-    /**
      * Setter for the stricken boolean
      *
      * @param stricken true if this item should be rendered with strikeout
      */
     public void setStricken(boolean stricken) {
         this.stricken = stricken;
+    }
+
+    /**
+     * Gets the isCustom bool
+     *
+     * @return True if the item uses dbIds, false if it uses fdcId
+     */
+    public boolean isCustom() {
+        return isCustom;
     }
 
     /**

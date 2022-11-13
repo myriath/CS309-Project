@@ -1,7 +1,9 @@
 package com.example.cs309android.models.api.request.shopping;
 
+import static com.example.cs309android.util.Constants.REMOVE_SHOPPING_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PutRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -29,13 +31,15 @@ public class ShoppingRemoveRequest extends PutRequest {
      * @param token    Token for authentication
      */
     public ShoppingRemoveRequest(int id, boolean isCustom, String token) {
-        super(Constants.REMOVE_SHOPPING_URL + token);
+        super(new ParameterizedRequestURL(REMOVE_SHOPPING_URL)
+                .addPathVar(token)
+                .toString());
         this.id = id;
         this.isCustom = isCustom;
     }
 
     /**
-     * Getter for the fdcId
+     * Getter for the id
      *
      * @return item id
      */

@@ -13,6 +13,20 @@ import com.google.gson.annotations.Expose;
  */
 public class Ingredient implements Parcelable {
     /**
+     * CREATOR instance for the Parcelable interface
+     */
+    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
+    /**
      * Food item that this ingredient is.
      */
     @Expose
@@ -52,18 +66,6 @@ public class Ingredient implements Parcelable {
         unit = in.readString();
     }
 
-    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
-        @Override
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
-        }
-
-        @Override
-        public Ingredient[] newArray(int size) {
-            return new Ingredient[size];
-        }
-    };
-
     /**
      * Getter for the food item
      *
@@ -83,21 +85,21 @@ public class Ingredient implements Parcelable {
     }
 
     /**
-     * Getter for the unit
-     *
-     * @return units
-     */
-    public String getUnit() {
-        return unit;
-    }
-
-    /**
      * Setter for the quantity
      *
      * @param quantity new quantity
      */
     public void setQuantity(float quantity) {
         this.quantity = quantity;
+    }
+
+    /**
+     * Getter for the unit
+     *
+     * @return units
+     */
+    public String getUnit() {
+        return unit;
     }
 
     /**

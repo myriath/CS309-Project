@@ -1,8 +1,9 @@
 package com.example.cs309android.models.api.request.shopping;
 
+import static com.example.cs309android.util.Constants.GET_SHOPPING_URL;
+
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
-import com.example.cs309android.util.Constants;
 
 /**
  * Request for getting a user's shopping list
@@ -31,6 +32,8 @@ public class GetListRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.GET_SHOPPING_URL + token).toString();
+        return new ParameterizedRequestURL(GET_SHOPPING_URL)
+                .addPathVar(token)
+                .toString();
     }
 }

@@ -4,6 +4,11 @@ import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
+/**
+ * Response object for the get food log request
+ *
+ * @author Travis Massner
+ */
 public class GetFoodLogResponse extends GenericResponse {
     /**
      * Food Log array from JSON
@@ -14,7 +19,7 @@ public class GetFoodLogResponse extends GenericResponse {
     /**
      * Public constructor
      *
-     * @param result        Result code from the request
+     * @param result  Result code from the request
      * @param foodLog Shopping list array
      */
     public GetFoodLogResponse(int result, FoodLogItem[] foodLog) {

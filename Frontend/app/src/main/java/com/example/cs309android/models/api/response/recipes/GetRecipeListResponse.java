@@ -4,8 +4,12 @@ import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
+/**
+ * Response object for the get recipe list request
+ *
+ * @author Travis Massner
+ */
 public class GetRecipeListResponse extends GenericResponse {
-
     /**
      * Recipe list array from JSON
      */

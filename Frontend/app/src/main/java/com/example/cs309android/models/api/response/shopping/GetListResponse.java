@@ -5,7 +5,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * GSON model for the /shopping/get endpoint
+ * Response object for the get shopping list request
  *
  * @author Mitch Hudson
  */
@@ -19,7 +19,7 @@ public class GetListResponse extends GenericResponse {
     /**
      * Public constructor
      *
-     * @param result        Result code from the request
+     * @param result       Result code from the request
      * @param shoppingList Shopping list array
      */
     public GetListResponse(int result, SimpleFoodItem[] shoppingList) {

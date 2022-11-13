@@ -15,7 +15,7 @@ public class GenericResponse {
     private final int result;
 
     /**
-     * Constructor to be used by GSON
+     * Public constructor
      *
      * @param result Result code from the request
      */

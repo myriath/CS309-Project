@@ -27,15 +27,22 @@ public class CustomFoodGetRequest extends GetRequest {
 
     /**
      * Getter for the database id.
+     *
      * @return dbId
      */
     public int getDbId() {
         return dbId;
     }
 
+    /**
+     * Getter for the URL
+     *
+     * @return URL for the request
+     */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(GET_FOOD_URL + dbId)
+        return new ParameterizedRequestURL(GET_FOOD_URL)
+                .addPathVar(dbId)
                 .toString();
     }
 }

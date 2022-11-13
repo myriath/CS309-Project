@@ -53,7 +53,8 @@ public class ParameterizedRequestURL {
     }
 
     /**
-     * Used to add path variables to the url
+     * Adds the given path variable to the url
+     *
      * @param variable Variable to add
      * @return this
      */
@@ -65,6 +66,20 @@ public class ParameterizedRequestURL {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(int variable) {
+        if (url != null) {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(variable);
         }
         return this;
     }

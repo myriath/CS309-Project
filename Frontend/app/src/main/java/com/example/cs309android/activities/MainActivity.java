@@ -68,29 +68,29 @@ import java.util.Objects;
  * Most pages should probably use fragments
  *
  * @author Mitch Hudson
+ * @author Travis Massner
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
-    /**
-     * Fragment containing the current login window.
-     */
-    private CallbackFragment loginWindowFragment;
-
-    /**
-     * Main window fragment
-     */
-    private CallbackFragment mainFragment;
-    private int currentFragment = 2;
-
-    /**
-     * GlobalClass for storing universal values
-     */
-    private GlobalClass global;
-
     /**
      * Used to launch various activities.
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
-
+    /**
+     * Fragment containing the current login window.
+     */
+    private CallbackFragment loginWindowFragment;
+    /**
+     * Main window fragment
+     */
+    private CallbackFragment mainFragment;
+    /**
+     * Tracker for the current fragment
+     */
+    private int currentFragment = 2;
+    /**
+     * GlobalClass for storing universal values
+     */
+    private GlobalClass global;
     /**
      * Navbar object at the bottom of the app.
      */
@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         new RequestHandler(MainActivity.this).cancelAll();
     }
 
+    /**
+     * Resumes when the application is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -247,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.account) {
-                mainFragment = AccountFragment.newInstance(global.getUsername(), true);
+                mainFragment = new AccountFragment();
                 mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
@@ -286,6 +289,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * CALLBACK_CLOSE_LOGIN:
      * Closes the login page with a nice animation and permits interaction and removes transparency
      * filter over the main activity
+     * <p>
+     * CALLBACK_START_LOGIN:
+     * Starts the login fragment
+     * <p>
+     * CALLBACK_MOVE_TO_HOME:
+     * Moves the current fragment to the home fragment
+     * <p>
+     * CALLBACK_FOOD_DETAIL:
+     * Starts the food details activity with the given fooditem
+     * <p>
+     * CALLBACK_SEARCH_FOOD:
+     * Starts the search activity
+     * <p>
+     * CALLBACK_MOVE_TO_SETTINGS:
+     * Moves the current fragment to the settings fragment
      *
      * @param op     Opcode to decide what to do
      * @param bundle Bundle with args
@@ -361,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Main activity has no callback.
      *
-     * @param fragment Callback fragment.
+     * @param fragment ignored
      */
     @Override
     public void setCallbackFragment(CallbackFragment fragment) {
@@ -369,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Starts the login fragment.
-     * First, makes MainActivity transparent and non-interactable
+     * First, makes MainActivity transparent and non-interactive
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginFragment() {

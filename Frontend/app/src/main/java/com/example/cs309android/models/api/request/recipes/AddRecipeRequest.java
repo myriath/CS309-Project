@@ -1,13 +1,15 @@
 package com.example.cs309android.models.api.request.recipes;
 
+import static com.example.cs309android.util.Constants.ADD_RECIPES_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.request.abstraction.PostRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Add request model for the /recipe/add endpoint
+ * Adds a recipe
  *
  * @author Travis Massner
  */
@@ -43,7 +45,9 @@ public class AddRecipeRequest extends PostRequest {
      * @param instructions Recipe Instructions
      */
     public AddRecipeRequest(String token, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions) {
-        super(Constants.ADD_RECIPES_URL + "/" + token);
+        super(new ParameterizedRequestURL(ADD_RECIPES_URL)
+                .addPathVar(token)
+                .toString());
         this.recipeName = recipeName;
         this.description = description;
         this.ingredients = ingredients;

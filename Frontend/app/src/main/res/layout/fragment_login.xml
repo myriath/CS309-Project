@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.login.LoginFragment">
     <!--    android:background="@color/black">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="?android:colorBackground"
-        android:background="?android:colorBackground">
+        android:background="?android:colorBackground"
+        android:backgroundTint="?android:colorBackground">
 
         <TextView
             android:id="@+id/loginTextView"
@@ -122,24 +122,24 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/spinnerBlocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/spinnerBlocker"
-        android:elevation="50dp"
-        android:backgroundTint="?android:colorBackground"
+        android:alpha="0"
         android:background="?android:colorBackground"
-        android:alpha="0">
+        android:backgroundTint="?android:colorBackground"
+        android:elevation="50dp">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/loginSpinner"
         style="?android:attr/progressBarStyle"
-        android:indeterminateTint="?colorPrimary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:elevation="100dp"
+        android:indeterminateTint="?colorPrimary"
         android:visibility="gone" />
 
 </FrameLayout>

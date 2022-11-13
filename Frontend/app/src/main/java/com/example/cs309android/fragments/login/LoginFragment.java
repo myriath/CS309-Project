@@ -38,13 +38,15 @@ import java.util.Objects;
 
 /**
  * Login fragment that makes up the Login page.
- * Shown whenever a user needs to login (either the stored creds become invalid or first open).
+ * Shown whenever a user needs to login (either the stored credentials become invalid or first open).
  *
  * @author Mitch Hudson
  */
 public class LoginFragment extends BaseFragment {
-    Button loginButton, registerButton;
-    TextInputLayout usernameField, passwordField;
+    /**
+     * Password input field
+     */
+    private TextInputLayout passwordField;
 
     /**
      * Ran whenever the fragment is shown.
@@ -64,11 +66,11 @@ public class LoginFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        usernameField = view.findViewById(R.id.unameField);
+        TextInputLayout usernameField = view.findViewById(R.id.unameField);
         passwordField = view.findViewById(R.id.passwordField);
 
-        loginButton = view.findViewById(R.id.buttonLogin);
-        registerButton = view.findViewById(R.id.buttonRegister);
+        Button loginButton = view.findViewById(R.id.buttonLogin);
+        Button registerButton = view.findViewById(R.id.buttonRegister);
 
         loginButton.setOnClickListener(view1 -> {
             hideKeyboard(view1, requireActivity());

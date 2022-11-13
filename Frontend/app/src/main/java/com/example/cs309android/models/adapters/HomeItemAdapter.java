@@ -15,6 +15,11 @@ import com.example.cs309android.models.api.models.Recipe;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for the list of recipes in the home page
+ *
+ * @author Travis Massner
+ */
 public class HomeItemAdapter extends ArrayAdapter<Recipe> {
     /**
      * List of items in the recipe list

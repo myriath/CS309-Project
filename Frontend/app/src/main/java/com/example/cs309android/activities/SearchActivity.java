@@ -63,23 +63,25 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Activity used to search for food items in the nutritionix database.
+ * Activity used to search and display search results
+ * Can be used for food items and recipes
  *
  * @author Mitch Hudson
  */
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, CallbackFragment {
     /**
+     * Adapter for the search results
+     */
+    private static FoodSearchListAdapter adapter;
+    /**
      * List of existing items from whatever called this.
      * Completing a search adds that item to this list.
      */
     private ArrayList<SimpleFoodItem> items;
-    private ArrayList<SimpleFoodItem> searchResults;
-
     /**
-     * Adapter for the search results
+     * List of search results from the search to display
      */
-    private static FoodSearchListAdapter adapter;
-
+    private ArrayList<SimpleFoodItem> searchResults;
     /**
      * Launches the food details activity for a food item clicked in the search results
      */
@@ -95,7 +97,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private int intentCode;
 
     /**
-     * Ran when the activity is created.
+     * Runs when the activity is created.
      *
      * @param savedInstanceState Saved instance state
      */
@@ -136,9 +138,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             return WindowInsetsCompat.CONSUMED;
         });
 
-        findViewById(R.id.scanButton).setOnClickListener(view -> {
-            imageChooser();
-        });
+        findViewById(R.id.scanButton).setOnClickListener(view -> imageChooser());
 
         foodDetailsLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -279,7 +279,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     /**
-     * Ran when the search query is changed. Shouldn't do anything to reduce api calls.
+     * Runs when the search query is changed. Shouldn't do anything to reduce api calls.
      *
      * @param s Query text.
      * @return false
@@ -292,8 +292,12 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     /**
      * Callback method used to control fragment activity
      * <p>
-     * CALLBACK_FOOD_DETAIL (fooditem):
+     * CALLBACK_FOOD_DETAIL:
      * Opens the food detail window for the given food item
+     * <p>
+     * CALLBACK_IMAGE_URI:
+     * Loads the barcode image and analyzes it for the UPC code
+     * If valid, it will open the food details window for the given barcode
      *
      * @param op     Opcode to decide what to do
      * @param bundle Bundle with args

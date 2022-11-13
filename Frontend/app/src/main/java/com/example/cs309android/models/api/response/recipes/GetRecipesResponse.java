@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
 
 /**
- * Response for the GetRecipesRequest
+ * Response object for the get recipes request
  *
  * @author Mitch Hudson
  */

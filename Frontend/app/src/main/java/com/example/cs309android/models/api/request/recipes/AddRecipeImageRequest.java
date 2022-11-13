@@ -9,7 +9,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.ImageSendRequest;
 
 /**
- * Add request model for the /recipe/add endpoint
+ * Adds a recipe's image
  *
  * @author Travis Massner
  */
@@ -26,8 +26,8 @@ public class AddRecipeImageRequest extends ImageSendRequest {
     /**
      * Constructor to be used by GSON
      *
-     * @param token        token to authenticate
-     * @param rid          rid for the recipe
+     * @param token token to authenticate
+     * @param rid   rid for the recipe
      */
     public AddRecipeImageRequest(Bitmap image, String token, String rid) {
         super(Request.Method.POST, image);
@@ -37,6 +37,7 @@ public class AddRecipeImageRequest extends ImageSendRequest {
 
     /**
      * Getter for the token
+     *
      * @return Authentication token
      */
     public String getToken() {
@@ -45,12 +46,18 @@ public class AddRecipeImageRequest extends ImageSendRequest {
 
     /**
      * Getter for the rid
+     *
      * @return Rid
      */
     public String getRid() {
         return rid;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
     @Override
     public String getURL() {
         return new ParameterizedRequestURL(ADD_RECIPE_IMAGE_URL)

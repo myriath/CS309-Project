@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response class for the /users/validateLogin endpoint
+ * Response object for the get profile request
  *
  * @author Mitch Hudson
  */

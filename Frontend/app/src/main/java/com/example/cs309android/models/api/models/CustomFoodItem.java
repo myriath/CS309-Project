@@ -12,6 +12,20 @@ import com.google.gson.annotations.Expose;
  */
 public class CustomFoodItem implements Parcelable {
     /**
+     * Parcelable required CREATOR object
+     */
+    public static final Creator<CustomFoodItem> CREATOR = new Creator<CustomFoodItem>() {
+        @Override
+        public CustomFoodItem createFromParcel(Parcel in) {
+            return new CustomFoodItem(in);
+        }
+
+        @Override
+        public CustomFoodItem[] newArray(int size) {
+            return new CustomFoodItem[size];
+        }
+    };
+    /**
      * Database id for the custom foods table
      */
     @Expose
@@ -114,21 +128,6 @@ public class CustomFoodItem implements Parcelable {
     }
 
     /**
-     * Parcelable required CREATOR object
-     */
-    public static final Creator<CustomFoodItem> CREATOR = new Creator<CustomFoodItem>() {
-        @Override
-        public CustomFoodItem createFromParcel(Parcel in) {
-            return new CustomFoodItem(in);
-        }
-
-        @Override
-        public CustomFoodItem[] newArray(int size) {
-            return new CustomFoodItem[size];
-        }
-    };
-
-    /**
      * Getter for the custom id
      *
      * @return item id
@@ -166,6 +165,7 @@ public class CustomFoodItem implements Parcelable {
 
     /**
      * Getter for the ingredients
+     *
      * @return ingredients
      */
     public String getIngredients() {
@@ -174,6 +174,7 @@ public class CustomFoodItem implements Parcelable {
 
     /**
      * Getter for the calories
+     *
      * @return calories
      */
     public float getCalories() {
@@ -182,6 +183,7 @@ public class CustomFoodItem implements Parcelable {
 
     /**
      * Getter for the fat
+     *
      * @return fat
      */
     public float getFat() {
@@ -190,6 +192,7 @@ public class CustomFoodItem implements Parcelable {
 
     /**
      * Getter for the carbs
+     *
      * @return carbs
      */
     public float getCarbs() {
@@ -198,6 +201,7 @@ public class CustomFoodItem implements Parcelable {
 
     /**
      * Getter for the protein
+     *
      * @return protein
      */
     public float getProtein() {

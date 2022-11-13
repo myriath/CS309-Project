@@ -3,13 +3,13 @@
     <PreferenceCategory android:title="@string/account_title">
         <Preference
             android:key="switch_user"
-            android:title="@string/switch_user_title"
-            android:summary="@string/switch_user_msg" />
+            android:summary="@string/switch_user_msg"
+            android:title="@string/switch_user_title" />
 
         <Preference
             android:key="logout"
-            android:title="@string/logout_title"
-            android:summary="@string/logout_msg" />
+            android:summary="@string/logout_msg"
+            android:title="@string/logout_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/display_title">

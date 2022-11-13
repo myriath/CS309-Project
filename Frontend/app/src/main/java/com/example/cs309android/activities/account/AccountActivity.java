@@ -55,9 +55,15 @@ public class AccountActivity extends AppCompatActivity {
     private boolean isFollowing;
     /**
      * Keeps track of the follower count to display
+     * Default 0
      */
     private int followers = 0;
 
+    /**
+     * Runs when the activity is created
+     *
+     * @param savedInstanceState Saved state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +170,7 @@ public class AccountActivity extends AppCompatActivity {
 
     /**
      * Returns the current following boolean
+     *
      * @return True if the account displayed is being followed
      */
     public boolean isFollowing() {
@@ -172,6 +179,7 @@ public class AccountActivity extends AppCompatActivity {
 
     /**
      * Sets the current following boolean
+     *
      * @param following True if the account displayed is being followed
      */
     public void setFollowing(boolean following) {

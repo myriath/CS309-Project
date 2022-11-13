@@ -2,11 +2,12 @@ package com.example.cs309android.models.api.request.profile;
 
 import static com.example.cs309android.util.Constants.UPDATE_PROFILE_URL;
 
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PatchRequest;
 import com.google.gson.annotations.Expose;
 
 /**
- * Request to get details for a profile's page
+ * Request to update a user's profile info
  *
  * @author Mitch Hudson
  */
@@ -23,7 +24,9 @@ public class UpdateProfileRequest extends PatchRequest {
      * @param token authentication token
      */
     public UpdateProfileRequest(String token, String newBio) {
-        super(UPDATE_PROFILE_URL + token);
+        super(new ParameterizedRequestURL(UPDATE_PROFILE_URL)
+                .addPathVar(token)
+                .toString());
         this.newBio = newBio;
     }
 

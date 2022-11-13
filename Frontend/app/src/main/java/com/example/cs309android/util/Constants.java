@@ -9,22 +9,14 @@ import static com.example.cs309android.BuildConfig.BASE_API_URL;
  */
 public class Constants {
     /**
-     * Private constructor (Util class)
-     */
-    private Constants() {
-    }
-
-    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
     public static final boolean DEBUG = true;
-
     /**
      * Name of the app for all mentions in the app
      */
     public static final String APP_NAME = "Föd";
-
     /**
      * Preference name for this app's shared preferences.
      */
@@ -42,12 +34,10 @@ public class Constants {
      * Preference key for the latest user
      */
     public static final String USERS_LATEST = "latest";
-
     /**
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
-
     /**
      * Tells the MainActivity to move to the register page
      */
@@ -84,7 +74,6 @@ public class Constants {
      * Used to open the account page
      */
     public static final int CALLBACK_OPEN_ACCOUNT = 8;
-
     /**
      * Various intents tell the app what to do when certain things are done.
      */
@@ -97,8 +86,6 @@ public class Constants {
      * Tells the SearchActivity it was opened from recipe add
      */
     public static final int INTENT_RECIPE_ADD = 1;
-
-
     public static final String PARCEL_IMAGE_URI = "image_uri";
     /**
      * This is used wherever a food item needs to be parceled.
@@ -144,12 +131,12 @@ public class Constants {
      * Used to give the toolbar in AccountListView a title
      */
     public static final String PARCEL_TITLE = "title";
-
-    // RESULT CODES
     /**
      * Indicates the request resulted in an error (generic)
      */
     public static final int RESULT_ERROR = -1;
+
+    // RESULT CODES
     /**
      * Indicates a mismatch between the given username / password
      */
@@ -162,7 +149,6 @@ public class Constants {
      * Indicates the email given has been taken
      */
     public static final int RESULT_ERROR_EMAIL_TAKEN = -4;
-
     /**
      * Indicates the request succeeded (generic)
      */
@@ -187,13 +173,13 @@ public class Constants {
      * Indicates the user has been successfully created
      */
     public static final int RESULT_ERROR_RID_TAKEN = -23;
-
-
-    // USERS
     /**
      * Base auth url for all authentication requests
      */
     public static final String AUTH_URL = BASE_API_URL + "users/";
+
+
+    // USERS
     /**
      * URL to register a new account to. (Params: email, username, salt, hash)
      */
@@ -214,13 +200,13 @@ public class Constants {
      * URL to regen an expired token
      */
     public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
-
-
-    // FOOD
     /**
      * URL for the custom food database part of the api
      */
     public static final String FOOD_URL = BASE_API_URL + "food/";
+
+
+    // FOOD
     /**
      * URL for adding a new custom food item
      */
@@ -237,13 +223,13 @@ public class Constants {
      * URL for getting fdc id from a upc code
      */
     public static final String UPC_URL = FOOD_URL + "foodByUpc/";
-
-
-    // SHOPPING
     /**
      * Base shopping url for all shopping list based requests
      */
     public static final String SHOPPING_URL = BASE_API_URL + "shopping/";
+
+
+    // SHOPPING
     /**
      * Get url for getting shopping list
      */
@@ -264,12 +250,12 @@ public class Constants {
      * Strikeout url when the user interacts with custom food items
      */
     public static final String STRIKE_SHOPPING_DB_URL = SHOPPING_URL + "strikeoutDb/";
-
-    // RECIPES
     /**
      * Base recipes url for all recipes based requests
      */
     public static final String RECIPES_URL = BASE_API_URL + "recipe/";
+
+    // RECIPES
     /**
      * Add url for adding an item to recipes
      */
@@ -298,12 +284,12 @@ public class Constants {
      * URL for getting a recipe's image
      */
     public static final String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
-
-    // SOCIAL
     /**
      * Base social url for all social based requests
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
+
+    // SOCIAL
     /**
      * URL used when creating a comment
      */
@@ -336,12 +322,12 @@ public class Constants {
      * Add url for getting a users feed
      */
     public static final String GET_FEED_URL = SOCIAL_URL + "getFeed";
-
-    //FOOD LOG
     /**
      * Base food log url for all food log based requests
      */
     public static final String FOOD_LOG_URL = BASE_API_URL + "log/";
+
+    //FOOD LOG
     /**
      * Add url for adding an item to food log
      */
@@ -358,23 +344,12 @@ public class Constants {
      * Get url for getting an item by day from food log
      */
     public static final String GET_FOOD_LOG_BY_DAY_URL = FOOD_LOG_URL + "getDay/";
-
-
-//    // SOCIAL
-//    /**
-//     * Base URL for social endpoints
-//     */
-//    public static final String SOCIAL_URL = BASE_API_URL + "social/";
-//    /**
-//     * URL for getting user posts
-//     */
-//    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
-
-    // PROFILE
     /**
      * Base profile endpoints URL
      */
     public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+
+    // PROFILE
     /**
      * URL to get profile data
      */
@@ -399,15 +374,20 @@ public class Constants {
      * URL used to update a user's banner image
      */
     public static final String UPDATE_BANNER_URL = PROFILE_API_URL + "updateBanner/";
-
-    // OTHER
     /**
      * URL for getting images
      */
     public static final String IMAGE_URL = BASE_API_URL + "images/";
 
+    // OTHER
     /**
      * No fdc id associated with this item, used for custom items
      */
     public static final int ITEM_ID_NULL = -1;
+
+    /**
+     * Private constructor (Util class)
+     */
+    private Constants() {
+    }
 }

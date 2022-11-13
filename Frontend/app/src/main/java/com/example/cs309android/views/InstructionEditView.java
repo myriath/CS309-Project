@@ -22,7 +22,13 @@ import java.util.Objects;
  * @author Mitch Hudson
  */
 public class InstructionEditView extends FrameLayout {
+    /**
+     * View for finding sub-views
+     */
     private View view;
+    /**
+     * Position in the list view
+     */
     private int position;
 
     public InstructionEditView(@NonNull Context context) {
@@ -55,6 +61,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Getter for the instruction text
+     *
      * @return instruction text
      */
     public String getInstructionText() {
@@ -63,6 +70,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Getter for the position
+     *
      * @return position of the ingredient
      */
     public int getPosition() {
@@ -71,6 +79,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Setter for the position
+     *
      * @param position position of the ingredient
      */
     public void setPosition(int position) {
@@ -80,6 +89,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Gets the instruction this view builds
+     *
      * @return Instruction representing this view
      */
     public Instruction getInstruction() {

@@ -36,21 +36,32 @@ import java.util.Objects;
  */
 public class AccountEditActivity extends AppCompatActivity implements CallbackFragment {
     /**
+     * The destination for the image is none
+     */
+    private static final int NONE = -1;
+    /**
+     * The target image for callback is the banner
+     */
+    private static final int BANNER = 0;
+    /**
+     * The target image for callback is profile picture
+     */
+    private static final int PFP = 1;
+    /**
      * Images to be filled in when a user sets an image
      */
     private Bitmap profileImage, bannerImage;
+    /**
+     * Current target
+     * Default NONE
+     */
+    private int imageDestination = NONE;
 
     /**
-     * Image intent constants
+     * Runs when the activity is started
+     *
+     * @param savedInstanceState saved state
      */
-    private static final int NONE = -1;
-    private static final int BANNER = 0;
-    private static final int PFP = 1;
-    /**
-     * Current intent
-     */
-    private int imageDestination;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,24 +152,28 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
         select.show(getSupportFragmentManager(), ModalImageSelect.TAG);
     }
 
+    /**
+     * Takes opcode and bundle and does something with it
+     *
+     * @param op     Tells the activity what to do
+     * @param bundle Callback args
+     */
     @Override
     public void callback(int op, Bundle bundle) {
-        switch (op) {
-            case (CALLBACK_IMAGE_URI): {
-                try {
-                    Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
-                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
-                    if (imageDestination == BANNER) {
-                        bannerImage = ImageDecoder.decodeBitmap(source);
-                        ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);
-                    } else if (imageDestination == PFP) {
-                        profileImage = ImageDecoder.decodeBitmap(source);
-                        ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);
-                    }
-                    imageDestination = NONE;
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (op == CALLBACK_IMAGE_URI) {
+            try {
+                Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);
+                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);
+                if (imageDestination == BANNER) {
+                    bannerImage = ImageDecoder.decodeBitmap(source);
+                    ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);
+                } else if (imageDestination == PFP) {
+                    profileImage = ImageDecoder.decodeBitmap(source);
+                    ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);
                 }
+                imageDestination = NONE;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -166,7 +181,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
     /**
      * Do nothing, no parent
      *
-     * @param fragment Callback fragment.
+     * @param fragment ignored
      */
     @Override
     public void setCallbackFragment(CallbackFragment fragment) {

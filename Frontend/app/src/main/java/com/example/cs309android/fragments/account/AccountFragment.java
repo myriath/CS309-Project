@@ -37,38 +37,32 @@ import java.util.Locale;
  * @author Mitch Hudson
  */
 public class AccountFragment extends BaseFragment {
-    public static final String ARGS_USERNAME = "username";
-    private String username;
-    public static final String ARGS_OWNER = "owner";
-    private boolean owner;
-
+    /**
+     * Launcher for the account edit activity
+     */
     private ActivityResultLauncher<Intent> accountEditLauncher;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Refresh the account page
      *
-     * @return A new instance of fragment AccountFragment.
+     * @param view   view to find subviews
+     * @param global global containing account data
      */
-    public static AccountFragment newInstance(String username, boolean owner) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARGS_USERNAME, username);
-        args.putBoolean(ARGS_OWNER, owner);
-        fragment.setArguments(args);
-        return fragment;
+    public static void refreshAccount(View view, GlobalClass global) {
+        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            username = args.getString(ARGS_USERNAME);
-            owner = args.getBoolean(ARGS_OWNER);
-        }
-    }
-
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the view of the fragment
+     * @param container          Parent of the fragment
+     * @param savedInstanceState Saved state
+     * @return inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,6 +90,7 @@ public class AccountFragment extends BaseFragment {
 
         refreshAccount(view, global);
 
+        String username = global.getUsername();
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             global.setBio(profileResponse.getBio());
@@ -130,18 +125,5 @@ public class AccountFragment extends BaseFragment {
                 }, getContext()));
 
         return view;
-    }
-
-    /**
-     * Refresh the account page
-     * @param view view to find subviews
-     * @param global global containing account data
-     */
-    public static void refreshAccount(View view, GlobalClass global) {
-        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
-
     }
 }

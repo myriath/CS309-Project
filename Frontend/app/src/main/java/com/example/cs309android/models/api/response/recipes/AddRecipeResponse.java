@@ -4,7 +4,7 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response for the AddRecipeRequest
+ * Response object for the add recipe request
  *
  * @author Mitch Hudson
  */

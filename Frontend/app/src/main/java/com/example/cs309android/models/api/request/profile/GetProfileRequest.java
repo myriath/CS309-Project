@@ -6,7 +6,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
 
 /**
- * Request to get details for a profile's page
+ * Request to get details for a user's profile
  *
  * @author Mitch Hudson
  */
@@ -25,9 +25,15 @@ public class GetProfileRequest extends GetRequest {
         this.username = username;
     }
 
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(GET_PROFILE_URL + username)
+        return new ParameterizedRequestURL(GET_PROFILE_URL)
+                .addPathVar(username)
                 .toString();
     }
 }

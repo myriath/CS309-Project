@@ -1,7 +1,9 @@
 package com.example.cs309android.models.api.request.recipes;
 
+import static com.example.cs309android.util.Constants.REMOVE_RECIPES_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.DeleteRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -28,7 +30,10 @@ public class RemoveRecipeRequest extends DeleteRequest {
      * @param token Authentication token for the user
      */
     public RemoveRecipeRequest(int index, String token) {
-        super(Constants.REMOVE_RECIPES_URL);
+        super(new ParameterizedRequestURL(REMOVE_RECIPES_URL)
+                .addPathVar(token)
+                .addPathVar(index)
+                .toString());
         this.index = index;
         this.token = token;
     }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract image get request handler
+ * Abstract image send request handler
  *
  * @author Mitch Hudson
  */

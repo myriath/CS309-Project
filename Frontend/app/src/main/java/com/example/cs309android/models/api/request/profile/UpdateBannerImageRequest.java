@@ -4,10 +4,11 @@ import static com.example.cs309android.util.Constants.UPDATE_BANNER_URL;
 
 import android.graphics.Bitmap;
 
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PatchImageRequest;
 
 /**
- * Request to get details for a profile's page
+ * Request to update a user's banner image
  *
  * @author Mitch Hudson
  */
@@ -19,6 +20,9 @@ public class UpdateBannerImageRequest extends PatchImageRequest {
      * @param bitmap Image to send
      */
     public UpdateBannerImageRequest(String token, Bitmap bitmap) {
-        super(UPDATE_BANNER_URL + token, bitmap);
+        super(new ParameterizedRequestURL(UPDATE_BANNER_URL)
+                        .addPathVar(token)
+                        .toString(),
+                bitmap);
     }
 }

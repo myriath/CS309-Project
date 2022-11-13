@@ -5,8 +5,9 @@ import com.example.cs309android.util.Util;
 
 /**
  * Base class for post requests.
- * <p>
  * Post requests need a method to get the json body
+ *
+ * @author Mitch Hudson
  */
 public abstract class PostRequest extends com.example.cs309android.models.api.request.abstraction.Request {
     /**

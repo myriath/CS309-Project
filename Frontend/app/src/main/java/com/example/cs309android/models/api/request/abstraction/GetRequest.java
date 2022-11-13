@@ -2,7 +2,6 @@ package com.example.cs309android.models.api.request.abstraction;
 
 /**
  * Interface for get requests
- * <p>
  * Get requests need a method for getting a parameterized URL
  *
  * @author Mitch Hudson

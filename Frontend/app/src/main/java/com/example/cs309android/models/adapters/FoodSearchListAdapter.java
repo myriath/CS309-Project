@@ -22,7 +22,7 @@ import com.example.cs309android.models.api.models.SimpleFoodItem;
 import java.util.ArrayList;
 
 /**
- * Custom adapter to display the list of food items in the shopping list fragment.
+ * Adapter to display the list of foods in the search activity
  *
  * @author Mitch Hudson
  */

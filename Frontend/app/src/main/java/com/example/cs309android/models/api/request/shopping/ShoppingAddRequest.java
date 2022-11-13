@@ -1,12 +1,14 @@
 package com.example.cs309android.models.api.request.shopping;
 
+import static com.example.cs309android.util.Constants.ADD_SHOPPING_URL;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.abstraction.PostRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**
- * Add request model for the /shopping/add endpoint
+ * Adds the given item to the shopping list
  *
  * @author Mitch Hudson
  */
@@ -20,11 +22,13 @@ public class ShoppingAddRequest extends PostRequest {
     /**
      * Public constructor
      *
-     * @param item Item to add to the list
+     * @param item  Item to add to the list
      * @param token Authentication token
      */
     public ShoppingAddRequest(SimpleFoodItem item, String token) {
-        super(Constants.ADD_SHOPPING_URL + token);
+        super(new ParameterizedRequestURL(ADD_SHOPPING_URL)
+                .addPathVar(token)
+                .toString());
         this.item = item;
     }
 

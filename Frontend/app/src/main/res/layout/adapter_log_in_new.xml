@@ -6,15 +6,15 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addAccount"
-        android:layout_margin="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/add_account"
+        android:layout_centerVertical="true"
+        android:layout_margin="32dp"
         android:backgroundTint="?attr/colorPrimary"
-        app:iconTint="?attr/colorOnPrimary"
+        android:text="@string/add_account"
         android:textColor="?attr/colorOnPrimary"
-        app:icon="@drawable/ic_add" />
+        app:icon="@drawable/ic_add"
+        app:iconTint="?attr/colorOnPrimary" />
 
 </RelativeLayout>

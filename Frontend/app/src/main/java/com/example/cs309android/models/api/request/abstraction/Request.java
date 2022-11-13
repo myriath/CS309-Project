@@ -11,6 +11,11 @@ import com.example.cs309android.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Abstract request class to handle requests with Volley
+ *
+ * @author Mitch Hudson
+ */
 public abstract class Request {
     /**
      * Method type for the request

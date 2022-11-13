@@ -1,10 +1,13 @@
 package com.example.cs309android.models.api.request.home;
 
-import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
-import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
+/**
+ * Request for getting a user's homepage feed
+ *
+ * @author Travis Massner
+ */
 public class GetUserFeedRequest extends GetRequest {
     /**
      * Authentication token of the user
@@ -36,6 +39,7 @@ public class GetUserFeedRequest extends GetRequest {
      * @return URL with token
      */
     public String getURL() {
+        // TODO: temporary null because the server gives the wrong data
 //        return new ParameterizedRequestURL(Constants.GET_FEED_URL)
 //                .addPathVar(token)
 //                .toString();

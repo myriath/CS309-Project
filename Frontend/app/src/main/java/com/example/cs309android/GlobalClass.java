@@ -98,6 +98,16 @@ public class GlobalClass extends Application {
     }
 
     /**
+     * Setter for the username
+     *
+     * @param username new username
+     */
+    public void setUsername(String username) {
+        if (USERS_LATEST.equals(username)) return;
+        users.put(USERS_LATEST, username);
+    }
+
+    /**
      * Getter for the list of logged in accounts
      *
      * @return Array of usernames
@@ -108,16 +118,6 @@ public class GlobalClass extends Application {
             if (!username.equals(USERS_LATEST)) accounts.add(username);
         });
         return accounts.toArray(new String[0]);
-    }
-
-    /**
-     * Setter for the username
-     *
-     * @param username new username
-     */
-    public void setUsername(String username) {
-        if (USERS_LATEST.equals(username)) return;
-        users.put(USERS_LATEST, username);
     }
 
     /**

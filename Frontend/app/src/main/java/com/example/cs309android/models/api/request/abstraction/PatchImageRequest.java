@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import com.android.volley.Request;
 
 /**
- * Base class for post requests.
- * <p>
- * Post requests need a method to get the json body
+ * Base class to send an image in a patch request
+ *
+ * @author Mitch Hudson
  */
 public abstract class PatchImageRequest extends ImageSendRequest {
     /**

@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/stricken"
         android:layout_toStartOf="@+id/remove"
+        android:layout_toEndOf="@id/stricken"
         android:textSize="24sp" />
 
     <ImageView
@@ -28,9 +28,9 @@
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:padding="10dp"
-        android:elevation="1dp"
         android:contentDescription="@string/remove"
+        android:elevation="1dp"
+        android:padding="10dp"
         app:srcCompat="@drawable/ic_remove" />
 
 </RelativeLayout>

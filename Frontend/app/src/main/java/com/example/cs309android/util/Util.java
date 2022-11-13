@@ -16,8 +16,8 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.social.IsFollowingRequest;
 import com.example.cs309android.models.api.response.social.FollowResponse;
-import com.example.cs309android.models.api.response.social.IsFollowingRequest;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -34,20 +34,25 @@ import java.lang.reflect.Type;
  */
 public class Util {
     /**
-     * Gson object used by the entire application.
+     * GSON Builder used for the entire application
      */
     public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
             .serializeNulls()
             .excludeFieldsWithoutExposeAnnotation();
+    /**
+     * GSON used for the entire application
+     */
     public static final Gson GSON = GSON_BUILDER.create();
 
     /**
      * Scalar defined by MainActivity
+     * Scales pixels to DIPs
      */
     public static float dpScalar;
 
     /**
      * Converts pixels to dip
+     *
      * @param pixels pixel measurement
      * @return dip
      */

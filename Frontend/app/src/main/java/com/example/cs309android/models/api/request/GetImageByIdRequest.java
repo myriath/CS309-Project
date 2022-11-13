@@ -6,7 +6,7 @@ import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
 
 /**
- * Abstract image get request handler
+ * Gets an image by it's image id
  *
  * @author Mitch Hudson
  */
@@ -40,6 +40,8 @@ public class GetImageByIdRequest extends GetImageRequest {
      * @return URL for the request
      */
     public String getURL() {
-        return new ParameterizedRequestURL(IMAGE_URL + id).toString();
+        return new ParameterizedRequestURL(IMAGE_URL)
+                .addPathVar(id)
+                .toString();
     }
 }

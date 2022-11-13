@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
@@ -36,53 +35,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment to display the Recipe feed
+ *
+ * @author Travis Massner
  */
 public class RecipesFragment extends BaseFragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+    /**
+     * Recipe list to display
+     */
     private static ArrayList<Recipe> recipes;
 
-    private String mParam1;
-    private String mParam2;
-
-    public RecipesFragment() {
-        // Required empty public constructor
-    }
-
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Runs when the fragment is created
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipesFragment.
+     * @param savedInstanceState Saved state
      */
-
-    public static RecipesFragment newInstance(String param1, String param2) {
-        RecipesFragment fragment = new RecipesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
         recipes = new ArrayList<>();
     }
 
+    /**
+     * Runs when the fragment view is created
+     *
+     * @param inflater           Inflates the layout
+     * @param container          Parent view group
+     * @param savedInstanceState Saved state
+     * @return Inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,6 +90,11 @@ public class RecipesFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * Refreshes the list of recipes
+     *
+     * @param view View to get children of
+     */
     public void refreshList(View view) {
         new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -168,5 +154,4 @@ public class RecipesFragment extends BaseFragment {
             }
         });
     }
-
 }

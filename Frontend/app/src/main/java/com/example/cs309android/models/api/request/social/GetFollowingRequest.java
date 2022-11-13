@@ -29,6 +29,7 @@ public class GetFollowingRequest extends GetRequest {
 
     /**
      * Getter for the URL
+     *
      * @return URL for the request
      */
     @Override

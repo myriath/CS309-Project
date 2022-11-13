@@ -21,9 +21,21 @@ import com.example.cs309android.models.api.models.SimpleFoodItem;
  * @author Mitch Hudson
  */
 public class IngredientEditView extends FrameLayout {
+    /**
+     * Item this view represents
+     */
     private SimpleFoodItem item;
+    /**
+     * View for finding sub-views
+     */
     private View view;
+    /**
+     * Unit for the ingredient
+     */
     private String unit;
+    /**
+     * Position in the list
+     */
     private int position;
 
     public IngredientEditView(@NonNull Context context) {
@@ -45,10 +57,10 @@ public class IngredientEditView extends FrameLayout {
     /**
      * Inflates the nutrition_item layout under this view
      *
-     * @param item      Item for the ingredient
-     * @param unit      Unit for the quantity
-     * @param listener  Runs when the remove button is pressed
-     * @param position  Position in the list
+     * @param item     Item for the ingredient
+     * @param unit     Unit for the quantity
+     * @param listener Runs when the remove button is pressed
+     * @param position Position in the list
      */
     public void initView(SimpleFoodItem item, String unit, OnClickListener listener, int position) {
         view = inflate(getContext(), R.layout.ingredient_add, this);
@@ -62,6 +74,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Getter for the quantity of the ingredient
+     *
      * @return quantity
      */
     public float getQuantity() {
@@ -70,6 +83,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Getter for the position
+     *
      * @return position of the ingredient
      */
     public int getPosition() {
@@ -78,6 +92,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Setter for the position
+     *
      * @param position position of the ingredient
      */
     public void setPosition(int position) {

@@ -15,9 +15,9 @@ import com.example.cs309android.models.api.models.Recipe;
 import java.util.ArrayList;
 
 /**
- * Custom adapter to display the list of food items in the shopping list fragment.
+ * Adapter to show a user's feed of recipes
  *
- * @author Mitch Hudson
+ * @author Travis Massner
  */
 public class FeedAdapter extends ArrayAdapter<Recipe> {
     /**
