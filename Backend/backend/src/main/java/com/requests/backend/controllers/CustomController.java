@@ -1,17 +1,11 @@
 package com.requests.backend.controllers;
 
-import ch.qos.logback.classic.Logger;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.io.JsonEOFException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.FoodResponse;
 import com.requests.backend.models.FoodsResponse;
 import com.requests.backend.models.Token;
 import com.requests.backend.models.requests.CustomFoodRequest;
 import com.requests.backend.models.responses.CustomFoodResponse;
-import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.CustomRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;

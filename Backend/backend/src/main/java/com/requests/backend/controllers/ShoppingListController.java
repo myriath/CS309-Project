@@ -1,8 +1,9 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.requests.backend.models.*;
+import com.requests.backend.models.ShoppingList;
+import com.requests.backend.models.SimpleFoodItem;
+import com.requests.backend.models.Token;
+import com.requests.backend.models.User;
 import com.requests.backend.models.requests.ShoppingListAddRequest;
 import com.requests.backend.models.requests.ShoppingListRemoveRequest;
 import com.requests.backend.models.requests.StrikeoutRequest;
@@ -88,9 +89,6 @@ public class ShoppingListController {
      */
     @PostMapping(path="/add/{token}")
     public @ResponseBody ResultResponse addToShoppingList(@PathVariable String token, @RequestBody ShoppingListAddRequest req) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
         String hashedToken = Hasher.sha256(token);
 
         SimpleFoodItem foodItem = req.getFoodItem();

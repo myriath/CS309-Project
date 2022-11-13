@@ -1,24 +1,15 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.requests.backend.models.FoodLog;
 import com.requests.backend.models.Token;
-import com.requests.backend.models.User;
 import com.requests.backend.models.requests.FoodLogAddRequest;
-import com.requests.backend.models.requests.FoodLogGetDayRequest;
 import com.requests.backend.models.responses.FoodLogGetResponse;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.repositories.FoodLogRepository;
-import com.requests.backend.repositories.ShoppingListRepository;
 import com.requests.backend.repositories.TokenRepository;
-import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Date;
 
 import static com.util.Constants.*;
 

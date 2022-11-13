@@ -1,10 +1,7 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.requests.backend.models.Recipe;
 import com.requests.backend.models.Token;
-import com.requests.backend.models.User;
 import com.requests.backend.models.responses.FollowResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.ResultResponse;
@@ -16,7 +13,8 @@ import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.util.Constants.*;
+import static com.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import static com.util.Constants.RESULT_OK;
 
 /**
  * This class is responsible for handling all requests related to recipes.
