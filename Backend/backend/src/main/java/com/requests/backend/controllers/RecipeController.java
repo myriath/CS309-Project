@@ -206,6 +206,7 @@ public class RecipeController {
         return res.getResult();
     }
 
+
     /*  to be modified after database changed
     @GetMapping(path="/getImage/{rid}")
     @ResponseBody
@@ -227,6 +228,8 @@ public class RecipeController {
         return gson.toJson(recipe[0]);
         //return null;
     }
+
+
      */
 
     /**
@@ -234,10 +237,10 @@ public class RecipeController {
      * @param token The token of the user to get the recipes of.
      * @return A JSON response containing the result of the operation and the list of recipes.
      */
-    @GetMapping(path="/recipeList/{token}")
+    @GetMapping(path="/userRecipeList/{token}")
     @ResponseBody
-    public String recipeList(@PathVariable String token) {
-        Recipe[] recipe = recipeRepository.queryrecipeList(token);
+    public String userRecipeList(@PathVariable String token) {
+        Recipe[] recipe = recipeRepository.queryuserRecipeList(token);
         RecipeResponse res = new RecipeResponse();
 
         if(recipe.length == 0) {
@@ -251,4 +254,8 @@ public class RecipeController {
 
         return gson.toJson(recipe);
     }
+
+
+
+
 }
