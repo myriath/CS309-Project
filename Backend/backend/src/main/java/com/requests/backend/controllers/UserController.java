@@ -111,6 +111,7 @@ public class UserController {
             res.setResult(RESULT_ERROR);
         }
 
+        LOGGER.info(String.valueOf(res.getResult()));
         return res;
     }
 
