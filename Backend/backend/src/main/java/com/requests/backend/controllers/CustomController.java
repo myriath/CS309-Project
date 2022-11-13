@@ -90,7 +90,7 @@ public class CustomController {
      * @throws JsonProcessingException
      */
     @PostMapping("/add/{token}")
-    public @ResponseBody String add(@PathVariable String token, @RequestBody CustomFoodRequest req) throws JsonProcessingException {
+    public @ResponseBody CustomFoodResponse add(@PathVariable String token, @RequestBody CustomFoodRequest req) throws JsonProcessingException {
 
         String hashedToken = Hasher.sha256(token);
 
@@ -118,7 +118,7 @@ public class CustomController {
                 res.setDbId(dbId);
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
 
