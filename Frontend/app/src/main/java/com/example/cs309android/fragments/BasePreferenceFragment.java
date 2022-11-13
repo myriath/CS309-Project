@@ -8,6 +8,7 @@ import com.example.cs309android.interfaces.CallbackFragment;
 
 /**
  * Abstract helper class containing methods used by most fragments.
+ *
  * @author Mitch Hudson
  */
 public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements CallbackFragment {
@@ -18,6 +19,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
 
     /**
      * Sets the callback fragment for closing the window/opening the register page.
+     *
      * @param fragment Callback fragment.
      */
     @Override

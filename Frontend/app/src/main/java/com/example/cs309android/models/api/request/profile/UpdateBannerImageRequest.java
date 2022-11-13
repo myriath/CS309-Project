@@ -15,6 +15,7 @@ import com.example.cs309android.models.api.request.abstraction.PatchImageRequest
 public class UpdateBannerImageRequest extends PatchImageRequest {
     /**
      * Public constructor
+     *
      * @param token  authentication token
      * @param bitmap Image to send
      */

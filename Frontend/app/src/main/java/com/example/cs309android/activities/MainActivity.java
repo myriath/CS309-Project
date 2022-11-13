@@ -72,10 +72,13 @@ import java.util.Objects;
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
     /**
+     * Used to launch various activities.
+     */
+    ActivityResultLauncher<Intent> foodSearchLauncher;
+    /**
      * Fragment containing the current login window.
      */
     private CallbackFragment loginWindowFragment;
-
     /**
      * Main window fragment
      */
@@ -84,17 +87,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Tracker for the current fragment
      */
     private int currentFragment = 2;
-
     /**
      * GlobalClass for storing universal values
      */
     private GlobalClass global;
-
-    /**
-     * Used to launch various activities.
-     */
-    ActivityResultLauncher<Intent> foodSearchLauncher;
-
     /**
      * Navbar object at the bottom of the app.
      */
@@ -126,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Starts up the app.
+     *
      * @param savedInstanceState Saved instance state data
      */
     @Override
@@ -381,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Main activity has no callback.
+     *
      * @param fragment ignored
      */
     @Override
@@ -406,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Regenerates a token (5 retries max)
+     *
      * @param oldToken Old token for authentication
      * @param depth    current retry counter
      */

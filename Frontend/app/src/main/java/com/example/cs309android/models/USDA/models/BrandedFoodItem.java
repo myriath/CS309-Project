@@ -116,27 +116,28 @@ public class BrandedFoodItem {
 
     /**
      * Public constructor
-     * @param fdcId fdc id
-     * @param availableDate date made available
-     * @param brandOwner brand that owns this item
-     * @param dataSource data source
-     * @param dataType data type
-     * @param description description / name
-     * @param foodClass food class
-     * @param gtinUpc unknown
+     *
+     * @param fdcId                    fdc id
+     * @param availableDate            date made available
+     * @param brandOwner               brand that owns this item
+     * @param dataSource               data source
+     * @param dataType                 data type
+     * @param description              description / name
+     * @param foodClass                food class
+     * @param gtinUpc                  unknown
      * @param householdServingFullText household serving size
-     * @param ingredients ingredient list
-     * @param modifiedDate date last modified
-     * @param publicationDate publication date
-     * @param servingSize serving size
-     * @param servingSizeUnit serving size unit
-     * @param preparationStateCode preparation state code
-     * @param brandedFoodCategory food category
-     * @param tradeChannel trade channel
-     * @param gpcClassCode GPC class code
-     * @param foodNutrients food nutrients
-     * @param foodUpdateLog food update log
-     * @param labelNutrients label nutrients
+     * @param ingredients              ingredient list
+     * @param modifiedDate             date last modified
+     * @param publicationDate          publication date
+     * @param servingSize              serving size
+     * @param servingSizeUnit          serving size unit
+     * @param preparationStateCode     preparation state code
+     * @param brandedFoodCategory      food category
+     * @param tradeChannel             trade channel
+     * @param gpcClassCode             GPC class code
+     * @param foodNutrients            food nutrients
+     * @param foodUpdateLog            food update log
+     * @param labelNutrients           label nutrients
      */
     public BrandedFoodItem(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String description, String foodClass, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, double servingSize, String servingSizeUnit, String preparationStateCode, String brandedFoodCategory, String[] tradeChannel, int gpcClassCode, FoodNutrient[] foodNutrients, FoodUpdateLog[] foodUpdateLog, LabelNutrients labelNutrients) {
         this.fdcId = fdcId;
@@ -425,19 +426,20 @@ public class BrandedFoodItem {
 
         /**
          * Public constructor
-         * @param fat fat
-         * @param saturatedFat saturated fat
-         * @param transFat trans fat
-         * @param cholesterol cholesterol
-         * @param sodium sodium
+         *
+         * @param fat           fat
+         * @param saturatedFat  saturated fat
+         * @param transFat      trans fat
+         * @param cholesterol   cholesterol
+         * @param sodium        sodium
          * @param carbohydrates carbohydrates
-         * @param fiber fiber
-         * @param sugars sugars
-         * @param protein protein
-         * @param calcium calcium
-         * @param iron iron
-         * @param potassium potassium
-         * @param calories calories
+         * @param fiber         fiber
+         * @param sugars        sugars
+         * @param protein       protein
+         * @param calcium       calcium
+         * @param iron          iron
+         * @param potassium     potassium
+         * @param calories      calories
          */
         public LabelNutrients(Nutrient fat, Nutrient saturatedFat, Nutrient transFat, Nutrient cholesterol, Nutrient sodium, Nutrient carbohydrates, Nutrient fiber, Nutrient sugars, Nutrient protein, Nutrient calcium, Nutrient iron, Nutrient potassium, Nutrient calories) {
             this.fat = fat;
@@ -457,6 +459,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the fat
+         *
          * @return fat
          */
         public Nutrient getFat() {
@@ -465,6 +468,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the saturated fat
+         *
          * @return saturated fat
          */
         public Nutrient getSaturatedFat() {
@@ -473,6 +477,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the trans fat
+         *
          * @return trans fat
          */
         public Nutrient getTransFat() {
@@ -481,6 +486,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the cholesterol
+         *
          * @return cholesterol
          */
         public Nutrient getCholesterol() {
@@ -489,6 +495,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the sodium
+         *
          * @return sodium
          */
         public Nutrient getSodium() {
@@ -497,6 +504,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the carbohydrates
+         *
          * @return carbohydrates
          */
         public Nutrient getCarbohydrates() {
@@ -505,6 +513,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the fiber
+         *
          * @return fiber
          */
         public Nutrient getFiber() {
@@ -513,6 +522,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the sugars
+         *
          * @return
          */
         public Nutrient getSugars() {
@@ -521,6 +531,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the protein
+         *
          * @return protein
          */
         public Nutrient getProtein() {
@@ -529,6 +540,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the calcium
+         *
          * @return calcium
          */
         public Nutrient getCalcium() {
@@ -537,6 +549,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the iron
+         *
          * @return iron
          */
         public Nutrient getIron() {
@@ -545,6 +558,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the potassium
+         *
          * @return potassium
          */
         public Nutrient getPotassium() {
@@ -553,6 +567,7 @@ public class BrandedFoodItem {
 
         /**
          * Getter for the calories
+         *
          * @return calories
          */
         public Nutrient getCalories() {
@@ -561,6 +576,7 @@ public class BrandedFoodItem {
 
         /**
          * Nutrient class representing the data for each nutrient
+         *
          * @author Mitch Hudson
          */
         public static class Nutrient {
@@ -572,6 +588,7 @@ public class BrandedFoodItem {
 
             /**
              * Public constructor
+             *
              * @param value value of the nutrient
              */
             public Nutrient(float value) {
@@ -580,6 +597,7 @@ public class BrandedFoodItem {
 
             /**
              * Getter for the value
+             *
              * @return value
              */
             public Float getValue() {

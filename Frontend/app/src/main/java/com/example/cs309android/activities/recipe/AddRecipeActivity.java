@@ -56,6 +56,7 @@ import java.util.Objects;
 
 /**
  * Activity for adding new recipes
+ *
  * @author Travis Massner
  * @author Mitch Hudson
  */
@@ -216,6 +217,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Creates a new instruction entry
+     *
      * @param instructionList Instruction list to add to
      */
     public void addToInstructionList(LinearLayout instructionList) {
@@ -233,6 +235,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Generates an entry for the ingredient list
+     *
      * @param ingredientList Ingredient list to add to
      * @param item           Item to add an ingredient for
      */
@@ -266,6 +269,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
     /**
      * Handles the back button on the toolbar
+     *
      * @return true
      */
     @Override

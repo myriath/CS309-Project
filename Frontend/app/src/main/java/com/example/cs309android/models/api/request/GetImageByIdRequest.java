@@ -18,6 +18,7 @@ public class GetImageByIdRequest extends GetImageRequest {
 
     /**
      * Constructor
+     *
      * @param id Image id for the image to load
      */
     public GetImageByIdRequest(String id) {
@@ -26,6 +27,7 @@ public class GetImageByIdRequest extends GetImageRequest {
 
     /**
      * Gets the image id
+     *
      * @return image id
      */
     public String getUsername() {
@@ -34,6 +36,7 @@ public class GetImageByIdRequest extends GetImageRequest {
 
     /**
      * Getter for the url for this get request
+     *
      * @return URL for the request
      */
     public String getURL() {

@@ -18,7 +18,8 @@ public class GetListResponse extends GenericResponse {
 
     /**
      * Public constructor
-     * @param result        Result code from the request
+     *
+     * @param result       Result code from the request
      * @param shoppingList Shopping list array
      */
     public GetListResponse(int result, SimpleFoodItem[] shoppingList) {
@@ -28,6 +29,7 @@ public class GetListResponse extends GenericResponse {
 
     /**
      * Getter for the shopping list array
+     *
      * @return Array of simple food items.
      */
     public SimpleFoodItem[] getShoppingList() {

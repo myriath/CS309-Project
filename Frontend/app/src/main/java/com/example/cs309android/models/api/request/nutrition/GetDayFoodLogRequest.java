@@ -24,6 +24,7 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param token Authentication token
      * @param date  Date of the food log
      */
@@ -34,6 +35,7 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the authentication token
+     *
      * @return authentication token
      */
     public String getToken() {
@@ -42,6 +44,7 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the date
+     *
      * @return date
      */
     public String getDate() {
@@ -50,6 +53,7 @@ public class GetDayFoodLogRequest extends GetRequest {
 
     /**
      * Getter for the URL with token and date
+     *
      * @return URL with token and date
      */
     public String getURL() {

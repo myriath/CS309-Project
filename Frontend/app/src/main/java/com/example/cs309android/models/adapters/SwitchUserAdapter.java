@@ -15,6 +15,7 @@ import com.example.cs309android.util.Util;
 
 /**
  * Custom adapter to display the list of logged in accounts
+ *
  * @author Mitch Hudson
  */
 public class SwitchUserAdapter extends ArrayAdapter<String> {
@@ -33,6 +34,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
 
     /**
      * Public constructor.
+     *
      * @param context          context used by the superclass {@link ArrayAdapter}
      * @param accounts         List of users to display
      * @param global           GlobalClass to get account details from
@@ -48,6 +50,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
     /**
      * Ran for each of the child views (items in the list)
      * Here is where button functionality for each item is given.
+     *
      * @param position    index of the item in the list
      * @param convertView converted view of the item in the list
      * @param parent      ListView parent

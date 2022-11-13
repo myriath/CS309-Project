@@ -26,8 +26,8 @@ public class AddRecipeImageRequest extends ImageSendRequest {
     /**
      * Constructor to be used by GSON
      *
-     * @param token        token to authenticate
-     * @param rid          rid for the recipe
+     * @param token token to authenticate
+     * @param rid   rid for the recipe
      */
     public AddRecipeImageRequest(Bitmap image, String token, String rid) {
         super(Request.Method.POST, image);
@@ -37,6 +37,7 @@ public class AddRecipeImageRequest extends ImageSendRequest {
 
     /**
      * Getter for the token
+     *
      * @return Authentication token
      */
     public String getToken() {

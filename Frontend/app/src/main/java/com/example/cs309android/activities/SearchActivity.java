@@ -70,6 +70,10 @@ import java.util.Objects;
  */
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, CallbackFragment {
     /**
+     * Adapter for the search results
+     */
+    private static FoodSearchListAdapter adapter;
+    /**
      * List of existing items from whatever called this.
      * Completing a search adds that item to this list.
      */
@@ -78,12 +82,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
      * List of search results from the search to display
      */
     private ArrayList<SimpleFoodItem> searchResults;
-
-    /**
-     * Adapter for the search results
-     */
-    private static FoodSearchListAdapter adapter;
-
     /**
      * Launches the food details activity for a food item clicked in the search results
      */
@@ -233,6 +231,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
      * Ran when the search is ran.
      * First, gets data based on the query from Nutritionix, then displays a list of the items.
      * Each item can be clicked on for more info which should open in a new fragment and then have an ok button.
+     *
      * @param query Query text
      * @return true on successful query
      */
@@ -281,6 +280,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     /**
      * Runs when the search query is changed. Shouldn't do anything to reduce api calls.
+     *
      * @param s Query text.
      * @return false
      */
@@ -291,10 +291,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     /**
      * Callback method used to control fragment activity
-     *
+     * <p>
      * CALLBACK_FOOD_DETAIL:
      * Opens the food detail window for the given food item
-     *
+     * <p>
      * CALLBACK_IMAGE_URI:
      * Loads the barcode image and analyzes it for the UPC code
      * If valid, it will open the food details window for the given barcode
@@ -358,6 +358,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     /**
      * Activity has no callbacks
+     *
      * @param fragment Callback fragment.
      */
     @Override

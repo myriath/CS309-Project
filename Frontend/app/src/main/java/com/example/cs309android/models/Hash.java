@@ -2,6 +2,7 @@ package com.example.cs309android.models;
 
 /**
  * Data class containing the salt and hash values of a full hash
+ *
  * @author Mitch Hudson
  */
 public class Hash {
@@ -16,6 +17,7 @@ public class Hash {
 
     /**
      * Public constructor
+     *
      * @param salt byte array containing the salt used for the hash
      * @param hash byte array containing the hash value
      */
@@ -26,6 +28,7 @@ public class Hash {
 
     /**
      * Getter for the salt
+     *
      * @return Salt byte array
      */
     public byte[] getSalt() {
@@ -34,6 +37,7 @@ public class Hash {
 
     /**
      * Getter for the hash
+     *
      * @return Hash byte array
      */
     public byte[] getHash() {

@@ -9,9 +9,24 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Simple food item used for displaying and moving data in the app
+ *
  * @author Mitch Hudson
  */
 public class SimpleFoodItem implements Parcelable {
+    /**
+     * Parcelable required CREATOR object
+     */
+    public static final Creator<SimpleFoodItem> CREATOR = new Creator<SimpleFoodItem>() {
+        @Override
+        public SimpleFoodItem createFromParcel(Parcel in) {
+            return new SimpleFoodItem(in);
+        }
+
+        @Override
+        public SimpleFoodItem[] newArray(int size) {
+            return new SimpleFoodItem[size];
+        }
+    };
     /**
      * FDC ID from the api
      * -1 if it is a Custom food item
@@ -42,6 +57,7 @@ public class SimpleFoodItem implements Parcelable {
     /**
      * Public constructor for new custom item
      * DB id will be assigned by backend
+     *
      * @param description description / title
      * @param brand       Brand of the item (null for none)
      */
@@ -55,6 +71,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Public constructor
+     *
      * @param id          item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
@@ -71,6 +88,7 @@ public class SimpleFoodItem implements Parcelable {
     /**
      * Public constructor
      * stricken is set
+     *
      * @param id          item id
      * @param description description / title
      * @param brand       Brand of the item (null for none)
@@ -86,6 +104,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Constructor from parcel
+     *
      * @param in Parcel to unpack
      */
     protected SimpleFoodItem(Parcel in) {
@@ -97,22 +116,8 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
-     * Parcelable required CREATOR object
-     */
-    public static final Creator<SimpleFoodItem> CREATOR = new Creator<SimpleFoodItem>() {
-        @Override
-        public SimpleFoodItem createFromParcel(Parcel in) {
-            return new SimpleFoodItem(in);
-        }
-
-        @Override
-        public SimpleFoodItem[] newArray(int size) {
-            return new SimpleFoodItem[size];
-        }
-    };
-
-    /**
      * Getter for the id
+     *
      * @return item id
      */
     public int getId() {
@@ -121,6 +126,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Getter for the description
+     *
      * @return item description / title
      */
     public String getDescription() {
@@ -146,6 +152,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Getter for the brand
+     *
      * @return item brand / null
      */
     public String getBrand() {
@@ -154,6 +161,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Getter for the stricken boolean
+     *
      * @return true if this item should be rendered with strikeout
      */
     public boolean isStricken() {
@@ -161,15 +169,8 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
-     * Gets the isCustom bool
-     * @return True if the item uses dbIds, false if it uses fdcId
-     */
-    public boolean isCustom() {
-        return isCustom;
-    }
-
-    /**
      * Setter for the stricken boolean
+     *
      * @param stricken true if this item should be rendered with strikeout
      */
     public void setStricken(boolean stricken) {
@@ -177,7 +178,17 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
+     * Gets the isCustom bool
+     *
+     * @return True if the item uses dbIds, false if it uses fdcId
+     */
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    /**
      * Parcelable required method
+     *
      * @return 0
      */
     @Override
@@ -187,6 +198,7 @@ public class SimpleFoodItem implements Parcelable {
 
     /**
      * Adds this object to a parcel
+     *
      * @param parcel parcel to add this object to
      * @param i      flags
      */

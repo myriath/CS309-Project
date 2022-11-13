@@ -29,6 +29,7 @@ public abstract class ImageSendRequest {
 
     /**
      * Constructor
+     *
      * @param method Request method
      * @param bitmap Image to send
      */
@@ -39,12 +40,14 @@ public abstract class ImageSendRequest {
 
     /**
      * Getter for the url for this get request
+     *
      * @return URL for the request
      */
     public abstract String getURL();
 
     /**
      * Base request method
+     *
      * @param listener Runs when completed successfully
      * @param context  Context for volley
      */
@@ -55,6 +58,7 @@ public abstract class ImageSendRequest {
     /**
      * Base request method
      * (Custom error listener)
+     *
      * @param listener      Runs when completed successfully
      * @param errorListener Runs when volley throws an error
      * @param context       Context for volley
@@ -76,6 +80,7 @@ public abstract class ImageSendRequest {
 
     /**
      * Turns an image into a byte array
+     *
      * @param bitmap Bitmap to compress and convert
      * @return byte[] of the compressed image
      */

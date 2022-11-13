@@ -13,8 +13,9 @@ import com.example.cs309android.models.api.request.abstraction.PutRequest;
 public class UnfollowRequest extends PutRequest {
     /**
      * Public constructor
-     * @param token Token for authentication
-     * @param username  Username of the account to unfollow
+     *
+     * @param token    Token for authentication
+     * @param username Username of the account to unfollow
      */
     public UnfollowRequest(String token, String username) {
         super(new ParameterizedRequestURL(UNFOLLOW_URL)

@@ -20,6 +20,7 @@ public class LoginTokenRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param token Token for login
      */
     public LoginTokenRequest(String token) {

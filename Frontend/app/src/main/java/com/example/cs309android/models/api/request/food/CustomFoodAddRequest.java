@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * POST request for adding a custom food item to the database
+ *
  * @author Mitch Hudson
  */
 public class CustomFoodAddRequest extends PostRequest {
@@ -21,6 +22,7 @@ public class CustomFoodAddRequest extends PostRequest {
 
     /**
      * Public constructor
+     *
      * @param item item to add
      */
     public CustomFoodAddRequest(CustomFoodItem item, String token) {
@@ -32,6 +34,7 @@ public class CustomFoodAddRequest extends PostRequest {
 
     /**
      * Getter for the item to add
+     *
      * @return item to add
      */
     public CustomFoodItem getItem() {

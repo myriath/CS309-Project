@@ -42,6 +42,7 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
     /**
      * Used to set the result code
+     *
      * @param op     Used to tell the activity what the result code will be
      * @param bundle ignored
      */
@@ -55,6 +56,7 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
     /**
      * No parent, ignored
+     *
      * @param fragment ignored
      */
     @Override

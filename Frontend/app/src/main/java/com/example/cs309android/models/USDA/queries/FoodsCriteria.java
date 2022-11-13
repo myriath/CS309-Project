@@ -40,8 +40,9 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Public constructor (Multiple fdc ids, String format)
-     * @param fdcIds array of fdc ids
-     * @param format search format
+     *
+     * @param fdcIds    array of fdc ids
+     * @param format    search format
      * @param nutrients nutrients array
      */
     public FoodsCriteria(Integer[] fdcIds, String format, Integer[] nutrients) {
@@ -52,8 +53,9 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Public constructor (Multiple fdc ids, Format format)
-     * @param fdcIds fdc ids to get details for
-     * @param format search format
+     *
+     * @param fdcIds    fdc ids to get details for
+     * @param format    search format
      * @param nutrients nutrients to get
      */
     public FoodsCriteria(Integer[] fdcIds, Constants.Format format, Integer[] nutrients) {
@@ -62,8 +64,9 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Public constructor (Single fdc id, Format format)
-     * @param fdcId fdc id to get details for
-     * @param format search format
+     *
+     * @param fdcId     fdc id to get details for
+     * @param format    search format
      * @param nutrients nutrients to get
      */
     public FoodsCriteria(int fdcId, Constants.Format format, Integer[] nutrients) {
@@ -72,6 +75,7 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Getter for the fdc ids
+     *
      * @return fdc ids
      */
     public Integer[] getFdcIds() {
@@ -80,6 +84,7 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Getter for the search format
+     *
      * @return search format
      */
     public String getFormat() {
@@ -88,6 +93,7 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Getter for the nutrients
+     *
      * @return nutrients
      */
     public Integer[] getNutrients() {
@@ -96,6 +102,7 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Setter for the index
+     *
      * @param index Which fdc id to get (-1 for all)
      * @return this
      */
@@ -106,6 +113,7 @@ public class FoodsCriteria extends GetRequest {
 
     /**
      * Getter for the request URL
+     *
      * @return request URL
      */
     @Override

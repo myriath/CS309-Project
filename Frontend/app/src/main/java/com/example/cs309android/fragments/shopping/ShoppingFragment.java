@@ -37,6 +37,7 @@ import java.util.Arrays;
  * Consists of a ListView and a FAB to add items.
  * The list view has a custom adapter that has a checkbox to strike out the text, a label, and
  * a button to remove the item.
+ *
  * @author Mitch Hudson
  */
 public class ShoppingFragment extends BaseFragment {
@@ -54,6 +55,24 @@ public class ShoppingFragment extends BaseFragment {
         ShoppingFragment fragment = new ShoppingFragment();
         ShoppingFragment.items = items;
         return fragment;
+    }
+
+    /**
+     * Removes the given item from the list
+     *
+     * @param i index of the item to remove
+     * @return True if the items list is empty
+     */
+    public static boolean removeItem(int i) {
+        items.remove(i);
+        return items.isEmpty();
+    }
+
+    /**
+     * Clears the item list.
+     */
+    public static void clearItems() {
+        items = null;
     }
 
     /**
@@ -126,22 +145,5 @@ public class ShoppingFragment extends BaseFragment {
             empty.setVisibility(View.INVISIBLE);
             fab.shrink();
         }
-    }
-
-    /**
-     * Removes the given item from the list
-     * @param i index of the item to remove
-     * @return True if the items list is empty
-     */
-    public static boolean removeItem(int i) {
-        items.remove(i);
-        return items.isEmpty();
-    }
-
-    /**
-     * Clears the item list.
-     */
-    public static void clearItems() {
-        items = null;
     }
 }

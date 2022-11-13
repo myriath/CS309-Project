@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Gets a list of users following this user
+ *
  * @author Mitch Hudson
  */
 public class GetFollowingRequest extends GetRequest {
@@ -19,6 +20,7 @@ public class GetFollowingRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param username Username to get list from
      */
     public GetFollowingRequest(String username) {
@@ -27,6 +29,7 @@ public class GetFollowingRequest extends GetRequest {
 
     /**
      * Getter for the URL
+     *
      * @return URL for the request
      */
     @Override

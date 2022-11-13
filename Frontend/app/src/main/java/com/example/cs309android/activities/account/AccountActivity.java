@@ -45,6 +45,7 @@ import java.util.Locale;
  * Account activity used to view an account's details
  * when clicked on
  * (ex: from a recipe details page or search)
+ *
  * @author Mitch Hudson
  */
 public class AccountActivity extends AppCompatActivity {
@@ -169,6 +170,7 @@ public class AccountActivity extends AppCompatActivity {
 
     /**
      * Returns the current following boolean
+     *
      * @return True if the account displayed is being followed
      */
     public boolean isFollowing() {
@@ -177,6 +179,7 @@ public class AccountActivity extends AppCompatActivity {
 
     /**
      * Sets the current following boolean
+     *
      * @param following True if the account displayed is being followed
      */
     public void setFollowing(boolean following) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 /**
  * Interface to allow callback methods for controlling fragment activity
+ *
  * @author Mitch Hudson
  */
 public interface CallbackFragment {
@@ -17,6 +18,7 @@ public interface CallbackFragment {
 
     /**
      * Sets the callback fragment for closing the window/opening the register page.
+     *
      * @param fragment Callback fragment.
      */
     void setCallbackFragment(CallbackFragment fragment);

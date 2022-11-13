@@ -29,6 +29,7 @@ import java.util.Objects;
 
 /**
  * Settings fragment used to show user settings and give them options
+ *
  * @author Mitch Hudson
  */
 public class SettingsFragment extends BasePreferenceFragment {

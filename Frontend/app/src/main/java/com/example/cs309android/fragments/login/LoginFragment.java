@@ -150,6 +150,7 @@ public class LoginFragment extends BaseFragment {
     /**
      * Recursive method for login attempts
      * (recursive in case duplicates are generated)
+     *
      * @param global GlobalClass for storing application variables
      * @param unm    Username for login attempt
      * @param hash   Hash for login attempt

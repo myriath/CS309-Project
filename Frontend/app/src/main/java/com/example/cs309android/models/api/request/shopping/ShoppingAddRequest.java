@@ -21,7 +21,8 @@ public class ShoppingAddRequest extends PostRequest {
 
     /**
      * Public constructor
-     * @param item Item to add to the list
+     *
+     * @param item  Item to add to the list
      * @param token Authentication token
      */
     public ShoppingAddRequest(SimpleFoodItem item, String token) {
@@ -33,6 +34,7 @@ public class ShoppingAddRequest extends PostRequest {
 
     /**
      * Getter for the item
+     *
      * @return item to add
      */
     public SimpleFoodItem getItem() {

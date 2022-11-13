@@ -56,10 +56,11 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
-     * @param item      Item for the ingredient
-     * @param unit      Unit for the quantity
-     * @param listener  Runs when the remove button is pressed
-     * @param position  Position in the list
+     *
+     * @param item     Item for the ingredient
+     * @param unit     Unit for the quantity
+     * @param listener Runs when the remove button is pressed
+     * @param position Position in the list
      */
     public void initView(SimpleFoodItem item, String unit, OnClickListener listener, int position) {
         view = inflate(getContext(), R.layout.ingredient_add, this);
@@ -73,6 +74,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Getter for the quantity of the ingredient
+     *
      * @return quantity
      */
     public float getQuantity() {
@@ -81,6 +83,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Getter for the position
+     *
      * @return position of the ingredient
      */
     public int getPosition() {
@@ -89,6 +92,7 @@ public class IngredientEditView extends FrameLayout {
 
     /**
      * Setter for the position
+     *
      * @param position position of the ingredient
      */
     public void setPosition(int position) {

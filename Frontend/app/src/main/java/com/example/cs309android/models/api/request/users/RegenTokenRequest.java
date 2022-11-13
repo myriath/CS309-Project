@@ -14,6 +14,7 @@ import com.example.cs309android.models.api.request.abstraction.PutRequest;
 public class RegenTokenRequest extends PutRequest {
     /**
      * Public constructor
+     *
      * @param newToken New token to replace old token
      * @param oldToken Old token for authenticating this request
      */

@@ -13,8 +13,9 @@ import com.example.cs309android.models.api.request.abstraction.PostRequest;
 public class FollowRequest extends PostRequest {
     /**
      * Public constructor
-     * @param token Token for authentication
-     * @param username  Username of the account to follow
+     *
+     * @param token    Token for authentication
+     * @param username Username of the account to follow
      */
     public FollowRequest(String token, String username) {
         super(new ParameterizedRequestURL(FOLLOW_URL)

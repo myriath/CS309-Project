@@ -27,6 +27,7 @@ public class GetProfileResponse extends GenericResponse {
 
     /**
      * Public constructor
+     *
      * @param result    request result code (OK for success, ERROR for fail)
      * @param followers follower count
      * @param following number of users this user is following
@@ -41,6 +42,7 @@ public class GetProfileResponse extends GenericResponse {
 
     /**
      * Gets the follower count
+     *
      * @return follower count
      */
     public int getFollowers() {
@@ -49,6 +51,7 @@ public class GetProfileResponse extends GenericResponse {
 
     /**
      * Gets the number of accounts being followed
+     *
      * @return following count
      */
     public int getFollowing() {
@@ -57,6 +60,7 @@ public class GetProfileResponse extends GenericResponse {
 
     /**
      * Gets the bio
+     *
      * @return biography text
      */
     public String getBio() {

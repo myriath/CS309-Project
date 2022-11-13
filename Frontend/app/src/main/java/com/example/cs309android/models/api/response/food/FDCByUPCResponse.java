@@ -17,6 +17,7 @@ public class FDCByUPCResponse extends GenericResponse {
 
     /**
      * Constructor to be used by GSON
+     *
      * @param result Result code from the request
      */
     public FDCByUPCResponse(int result, int fdcId) {
@@ -26,6 +27,7 @@ public class FDCByUPCResponse extends GenericResponse {
 
     /**
      * Getter for the database id
+     *
      * @return Database id for the food item that was added
      */
     public int getFdcId() {

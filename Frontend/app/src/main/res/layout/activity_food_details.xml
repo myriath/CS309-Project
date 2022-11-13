@@ -28,10 +28,10 @@
             android:id="@+id/details_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:backgroundTint="?attr/colorSecondaryContainer"
-            app:tint="?attr/colorOnSecondaryContainer"
-            android:paddingHorizontal="16dp" />
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            app:tint="?attr/colorOnSecondaryContainer" />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -40,12 +40,12 @@
         style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"
         android:contentDescription="@string/add_item"
+        android:elevation="0dp"
         android:text="@string/add_item"
         app:fabSize="auto"
-        android:elevation="0dp"
-        android:layout_margin="32dp"
-        android:layout_gravity="bottom|end"
         app:icon="@drawable/ic_add" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -55,6 +55,7 @@ public class AccountListActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Used by the AccountAdapter class
+     *
      * @param op     Tells the class what to do.
      * @param bundle Callback arguments
      */
@@ -68,6 +69,7 @@ public class AccountListActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Does nothing, no parent
+     *
      * @param fragment Ignored
      */
     @Override

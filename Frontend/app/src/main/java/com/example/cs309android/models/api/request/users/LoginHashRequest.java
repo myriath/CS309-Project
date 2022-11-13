@@ -30,6 +30,7 @@ public class LoginHashRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param username Username for login
      * @param hash     Hash for login
      */
@@ -41,6 +42,7 @@ public class LoginHashRequest extends GetRequest {
 
     /**
      * Username getter
+     *
      * @return username
      */
     public String getUsername() {

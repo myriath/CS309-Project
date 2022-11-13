@@ -89,6 +89,126 @@ public class FoodLogItem {
     private final String meal;
 
     /**
+     * Constructor for gson
+     *
+     * @param logId         Log id
+     * @param username      Username
+     * @param fdcId         Food item id
+     * @param foodName      Food item name
+     * @param servingAmt    Serving amount
+     * @param servingUnit   Serving unit
+     * @param fat           Fat amount
+     * @param sat_fat       Saturated fat amount
+     * @param sodium        Sodium amount
+     * @param carbohydrates Carbohydrate amount
+     * @param fiber         Fiber amount
+     * @param sugars        Sugar amount
+     * @param protein       Protein amount
+     * @param date          Date of log
+     * @param meal          Meal type
+     */
+    public FoodLogItem(int logId, String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {
+        this.logId = logId;
+        this.username = username;
+        this.fdcId = fdcId;
+        this.foodName = foodName;
+        this.servingAmt = servingAmt;
+        this.servingUnit = servingUnit;
+        this.fat = fat;
+        this.sat_fat = sat_fat;
+        this.sodium = sodium;
+        this.carbohydrates = carbohydrates;
+        this.fiber = fiber;
+        this.sugars = sugars;
+        this.protein = protein;
+        this.date = date;
+        this.meal = meal;
+    }
+
+    /**
+     * Constructor for creating a new food log item
+     *
+     * @param username Username
+     * @param foodName Food item name
+     */
+    public FoodLogItem(String username, String foodName) {
+        this.logId = ITEM_ID_NULL;
+        this.username = username;
+        this.fdcId = ITEM_ID_NULL;
+        this.foodName = foodName;
+        this.servingAmt = 0;
+        this.servingUnit = "";
+        this.fat = 0;
+        this.sat_fat = 0;
+        this.sodium = 0;
+        this.carbohydrates = 0;
+        this.fiber = 0;
+        this.sugars = 0;
+        this.protein = 0;
+        this.date = "";
+        this.meal = "";
+    }
+
+    /**
+     * Constructor for new food log item
+     *
+     * @param username      Username
+     * @param fdcId         Food item id
+     * @param foodName      Food item name
+     * @param servingAmt    Serving amount
+     * @param servingUnit   Serving unit
+     * @param fat           Fat amount
+     * @param sat_fat       Saturated fat amount
+     * @param sodium        Sodium amount
+     * @param carbohydrates Carbohydrate amount
+     * @param fiber         Fiber amount
+     * @param sugars        Sugar amount
+     * @param protein       Protein amount
+     * @param date          Date of log
+     * @param meal          Meal type
+     */
+    public FoodLogItem(String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {
+        this.logId = ITEM_ID_NULL;
+        this.username = username;
+        this.fdcId = fdcId;
+        this.foodName = foodName;
+        this.servingAmt = servingAmt;
+        this.servingUnit = servingUnit;
+        this.fat = fat;
+        this.sat_fat = sat_fat;
+        this.sodium = sodium;
+        this.carbohydrates = carbohydrates;
+        this.fiber = fiber;
+        this.sugars = sugars;
+        this.protein = protein;
+        this.date = date;
+        this.meal = meal;
+    }
+
+    /**
+     * Constructor for parcelable
+     *
+     * @param in Parcel
+     */
+    protected FoodLogItem(Parcel in) {
+        logId = in.readInt();
+        username = in.readString();
+        fdcId = in.readInt();
+        foodName = in.readString();
+        servingAmt = in.readInt();
+        servingUnit = in.readString();
+        fat = in.readInt();
+        sat_fat = in.readInt();
+        sodium = in.readInt();
+        carbohydrates = in.readInt();
+        fiber = in.readInt();
+        sugars = in.readInt();
+        protein = in.readInt();
+        date = in.readString();
+        meal = in.readString();
+    }
+
+    /**
      * Getter for the log id
      *
      * @return log id
@@ -222,121 +342,5 @@ public class FoodLogItem {
      */
     public String getMeal() {
         return meal;
-    }
-
-    /**
-     * Constructor for gson
-     * @param logId         Log id
-     * @param username      Username
-     * @param fdcId         Food item id
-     * @param foodName      Food item name
-     * @param servingAmt    Serving amount
-     * @param servingUnit   Serving unit
-     * @param fat           Fat amount
-     * @param sat_fat       Saturated fat amount
-     * @param sodium        Sodium amount
-     * @param carbohydrates Carbohydrate amount
-     * @param fiber         Fiber amount
-     * @param sugars        Sugar amount
-     * @param protein       Protein amount
-     * @param date          Date of log
-     * @param meal          Meal type
-     */
-    public FoodLogItem(int logId, String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {
-        this.logId = logId;
-        this.username = username;
-        this.fdcId = fdcId;
-        this.foodName = foodName;
-        this.servingAmt = servingAmt;
-        this.servingUnit = servingUnit;
-        this.fat = fat;
-        this.sat_fat = sat_fat;
-        this.sodium = sodium;
-        this.carbohydrates = carbohydrates;
-        this.fiber = fiber;
-        this.sugars = sugars;
-        this.protein = protein;
-        this.date = date;
-        this.meal = meal;
-    }
-
-    /**
-     * Constructor for creating a new food log item
-     * @param username      Username
-     * @param foodName      Food item name
-     */
-    public FoodLogItem(String username, String foodName) {
-        this.logId = ITEM_ID_NULL;
-        this.username = username;
-        this.fdcId = ITEM_ID_NULL;
-        this.foodName = foodName;
-        this.servingAmt = 0;
-        this.servingUnit = "";
-        this.fat = 0;
-        this.sat_fat = 0;
-        this.sodium = 0;
-        this.carbohydrates = 0;
-        this.fiber = 0;
-        this.sugars = 0;
-        this.protein = 0;
-        this.date = "";
-        this.meal = "";
-    }
-
-    /**
-     * Constructor for new food log item
-     * @param username      Username
-     * @param fdcId         Food item id
-     * @param foodName      Food item name
-     * @param servingAmt    Serving amount
-     * @param servingUnit   Serving unit
-     * @param fat           Fat amount
-     * @param sat_fat       Saturated fat amount
-     * @param sodium        Sodium amount
-     * @param carbohydrates Carbohydrate amount
-     * @param fiber         Fiber amount
-     * @param sugars        Sugar amount
-     * @param protein       Protein amount
-     * @param date          Date of log
-     * @param meal          Meal type
-     */
-    public FoodLogItem(String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {
-        this.logId = ITEM_ID_NULL;
-        this.username = username;
-        this.fdcId = fdcId;
-        this.foodName = foodName;
-        this.servingAmt = servingAmt;
-        this.servingUnit = servingUnit;
-        this.fat = fat;
-        this.sat_fat = sat_fat;
-        this.sodium = sodium;
-        this.carbohydrates = carbohydrates;
-        this.fiber = fiber;
-        this.sugars = sugars;
-        this.protein = protein;
-        this.date = date;
-        this.meal = meal;
-    }
-
-    /**
-     * Constructor for parcelable
-     * @param in Parcel
-     */
-    protected FoodLogItem(Parcel in) {
-        logId = in.readInt();
-        username = in.readString();
-        fdcId = in.readInt();
-        foodName = in.readString();
-        servingAmt = in.readInt();
-        servingUnit = in.readString();
-        fat = in.readInt();
-        sat_fat = in.readInt();
-        sodium = in.readInt();
-        carbohydrates = in.readInt();
-        fiber = in.readInt();
-        sugars = in.readInt();
-        protein = in.readInt();
-        date = in.readString();
-        meal = in.readString();
     }
 }

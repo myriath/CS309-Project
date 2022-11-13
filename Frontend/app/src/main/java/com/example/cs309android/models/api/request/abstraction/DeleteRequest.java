@@ -9,6 +9,7 @@ import com.android.volley.Request;
 public abstract class DeleteRequest extends PostRequest {
     /**
      * Public constructor
+     *
      * @param url URL for the request
      */
     public DeleteRequest(String url) {

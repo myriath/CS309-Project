@@ -155,6 +155,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Handles the back button on the toolbar
+     *
      * @return true
      */
     @Override
@@ -166,6 +167,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the nutrition values for the nutrition table
+     *
      * @param nutrients Nutrients of the item
      */
     private void fillNutrition(BrandedFoodItem.LabelNutrients nutrients, float servingSize, String servingUnit) {
@@ -228,6 +230,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the nutrition card for custom food items
+     *
      * @param foodItem Item to display nutrition info of
      */
     private void fillNutrition(CustomFoodItem foodItem) {
@@ -260,11 +263,12 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Generates a NutritionItemView to be used for the nutrition table
+     *
      * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
      * @param unit     Unit for the nutrient
      * @return Null if the amount is 0, or a NutritionItemView to
-     *                 display the nutrient information
+     * display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, BrandedFoodItem.LabelNutrients.Nutrient nutrient, String unit) {
         NutritionItemView itemView;
@@ -280,11 +284,12 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Generates a NutritionItemView to be used for the nutrition table
+     *
      * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
      * @param unit     Unit for the nutrient
      * @return Null if the amount is 0, or a NutritionItemView
-     *                 to display the nutrient information
+     * to display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, Float nutrient, String unit) {
         NutritionItemView itemView;
@@ -300,6 +305,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the ingredient values for the ingredients table
+     *
      * @param ingredientsText Ingredients of the item
      */
     private void fillIngredients(String ingredientsText) {

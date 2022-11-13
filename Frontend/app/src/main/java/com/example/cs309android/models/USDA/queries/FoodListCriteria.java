@@ -44,11 +44,12 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Public constructor (String data type)
-     * @param dataType data types to search for
-     * @param pageSize # of elements per page
+     *
+     * @param dataType   data types to search for
+     * @param pageSize   # of elements per page
      * @param pageNumber page number
-     * @param sortBy sort by prompt
-     * @param sortOrder sort order prompt
+     * @param sortBy     sort by prompt
+     * @param sortOrder  sort order prompt
      */
     public FoodListCriteria(String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder) {
         this.dataType = dataType;
@@ -60,11 +61,12 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Public constructor (DataType data types)
-     * @param dataTypes data types to search for
-     * @param pageSize # of elements per page
+     *
+     * @param dataTypes  data types to search for
+     * @param pageSize   # of elements per page
      * @param pageNumber page number
-     * @param sortBy sort by prompt
-     * @param sortOrder sort order prompt
+     * @param sortBy     sort by prompt
+     * @param sortOrder  sort order prompt
      */
     public FoodListCriteria(Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder) {
         String[] dataType = new String[dataTypes.length];
@@ -78,6 +80,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the data type prompt
+     *
      * @return data type
      */
     public String[] getDataType() {
@@ -86,6 +89,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the page size prompt
+     *
      * @return page size
      */
     public Integer getPageSize() {
@@ -94,6 +98,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the page number
+     *
      * @return page number
      */
     public Integer getPageNumber() {
@@ -102,6 +107,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the sort by prompt
+     *
      * @return sort by prompt
      */
     public String getSortBy() {
@@ -110,6 +116,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the sort order prompt
+     *
      * @return sort order prompt
      */
     public String getSortOrder() {
@@ -118,6 +125,7 @@ public class FoodListCriteria extends GetRequest {
 
     /**
      * Getter for the request URL
+     *
      * @return request URL
      */
     @Override

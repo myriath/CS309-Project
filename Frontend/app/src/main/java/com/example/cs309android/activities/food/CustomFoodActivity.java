@@ -91,6 +91,7 @@ public class CustomFoodActivity extends AppCompatActivity {
 
     /**
      * Handles the back button on the toolbar
+     *
      * @return true
      */
     @Override

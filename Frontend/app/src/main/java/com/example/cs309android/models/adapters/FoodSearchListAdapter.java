@@ -34,6 +34,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
 
     /**
      * Public constructor.
+     *
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
@@ -45,6 +46,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
     /**
      * Ran for each of the child views (items in the list)
      * Here is where button functionality for each item is given.
+     *
      * @param position    index of the item in the list
      * @param convertView converted view of the item in the list
      * @param parent      ListView parent

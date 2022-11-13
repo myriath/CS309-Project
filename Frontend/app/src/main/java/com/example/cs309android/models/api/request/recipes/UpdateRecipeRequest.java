@@ -58,6 +58,7 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the recipe name
+     *
      * @return recipeName
      */
     public String getRecipeName() {
@@ -66,6 +67,7 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the recipe instructions
+     *
      * @return instructions
      */
     public String getDescription() {
@@ -74,6 +76,7 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the ingredients
+     *
      * @return ingredients array
      */
     public Ingredient[] getIngredients() {
@@ -82,6 +85,7 @@ public class UpdateRecipeRequest extends PatchRequest {
 
     /**
      * Getter for the instructions
+     *
      * @return instructions array (ORDERED)
      */
     public Instruction[] getInstructions() {

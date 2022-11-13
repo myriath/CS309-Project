@@ -69,16 +69,17 @@ public class FoodSearchCriteria extends GetRequest {
 
     /**
      * Public constructor
-     * @param query search query
-     * @param dataType data types to search
-     * @param pageSize page size
-     * @param pageNumber page number
-     * @param sortBy sort by prompt
-     * @param sortOrder sort order prompt
-     * @param brandOwner brand owner prompt
+     *
+     * @param query        search query
+     * @param dataType     data types to search
+     * @param pageSize     page size
+     * @param pageNumber   page number
+     * @param sortBy       sort by prompt
+     * @param sortOrder    sort order prompt
+     * @param brandOwner   brand owner prompt
      * @param tradeChannel trade channels prompt
-     * @param startDate start date prompt
-     * @param endDate end date prompt
+     * @param startDate    start date prompt
+     * @param endDate      end date prompt
      */
     public FoodSearchCriteria(String query, String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder, String brandOwner, String[] tradeChannel, String startDate, String endDate) {
         this.query = query;
@@ -95,16 +96,17 @@ public class FoodSearchCriteria extends GetRequest {
 
     /**
      * Public constructor
-     * @param query search query
-     * @param dataTypes data types to search
-     * @param pageSize page size
-     * @param pageNumber page number
-     * @param sortBy sort by prompt
-     * @param sortOrder sort order prompt
-     * @param brandOwner brand owner prompt
+     *
+     * @param query         search query
+     * @param dataTypes     data types to search
+     * @param pageSize      page size
+     * @param pageNumber    page number
+     * @param sortBy        sort by prompt
+     * @param sortOrder     sort order prompt
+     * @param brandOwner    brand owner prompt
      * @param tradeChannels trade channels prompt
-     * @param startDate start date prompt
-     * @param endDate end date prompt
+     * @param startDate     start date prompt
+     * @param endDate       end date prompt
      */
     public FoodSearchCriteria(String query, Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder, String brandOwner, Constants.TradeChannel[] tradeChannels, String startDate, String endDate) {
         this.query = query;
@@ -126,7 +128,8 @@ public class FoodSearchCriteria extends GetRequest {
 
     /**
      * Public constructor (everything else default)
-     * @param query search query
+     *
+     * @param query    search query
      * @param dataType data types to search
      */
     public FoodSearchCriteria(String query, Constants.DataType dataType) {
@@ -143,79 +146,8 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
-     * Setter for the data types
-     * @param dataType data types
-     */
-    public void setDataType(String[] dataType) {
-        this.dataType = dataType;
-    }
-
-    /**
-     * Setter for the page size
-     * @param pageSize page size
-     */
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    /**
-     * Setter for the page number
-     * @param pageNumber page number
-     */
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    /**
-     * Setter for the sort by prompt
-     * @param sortBy sort by prompt
-     */
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
-    }
-
-    /**
-     * Setter for the sort order prompt
-     * @param sortOrder sort order prompt
-     */
-    public void setSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder;
-    }
-
-    /**
-     * Setter for the brand owner prompt
-     * @param brandOwner brand owner prompt
-     */
-    public void setBrandOwner(String brandOwner) {
-        this.brandOwner = brandOwner;
-    }
-
-    /**
-     * Setter for the trade channel prompt
-     * @param tradeChannel trade channel prompt
-     */
-    public void setTradeChannel(String[] tradeChannel) {
-        this.tradeChannel = tradeChannel;
-    }
-
-    /**
-     * Setter for the start date prompt
-     * @param startDate start date prompt
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * Setter for the end date prompt
-     * @param endDate end date prompt
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    /**
      * Getter for the data types
+     *
      * @return data types
      */
     public String[] getDataType() {
@@ -223,7 +155,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the data types
+     *
+     * @param dataType data types
+     */
+    public void setDataType(String[] dataType) {
+        this.dataType = dataType;
+    }
+
+    /**
      * Getter for the page size
+     *
      * @return page size
      */
     public Integer getPageSize() {
@@ -231,7 +173,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the page size
+     *
+     * @param pageSize page size
+     */
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    /**
      * Getter for the page number
+     *
      * @return page number
      */
     public Integer getPageNumber() {
@@ -239,7 +191,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the page number
+     *
+     * @param pageNumber page number
+     */
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    /**
      * Getter for the sort by prompt
+     *
      * @return sort by prompt
      */
     public String getSortBy() {
@@ -247,7 +209,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the sort by prompt
+     *
+     * @param sortBy sort by prompt
+     */
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    /**
      * Getter for the sort order prompt
+     *
      * @return sort order prompt
      */
     public String getSortOrder() {
@@ -255,7 +227,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the sort order prompt
+     *
+     * @param sortOrder sort order prompt
+     */
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    /**
      * Getter for the brand owner prompt
+     *
      * @return brand owner prompt
      */
     public String getBrandOwner() {
@@ -263,7 +245,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the brand owner prompt
+     *
+     * @param brandOwner brand owner prompt
+     */
+    public void setBrandOwner(String brandOwner) {
+        this.brandOwner = brandOwner;
+    }
+
+    /**
      * Getter for the trade channel prompt
+     *
      * @return trade channel prompt
      */
     public String[] getTradeChannel() {
@@ -271,7 +263,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the trade channel prompt
+     *
+     * @param tradeChannel trade channel prompt
+     */
+    public void setTradeChannel(String[] tradeChannel) {
+        this.tradeChannel = tradeChannel;
+    }
+
+    /**
      * Getter for the start date prompt
+     *
      * @return start date prompt
      */
     public String getStartDate() {
@@ -279,7 +281,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the start date prompt
+     *
+     * @param startDate start date prompt
+     */
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
      * Getter for the end date prompt
+     *
      * @return end date prompt
      */
     public String getEndDate() {
@@ -287,7 +299,17 @@ public class FoodSearchCriteria extends GetRequest {
     }
 
     /**
+     * Setter for the end date prompt
+     *
+     * @param endDate end date prompt
+     */
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    /**
      * Getter for the request URL
+     *
      * @return request URL
      */
     @Override

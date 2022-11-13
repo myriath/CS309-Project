@@ -16,6 +16,7 @@ public class GetRecipesResponse extends GenericResponse {
 
     /**
      * Constructor to be used by GSON
+     *
      * @param result Result code from the request
      * @param items  Array of user posts
      */
@@ -26,6 +27,7 @@ public class GetRecipesResponse extends GenericResponse {
 
     /**
      * Gets the response's items
+     *
      * @return array of user posts
      */
     public Recipe[] getItems() {

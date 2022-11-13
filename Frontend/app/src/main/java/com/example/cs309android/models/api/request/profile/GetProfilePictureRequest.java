@@ -18,6 +18,7 @@ public class GetProfilePictureRequest extends GetImageRequest {
 
     /**
      * Constructor
+     *
      * @param username Username to get the profile picture of
      */
     public GetProfilePictureRequest(String username) {

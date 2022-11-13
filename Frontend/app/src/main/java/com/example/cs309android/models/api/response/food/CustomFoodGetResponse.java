@@ -29,6 +29,7 @@ public class CustomFoodGetResponse extends GenericResponse {
 
     /**
      * Getter for the custom food item
+     *
      * @return Item from the result
      */
     public CustomFoodItem getItem() {

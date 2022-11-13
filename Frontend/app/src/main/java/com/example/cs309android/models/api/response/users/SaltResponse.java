@@ -29,6 +29,7 @@ public class SaltResponse extends GenericResponse {
 
     /**
      * Getter for the salt value
+     *
      * @return Salt value from the request
      */
     public String getSalt() {

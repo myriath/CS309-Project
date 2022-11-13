@@ -25,6 +25,7 @@ public class StrikeRequest extends PatchRequest {
 
     /**
      * Public constructor
+     *
      * @param id       ID of the item
      * @param isCustom True if the item is custom
      * @param token    Token for authentication
@@ -39,6 +40,7 @@ public class StrikeRequest extends PatchRequest {
 
     /**
      * Getter for the index
+     *
      * @return Index of the strikeout item.
      */
     public int getId() {
@@ -47,6 +49,7 @@ public class StrikeRequest extends PatchRequest {
 
     /**
      * Getter for the custom bool
+     *
      * @return True if the item to strike is custom, false if it is fdc
      */
     public boolean isCustom() {

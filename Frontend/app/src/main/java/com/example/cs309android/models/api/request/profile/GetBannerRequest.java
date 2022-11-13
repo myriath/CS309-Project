@@ -18,6 +18,7 @@ public class GetBannerRequest extends GetImageRequest {
 
     /**
      * Constructor
+     *
      * @param username Username to get the profile picture of
      */
     public GetBannerRequest(String username) {

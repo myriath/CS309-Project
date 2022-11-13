@@ -29,6 +29,7 @@ import java.lang.reflect.Type;
 
 /**
  * Utility class containing many commonly used methods
+ *
  * @author Mitch Hudson
  */
 public class Util {
@@ -51,6 +52,7 @@ public class Util {
 
     /**
      * Converts pixels to dip
+     *
      * @param pixels pixel measurement
      * @return dip
      */
@@ -61,6 +63,7 @@ public class Util {
     /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
+     *
      * @param view View to find the spinner from.
      */
     public static void spin(View view) {
@@ -72,6 +75,7 @@ public class Util {
     /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
+     *
      * @param view View to find the spinner from.
      */
     public static void spin(Activity view) {
@@ -83,6 +87,7 @@ public class Util {
     /**
      * Makes the spinner invisible and unlocks interaction with the register page.
      * This is ran when a response is received from the server.
+     *
      * @param view View to find the spinner from.
      */
     public static void unSpin(View view) {
@@ -94,6 +99,7 @@ public class Util {
     /**
      * Makes the spinner invisible and unlocks interaction with the register page.
      * This is ran when a response is received from the server.
+     *
      * @param view View to find the spinner from.
      */
     public static void unSpin(Activity view) {
@@ -104,6 +110,7 @@ public class Util {
 
     /**
      * Sets the title of the activity
+     *
      * @param title   New title
      * @param toolbar Toolbar to change the title of
      */
@@ -117,6 +124,7 @@ public class Util {
 
     /**
      * Sets the subtitle to whatever the brand of the item is
+     *
      * @param subtitle Subtitle for the toolbar
      * @param toolbar  Toolbar to set subtitle of
      */
@@ -128,6 +136,7 @@ public class Util {
 
     /**
      * Hides the keyboard. This is usually ran when the user clicks a button.
+     *
      * @param view View of the button/object being interacted with.
      */
     public static void hideKeyboard(View view, Activity activity) {
@@ -138,6 +147,7 @@ public class Util {
     /**
      * Sets variables necessary for app functions after a login
      * Also sets the preferences for a new token
+     *
      * @param global GlobalClass for storing values
      * @param token  Token for authentication
      * @param login  LoginResponse for other values from the server
@@ -154,6 +164,7 @@ public class Util {
 
     /**
      * Opens the account page based on the given parameters
+     *
      * @param global   Used to get the current user's account details
      * @param username Username of the account to open
      * @param context  Context to start activity / volley with
@@ -177,6 +188,7 @@ public class Util {
 
     /**
      * Switches the active user to the new username
+     *
      * @param global   Global class for variables
      * @param username New username to switch to
      */
@@ -187,6 +199,7 @@ public class Util {
 
     /**
      * Logs out of the given account
+     *
      * @param global   Global class for variables
      * @param username Username to log out of
      */
@@ -198,6 +211,7 @@ public class Util {
 
     /**
      * Creates an object from JSON using GSON's fromJson() method
+     *
      * @param json JSONObject (usually from a volley response)
      * @param type Type of the returned object
      * @param <T>  Type of json object
@@ -209,6 +223,7 @@ public class Util {
 
     /**
      * Creates an object from JSON using GSON's fromJson() method
+     *
      * @param json JSON string
      * @param type Type of the returned object
      * @param <T>  Type of json object
@@ -220,6 +235,7 @@ public class Util {
 
     /**
      * Creates an object from JSON using GSON and a custom type adapter
+     *
      * @param json        JSON string
      * @param type        Type of the returned object
      * @param typeAdapter Adapter object to be used for generation

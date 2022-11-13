@@ -7,6 +7,7 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 
 /**
  * Checks if the given user is following the `following` user
+ *
  * @author Mitch Hudson
  */
 public class IsFollowingRequest extends GetRequest {

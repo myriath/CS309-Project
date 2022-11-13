@@ -49,6 +49,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Inflates the nutrition_item layout under this view
+     *
      * @param listener Runs when the remove button is pressed
      * @param position Keeps track of the instruction number
      */
@@ -60,6 +61,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Getter for the instruction text
+     *
      * @return instruction text
      */
     public String getInstructionText() {
@@ -68,6 +70,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Getter for the position
+     *
      * @return position of the ingredient
      */
     public int getPosition() {
@@ -76,6 +79,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Setter for the position
+     *
      * @param position position of the ingredient
      */
     public void setPosition(int position) {
@@ -85,6 +89,7 @@ public class InstructionEditView extends FrameLayout {
 
     /**
      * Gets the instruction this view builds
+     *
      * @return Instruction representing this view
      */
     public Instruction getInstruction() {

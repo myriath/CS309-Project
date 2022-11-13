@@ -17,6 +17,7 @@ public abstract class PatchImageRequest extends ImageSendRequest {
 
     /**
      * Public constructor
+     *
      * @param url URL for the request
      */
     public PatchImageRequest(String url, Bitmap bitmap) {
@@ -26,6 +27,7 @@ public abstract class PatchImageRequest extends ImageSendRequest {
 
     /**
      * Getter for the url
+     *
      * @return url for the request
      */
     @Override

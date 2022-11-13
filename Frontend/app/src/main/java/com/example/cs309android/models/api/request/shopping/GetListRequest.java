@@ -7,6 +7,7 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 
 /**
  * Request for getting a user's shopping list
+ *
  * @author Mitch Hudson
  */
 public class GetListRequest extends GetRequest {
@@ -17,6 +18,7 @@ public class GetListRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param token Authentication token
      */
     public GetListRequest(String token) {
@@ -25,6 +27,7 @@ public class GetListRequest extends GetRequest {
 
     /**
      * Getter for the parameterized URL
+     *
      * @return parameterized URL
      */
     @Override

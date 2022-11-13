@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 /**
  * Static util class for making toasts.
+ *
  * @author Mitch Hudson
  */
 public class Toaster {
@@ -16,6 +17,7 @@ public class Toaster {
 
     /**
      * Creates a toast for a short amount of time
+     *
      * @param text    Text to toast
      * @param context Context to show the toast on
      */
@@ -25,6 +27,7 @@ public class Toaster {
 
     /**
      * Creates a toast for a long amount of time
+     *
      * @param text    Text to toast
      * @param context Context to show the toast on
      */

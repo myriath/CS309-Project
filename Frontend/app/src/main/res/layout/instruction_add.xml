@@ -7,9 +7,9 @@
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/remove"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/remove"
         android:padding="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textMultiLine"
-            android:maxLines="10"
-            android:maxLength="255" />
+            android:maxLength="255"
+            android:maxLines="10" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

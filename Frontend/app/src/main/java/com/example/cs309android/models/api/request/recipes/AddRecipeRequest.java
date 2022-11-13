@@ -56,6 +56,7 @@ public class AddRecipeRequest extends PostRequest {
 
     /**
      * Getter for the recipe name
+     *
      * @return recipeName
      */
     public String getRecipeName() {
@@ -64,6 +65,7 @@ public class AddRecipeRequest extends PostRequest {
 
     /**
      * Getter for the recipe instructions
+     *
      * @return instructions
      */
     public String getDescription() {
@@ -72,6 +74,7 @@ public class AddRecipeRequest extends PostRequest {
 
     /**
      * Getter for the ingredients
+     *
      * @return ingredients array
      */
     public Ingredient[] getIngredients() {
@@ -80,6 +83,7 @@ public class AddRecipeRequest extends PostRequest {
 
     /**
      * Getter for the instructions
+     *
      * @return instructions array (ORDERED)
      */
     public Instruction[] getInstructions() {

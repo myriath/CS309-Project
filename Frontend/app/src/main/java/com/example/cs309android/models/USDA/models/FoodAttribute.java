@@ -31,9 +31,10 @@ public class FoodAttribute {
 
     /**
      * Public constructor
-     * @param id attribute id
-     * @param sequenceNumber sequence number
-     * @param value attribute value
+     *
+     * @param id                attribute id
+     * @param sequenceNumber    sequence number
+     * @param value             attribute value
      * @param foodAttributeType attribute type
      */
     public FoodAttribute(int id, int sequenceNumber, String value, FoodAttribute.FoodAttributeType foodAttributeType) {
@@ -45,6 +46,7 @@ public class FoodAttribute {
 
     /**
      * Getter for the id
+     *
      * @return attribute id
      */
     public int getId() {
@@ -53,6 +55,7 @@ public class FoodAttribute {
 
     /**
      * Getter for the sequence number
+     *
      * @return sequence number
      */
     public int getSequenceNumber() {
@@ -61,6 +64,7 @@ public class FoodAttribute {
 
     /**
      * Getter for the attribute value
+     *
      * @return value
      */
     public String getValue() {
@@ -69,6 +73,7 @@ public class FoodAttribute {
 
     /**
      * Getter for the attribute type
+     *
      * @return attribute type
      */
     public FoodAttribute.FoodAttributeType getFoodAttributeType() {
@@ -77,6 +82,7 @@ public class FoodAttribute {
 
     /**
      * Food attribute type class
+     *
      * @author Mitch Hudson
      */
     public static class FoodAttributeType {
@@ -95,8 +101,9 @@ public class FoodAttribute {
 
         /**
          * Public constructor
-         * @param id type id
-         * @param name type name
+         *
+         * @param id          type id
+         * @param name        type name
          * @param description type description
          */
         public FoodAttributeType(int id, String name, String description) {
@@ -107,6 +114,7 @@ public class FoodAttribute {
 
         /**
          * Getter for the id
+         *
          * @return id
          */
         public int getId() {
@@ -115,6 +123,7 @@ public class FoodAttribute {
 
         /**
          * Getter for the name
+         *
          * @return name
          */
         public String getName() {
@@ -123,6 +132,7 @@ public class FoodAttribute {
 
         /**
          * Getter for the description
+         *
          * @return description
          */
         public String getDescription() {

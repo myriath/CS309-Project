@@ -27,6 +27,7 @@ public class CustomFoodAddResponse extends GenericResponse {
 
     /**
      * Getter for the database id
+     *
      * @return Database id for the food item that was added
      */
     public int getDbId() {

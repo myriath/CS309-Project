@@ -78,6 +78,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills in the activity with recipe details
+     *
      * @param recipe Recipe to fill the details for
      * @param global Global to check account with
      */

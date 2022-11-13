@@ -28,6 +28,7 @@ public class HomeItemAdapter extends ArrayAdapter<Recipe> {
 
     /**
      * Public constructor.
+     *
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
@@ -38,6 +39,7 @@ public class HomeItemAdapter extends ArrayAdapter<Recipe> {
 
     /**
      * Ran for each of the child views (items in the list)
+     *
      * @param position    index of the item in the list
      * @param convertView converted view of the item in the list
      * @param parent      ListView parent

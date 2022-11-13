@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 
 /**
  * Simple model used to check data types of food items from the USDA API
+ *
  * @author Mitch Hudson
  */
 public class DataTypeModel {

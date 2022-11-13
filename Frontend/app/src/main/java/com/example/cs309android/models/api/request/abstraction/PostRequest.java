@@ -18,6 +18,7 @@ public abstract class PostRequest extends com.example.cs309android.models.api.re
     /**
      * Public constructor
      * Creates new post request for the given url
+     *
      * @param url URL for the request
      */
     public PostRequest(String url) {
@@ -28,6 +29,7 @@ public abstract class PostRequest extends com.example.cs309android.models.api.re
     /**
      * Public constructor
      * Creates new request with given type (used by subclasses)
+     *
      * @param url    URL for the request
      * @param method Method type for the request
      */
@@ -38,6 +40,7 @@ public abstract class PostRequest extends com.example.cs309android.models.api.re
 
     /**
      * Generates JSON of this object using GSON
+     *
      * @return JSON string
      */
     public String getBody() {
@@ -47,6 +50,7 @@ public abstract class PostRequest extends com.example.cs309android.models.api.re
 
     /**
      * Getter for the url
+     *
      * @return URL
      */
     public String getURL() {

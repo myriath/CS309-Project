@@ -29,6 +29,7 @@ public class FollowResponse extends GenericResponse {
 
     /**
      * Getter for the users
+     *
      * @return array of usernames
      */
     public String[] getUsers() {

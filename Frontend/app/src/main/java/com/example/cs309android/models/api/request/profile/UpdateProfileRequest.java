@@ -20,6 +20,7 @@ public class UpdateProfileRequest extends PatchRequest {
 
     /**
      * Public constructor
+     *
      * @param token authentication token
      */
     public UpdateProfileRequest(String token, String newBio) {
@@ -31,6 +32,7 @@ public class UpdateProfileRequest extends PatchRequest {
 
     /**
      * Getter for the new bio
+     *
      * @return new bio for the profile
      */
     public String getNewBio() {

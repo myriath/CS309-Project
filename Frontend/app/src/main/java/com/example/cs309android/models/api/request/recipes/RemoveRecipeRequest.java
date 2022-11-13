@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Removes the specific recipe index from the DB
+ *
  * @author Travis Massner
  */
 public class RemoveRecipeRequest extends DeleteRequest {
@@ -39,6 +40,7 @@ public class RemoveRecipeRequest extends DeleteRequest {
 
     /**
      * Getter for the recipe index
+     *
      * @return item to add
      */
     public int getRecipe() {
@@ -47,6 +49,7 @@ public class RemoveRecipeRequest extends DeleteRequest {
 
     /**
      * Getter for the authentication token
+     *
      * @return authentication token
      */
     public String getToken() {

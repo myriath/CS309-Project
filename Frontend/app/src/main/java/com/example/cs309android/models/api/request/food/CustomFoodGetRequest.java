@@ -7,6 +7,7 @@ import com.example.cs309android.models.api.request.abstraction.GetRequest;
 
 /**
  * Request to get a specific custom food item by ID
+ *
  * @author Mitch Hudson
  */
 public class CustomFoodGetRequest extends GetRequest {
@@ -17,6 +18,7 @@ public class CustomFoodGetRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param dbId database ID to look up
      */
     public CustomFoodGetRequest(int dbId) {

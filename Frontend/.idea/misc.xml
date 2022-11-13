@@ -34,10 +34,7 @@
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_main.xml" value="0.27330173775671407" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_recipe_details.xml" value="0.20729166666666668" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_search.xml" value="0.1503623188405797" />
-        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_switch_user.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/adapter_account.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/adapter_log_in_new.xml" value="0.5" />
-        <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/adapter_logged_in.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/bottom_sheet_choose_photo.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/custom_nutrition_item.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/mitch/Programming/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/dark_cursor.xml" value="0.23097826086956522" />
@@ -89,6 +86,11 @@
         <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.16666666666666666" />
       </map>
     </option>
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Documents/frontend" />
+    <option name="OPTION_SCOPE" value="private" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

@@ -28,6 +28,7 @@ public class LoginResponse extends GenericResponse {
 
     /**
      * Username for reference
+     *
      * @return username
      */
     public String getUsername() {

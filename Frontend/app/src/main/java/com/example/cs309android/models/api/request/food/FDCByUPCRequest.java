@@ -20,6 +20,7 @@ public class FDCByUPCRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param upc UPC code to look up
      */
     public FDCByUPCRequest(String upc) {
@@ -28,6 +29,7 @@ public class FDCByUPCRequest extends GetRequest {
 
     /**
      * Getter for the parameterized url
+     *
      * @return Parameterized url
      */
     @Override

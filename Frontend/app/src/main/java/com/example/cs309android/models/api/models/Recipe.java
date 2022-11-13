@@ -13,6 +13,20 @@ import com.google.gson.annotations.Expose;
  */
 public class Recipe implements Parcelable {
     /**
+     * Creator for Parcelable
+     */
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+    /**
      * ID of recipe stored in database
      */
     @Expose
@@ -45,12 +59,13 @@ public class Recipe implements Parcelable {
 
     /**
      * Public constructor
-     * @param rid           Recipe id
-     * @param recipeName    Recipe name
-     * @param description   Description
-     * @param ingredients   Ingredients
-     * @param instructions  Instructions
-     * @param username      Creator's username
+     *
+     * @param rid          Recipe id
+     * @param recipeName   Recipe name
+     * @param description  Description
+     * @param ingredients  Ingredients
+     * @param instructions Instructions
+     * @param username     Creator's username
      */
     public Recipe(int rid, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions, String username) {
         this.rid = rid;
@@ -63,6 +78,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Parcel constructor
+     *
      * @param in Parcel to read from
      */
     protected Recipe(Parcel in) {
@@ -76,6 +92,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Creates a parcel from this object
+     *
      * @param dest  Destination parcel
      * @param flags Flags
      */
@@ -90,22 +107,8 @@ public class Recipe implements Parcelable {
     }
 
     /**
-     * Creator for Parcelable
-     */
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
-
-    /**
      * Getter for the recipe ID
+     *
      * @return recipe ID
      */
     public int getRecipeID() {
@@ -114,6 +117,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the description
+     *
      * @return Description
      */
     public String getDescription() {
@@ -131,6 +135,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the ingredients
+     *
      * @return Ingredients
      */
     public Ingredient[] getIngredients() {
@@ -139,6 +144,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the steps
+     *
      * @return recipe steps
      */
     public Instruction[] getInstructions() {
@@ -147,6 +153,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Getter for the creator's username
+     *
      * @return Creator's username
      */
     public String getUsername() {
@@ -155,6 +162,7 @@ public class Recipe implements Parcelable {
 
     /**
      * Parcelable required method
+     *
      * @return 0
      */
     @Override

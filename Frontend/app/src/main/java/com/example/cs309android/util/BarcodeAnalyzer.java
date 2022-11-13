@@ -38,7 +38,8 @@ public class BarcodeAnalyzer {
 
     /**
      * Public constructor
-     * @param listener Runs when the barcodes are found
+     *
+     * @param listener      Runs when the barcodes are found
      * @param errorListener Runs when the analysis fails
      */
     public BarcodeAnalyzer(OnSuccessListener<String[]> listener, OnFailureListener errorListener) {
@@ -51,18 +52,9 @@ public class BarcodeAnalyzer {
 //        DP90 = DP180 / 2;
     }
 
-    public void analyze(@NonNull Bitmap bitmap) {
-//        int x = (int) (bitmap.getWidth() / 2 - DP150);
-//        int y = (int) (bitmap.getHeight() / 2 - DP90);
-//        Bitmap cropped = Bitmap.createBitmap(bitmap, x, y, (int) DP300, (int) DP180);
-        BarcodeScanner scanner = BarcodeScanning.getClient(BARCODE_SCANNER_OPTIONS);
-        scanner.process(bitmap, 0)
-                .addOnSuccessListener(barcodes -> listener.onSuccess(readBarcodes(barcodes)))
-                .addOnFailureListener(errorListener);
-    }
-
     /**
      * Gets the raw values from a list of Barcodes
+     *
      * @param barcodes List of barcodes to get the values of
      * @return String[] of barcode values
      */
@@ -73,5 +65,15 @@ public class BarcodeAnalyzer {
             values[i] = barcodes.get(i).getRawValue();
         }
         return values;
+    }
+
+    public void analyze(@NonNull Bitmap bitmap) {
+//        int x = (int) (bitmap.getWidth() / 2 - DP150);
+//        int y = (int) (bitmap.getHeight() / 2 - DP90);
+//        Bitmap cropped = Bitmap.createBitmap(bitmap, x, y, (int) DP300, (int) DP180);
+        BarcodeScanner scanner = BarcodeScanning.getClient(BARCODE_SCANNER_OPTIONS);
+        scanner.process(bitmap, 0)
+                .addOnSuccessListener(barcodes -> listener.onSuccess(readBarcodes(barcodes)))
+                .addOnFailureListener(errorListener);
     }
 }

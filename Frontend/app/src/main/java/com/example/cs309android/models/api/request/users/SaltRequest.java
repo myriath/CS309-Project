@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Request for getting the salt associated with a username
+ *
  * @author Mitch Hudson
  */
 public class SaltRequest extends GetRequest {
@@ -18,6 +19,7 @@ public class SaltRequest extends GetRequest {
 
     /**
      * Public constructor to generate a request.
+     *
      * @param username Username to get the salt of
      */
     public SaltRequest(String username) {
@@ -26,6 +28,7 @@ public class SaltRequest extends GetRequest {
 
     /**
      * Getter for the username
+     *
      * @return username
      */
     public String getUsername() {
@@ -34,6 +37,7 @@ public class SaltRequest extends GetRequest {
 
     /**
      * Gets the parameterized URL
+     *
      * @return Parameterized GET URL
      */
     @Override

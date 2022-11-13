@@ -10,6 +10,7 @@ import com.android.volley.Request;
 public abstract class PatchRequest extends PostRequest {
     /**
      * Public constructor
+     *
      * @param url URL for the request
      */
     public PatchRequest(String url) {

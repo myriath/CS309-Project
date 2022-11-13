@@ -38,6 +38,7 @@ public class RegisterRequest extends PostRequest {
 
     /**
      * Constructor to be used by GSON
+     *
      * @param email    Email to register
      * @param username Username to register
      * @param pHash    Hashed password + salt for new account

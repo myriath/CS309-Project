@@ -33,6 +33,7 @@ import java.util.Locale;
 
 /**
  * Fragment to display account details
+ *
  * @author Mitch Hudson
  */
 public class AccountFragment extends BaseFragment {
@@ -40,6 +41,19 @@ public class AccountFragment extends BaseFragment {
      * Launcher for the account edit activity
      */
     private ActivityResultLauncher<Intent> accountEditLauncher;
+
+    /**
+     * Refresh the account page
+     *
+     * @param view   view to find subviews
+     * @param global global containing account data
+     */
+    public static void refreshAccount(View view, GlobalClass global) {
+        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+    }
 
     /**
      * Runs when the view is created
@@ -111,17 +125,5 @@ public class AccountFragment extends BaseFragment {
                 }, getContext()));
 
         return view;
-    }
-
-    /**
-     * Refresh the account page
-     * @param view view to find subviews
-     * @param global global containing account data
-     */
-    public static void refreshAccount(View view, GlobalClass global) {
-        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
     }
 }

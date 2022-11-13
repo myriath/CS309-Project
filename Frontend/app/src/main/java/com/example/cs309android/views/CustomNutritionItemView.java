@@ -18,6 +18,7 @@ import java.util.Objects;
 /**
  * Custom view inflates the custom_nutrition_item layout.
  * For custom nutrition values in CustomFoodActivity
+ *
  * @author Mitch Hudson
  */
 public class CustomNutritionItemView extends FrameLayout {

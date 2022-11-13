@@ -18,6 +18,7 @@ public class GetRecipeListResponse extends GenericResponse {
 
     /**
      * Public constructor
+     *
      * @param recipes recipe item
      */
     public GetRecipeListResponse(Recipe[] recipes, int result) {
@@ -27,6 +28,7 @@ public class GetRecipeListResponse extends GenericResponse {
 
     /**
      * Getter for the recipe array
+     *
      * @return Array of simple recipe items.
      */
     public Recipe[] getRecipes() {

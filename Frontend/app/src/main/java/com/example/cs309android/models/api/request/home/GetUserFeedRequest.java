@@ -17,6 +17,7 @@ public class GetUserFeedRequest extends GetRequest {
 
     /**
      * Public constructor
+     *
      * @param token Authentication token for the user
      */
     public GetUserFeedRequest(String token) {
@@ -25,6 +26,7 @@ public class GetUserFeedRequest extends GetRequest {
 
     /**
      * Getter for the authentication token
+     *
      * @return authentication token
      */
     public String getToken() {
@@ -33,6 +35,7 @@ public class GetUserFeedRequest extends GetRequest {
 
     /**
      * Getter for the URL with token
+     *
      * @return URL with token
      */
     public String getURL() {

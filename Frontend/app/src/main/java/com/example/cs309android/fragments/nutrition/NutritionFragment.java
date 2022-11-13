@@ -46,6 +46,10 @@ import java.util.Locale;
  */
 public class NutritionFragment extends BaseFragment {
     /**
+     * Used to store the list of simple food items
+     */
+    private static ArrayList<FoodLogItem> foods;
+    /**
      * Calendar for tracking the date
      */
     Calendar date;
@@ -65,21 +69,14 @@ public class NutritionFragment extends BaseFragment {
      * List view to display the nutrition log
      */
     ListView listView;
-
-    /**
-     * Used to store the list of simple food items
-     */
-    private static ArrayList<FoodLogItem> foods;
-
-    /**
-     * Main window fragment
-     */
-    private CallbackFragment nutritionFragment;
-
     /**
      * Used to launch various activities.
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
+    /**
+     * Main window fragment
+     */
+    private CallbackFragment nutritionFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

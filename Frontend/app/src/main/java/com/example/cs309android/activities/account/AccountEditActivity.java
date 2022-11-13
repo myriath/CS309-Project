@@ -31,14 +31,10 @@ import java.util.Objects;
 
 /**
  * Activity used to edit a user's profile
+ *
  * @author Mitch Hudson
  */
 public class AccountEditActivity extends AppCompatActivity implements CallbackFragment {
-    /**
-     * Images to be filled in when a user sets an image
-     */
-    private Bitmap profileImage, bannerImage;
-
     /**
      * The destination for the image is none
      */
@@ -51,7 +47,10 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
      * The target image for callback is profile picture
      */
     private static final int PFP = 1;
-
+    /**
+     * Images to be filled in when a user sets an image
+     */
+    private Bitmap profileImage, bannerImage;
     /**
      * Current target
      * Default NONE
@@ -181,6 +180,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
     /**
      * Do nothing, no parent
+     *
      * @param fragment ignored
      */
     @Override
