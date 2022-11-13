@@ -2,7 +2,7 @@ package com.example.cs309android.models.USDA.models;
 
 import com.google.gson.annotations.Expose;
 
-public class NutrientAquisitionDetails {
+public class NutrientAcquisitionDetails {
     @Expose
     private final int sampleUnitId;
     @Expose
@@ -12,7 +12,7 @@ public class NutrientAquisitionDetails {
     @Expose
     private final String storeState;
 
-    public NutrientAquisitionDetails(int sampleUnitId, String purchaseDate, String storeCity, String storeState) {
+    public NutrientAcquisitionDetails(int sampleUnitId, String purchaseDate, String storeCity, String storeState) {
         this.sampleUnitId = sampleUnitId;
         this.purchaseDate = purchaseDate;
         this.storeCity = storeCity;
