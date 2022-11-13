@@ -1,6 +1,5 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.GsonBuilder;
 import com.requests.backend.models.*;
 import com.requests.backend.models.responses.LoginResponse;
 import com.requests.backend.repositories.TokenRepository;
@@ -12,7 +11,6 @@ import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,7 +46,7 @@ public class UserController {
      */
     @GetMapping("/getSalt/{username}")
     @ResponseBody
-    public String getSalt(@PathVariable String username) {
+    public SaltResponse getSalt(@PathVariable String username) {
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
@@ -63,10 +61,7 @@ public class UserController {
             res.setSalt(salt);
         }
 
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -76,7 +71,7 @@ public class UserController {
      * @return JSON string containing the username associated with the given token and a status code.
      */
     @GetMapping(path="/validateToken/{token}") // /users/validateLogin/{token}
-    public @ResponseBody String validateTokenLogin(@PathVariable String token) {
+    public @ResponseBody LoginResponse validateTokenLogin(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
 
         LoginResponse res = new LoginResponse();
@@ -116,9 +111,7 @@ public class UserController {
             res.setResult(RESULT_ERROR);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -129,7 +122,7 @@ public class UserController {
      * @return JSON string containing the token associated with the given username and password and a status code.
      */
     @GetMapping(path="/validateLogin/{username}") // /users/validateLogin/{username}?hash=""&newToken=""
-    public @ResponseBody String validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash, @RequestParam(name="newToken") String newToken) {
+    public @ResponseBody LoginResponse validateLogin(@PathVariable String username, @RequestParam(name="hash") String hash, @RequestParam(name="newToken") String newToken) {
         String pHash = Hasher.sha256(hash); // SHA-256's the incoming hash
         String tokenHash = Hasher.sha256(newToken); // SHA-256's the incoming token, this is added to the table as another hash for the username
 
@@ -172,24 +165,16 @@ public class UserController {
             }
         }
 
-        // If no users with the username is found, return code -1
-
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "=")
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Adds a new user to the database.
-     * @param json JSON string containing the username, password, and salt.
+     * @param req JSON string containing the username, password, and salt.
      * @return JSON string containing the result code.
      */
     @PostMapping(path="/register")
-    public @ResponseBody String addNewUser (@RequestBody String json) {
-
-        RegisterRequest req = new Gson().fromJson(json, RegisterRequest.class);
-
+    public @ResponseBody LoginResponse addNewUser (@RequestBody RegisterRequest req) {
         String username = req.getUsername();
         String email = req.getEmail();
         String pHash = Hasher.sha256(req.getPHash()); // SHA-256's the incoming hash
@@ -218,10 +203,7 @@ public class UserController {
             }
         }
 
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -231,7 +213,7 @@ public class UserController {
      * @return JSON string containing the result code.
      */
     @PutMapping(path="/regenToken/{oldToken}")
-    public @ResponseBody String regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
+    public @ResponseBody ResultResponse regenToken(@PathVariable String oldToken, @RequestParam(name="newToken") String newToken) {
         String oldTokenHash = Hasher.sha256(oldToken);
         String newTokenHash = Hasher.sha256(newToken);
 
@@ -263,9 +245,7 @@ public class UserController {
             }
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
