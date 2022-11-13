@@ -42,7 +42,7 @@ public class FoodLogController {
      * @return          A JSON array containing all food log entries for the given date
      */
     @GetMapping (path = "/get/{token}")
-    public @ResponseBody String getFoodLog(@PathVariable String token) {
+    public @ResponseBody FoodLogGetResponse getFoodLog(@PathVariable String token) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -59,9 +59,7 @@ public class FoodLogController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -71,10 +69,7 @@ public class FoodLogController {
      * @return          A JSON array containing all food log entries for the given date
      */
     @GetMapping (path = "/getDay/{token}")
-    public @ResponseBody String getLogByDay(@PathVariable String token, @RequestParam String date) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
-
+    public @ResponseBody FoodLogGetResponse getLogByDay(@PathVariable String token, @RequestParam String date) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -92,22 +87,17 @@ public class FoodLogController {
             res.setResult(RESULT_OK);
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Adds a food log entry associated with a user
      * @param token  The provided token of the user
-     * @param json   JSON object containing all food information (fdcId, foodName, nutrients etc.)
+     * @param req   JSON object containing all food information (fdcId, foodName, nutrients etc.)
      * @return       JSON response containing result code
      */
     @PostMapping(path = "/add/{token}")
-    public @ResponseBody String addToLog(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        FoodLogAddRequest req = gson.fromJson(json, FoodLogAddRequest.class);
-
+    public @ResponseBody ResultResponse addToLog(@PathVariable String token, @RequestBody FoodLogAddRequest req) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -126,7 +116,7 @@ public class FoodLogController {
             res.setResult(RESULT_OK);
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -134,10 +124,10 @@ public class FoodLogController {
      *
      * @param token  The provided token of the user
      * @param logId  The logId of the entry the user wants to remove
-     * @return
+     * @return ResultResponse containing the result data
      */
     @DeleteMapping (path = "/remove/{token}")   // /remove/{token}?logId=
-    public @ResponseBody String removeFromLog(@PathVariable String token, @RequestParam int logId) {
+    public @ResponseBody ResultResponse removeFromLog(@PathVariable String token, @RequestParam int logId) {
 
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -152,8 +142,6 @@ public class FoodLogController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 }

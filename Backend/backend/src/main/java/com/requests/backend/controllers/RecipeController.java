@@ -56,12 +56,10 @@ public class RecipeController {
      * @return A list of recipes with the given name.
      */
     @GetMapping(path="/getRecipeByRname/{rname}")
-    public @ResponseBody String getRecipeByRname(@PathVariable String rname) {
+    public @ResponseBody RecipeListResponse getRecipeByRname(@PathVariable String rname) {
         Recipe[] recipes = recipeRepository.queryGetRecipeByRname(rname);
 
         RecipeListResponse res = new RecipeListResponse();
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         if (recipes.length == 0) {
             res.setResult(RESULT_ERROR);
@@ -71,7 +69,7 @@ public class RecipeController {
             res.setResult(RESULT_OK);
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -80,12 +78,10 @@ public class RecipeController {
      * @return A JSON response containing the recipe with the given recipe ID.
      */
     @GetMapping(path="/getRecipeByRid/{rid}")
-    public @ResponseBody String getRecipeByRid(@PathVariable int rid) {
+    public @ResponseBody RecipeResponse getRecipeByRid(@PathVariable int rid) {
         Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
 
         RecipeResponse res = new RecipeResponse();
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         if (recipe.length == 0) {
             res.setResult(RESULT_ERROR);
@@ -95,23 +91,20 @@ public class RecipeController {
             res.setResult(RESULT_OK);
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Add a recipe to the database given recipe information.
      * @param token The token of the user adding the recipe.
-     * @param json The JSON string containing the recipe information.
+     * @param req Recipe Add Request containing the new recipe information
      * @return A JSON response containing the result of the operation.
      */
     @PostMapping(path="/add/{token}")
     @ResponseBody
-    public String addNewRecipe(@PathVariable String token, @RequestBody String json) {
-
+    public ResultResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
-
-        RecipeAddRequest req = new Gson().fromJson(json, RecipeAddRequest.class);
 
         String recipeName = req.getRecipeName();
         String instructions = req.getInstructions();
@@ -133,10 +126,7 @@ public class RecipeController {
             }
         }
 
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -148,7 +138,7 @@ public class RecipeController {
      */
     @PostMapping(path="/addPicture/{rid}/{token}")
     @ResponseBody
-    public String addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
+    public ResultResponse addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
         return UserController.getUsernameFromToken(token, (username, res) -> {
             Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
             if (recipes.length == 0 || !recipes[0].getUsername().equals(username)) {
@@ -171,7 +161,7 @@ public class RecipeController {
      * Get the picture associated with a recipe as a byte array based on its recipe ID.
      * @param rid The recipe ID of the recipe to get the picture of.
      * @return A JSON response containing the result of the operation and the picture as a byte array.
-     * @throws IOException
+     * @throws IOException Thrown if there is an error reading the file
      */
     @GetMapping(path="/getPicture/{rid}", produces="image/webp")
     public @ResponseBody byte[] getRecipePicture(@PathVariable String rid) throws IOException {
@@ -192,7 +182,7 @@ public class RecipeController {
      */
     @DeleteMapping(path="/remove")
     @ResponseBody
-    public int removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
+    public RecipeResponse removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
         Recipe[] recipe = recipeRepository.queryRecipeDeleteCheck(token, username);
         RecipeResponse res = new RecipeResponse();
 
@@ -203,7 +193,7 @@ public class RecipeController {
             res.setResult(RESULT_OK);
         }
 
-        return res.getResult();
+        return res;
     }
 
     /*  to be modified after database changed
@@ -236,9 +226,9 @@ public class RecipeController {
      */
     @GetMapping(path="/recipeList/{token}")
     @ResponseBody
-    public String recipeList(@PathVariable String token) {
+    public Recipe[] recipeList(@PathVariable String token) {
         Recipe[] recipe = recipeRepository.queryrecipeList(token);
-        RecipeResponse res = new RecipeResponse();
+        RecipeResponse res = new RecipeResponse(); // TODO: Unused, probably need a new response type that has recipe array and result code
 
         if(recipe.length == 0) {
             res.setResult(RESULT_ERROR);
@@ -247,8 +237,6 @@ public class RecipeController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(recipe);
+        return recipe;
     }
 }

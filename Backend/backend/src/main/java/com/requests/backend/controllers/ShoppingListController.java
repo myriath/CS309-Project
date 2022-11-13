@@ -41,10 +41,10 @@ public class ShoppingListController {
      * If the user exists, but the hash is incorrect, return hash mismatch error code with empty list.
      * Otherwise, the credentials are valid: return "OK" result code and shopping list for associated user.
      * @param token Token for authentication
-     * @return
+     * @return Shopping list get response that contains all the shopping list items
      */
     @GetMapping(path="/get/{token}")
-    public @ResponseBody String getShoppingList(@PathVariable String token) {
+    public @ResponseBody ShoppingListGetResponse getShoppingList(@PathVariable String token) {
 
         String hashedToken = Hasher.sha256(token);
 
@@ -77,26 +77,21 @@ public class ShoppingListController {
             }
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
-
-        return gson.toJson(res);
-
+        return res;
     }
 
     /**
      * Adds an item to the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param json JSON request body containing the item to add to the shopping list
+     * @param req JSON request body containing the item to add to the shopping list
      * @return Result code
      */
     @PostMapping(path="/add/{token}")
-    public @ResponseBody String addToShoppingList(@PathVariable String token, @RequestBody String json) {
+    public @ResponseBody ResultResponse addToShoppingList(@PathVariable String token, @RequestBody ShoppingListAddRequest req) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         String hashedToken = Hasher.sha256(token);
-
-        ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
@@ -126,24 +121,19 @@ public class ShoppingListController {
             }
         }
 
-        return gson.toJson(res);
+        return res;
     }
-
 
     /**
      * Changes the strikeout status of an item in the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param json JSON request body containing identifying information for the item to change
+     * @param req JSON request body containing identifying information for the item to change
      * @return Result code
      */
     @PatchMapping (path="/strikeout/{token}")
-    public @ResponseBody String changeStrikeout(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
+    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @RequestBody StrikeoutRequest req) {
         String hashedToken = Hasher.sha256(token);
 
-        StrikeoutRequest req = gson.fromJson(json, StrikeoutRequest.class);
         int id = req.getId();
         boolean isCustom = req.isCustom();
 
@@ -170,23 +160,19 @@ public class ShoppingListController {
             }
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Deletes an item from the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param json JSON request body containing identifying information for the item to delete
+     * @param req JSON request body containing identifying information for the item to delete
      * @return Result code
      */
     @PutMapping (path = "/remove/{token}")
-    public @ResponseBody String removeFromList(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
+    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @RequestBody ShoppingListRemoveRequest req) {
         String hashedToken = Hasher.sha256(token);
 
-        ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
         int reqId = req.getId();
 
         ResultResponse res = new ResultResponse();
@@ -212,7 +198,7 @@ public class ShoppingListController {
             }
         }
 
-        return gson.toJson(res);
+        return res;
 
     }
 }

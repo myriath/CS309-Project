@@ -275,7 +275,7 @@ public class UserController {
      * @param tokenRepository The token repository.
      * @return JSON string containing the result code and username.
      */
-    public static String getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
+    public static ResultResponse getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
         String hashedToken = Hasher.sha256(token);
 
         ResultResponse res = new ResultResponse();
@@ -297,9 +297,7 @@ public class UserController {
             res.setResult(RESULT_ERROR);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     public interface RunWithUsername {

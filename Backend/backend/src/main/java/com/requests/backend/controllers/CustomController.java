@@ -38,12 +38,11 @@ public class CustomController {
 
     /**
      * Get custom foods that best match the given query.
-     * @param query
+     * @param query Search query, this endpoint returns foods that have this in the name
      * @return JSON string containing the results.
-     * @throws JsonProcessingException
      */
     @GetMapping("/get")
-    public String get(@RequestParam String query) throws JsonProcessingException {
+    public @ResponseBody FoodsResponse get(@RequestParam String query) {
 
         customRepository.queryGetCustomFoods(query);
         FoodsResponse res = new FoodsResponse();
@@ -52,20 +51,16 @@ public class CustomController {
 
         res.setItems(foods);
 
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Get information about a specific custom food by its ID.
-     * @param id
+     * @param id ID of the item to get
      * @return JSON string containing information about the food item.
-     * @throws JsonProcessingException
      */
     @GetMapping("/get/{id}")
-    public String get(@PathVariable int id) throws JsonProcessingException {
+    public @ResponseBody FoodResponse get(@PathVariable int id) {
         FoodResponse res = new FoodResponse();
 
         CustomFood[] foods = customRepository.queryGetByID(id);
@@ -76,25 +71,20 @@ public class CustomController {
             res.setItem(foods[0]);
             res.setResult(RESULT_OK);
         }
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        return gson.toJson(res);
+        return res;
     }
 
     /**
      * Add a new custom food item to the database.
-     * @param token
-     * @param req
+     * @param token Token for authentication
+     * @param req Custom food request containing the new custom food data
      * @return JSON string containing the result of the operation.
-     * @throws JsonProcessingException
      */
     @PostMapping("/add/{token}")
-    public @ResponseBody CustomFoodResponse add(@PathVariable String token, @RequestBody CustomFoodRequest req) throws JsonProcessingException {
+    public @ResponseBody CustomFoodResponse add(@PathVariable String token, @RequestBody CustomFoodRequest req) {
 
         String hashedToken = Hasher.sha256(token);
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         // Find token in table
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -120,9 +110,4 @@ public class CustomController {
 
         return res;
     }
-
-
-
-
-
 }

@@ -44,7 +44,7 @@ public class SocialController {
      * @return A list of followers of the user.
      */
     @GetMapping (path="/getFollowers/{username}")
-    public @ResponseBody String getFollowers(@PathVariable String username) {
+    public @ResponseBody FollowResponse getFollowers(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
 
         String[] followers = followRepository.queryGetFollowers(username);
@@ -52,9 +52,7 @@ public class SocialController {
         res.setUsers(followers);
         res.setResult(RESULT_OK);
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -63,7 +61,7 @@ public class SocialController {
      * @return A list of users that the user is following.
      */
     @GetMapping (path="/getFollowing/{username}")
-    public @ResponseBody String getFollowing(@PathVariable String username) {
+    public @ResponseBody FollowResponse getFollowing(@PathVariable String username) {
         FollowResponse res = new FollowResponse();
 
         String[] following = followRepository.queryGetFollowing(username);
@@ -71,9 +69,7 @@ public class SocialController {
         res.setUsers(following);
         res.setResult(RESULT_OK);
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -83,7 +79,7 @@ public class SocialController {
      * @return A boolean value indicating if the user is following the other user.
      */
     @GetMapping (path="/isFollowing/{follower}/{following}")
-    public @ResponseBody String getIsFollowing(@PathVariable String follower, @PathVariable String following) {
+    public @ResponseBody FollowResponse getIsFollowing(@PathVariable String follower, @PathVariable String following) {
         FollowResponse res = new FollowResponse();
 
         String[] query = followRepository.queryIsFollowing(follower, following);
@@ -91,9 +87,7 @@ public class SocialController {
         res.setUsers(query);
         res.setResult(RESULT_OK);
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -103,7 +97,7 @@ public class SocialController {
      * @return A result code indicating if the user was successfully followed.
      */
     @PostMapping (path="/follow/{token}")
-    public @ResponseBody String follow(@PathVariable String token, @RequestParam String following) {
+    public @ResponseBody FollowResponse follow(@PathVariable String token, @RequestParam String following) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -121,9 +115,7 @@ public class SocialController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -133,7 +125,7 @@ public class SocialController {
      * @return A result code indicating if the user was successfully unfollowed.
      */
     @PutMapping (path="/unfollow/{token}")
-    public @ResponseBody String unfollow(@PathVariable String token, @RequestParam String following) {
+    public @ResponseBody FollowResponse unfollow(@PathVariable String token, @RequestParam String following) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -151,9 +143,7 @@ public class SocialController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -162,7 +152,7 @@ public class SocialController {
      * @return A list of recipes for the user.
      */
     @GetMapping (path="/getFeed/{token}")
-    public @ResponseBody String getFeed(@PathVariable String token) {
+    public @ResponseBody RecipeListResponse getFeed(@PathVariable String token) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -181,9 +171,7 @@ public class SocialController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -192,7 +180,7 @@ public class SocialController {
      * @return A list of recipes posted by the user.
      */
     @GetMapping (path="/getUserPosts/{token}")
-    public @ResponseBody String getUserFeed(@PathVariable String token) {
+    public @ResponseBody RecipeListResponse getUserFeed(@PathVariable String token) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -211,9 +199,7 @@ public class SocialController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
     /**
@@ -224,7 +210,7 @@ public class SocialController {
      * @return A result code indicating if the comment was successfully added.
      */
     @PostMapping (path="/comment/{token}")
-    public @ResponseBody String comment(@PathVariable String token, @RequestParam int rid, @RequestParam String body) {
+    public @ResponseBody ResultResponse comment(@PathVariable String token, @RequestParam int rid, @RequestParam String body) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -242,8 +228,6 @@ public class SocialController {
             res.setResult(RESULT_OK);
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 }
