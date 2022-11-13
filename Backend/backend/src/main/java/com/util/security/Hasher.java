@@ -7,6 +7,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
+import java.lang.String;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -128,11 +129,20 @@ public class Hasher {
     }
 
     /**
-     * Puts a simple hash on top of the hashed data.
+     * Puts a simple hash on top of the encoded data.
      * @param b64 Base64 encoded string
      * @return Base64 encoded string.
      */
     public static String sha256(String b64) {
         return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64.trim()))).trim();
+    }
+
+    /**
+     * Puts a simple hash on top of the data.
+     * @param in Plaintext string
+     * @return Base64 encoded string.
+     */
+    public static String sha256plaintext(String in) {
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes())).trim();
     }
 }
