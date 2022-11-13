@@ -10,20 +10,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.Recipe;
 
 import java.util.ArrayList;
 
 /**
- * Custom adapter to display the list of food items in the shopping list fragment.
+ * Adapter to show a user's feed of recipes
  *
- * @author Mitch Hudson
+ * @author Travis Massner
  */
-public class FeedAdapter extends ArrayAdapter<SimpleRecipeItem> {
+public class FeedAdapter extends ArrayAdapter<Recipe> {
     /**
      * List of items in the shopping list
      */
-    private final ArrayList<SimpleRecipeItem> items;
+    private final ArrayList<Recipe> items;
 
     /**
      * Public constructor.
@@ -31,7 +31,7 @@ public class FeedAdapter extends ArrayAdapter<SimpleRecipeItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public FeedAdapter(Context context, ArrayList<SimpleRecipeItem> items) {
+    public FeedAdapter(Context context, ArrayList<Recipe> items) {
         super(context, R.layout.shopping_list_item, items);
         this.items = items;
     }
@@ -47,7 +47,7 @@ public class FeedAdapter extends ArrayAdapter<SimpleRecipeItem> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        SimpleRecipeItem item = items.get(position);
+        Recipe item = items.get(position);
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.food_search_branded, null);
         }

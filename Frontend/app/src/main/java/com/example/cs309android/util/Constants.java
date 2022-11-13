@@ -9,52 +9,83 @@ import static com.example.cs309android.BuildConfig.BASE_API_URL;
  */
 public class Constants {
     /**
-     * Private constructor (Util class)
-     */
-    private Constants() {
-    }
-
-    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
     public static final boolean DEBUG = true;
-
     /**
      * Name of the app for all mentions in the app
      */
     public static final String APP_NAME = "Föd";
-
     /**
      * Preference name for this app's shared preferences.
      */
     public static final String PREF_NAME = "COMS309";
+    /**
+     * Preference key for the first time variable
+     * Used to see if the app should run the tutorial
+     */
     public static final String PREF_FIRST_TIME = "FirstTime";
+    /**
+     * Preference key for the users hash map
+     */
     public static final String PREF_LOGIN = "users";
+    /**
+     * Preference key for the latest user
+     */
     public static final String USERS_LATEST = "latest";
-
     /**
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
-
     /**
-     * Response codes for callback method. Used by Fragments for this class
+     * Tells the MainActivity to move to the register page
      */
     public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
+    /**
+     * Tells MainActivity to close the login page
+     */
     public static final int CALLBACK_CLOSE_LOGIN = 1;
+    /**
+     * Tells MainActivity to open the login page
+     */
     public static final int CALLBACK_START_LOGIN = 2;
+    /**
+     * Tells MainActivity to move to the homepage
+     */
     public static final int CALLBACK_MOVE_TO_HOME = 3;
+    /**
+     * Opens the food details page
+     */
     public static final int CALLBACK_FOOD_DETAIL = 4;
+    /**
+     * Opens the food search activity
+     */
     public static final int CALLBACK_SEARCH_FOOD = 5;
+    /**
+     * Tells MainActivity to move to the settings page
+     */
     public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
-    public static final int CALLBACK_EDIT_ACCOUNT = 7;
-    public static final int CALLBACK_CLOSE_PROFILE = 8;
-    public static final int CALLBACK_FOLLOW = 9;
-    public static final int CALLBACK_IMAGE_URI = 10;
-    public static final int CALLBACK_CLOSE_DETAIL = 11;
-
-
+    /**
+     * Used to return an image uri from the Image loader bottom sheet
+     */
+    public static final int CALLBACK_IMAGE_URI = 7;
+    /**
+     * Used to open the account page
+     */
+    public static final int CALLBACK_OPEN_ACCOUNT = 8;
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    public static final int INTENT_NONE = -1;
+    /**
+     * Intent code tells the SearchActivity it is from the shopping list
+     */
+    public static final int INTENT_SHOPPING_LIST = 0;
+    /**
+     * Tells the SearchActivity it was opened from recipe add
+     */
+    public static final int INTENT_RECIPE_ADD = 1;
     public static final String PARCEL_IMAGE_URI = "image_uri";
     /**
      * This is used wherever a food item needs to be parceled.
@@ -68,12 +99,44 @@ public class Constants {
      * This is used to parcel the intent of opening an activity.
      */
     public static final String PARCEL_INTENT_CODE = "intentCode";
-
-    // RESULT CODES
+    /**
+     * Used to parcel the control variable
+     */
+    public static final String PARCEL_BUTTON_CONTROL = "button-control";
+    /**
+     * Used to parcel an item's position in a list
+     */
+    public static final String PARCEL_ITEM_POSITION = "item_pos";
+    /**
+     * Used to parcel a recipe
+     */
+    public static final String PARCEL_RECIPE = "HomeFragment.recipe";
+    /**
+     * Used in the account page to tell if it is the owner or not
+     */
+    public static final String PARCEL_OWNER = "owner";
+    /**
+     * Used to tell the account page if the account is being followed
+     */
+    public static final String PARCEL_FOLLOWING = "following";
+    /**
+     * Used in the account page
+     */
+    public static final String PARCEL_USERNAME = "username";
+    /**
+     * Used in AccountListPage for transferring an array of usernames
+     */
+    public static final String PARCEL_ACCOUNT_LIST = "accounts";
+    /**
+     * Used to give the toolbar in AccountListView a title
+     */
+    public static final String PARCEL_TITLE = "title";
     /**
      * Indicates the request resulted in an error (generic)
      */
     public static final int RESULT_ERROR = -1;
+
+    // RESULT CODES
     /**
      * Indicates a mismatch between the given username / password
      */
@@ -86,7 +149,6 @@ public class Constants {
      * Indicates the email given has been taken
      */
     public static final int RESULT_ERROR_EMAIL_TAKEN = -4;
-
     /**
      * Indicates the request succeeded (generic)
      */
@@ -111,13 +173,13 @@ public class Constants {
      * Indicates the user has been successfully created
      */
     public static final int RESULT_ERROR_RID_TAKEN = -23;
-
-
-    // USERS
     /**
      * Base auth url for all authentication requests
      */
     public static final String AUTH_URL = BASE_API_URL + "users/";
+
+
+    // USERS
     /**
      * URL to register a new account to. (Params: email, username, salt, hash)
      */
@@ -138,13 +200,13 @@ public class Constants {
      * URL to regen an expired token
      */
     public static final String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
-
-
-    // FOOD
     /**
      * URL for the custom food database part of the api
      */
     public static final String FOOD_URL = BASE_API_URL + "food/";
+
+
+    // FOOD
     /**
      * URL for adding a new custom food item
      */
@@ -161,13 +223,13 @@ public class Constants {
      * URL for getting fdc id from a upc code
      */
     public static final String UPC_URL = FOOD_URL + "foodByUpc/";
-
-
-    // SHOPPING
     /**
      * Base shopping url for all shopping list based requests
      */
     public static final String SHOPPING_URL = BASE_API_URL + "shopping/";
+
+
+    // SHOPPING
     /**
      * Get url for getting shopping list
      */
@@ -188,16 +250,20 @@ public class Constants {
      * Strikeout url when the user interacts with custom food items
      */
     public static final String STRIKE_SHOPPING_DB_URL = SHOPPING_URL + "strikeoutDb/";
-
-    // RECIPES
     /**
      * Base recipes url for all recipes based requests
      */
     public static final String RECIPES_URL = BASE_API_URL + "recipe/";
+
+    // RECIPES
     /**
      * Add url for adding an item to recipes
      */
     public static final String ADD_RECIPES_URL = RECIPES_URL + "add/";
+    /**
+     * URL for updating recipes
+     */
+    public static final String UPDATE_RECIPES_URL = RECIPES_URL + "update/";
     /**
      * Remove url for removing an item from recipes
      */
@@ -210,22 +276,58 @@ public class Constants {
      * Url for getting an item from recipes
      */
     public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
-
-    // SOCIAL
+    /**
+     * URL for setting a recipe's image
+     */
+    public static final String ADD_RECIPE_IMAGE_URL = RECIPES_URL + "addPicture/";
+    /**
+     * URL for getting a recipe's image
+     */
+    public static final String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
     /**
      * Base social url for all social based requests
      */
     public static final String SOCIAL_URL = BASE_API_URL + "social/";
+
+    // SOCIAL
+    /**
+     * URL used when creating a comment
+     */
+    public static final String COMMENT_URL = SOCIAL_URL + "comment";
+    /**
+     * URL for deleting a comment
+     */
+    public static final String REMOVE_COMMENT_URL = SOCIAL_URL + "removeComment";
+    /**
+     * URL for following an account
+     */
+    public static final String FOLLOW_URL = SOCIAL_URL + "follow";
+    /**
+     * URL for unfollowing an account
+     */
+    public static final String UNFOLLOW_URL = SOCIAL_URL + "unfollow";
+    /**
+     * URL for checking follower status
+     */
+    public static final String IS_FOLLOWING_URL = SOCIAL_URL + "isFollowing";
+    /**
+     * URL for getting the follower list
+     */
+    public static final String GET_FOLLOWERS_URL = SOCIAL_URL + "getFollowers";
+    /**
+     * URL for getting the following list
+     */
+    public static final String GET_FOLLOWING_URL = SOCIAL_URL + "getFollowing";
     /**
      * Add url for getting a users feed
      */
-    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed/";
-
-    //FOOD LOG
+    public static final String GET_FEED_URL = SOCIAL_URL + "getFeed";
     /**
      * Base food log url for all food log based requests
      */
     public static final String FOOD_LOG_URL = BASE_API_URL + "log/";
+
+    //FOOD LOG
     /**
      * Add url for adding an item to food log
      */
@@ -242,23 +344,12 @@ public class Constants {
      * Get url for getting an item by day from food log
      */
     public static final String GET_FOOD_LOG_BY_DAY_URL = FOOD_LOG_URL + "getDay/";
-
-
-//    // SOCIAL
-//    /**
-//     * Base URL for social endpoints
-//     */
-//    public static final String SOCIAL_URL = BASE_API_URL + "social/";
-//    /**
-//     * URL for getting user posts
-//     */
-//    public static final String GET_POSTS_URL = SOCIAL_URL + "getUserPosts/";
-
-    // PROFILE
     /**
      * Base profile endpoints URL
      */
     public static final String PROFILE_API_URL = BASE_API_URL + "profile/";
+
+    // PROFILE
     /**
      * URL to get profile data
      */
@@ -283,15 +374,20 @@ public class Constants {
      * URL used to update a user's banner image
      */
     public static final String UPDATE_BANNER_URL = PROFILE_API_URL + "updateBanner/";
-
-    // OTHER
     /**
      * URL for getting images
      */
     public static final String IMAGE_URL = BASE_API_URL + "images/";
 
+    // OTHER
     /**
      * No fdc id associated with this item, used for custom items
      */
     public static final int ITEM_ID_NULL = -1;
+
+    /**
+     * Private constructor (Util class)
+     */
+    private Constants() {
+    }
 }

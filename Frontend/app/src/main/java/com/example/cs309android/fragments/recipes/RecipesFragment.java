@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
@@ -20,10 +19,12 @@ import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
-import com.example.cs309android.models.gson.request.recipes.GetUserRecipesRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,53 +35,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment to display the Recipe feed
+ *
+ * @author Travis Massner
  */
 public class RecipesFragment extends BaseFragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private static ArrayList<SimpleRecipeItem> recipes;
-
-    private String mParam1;
-    private String mParam2;
-
-    public RecipesFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Recipe list to display
+     */
+    private static ArrayList<Recipe> recipes;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Runs when the fragment is created
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipesFragment.
+     * @param savedInstanceState Saved state
      */
-
-    public static RecipesFragment newInstance(String param1, String param2) {
-        RecipesFragment fragment = new RecipesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
         recipes = new ArrayList<>();
     }
 
+    /**
+     * Runs when the fragment view is created
+     *
+     * @param inflater           Inflates the layout
+     * @param container          Parent view group
+     * @param savedInstanceState Saved state
+     * @return Inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,6 +90,11 @@ public class RecipesFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * Refreshes the list of recipes
+     *
+     * @param view View to get children of
+     */
     public void refreshList(View view) {
         new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -121,16 +109,34 @@ public class RecipesFragment extends BaseFragment {
                 return;
             }
 
-            SimpleRecipeItem[] newItems = recipeResponse.getRecipes();
+            Recipe[] newItems = recipeResponse.getRecipes();
             recipes = new ArrayList<>();
             recipes.addAll(Arrays.asList(newItems));
         }, requireContext());
 
         TextView emptyText = view.findViewById(R.id.emptyText);
-        if(recipes.isEmpty()){
+
+        // TODO: Temporary data until get list works
+        recipes = new ArrayList<>();
+        recipes.add(new Recipe(0, "Apples", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "apple"));
+
+        recipes.add(new Recipe(0, "Apples2", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "papajohn"));
+
+        if (recipes.isEmpty()) {
             emptyText.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             emptyText.setVisibility(View.INVISIBLE);
         }
 
@@ -141,12 +147,11 @@ public class RecipesFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleRecipeItem selectedItem = (SimpleRecipeItem) parent.getItemAtPosition(position);
+                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
                 Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
                 i.putExtra("HomeFragment.recipe", selectedItem);
                 startActivity(i);
             }
         });
     }
-
 }

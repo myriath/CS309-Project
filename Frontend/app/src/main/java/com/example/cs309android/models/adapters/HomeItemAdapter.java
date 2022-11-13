@@ -11,15 +11,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.SimpleRecipeItem;
+import com.example.cs309android.models.api.models.Recipe;
 
 import java.util.ArrayList;
 
-public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
+/**
+ * Adapter for the list of recipes in the home page
+ *
+ * @author Travis Massner
+ */
+public class HomeItemAdapter extends ArrayAdapter<Recipe> {
     /**
      * List of items in the recipe list
      */
-    private final ArrayList<SimpleRecipeItem> items;
+    private final ArrayList<Recipe> items;
 
     /**
      * Public constructor.
@@ -27,7 +32,7 @@ public class HomeItemAdapter extends ArrayAdapter<SimpleRecipeItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public HomeItemAdapter(Context context, ArrayList<SimpleRecipeItem> items) {
+    public HomeItemAdapter(Context context, ArrayList<Recipe> items) {
         super(context, R.layout.home_item_modal, items);
         this.items = items;
     }

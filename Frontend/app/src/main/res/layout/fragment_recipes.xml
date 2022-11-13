@@ -18,9 +18,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
         android:clickable="true"
         android:contentDescription="@string/add_item"
-        android:src="@drawable/ic_add" />
+        android:elevation="0dp"
+        android:src="@drawable/ic_add"
+        app:tint="?attr/colorOnSecondaryContainer" />
 
     <TextView
         android:id="@+id/emptyText"

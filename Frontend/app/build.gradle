@@ -13,7 +13,7 @@ android {
         release {
         }
     }
-    
+
     packagingOptions {
         resources.excludes.add("META-INF/*")
     }

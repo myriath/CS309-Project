@@ -1,12 +1,12 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Util.setSubtitle;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Space;
@@ -19,10 +19,10 @@ import androidx.core.view.WindowCompat;
 import com.example.cs309android.R;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
-import com.example.cs309android.models.gson.models.CustomFoodItem;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.food.CustomFoodGetRequest;
-import com.example.cs309android.models.gson.response.food.CustomFoodGetResponse;
+import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.food.CustomFoodGetRequest;
+import com.example.cs309android.models.api.response.food.CustomFoodGetResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.NutritionItemView;
@@ -33,17 +33,13 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Food Details activity displays the information of a food from the USDA API
+ * Food Details activity displays the information of a food item
  *
  * @author Mitch Hudson
  */
 public class FoodDetailsActivity extends AppCompatActivity {
     /**
-     * Used to parcel the control variable
-     */
-    public static final String PARCEL_BUTTON_CONTROL = "button-control";
-    /**
-     * Used to tell the activity to display no fab
+     * Used to tell the activity to display no floating button
      */
     public static final int CONTROL_NONE = 0;
     /**
@@ -52,10 +48,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public static final int CONTROL_ADD = 1;
 
     /**
-     * DP measurements
+     * 16dp in pixels
      */
-    public float dp16;
-    public float dp8;
+    private int dp16;
+    /**
+     * 8dp in pixels
+     */
+    private int dp8;
 
     /**
      * Layout for displaying the food details
@@ -70,13 +69,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
     /**
      * Runs when the activity is started
      *
-     * @param savedInstanceState savedInstanceState
+     * @param savedInstanceState saved state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
-        dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
+
+        dp16 = (int) Util.scalePixels(16);
+        dp8 = (int) Util.scalePixels(8);
 
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -118,13 +118,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.add_item);
-        int control = intent.getIntExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, CONTROL_NONE);
+        int control = intent.getIntExtra(PARCEL_BUTTON_CONTROL, CONTROL_NONE);
         if (control == CONTROL_ADD) {
             fab.setVisibility(View.VISIBLE);
-            spacer.setMinimumHeight((int) dp16 * 10);
+            spacer.setMinimumHeight((int) Util.scalePixels(160));
         } else {
             fab.setVisibility(View.GONE);
-            spacer.setMinimumHeight((int) dp16 * 4);
+            spacer.setMinimumHeight((int) Util.scalePixels(64));
         }
 
         fab.setOnClickListener(view -> {
@@ -175,7 +175,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         if (servingUnit != null) {
@@ -183,7 +183,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             subtitle.setText(String.format(Locale.getDefault(), "per %.02f %s serving", servingSize, servingUnit));
             subtitle.setTextSize(24f);
             subtitle.setEnabled(false);
-            subtitle.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+            subtitle.setPadding(dp16, dp8, dp16, dp8);
             detailsLayout.addView(subtitle);
         }
 
@@ -192,10 +192,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight((int) dp16);
+        space.setMinimumHeight(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -212,7 +212,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         // Linear layout inside CardView with details
         layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -238,7 +238,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         // Macro nutrients
@@ -246,10 +246,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight((int) dp16);
+        space.setMinimumHeight(dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        layout.setPadding(dp16, dp16, dp16, dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -264,10 +264,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
     /**
      * Generates a NutritionItemView to be used for the nutrition table
      *
-     * @param name   Name of the nutrient
+     * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
-     * @param unit   Unit for the nutrient
-     * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
+     * @param unit     Unit for the nutrient
+     * @return Null if the amount is 0, or a NutritionItemView to
+     * display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, BrandedFoodItem.LabelNutrients.Nutrient nutrient, String unit) {
         NutritionItemView itemView;
@@ -284,10 +285,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
     /**
      * Generates a NutritionItemView to be used for the nutrition table
      *
-     * @param name   Name of the nutrient
+     * @param name     Name of the nutrient
      * @param nutrient Nutrient for the row
-     * @param unit   Unit for the nutrient
-     * @return Null if the amount is 0, or a NutritionItemView to display the nutrient information
+     * @param unit     Unit for the nutrient
+     * @return Null if the amount is 0, or a NutritionItemView
+     * to display the nutrient information
      */
     private NutritionItemView generateNutritionRow(String name, Float nutrient, String unit) {
         NutritionItemView itemView;
@@ -312,7 +314,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.ingredients));
         title.setTextSize(30f);
-        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
+        title.setPadding(dp16, dp8, dp16, dp8);
         detailsLayout.addView(title);
 
         // Body CardView
@@ -320,7 +322,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         TextView ingredients = new TextView(this);
         ingredients.setTextSize(20f);
-        ingredients.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
+        ingredients.setPadding(dp16, dp16, dp16, dp16);
         ingredients.setText(ingredientsText);
         cardView.addView(ingredients);
         detailsLayout.addView(cardView);

@@ -5,7 +5,6 @@ import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.widget.LinearLayout;
 import android.widget.Space;
 
@@ -13,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.CustomFoodItem;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.food.CustomFoodAddRequest;
-import com.example.cs309android.models.gson.response.food.CustomFoodAddResponse;
+import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.food.CustomFoodAddRequest;
+import com.example.cs309android.models.api.response.food.CustomFoodAddResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -26,34 +25,32 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
+/**
+ * Activity for creating a custom food item
+ *
+ * @author Mitch Hudson
+ */
 public class CustomFoodActivity extends AppCompatActivity {
-
     /**
      * Food item to display details for
      */
     private SimpleFoodItem item;
 
     /**
-     * DP measurements
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
      */
-    public float dp16;
-    public float dp8;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_food);
 
-        dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
-        dp8 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, getResources().getDisplayMetrics());
-
         Intent intent = getIntent();
         item = intent.getParcelableExtra(PARCEL_FOODITEM);
         Space spacer = new Space(this);
-        spacer.setMinimumHeight((int) dp16 * 10);
-        /**
-         * Layout for displaying the food details
-         */
+        spacer.setMinimumHeight((int) Util.scalePixels(160));
+
         LinearLayout detailsLayout = findViewById(R.id.details_layout);
         detailsLayout.addView(spacer);
 

@@ -1,6 +1,7 @@
 package com.example.cs309android.fragments.shopping;
 
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
 
@@ -18,12 +19,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.shopping.GetListRequest;
-import com.example.cs309android.models.gson.response.shopping.GetListResponse;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.shopping.GetListRequest;
+import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -47,8 +47,7 @@ public class ShoppingFragment extends BaseFragment {
     private static ArrayList<SimpleFoodItem> items;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Creates a new ShoppingFragment instance
      *
      * @return A new instance of fragment ShoppingFragment.
      */
@@ -59,12 +58,30 @@ public class ShoppingFragment extends BaseFragment {
     }
 
     /**
-     * Ran when the fragment is created.
+     * Removes the given item from the list
      *
-     * @param inflater           inflater
-     * @param container          container
-     * @param savedInstanceState saved instance state
-     * @return inflated view
+     * @param i index of the item to remove
+     * @return True if the items list is empty
+     */
+    public static boolean removeItem(int i) {
+        items.remove(i);
+        return items.isEmpty();
+    }
+
+    /**
+     * Clears the item list.
+     */
+    public static void clearItems() {
+        items = null;
+    }
+
+    /**
+     * Runs when the fragment is created.
+     *
+     * @param inflater           Inflates the fragment
+     * @param container          Parent container for the fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated fragment view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +111,7 @@ public class ShoppingFragment extends BaseFragment {
         view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(PARCEL_FOODITEMS_LIST, items);
-            bundle.putInt(PARCEL_INTENT_CODE, SearchActivity.INTENT_SHOPPING_LIST);
+            bundle.putInt(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
             callbackFragment.callback(CALLBACK_SEARCH_FOOD, bundle);
         });
 
@@ -110,6 +127,11 @@ public class ShoppingFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * Refreshes the shopping list
+     *
+     * @param view Root view of the fragment
+     */
     public void refreshList(View view) {
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
@@ -123,23 +145,5 @@ public class ShoppingFragment extends BaseFragment {
             empty.setVisibility(View.INVISIBLE);
             fab.shrink();
         }
-    }
-
-    /**
-     * Removes the given item from the list
-     *
-     * @param i index of the item to remove
-     * @return True if the items list is empty
-     */
-    public static boolean removeItem(int i) {
-        items.remove(i);
-        return items.isEmpty();
-    }
-
-    /**
-     * Clears the item list.
-     */
-    public static void clearItems() {
-        items = null;
     }
 }

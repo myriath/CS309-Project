@@ -17,12 +17,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.activities.SearchActivity;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 
 import java.util.ArrayList;
 
 /**
- * Custom adapter to display the list of food items in the shopping list fragment.
+ * Adapter to display the list of foods in the search activity
  *
  * @author Mitch Hudson
  */
@@ -39,7 +39,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
      * @param items   list of items to display.
      */
     public FoodSearchListAdapter(Context context, ArrayList<SimpleFoodItem> items) {
-        super(context, R.layout.shopping_list_item, items);
+        super(context, R.layout.food_search_branded, items);
         this.items = items;
     }
 

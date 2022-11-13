@@ -22,14 +22,16 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
      *
      * @param fragment Callback fragment.
      */
+    @Override
     public void setCallbackFragment(CallbackFragment fragment) {
         callbackFragment = fragment;
     }
 
     /**
-     * Overridden by children classes with callback code.
+     * Overridden by children classes
      *
-     * @param op Tells the class what to do.
+     * @param op     Tells the class what to do.
+     * @param bundle Bundle of callback arguments
      */
     @Override
     public void callback(int op, Bundle bundle) {

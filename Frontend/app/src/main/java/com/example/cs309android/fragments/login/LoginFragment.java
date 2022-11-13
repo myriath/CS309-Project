@@ -25,10 +25,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.request.users.LoginHashRequest;
-import com.example.cs309android.models.gson.request.users.SaltRequest;
-import com.example.cs309android.models.gson.response.users.LoginResponse;
-import com.example.cs309android.models.gson.response.users.SaltResponse;
+import com.example.cs309android.models.api.request.users.LoginHashRequest;
+import com.example.cs309android.models.api.request.users.SaltRequest;
+import com.example.cs309android.models.api.response.users.LoginResponse;
+import com.example.cs309android.models.api.response.users.SaltResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;
@@ -38,13 +38,15 @@ import java.util.Objects;
 
 /**
  * Login fragment that makes up the Login page.
- * Shown whenever a user needs to login (either the stored creds become invalid or first open).
+ * Shown whenever a user needs to login (either the stored credentials become invalid or first open).
  *
  * @author Mitch Hudson
  */
 public class LoginFragment extends BaseFragment {
-    Button loginButton, registerButton;
-    TextInputLayout usernameField, passwordField;
+    /**
+     * Password input field
+     */
+    private TextInputLayout passwordField;
 
     /**
      * Ran whenever the fragment is shown.
@@ -64,11 +66,11 @@ public class LoginFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        usernameField = view.findViewById(R.id.unameField);
+        TextInputLayout usernameField = view.findViewById(R.id.unameField);
         passwordField = view.findViewById(R.id.passwordField);
 
-        loginButton = view.findViewById(R.id.buttonLogin);
-        registerButton = view.findViewById(R.id.buttonRegister);
+        Button loginButton = view.findViewById(R.id.buttonLogin);
+        Button registerButton = view.findViewById(R.id.buttonRegister);
 
         loginButton.setOnClickListener(view1 -> {
             hideKeyboard(view1, requireActivity());
@@ -77,6 +79,17 @@ public class LoginFragment extends BaseFragment {
             String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();
             usernameField.setError(null);
             passwordField.setError(null);
+
+            GlobalClass global = (GlobalClass) requireActivity().getApplicationContext();
+
+            for (String account : global.getAccounts()) {
+                if (unm.equals(account)) {
+                    global.setUsername(unm);
+                    callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
+                    callbackFragment.callback(CALLBACK_CLOSE_LOGIN, null);
+                    return;
+                }
+            }
 
             // Checks for empty fields
             if (unm.equals("")) {

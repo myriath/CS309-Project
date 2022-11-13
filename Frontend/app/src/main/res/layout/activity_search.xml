@@ -14,9 +14,9 @@
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:iconifiedByDefault="false"
             android:queryHint="Search..."
-            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,13 +65,15 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:backgroundTint="?attr/colorSecondaryContainer"
             android:elevation="51dp"
             android:indeterminateTint="?colorPrimary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnSecondaryContainer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,11 +81,12 @@
         android:id="@+id/scanButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_scan"
-        android:contentDescription="@string/scan_barcode"
         android:layout_gravity="top|end"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginTop="96dp" />
+        android:contentDescription="@string/scan_barcode"
+        android:elevation="0dp"
+        android:src="@drawable/ic_scan" />
 
     <FrameLayout
         android:id="@+id/bottom_sheet"

@@ -11,17 +11,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.models.FoodLogItem;
+import com.example.cs309android.models.api.models.FoodLogItem;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for the nutrition log list view
+ *
+ * @author Travis Massner
+ */
 public class NutritionLogAdapter extends ArrayAdapter<FoodLogItem> {
-
     /**
      * List of items in the food log
      */
     public final ArrayList<FoodLogItem> items;
-
 
     /**
      * Public constructor.

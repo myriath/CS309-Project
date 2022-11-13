@@ -1,17 +1,24 @@
 package com.example.cs309android.util;
 
+import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.gson.response.users.LoginResponse;
+import com.example.cs309android.activities.account.AccountActivity;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.social.IsFollowingRequest;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,12 +34,31 @@ import java.lang.reflect.Type;
  */
 public class Util {
     /**
-     * Gson object used by the entire application.
+     * GSON Builder used for the entire application
      */
     public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
             .serializeNulls()
             .excludeFieldsWithoutExposeAnnotation();
+    /**
+     * GSON used for the entire application
+     */
     public static final Gson GSON = GSON_BUILDER.create();
+
+    /**
+     * Scalar defined by MainActivity
+     * Scales pixels to DIPs
+     */
+    public static float dpScalar;
+
+    /**
+     * Converts pixels to dip
+     *
+     * @param pixels pixel measurement
+     * @return dip
+     */
+    public static float scalePixels(float pixels) {
+        return pixels * dpScalar;
+    }
 
     /**
      * Makes the spinner visible and locks interaction to the register page.
@@ -137,15 +163,27 @@ public class Util {
     }
 
     /**
-     * Logs out of the given account
+     * Opens the account page based on the given parameters
      *
-     * @param global   Global class for variables
-     * @param username Username to log out of
+     * @param global   Used to get the current user's account details
+     * @param username Username of the account to open
+     * @param context  Context to start activity / volley with
      */
-    public static void logout(GlobalClass global, String username) {
-        global.setUsername(null);
-        global.removeToken(username);
-        global.updateLoginPrefs();
+    public static void openAccountPage(GlobalClass global, String username, Context context) {
+        new IsFollowingRequest(global.getUsername(), username).request(response -> {
+            FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+
+            Intent intent = new Intent(context, AccountActivity.class);
+            intent.putExtra(PARCEL_FOLLOWING, followResponse.getUsers() != null && followResponse.getUsers().length != 0);
+            intent.putExtra(PARCEL_USERNAME, username);
+            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));
+            context.startActivity(intent);
+        }, error -> {
+            Intent intent = new Intent(context, AccountActivity.class);
+            intent.putExtra(PARCEL_USERNAME, username);
+            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));
+            context.startActivity(intent);
+        }, context);
     }
 
     /**
@@ -156,6 +194,18 @@ public class Util {
      */
     public static void switchUser(GlobalClass global, String username) {
         global.getUsers().put(USERS_LATEST, username);
+        global.updateLoginPrefs();
+    }
+
+    /**
+     * Logs out of the given account
+     *
+     * @param global   Global class for variables
+     * @param username Username to log out of
+     */
+    public static void logout(GlobalClass global, String username) {
+        global.setUsername(null);
+        global.removeToken(username);
         global.updateLoginPrefs();
     }
 
