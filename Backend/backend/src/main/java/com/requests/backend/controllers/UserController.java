@@ -47,6 +47,7 @@ public class UserController {
     @GetMapping("/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
+        LOGGER.info(username);
 
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
@@ -61,6 +62,8 @@ public class UserController {
             res.setResult(RESULT_OK);
             res.setSalt(salt);
         }
+
+        LOGGER.info(res.toString());
 
         return res;
     }

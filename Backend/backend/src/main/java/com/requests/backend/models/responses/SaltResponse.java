@@ -15,4 +15,12 @@ public class SaltResponse {
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+    @Override
+    public String toString() {
+        return "SaltResponse{" +
+                "result=" + result +
+                ", salt='" + salt + '\'' +
+                '}';
+    }
 }
