@@ -43,12 +43,12 @@ public class ShoppingList {
         this.id = fdcId;
     }
 
-    public String getItemName() {
+    public String getDescription() {
         return description;
     }
 
-    public void setItemName(String itemName) {
-        this.description = itemName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getStricken() {
