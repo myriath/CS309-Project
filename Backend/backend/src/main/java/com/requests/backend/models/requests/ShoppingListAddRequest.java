@@ -23,4 +23,9 @@ public class ShoppingListAddRequest {
     public void setAuth(String token) {
         this.token = token;
     }
+
+    @Override
+    public String toString() {
+        return token + " " + item.toString();
+    }
 }

@@ -92,4 +92,13 @@ public class SimpleFoodItem {
         this.isCustom = isCustom;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleFoodItem{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", stricken=" + stricken +
+                ", isCustom=" + isCustom +
+                '}';
+    }
 }
