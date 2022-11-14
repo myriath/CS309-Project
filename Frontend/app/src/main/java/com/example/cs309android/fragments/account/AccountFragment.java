@@ -49,11 +49,38 @@ public class AccountFragment extends BaseFragment {
      * @param view   view to find subviews
      * @param global global containing account data
      */
-    public static void refreshAccount(View view, GlobalClass global) {
-        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+    public void refreshAccount(View view, GlobalClass global) {
+        if (global.getUsername() == null) {
+            callbackFragment.callback(CALLBACK_START_LOGIN, null);
+            return;
+        }
+        ImageView profilePicture = view.findViewById(R.id.profile_picture);
+        ImageView bannerImage = view.findViewById(R.id.banner);
+
+        profilePicture.setImageBitmap(global.getPfp());
+        bannerImage.setImageBitmap(global.getBanner());
         ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
+
+        ((TextView) view.findViewById(R.id.followerCount))
+                .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
+        ((TextView) view.findViewById(R.id.followingCount))
+                .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+        ((TextView) view.findViewById(R.id.bioTextView))
+                .setText(global.getBio());
+        // Checks for updates to the above values
+        new GetProfileRequest(global.getUsername()).request(response -> {
+            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+            global.setBio(profileResponse.getBio());
+            global.setFollowers(profileResponse.getFollowers());
+            global.setFollowing(profileResponse.getFollowing());
+
+            ((TextView) view.findViewById(R.id.followerCount))
+                    .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
+            ((TextView) view.findViewById(R.id.followingCount))
+                    .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+            ((TextView) view.findViewById(R.id.bioTextView))
+                    .setText(global.getBio());
+        }, requireContext());
     }
 
     /**
@@ -92,22 +119,6 @@ public class AccountFragment extends BaseFragment {
         refreshAccount(view, global);
 
         String username = global.getUsername();
-        if (username == null) callbackFragment.callback(CALLBACK_START_LOGIN, null);
-        new GetProfileRequest(username).request(response -> {
-            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
-            global.setBio(profileResponse.getBio());
-            global.setFollowers(profileResponse.getFollowers());
-            global.setFollowing(profileResponse.getFollowing());
-
-            ((TextView) view.findViewById(R.id.followerCount))
-                    .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
-            ((TextView) view.findViewById(R.id.followingCount))
-                    .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
-            ((TextView) view.findViewById(R.id.bioTextView))
-                    .setText(global.getBio());
-
-        }, requireContext());
-
         view.findViewById(R.id.followerCount).setOnClickListener(view1 ->
                 new GetFollowersRequest(username).request(response -> {
                     FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);

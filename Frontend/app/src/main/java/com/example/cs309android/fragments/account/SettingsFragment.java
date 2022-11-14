@@ -3,6 +3,7 @@ package com.example.cs309android.fragments.account;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,7 +55,7 @@ public class SettingsFragment extends BasePreferenceFragment {
                 result -> {
                     if (result.getResultCode() == CALLBACK_START_LOGIN) {
                         callbackFragment.callback(CALLBACK_START_LOGIN, null);
-                    } else {
+                    } else if (result.getResultCode() != Activity.RESULT_CANCELED) {
                         callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
                     }
                 }

@@ -66,7 +66,11 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Util.switchUser(global, username);
-            callbackFragment.callback(0, null);
+            Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(0, null), System.out::println, System.out::println);
+        });
+
+        convertView.findViewById(R.id.remove).setOnClickListener(view -> {
+            Util.logout(global, username);
         });
 
         TextView usernameView = convertView.findViewById(R.id.username);

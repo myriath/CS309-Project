@@ -1,6 +1,7 @@
 package com.example.cs309android.activities.account;
 
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 
 import android.os.Bundle;
 import android.widget.ListView;
@@ -20,6 +21,11 @@ import com.example.cs309android.models.adapters.SwitchUserAdapter;
  */
 public class AccountSwitchActivity extends AppCompatActivity implements CallbackFragment {
     /**
+     * Tracks whether or not this was started because of the log out button
+     */
+    private boolean loggedOut = false;
+
+    /**
      * Runs when the activity starts
      *
      * @param savedInstanceState saved state
@@ -29,7 +35,15 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_switch_user);
 
-        ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(view -> onBackPressed());
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        loggedOut = getIntent().getBooleanExtra(PARCEL_LOGGED_OUT, false);
+
+        if (loggedOut) {
+            toolbar.setNavigationIcon(null);
+        } else {
+            toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        }
 
         GlobalClass global = (GlobalClass) getApplicationContext();
 
@@ -37,7 +51,6 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
         ((ListView) findViewById(R.id.list)).setAdapter(adapter);
 
         findViewById(R.id.addAccount).setOnClickListener(view -> callback(CALLBACK_START_LOGIN, null));
-
     }
 
     /**
@@ -61,5 +74,12 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
      */
     @Override
     public void setCallbackFragment(CallbackFragment fragment) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!loggedOut) {
+            super.onBackPressed();
+        }
     }
 }

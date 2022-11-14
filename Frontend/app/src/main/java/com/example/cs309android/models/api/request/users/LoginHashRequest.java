@@ -33,6 +33,7 @@ public class LoginHashRequest extends GetRequest {
      *
      * @param username Username for login
      * @param hash     Hash for login
+     * @param token    New token for logging in
      */
     public LoginHashRequest(String username, String hash, String token) {
         this.username = username;

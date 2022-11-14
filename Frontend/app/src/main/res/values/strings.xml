@@ -109,8 +109,8 @@
     <string name="quantity">QTY</string>
     <string name="update_recipe">UPDATE RECIPE</string>
     <string name="unfollow">UNFOLLOW</string>
-    <string name="switch_user_title">Switch user</string>
-    <string name="switch_user_msg">Switch to another user without logging out</string>
+    <string name="switch_user_title">Manage Accounts</string>
+    <string name="switch_user_msg">Manage your stored accounts</string>
     <string name="add_account">ADD ACCOUNT</string>
 
 </resources>
