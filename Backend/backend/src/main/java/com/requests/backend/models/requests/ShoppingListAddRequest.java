@@ -6,26 +6,16 @@ public class ShoppingListAddRequest {
 
     private SimpleFoodItem item;
 
-    private String token;
-
     public SimpleFoodItem getFoodItem() {
         return item;
     }
 
-    public void setFoodItem(SimpleFoodItem foodItem) {
-        this.item = foodItem;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setAuth(String token) {
-        this.token = token;
+    public void setItem(SimpleFoodItem item) {
+        this.item = item;
     }
 
     @Override
     public String toString() {
-        return token + " " + item.toString();
+        return item.toString();
     }
 }
