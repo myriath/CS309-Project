@@ -16,6 +16,14 @@ public class SaltResponse {
         this.salt = salt;
     }
 
+    public int getResult() {
+        return result;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
     @Override
     public String toString() {
         return "SaltResponse{" +
