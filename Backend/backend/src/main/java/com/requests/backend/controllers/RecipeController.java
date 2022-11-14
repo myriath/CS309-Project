@@ -10,6 +10,7 @@ import com.requests.backend.repositories.RecipeRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -137,7 +138,7 @@ public class RecipeController {
      */
     @PostMapping(path="/addPicture/{rid}/{token}")
     @ResponseBody
-    public String addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
+    public ResultResponse addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
         return UserController.getUsernameFromToken(token, (username, res) -> {
             Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
             if (recipes.length == 0 || !recipes[0].getUsername().equals(username)) {
