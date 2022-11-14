@@ -23,6 +23,8 @@ public class SimpleFoodItem {
 
     private boolean isCustom;
 
+    public SimpleFoodItem() {}
+
     /**
      * Constructor for gson
      *
