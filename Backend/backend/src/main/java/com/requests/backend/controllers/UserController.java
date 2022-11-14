@@ -41,10 +41,10 @@ public class UserController {
 
     /**
      * Gets the salt for a given username.
-     * @param username
+     * @param username Username to get the salt of
      * @return JSON string containing the salt for the given username.
      */
-    @GetMapping(path = "/getSalt/{username}", produces = "application/json")
+    @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
         LOGGER.info(username);
@@ -71,7 +71,7 @@ public class UserController {
     /**
      * Checks validity of a given token and returns the username associated with it if valid.
      * If invalid, returns an expired token status.
-     * @param token
+     * @param token Authentication token
      * @return JSON string containing the username associated with the given token and a status code.
      */
     @GetMapping(path="/validateToken/{token}") // /users/validateLogin/{token}
