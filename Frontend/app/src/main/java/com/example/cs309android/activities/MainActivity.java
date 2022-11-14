@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Navbar object at the bottom of the app.
      */
     private BottomNavigationView navbar;
+    /**
+     * Used to prevent back presses
+     */
+    private static boolean noBack = false;
 
     /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
@@ -421,5 +425,24 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 Util.login(global, newToken, oldResponse, MainActivity.this);
             else startLoginFragment();
         }, MainActivity.this);
+    }
+
+    /**
+     * Only process back button when it is allowed
+     * (This prevents users from pressing back to get out of the login screen)
+     */
+    @Override
+    public void onBackPressed() {
+        if (!noBack) {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * Setter for the noBack boolean
+     * @param noBack True if the MainActivity should prevent back presses
+     */
+    public static void setNoBack(boolean noBack) {
+        MainActivity.noBack = noBack;
     }
 }

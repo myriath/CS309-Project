@@ -1,6 +1,7 @@
 package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_TITLE;
 import static com.example.cs309android.util.Util.objFromJson;
@@ -91,6 +92,7 @@ public class AccountFragment extends BaseFragment {
         refreshAccount(view, global);
 
         String username = global.getUsername();
+        if (username == null) callbackFragment.callback(CALLBACK_START_LOGIN, null);
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             global.setBio(profileResponse.getBio());
