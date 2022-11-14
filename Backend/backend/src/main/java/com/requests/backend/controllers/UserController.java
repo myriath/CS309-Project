@@ -10,6 +10,7 @@ import com.requests.backend.models.responses.SaltResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public class UserController {
      * @param username Username to get the salt of
      * @return JSON string containing the salt for the given username.
      */
-    @GetMapping(path = "/getSalt/{username}")
+    @GetMapping(path = "/getSalt/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
         LOGGER.info(username);
