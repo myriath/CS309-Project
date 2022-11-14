@@ -45,7 +45,7 @@ public class UserController {
      * @param username Username to get the salt of
      * @return JSON string containing the salt for the given username.
      */
-    @GetMapping(path = "/getSalt/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
         LOGGER.info(username);
