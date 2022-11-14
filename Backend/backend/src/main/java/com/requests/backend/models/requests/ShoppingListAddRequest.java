@@ -6,6 +6,9 @@ public class ShoppingListAddRequest {
 
     private SimpleFoodItem item;
 
+    public ShoppingListAddRequest() {
+    }
+
     public ShoppingListAddRequest(SimpleFoodItem item) {
         this.item = item;
     }
