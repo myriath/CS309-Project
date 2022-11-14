@@ -4,6 +4,7 @@ import com.requests.backend.models.Favorite;
 import com.requests.backend.models.User;
 import com.requests.backend.models.requests.UpdateProfileRequest;
 import com.requests.backend.models.responses.ProfileResponse;
+import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.FollowRepository;
 import com.requests.backend.repositories.TokenRepository;
@@ -41,11 +42,11 @@ public class ProfileEndpointController {
 
     /**
      * Get profile information based on a provided username.
-     * @param username
+     * @param username Username of the profile to get
      * @return JSON object containing the user's profile information.
      */
     @GetMapping(path="/getProfile/{username}")
-    public @ResponseBody String getProfile(@PathVariable String username) {
+    public @ResponseBody ProfileResponse getProfile(@PathVariable String username) {
         ProfileResponse res = new ProfileResponse();
 
         Collection<User> users = userRepository.queryGetUserByUsername(username);
@@ -60,14 +61,14 @@ public class ProfileEndpointController {
             res.setBio(user.getBio());
         }
 
-        return GSON.toJson(res);
+        return res;
     }
 
     /**
      * Get a user's profile picture based on a provided username.
-     * @param username
+     * @param username Username to get the profile picture of
      * @return The user's profile picture as a JSON byte array.
-     * @throws IOException
+     * @throws IOException Thrown when there is an error reading the file
      */
     @GetMapping(path="/profilePicture/{username}", produces="image/webp")
     public @ResponseBody byte[] getPFP(@PathVariable String username) throws IOException {
@@ -81,9 +82,9 @@ public class ProfileEndpointController {
 
     /**
      * Get a user's profile banner based on a provided username.
-     * @param username
+     * @param username Username to get the banner image of
      * @return The user's profile banner as a JSON byte array.
-     * @throws IOException
+     * @throws IOException Thrown when there is an error reading the file
      */
     @GetMapping(path="/profileBanner/{username}", produces="image/webp")
     public @ResponseBody byte[] getBanner(@PathVariable String username) throws IOException {
@@ -97,41 +98,45 @@ public class ProfileEndpointController {
 
     /**
      * Update a user's profile information.
-     * @param token
-     * @param json
+     * @param token Token for authentication
+     * @param req Request containing the new bio
      * @return JSON string containing the result of the update attempt.
      */
     @PatchMapping(path="/updateProfile/{token}")
-    public @ResponseBody String updateProfile(@PathVariable String token, @RequestBody String json) {
-        return UserController.getUsernameFromToken(token, (username, res) -> {
-            UpdateProfileRequest request = GSON.fromJson(json, UpdateProfileRequest.class);
-            userRepository.queryUpdateBio(username, request.getNewBio());
-        }, tokenRepository);
+    public @ResponseBody ResultResponse updateProfile(@PathVariable String token, @RequestBody UpdateProfileRequest req) {
+        return UserController.getUsernameFromToken(token, (username, res) -> userRepository.queryUpdateBio(username, req.getNewBio()), tokenRepository);
     }
 
     /**
      * Update a user's profile picture.
-     * @param token
-     * @param file
+     * @param token Token for authentication
+     * @param file New profile picture in webp format
      * @return JSON string containing the result of the update attempt.
      */
     @PatchMapping(path="/updatePfp/{token}")
-    public @ResponseBody String updatePFP(@PathVariable String token, @RequestParam("image") MultipartFile file) {
+    public @ResponseBody ResultResponse updatePFP(@PathVariable String token, @RequestParam("image") MultipartFile file) {
         return updateImage(token, file, PFP_SOURCE);
     }
 
     /**
      * Update a user's profile banner.
-     * @param token
-     * @param file
+     * @param token Token for authentication
+     * @param file New banner image in webp format
      * @return JSON string containing the result of the update attempt.
      */
     @PatchMapping(path="/updateBanner/{token}")
-    public @ResponseBody String updateBanner(@PathVariable String token, @RequestParam("image") MultipartFile file) {
+    public @ResponseBody ResultResponse updateBanner(@PathVariable String token, @RequestParam("image") MultipartFile file) {
         return updateImage(token, file, BANNER_SOURCE);
     }
 
-    public String updateImage(String token, MultipartFile file, String basePath) {
+    /**
+     * Updates an image on the server
+     * @param token Token for authentication
+     * @param file New image to replace
+     * @param basePath Base path to the destination
+     * @return Result response with the result code to be handled by the backend
+     */
+    public ResultResponse updateImage(String token, MultipartFile file, String basePath) {
         return UserController.getUsernameFromToken(token, (username, res) -> {
             String filename = Hasher.sha256plaintext(username) + ".webp";
             File file1 = new File(basePath, filename);
@@ -146,35 +151,13 @@ public class ProfileEndpointController {
     }
 
     /**
-     *
-     * @return
-     */
-    @GetMapping(path="/dbquery")
-    public @ResponseBody String dbQuery() {
-        Collection<User> users = userRepository.queryGetAllUsers();
-        User papa = users.iterator().next();
-        return papa.getUsername();
-    }
-
-    /**
      * Get a user's favorite foods based on a provided username.
-     * @param username
+     * @param username Username to get the favorites of
      * @return JSON string containing the user's favorite foods.
      */
     @GetMapping(path="/getFavoritesByUsername/{username}")
     public @ResponseBody String getFavoritesByUsername(@PathVariable String username) {
         Collection<Favorite> favorites = favoriteRepository.queryGetFavorites(username);
         return favorites.iterator().next().getFoodName();
-    }
-
-    /**
-     * Get more information about a user based on a provided username.
-     * @param username
-     * @return JSON string containing the user's information.
-     */
-    @GetMapping(path="/getUserByUsername/{username}")
-    public @ResponseBody String getUserByUsername(@PathVariable String username) {
-        Collection<User> user = userRepository.queryGetUserByUsername(username);
-        return user.iterator().next().getUsername();
     }
 }
