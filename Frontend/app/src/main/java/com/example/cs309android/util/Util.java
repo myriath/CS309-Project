@@ -192,7 +192,6 @@ public class Util {
         new SaltRequest(username).request(response -> {
             SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);
 
-            System.out.println(saltResponse.getSalt());
             int result = saltResponse.getResult();
             if (result == RESULT_OK) {
                 byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());
@@ -223,7 +222,6 @@ public class Util {
         new LoginHashRequest(username, hash, token).request(response -> {
             LoginResponse loginResponse = objFromJson(response, LoginResponse.class);
 
-            System.out.println(loginResponse.getUsername());
             int result = loginResponse.getResult();
             switch (loginResponse.getResult()) {
                 case RESULT_REGEN_TOKEN: {

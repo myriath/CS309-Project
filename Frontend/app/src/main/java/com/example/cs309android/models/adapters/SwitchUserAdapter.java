@@ -1,6 +1,10 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.PARCEL_ITEM_POSITION;
+
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -71,6 +75,9 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
 
         convertView.findViewById(R.id.remove).setOnClickListener(view -> {
             Util.logout(global, username);
+            Bundle bundle = new Bundle();
+            bundle.putInt(PARCEL_ITEM_POSITION, position);
+            callbackFragment.callback(CALLBACK_REMOVE, bundle);
         });
 
         TextView usernameView = convertView.findViewById(R.id.username);

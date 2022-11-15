@@ -27,7 +27,7 @@
             android:name=".activities.account.AccountListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.account.AccountSwitchActivity"
+            android:name=".activities.login.AccountSwitchActivity"
             android:exported="false" />
         <activity
             android:name=".activities.account.AccountEditActivity"

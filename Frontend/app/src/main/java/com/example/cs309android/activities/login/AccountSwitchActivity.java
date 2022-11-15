@@ -1,5 +1,6 @@
-package com.example.cs309android.activities.account;
+package com.example.cs309android.activities.login;
 
+import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 
@@ -35,6 +36,8 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_switch_user);
 
+        GlobalClass global = (GlobalClass) getApplicationContext();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         loggedOut = getIntent().getBooleanExtra(PARCEL_LOGGED_OUT, false);
@@ -45,10 +48,7 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
 
-        GlobalClass global = (GlobalClass) getApplicationContext();
-
-        SwitchUserAdapter adapter = new SwitchUserAdapter(this, global.getAccounts(), global, this);
-        ((ListView) findViewById(R.id.list)).setAdapter(adapter);
+        refreshView(global);
 
         findViewById(R.id.addAccount).setOnClickListener(view -> callback(CALLBACK_START_LOGIN, null));
     }
@@ -61,10 +61,25 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
      */
     @Override
     public void callback(int op, Bundle bundle) {
-        if (op == CALLBACK_START_LOGIN) {
-            setResult(CALLBACK_START_LOGIN);
+        setResult(RESULT_OK);
+        switch (op) {
+            case CALLBACK_REMOVE:
+                refreshView((GlobalClass) getApplicationContext());
+                break;
+            case CALLBACK_START_LOGIN:
+                setResult(CALLBACK_START_LOGIN);
+            default:
+                finish();
         }
-        finish();
+    }
+
+    public void refreshView(GlobalClass global) {
+        String[] accounts = global.getAccounts();
+        SwitchUserAdapter adapter = new SwitchUserAdapter(this, accounts, global, this);
+        ((ListView) findViewById(R.id.list)).setAdapter(adapter);
+        if (accounts.length == 0) {
+            callback(CALLBACK_START_LOGIN, null);
+        }
     }
 
     /**

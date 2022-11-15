@@ -89,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
             spin(this);
             Util.loginAttempt(global, unm, pwd, () -> {
                 unSpin(this);
-                System.out.println(unm + pwd);
                 setResult(RESULT_OK);
                 finish();
             }, result -> {

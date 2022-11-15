@@ -71,6 +71,10 @@ public class Constants {
      */
     public static final int CALLBACK_OPEN_ACCOUNT = 7;
     /**
+     * Used to remove an item from a list
+     */
+    public static final int CALLBACK_REMOVE = 8;
+    /**
      * Various intents tell the app what to do when certain things are done.
      */
     public static final int INTENT_NONE = -1;

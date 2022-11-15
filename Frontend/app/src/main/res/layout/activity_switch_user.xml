@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.account.AccountSwitchActivity">
+    tools:context=".activities.login.AccountSwitchActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/switch_user_title" />
+        app:title="@string/manage_accounts_title" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"

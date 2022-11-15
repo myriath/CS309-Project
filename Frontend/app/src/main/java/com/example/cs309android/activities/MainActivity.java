@@ -12,6 +12,7 @@ import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
 import static com.example.cs309android.util.Constants.PREF_NAME;
@@ -37,6 +38,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.activities.login.LoginActivity;
 import com.example.cs309android.fragments.account.AccountFragment;
 import com.example.cs309android.fragments.account.SettingsFragment;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Tracker for the current fragment
      */
-    private int currentFragment = 2;
+    private static int currentFragment = 2;
     /**
      * GlobalClass for storing universal values
      */
@@ -174,13 +176,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         spin(this);
         System.out.println(token);
         if (token != null) {
-            Util.loginAttempt(global, token, () -> unSpin(this), result -> {
-                unSpin(this);
-                startLoginActivity(false);
-            }, error -> {
-                unSpin(this);
-                startLoginActivity(false);
-            });
+            Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
         } else {
             unSpin(this);
             startLoginActivity(false);
@@ -269,6 +265,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    public void failedLogin() {
+        unSpin(this);
+        if (global.getAccounts().length > 0) {
+            Intent intent = new Intent(this, AccountSwitchActivity.class);
+            intent.putExtra(PARCEL_LOGGED_OUT, true);
+            startActivity(intent);
+        } else {
+            startLoginActivity(false);
+        }
+    }
+
     /**
      * Callback method used to control fragment activity
      * <p>
@@ -312,7 +319,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_START_LOGIN): {
-                startLoginActivity(false);
+                boolean backEnabled = false;
+                if (bundle != null) {
+                    backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);
+                }
+                startLoginActivity(backEnabled);
                 break;
             }
             case (CALLBACK_MOVE_TO_HOME): {
@@ -348,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .addToBackStack(null)
                         .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
-                currentFragment = 5;
+                currentFragment = 4;
                 break;
             }
         }
