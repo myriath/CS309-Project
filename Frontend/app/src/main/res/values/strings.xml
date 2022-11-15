@@ -112,5 +112,11 @@
     <string name="manage_accounts_title">Manage Accounts</string>
     <string name="switch_user_msg">Manage your stored accounts</string>
     <string name="add_account">ADD ACCOUNT</string>
+    <string name="recently_logged_foods">Recently logged foods</string>
+    <string name="creators_you_follow">Creators you follow</string>
+    <string name="nutrient_image">Nutrient Image</string>
+    <string name="left_button">Left Button</string>
+    <string name="right_button">Right Button</string>
+    <string name="slash">/</string>
 
 </resources>

@@ -9,20 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.adapters.HomeNutritionAdapter;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.HomeNutritionCardModel;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONException;
 
@@ -81,6 +83,23 @@ public class HomeFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        ViewPager2 nutritionPager = view.findViewById(R.id.nutritionPager);
+        TabLayout nutritionTabs = view.findViewById(R.id.nutritionTabs);
+
+        HomeNutritionCardModel[] models = new HomeNutritionCardModel[]{
+                new HomeNutritionCardModel("Calories", null),
+                new HomeNutritionCardModel("Carbohydrates", null),
+                new HomeNutritionCardModel("Protein", null),
+                new HomeNutritionCardModel("Fat", null)
+        };
+
+        HomeNutritionAdapter adapter1 = new HomeNutritionAdapter(models);
+        nutritionPager.setAdapter(adapter1);
+
+        new TabLayoutMediator(nutritionTabs, nutritionPager, (tab, position) -> {
+
+        }).attach();
+
         new GetUserFeedRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
@@ -105,7 +124,7 @@ public class HomeFragment extends BaseFragment {
         }, requireContext());
 
         adapter = new HomeItemAdapter(this.getActivity(), recipes);
-        listView = view.findViewById(R.id.feed_item);
+        listView = view.findViewById(R.id.feed);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
@@ -114,14 +133,14 @@ public class HomeFragment extends BaseFragment {
             i.putExtra(PARCEL_RECIPE, selectedItem);
             startActivity(i);
         });
-        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            mlp.topMargin = insets.top;
-            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
-            mlp.bottomMargin = insets.bottom;
-            return WindowInsetsCompat.CONSUMED;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
+//            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+//            mlp.topMargin = insets.top;
+//            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+//            mlp.bottomMargin = insets.bottom;
+//            return WindowInsetsCompat.CONSUMED;
+//        });
 
         return view;
     }
