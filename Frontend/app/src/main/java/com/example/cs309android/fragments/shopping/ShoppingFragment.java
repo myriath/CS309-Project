@@ -1,10 +1,5 @@
 package com.example.cs309android.fragments.shopping;
 
-import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
-import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +22,6 @@ import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,13 +102,6 @@ public class ShoppingFragment extends BaseFragment {
 
         refreshList(view);
 
-        view.findViewById(R.id.add_item).setOnClickListener(view1 -> {
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(PARCEL_FOODITEMS_LIST, items);
-            bundle.putInt(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
-            callbackFragment.callback(CALLBACK_SEARCH_FOOD, bundle);
-        });
-
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.shopping_list), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
@@ -135,15 +122,15 @@ public class ShoppingFragment extends BaseFragment {
     public void refreshList(View view) {
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
-        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);
+//        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);
 
         TextView empty = view.findViewById(R.id.empty_text);
         if (items.isEmpty()) {
             empty.setVisibility(View.VISIBLE);
-            fab.extend();
+//            fab.extend();
         } else {
             empty.setVisibility(View.INVISIBLE);
-            fab.shrink();
+//            fab.shrink();
         }
     }
 }

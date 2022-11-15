@@ -6,6 +6,7 @@ import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
@@ -39,6 +40,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.activities.login.LoginActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.fragments.account.AccountFragment;
 import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
@@ -52,6 +54,7 @@ import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -90,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private BottomNavigationView navbar;
 
     /**
+     * Shopping list items for the shopping list
+     */
+    private static ArrayList<SimpleFoodItem> shoppingListItems;
+
+    /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
      */
     @Override
@@ -121,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
@@ -134,7 +143,25 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             NukeSSLCerts.nuke();
         }
 
-        setContentView(R.layout.activity_main);
+        // Recipe add button
+        findViewById(R.id.addRecipe).setOnClickListener(view -> {
+            Intent myIntent = new Intent(this, AddRecipeActivity.class);
+            startActivity(myIntent);
+        });
+
+        // Shopping list add button
+        findViewById(R.id.addShopping).setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
+            intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);
+            foodSearchLauncher.launch(intent);
+        });
+
+        // Log add button
+        findViewById(R.id.addLog).setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            foodSearchLauncher.launch(intent);
+        });
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);

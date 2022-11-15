@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
@@ -27,7 +26,6 @@ import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
@@ -72,14 +70,6 @@ public class RecipesFragment extends BaseFragment {
 
         // Refresh the list of recipes
         refreshList(view);
-
-        //Add button adds recipe to db
-        FloatingActionButton addRecipe = view.findViewById(R.id.add_recipe);
-        addRecipe.setOnClickListener(view1 -> {
-            Intent myIntent = new Intent(view.getContext(), AddRecipeActivity.class);
-            startActivity(myIntent);
-            refreshList(view);
-        });
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.recipe_frame_layout), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
