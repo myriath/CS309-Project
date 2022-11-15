@@ -1,4 +1,4 @@
-package com.example.cs309android.views;
+package com.example.cs309android.models;
 
 import android.graphics.Bitmap;
 

@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.home.HomeFragment"
-    android:fitsSystemWindows="true">
+    tools:context=".fragments.home.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:fitsSystemWindows="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -25,8 +25,7 @@
                     android:layout_height="300dp"
                     android:layout_margin="16dp"
                     app:cardCornerRadius="16dp"
-                    android:layout_centerHorizontal="true"
-                    android:fitsSystemWindows="true">
+                    android:layout_centerHorizontal="true">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -63,10 +62,11 @@
                 android:layout_margin="16dp"
                 android:text="@string/recently_logged_foods" />
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -76,10 +76,11 @@
                 android:layout_margin="16dp"
                 android:text="@string/creators_you_follow" />
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/feed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginBottom="16dp"/>
 
             <Space

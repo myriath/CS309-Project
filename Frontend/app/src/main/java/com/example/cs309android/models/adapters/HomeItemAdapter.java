@@ -33,7 +33,7 @@ public class HomeItemAdapter extends ArrayAdapter<Recipe> {
      * @param items   list of items to display.
      */
     public HomeItemAdapter(Context context, ArrayList<Recipe> items) {
-        super(context, R.layout.home_item_modal, items);
+        super(context, R.layout.home_item_model, items);
         this.items = items;
     }
 
@@ -48,10 +48,10 @@ public class HomeItemAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(getContext(), R.layout.home_item_modal, null);
+            convertView = View.inflate(getContext(), R.layout.home_item_model, null);
         }
 
-        TextView name = convertView.findViewById(R.id.recipe_instructions);
+        TextView name = convertView.findViewById(R.id.recipeTitle);
         name.setText(items.get(position).getRecipeName());
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {

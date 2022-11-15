@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
-import com.example.cs309android.views.HomeNutritionCardModel;
+import com.example.cs309android.models.HomeNutritionCardModel;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-
-import java.util.ArrayList;
 
 /**
  * Adapter to use with the TabLayout for the homepage

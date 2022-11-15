@@ -118,5 +118,6 @@
     <string name="left_button">Left Button</string>
     <string name="right_button">Right Button</string>
     <string name="slash">/</string>
+    <string name="recipe_image">Recipe Image</string>
 
 </resources>

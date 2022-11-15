@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -19,10 +20,12 @@ import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.example.cs309android.views.HomeNutritionCardModel;
+import com.example.cs309android.models.HomeNutritionCardModel;
+import com.example.cs309android.views.HomeRecipeView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -30,6 +33,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Home fragment for displaying the homepage
@@ -124,15 +128,29 @@ public class HomeFragment extends BaseFragment {
         }, requireContext());
 
         adapter = new HomeItemAdapter(this.getActivity(), recipes);
-        listView = view.findViewById(R.id.feed);
-        listView.setAdapter(adapter);
+        LinearLayout layout = view.findViewById(R.id.feed);
 
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
-            Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
-            i.putExtra(PARCEL_RECIPE, selectedItem);
-            startActivity(i);
+        HomeRecipeView view1 = new HomeRecipeView(requireContext());
+        view1.initView("Test Recipe", "Test Description", view3 -> {
+            // TODO: Load recipe details page
         });
+        new GetRecipeImageRequest("0").request(view1::setImage, getContext());
+        layout.addView(view1);
+
+        HomeRecipeView view2 = new HomeRecipeView(requireContext());
+        view2.initView("Test Recipe", "Test Description", view3 -> {
+            // TODO: Load recipe details page
+        });
+        new GetRecipeImageRequest("0").request(view2::setImage, getContext());
+        layout.addView(view2);
+
+
+//        listView.setOnItemClickListener((parent, view1, position, id) -> {
+//            Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
+//            Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+//            i.putExtra(PARCEL_RECIPE, selectedItem);
+//            startActivity(i);
+//        });
 //        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.home_feed), (v, windowInsets) -> {
 //            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
