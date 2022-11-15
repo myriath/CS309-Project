@@ -1,7 +1,6 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 //        mainFragment = new HomeFragment();
 //        FragmentManager manager = getSupportFragmentManager();
 //        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+//        transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
 //        transaction.commit();
 //        currentFragment = 2;
     }
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                     mainFragment.setCallbackFragment(this);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                            .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                             .commit();
                     currentFragment = 0;
                 }
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
@@ -231,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.account) {
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
             } else {
@@ -307,17 +306,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     public void callback(int op, Bundle bundle) {
         switch (op) {
-            case (CALLBACK_CLOSE_LOGIN): {
-                findViewById(R.id.mainLayout).setAlpha(1);
-                findViewById(R.id.loginPopup).setClickable(false);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
-                        .remove((Fragment) loginWindowFragment)
-                        .commit();
-                break;
-            }
             case (CALLBACK_START_LOGIN): {
                 boolean backEnabled = false;
                 if (bundle != null) {
@@ -330,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new HomeFragment();
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
@@ -357,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                         .addToBackStack(null)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
                 break;

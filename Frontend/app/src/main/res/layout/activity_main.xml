@@ -1,33 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/navbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navbar"
-        style="@style/Widget.Material3.BottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:elevation="8dp"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        <FrameLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addRecipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/addLog"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorTertiaryContainer"
+            android:tint="?attr/colorOnTertiaryContainer"
+            android:src="@drawable/ic_add"
+            android:visibility="gone"
+            android:contentDescription="@string/write_new_recipe" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/addShopping"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorTertiaryContainer"
+            android:tint="?attr/colorOnTertiaryContainer"
+            android:src="@drawable/ic_add"
+            android:visibility="gone"
+            android:contentDescription="@string/add_to_food_log" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addShopping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/mainButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="-16dp"
+            android:backgroundTint="?attr/colorTertiaryContainer"
+            android:tint="?attr/colorOnTertiaryContainer"
+            android:src="@drawable/ic_add"
+            android:visibility="gone"
+            android:contentDescription="@string/add_to_shopping_list" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/navbar"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="32dp"
+            android:backgroundTint="?attr/colorSecondaryContainer"
+            android:tint="?attr/colorOnSecondaryContainer"
+            android:src="@drawable/ic_add"
+            android:contentDescription="@string/main_add_button" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navbar"
+            style="@style/Widget.Material3.BottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:elevation="8dp"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"
@@ -54,11 +105,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/loginPopup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="60dp"
-        android:foregroundGravity="center" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
