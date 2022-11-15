@@ -15,13 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
         <activity
+            android:name=".activities.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.account.AccountActivity"
             android:exported="false" />
         <activity
             android:name=".activities.account.AccountListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.account.AccountSwitchActivity"
+            android:name=".activities.login.AccountSwitchActivity"
             android:exported="false" />
         <activity
             android:name=".activities.account.AccountEditActivity"

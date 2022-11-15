@@ -39,41 +39,41 @@ public class Constants {
      */
     public static final int TOKEN_MAX_DEPTH = 5;
     /**
-     * Tells the MainActivity to move to the register page
-     */
-    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
-    /**
      * Tells MainActivity to close the login page
      */
-    public static final int CALLBACK_CLOSE_LOGIN = 1;
+    public static final int CALLBACK_CLOSE_LOGIN = 0;
     /**
      * Tells MainActivity to open the login page
      */
-    public static final int CALLBACK_START_LOGIN = 2;
+    public static final int CALLBACK_START_LOGIN = 1;
     /**
      * Tells MainActivity to move to the homepage
      */
-    public static final int CALLBACK_MOVE_TO_HOME = 3;
+    public static final int CALLBACK_MOVE_TO_HOME = 2;
     /**
      * Opens the food details page
      */
-    public static final int CALLBACK_FOOD_DETAIL = 4;
+    public static final int CALLBACK_FOOD_DETAIL = 3;
     /**
      * Opens the food search activity
      */
-    public static final int CALLBACK_SEARCH_FOOD = 5;
+    public static final int CALLBACK_SEARCH_FOOD = 4;
     /**
      * Tells MainActivity to move to the settings page
      */
-    public static final int CALLBACK_MOVE_TO_SETTINGS = 6;
+    public static final int CALLBACK_MOVE_TO_SETTINGS = 5;
     /**
      * Used to return an image uri from the Image loader bottom sheet
      */
-    public static final int CALLBACK_IMAGE_URI = 7;
+    public static final int CALLBACK_IMAGE_URI = 6;
     /**
      * Used to open the account page
      */
-    public static final int CALLBACK_OPEN_ACCOUNT = 8;
+    public static final int CALLBACK_OPEN_ACCOUNT = 7;
+    /**
+     * Used to remove an item from a list
+     */
+    public static final int CALLBACK_REMOVE = 8;
     /**
      * Various intents tell the app what to do when certain things are done.
      */
@@ -86,6 +86,9 @@ public class Constants {
      * Tells the SearchActivity it was opened from recipe add
      */
     public static final int INTENT_RECIPE_ADD = 1;
+    /**
+     * Used to get an image uri from a parcel / intent
+     */
     public static final String PARCEL_IMAGE_URI = "image_uri";
     /**
      * This is used wherever a food item needs to be parceled.
@@ -132,11 +135,19 @@ public class Constants {
      */
     public static final String PARCEL_TITLE = "title";
     /**
+     * Used to tell the AccountSwitchActivity whether or not to allow back button presses
+     */
+    public static final String PARCEL_LOGGED_OUT = "logged_out";
+    /**
+     * Used to control the back button usability
+     */
+    public static final String PARCEL_BACK_ENABLED = "enable_back";
+
+    // RESULT CODES
+    /**
      * Indicates the request resulted in an error (generic)
      */
     public static final int RESULT_ERROR = -1;
-
-    // RESULT CODES
     /**
      * Indicates a mismatch between the given username / password
      */

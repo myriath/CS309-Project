@@ -44,7 +44,7 @@ public abstract class PostRequest extends com.example.cs309android.models.api.re
      * @return JSON string
      */
     public String getBody() {
-//        System.out.println(Util.GSON.toJson(this));
+        System.out.println(Util.GSON.toJson(this));
         return Util.GSON.toJson(this);
     }
 

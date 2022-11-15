@@ -2,7 +2,9 @@ package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +22,7 @@ import androidx.preference.Preference;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.account.AccountSwitchActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.util.Util;
@@ -53,8 +55,10 @@ public class SettingsFragment extends BasePreferenceFragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == CALLBACK_START_LOGIN) {
-                        callbackFragment.callback(CALLBACK_START_LOGIN, null);
-                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(PARCEL_BACK_ENABLED, true);
+                        callbackFragment.callback(CALLBACK_START_LOGIN, bundle);
+                    } else if (result.getResultCode() != Activity.RESULT_CANCELED) {
                         callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
                     }
                 }

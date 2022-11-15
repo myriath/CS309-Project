@@ -7,19 +7,18 @@ import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.CALLBACK_SWITCH_TO_REGISTER;
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
 import static com.example.cs309android.util.Constants.PREF_NAME;
-import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
-import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,23 +38,18 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
+import com.example.cs309android.activities.login.LoginActivity;
 import com.example.cs309android.fragments.account.AccountFragment;
 import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
-import com.example.cs309android.fragments.login.LoginFragment;
-import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
-import com.example.cs309android.models.api.request.users.LoginTokenRequest;
-import com.example.cs309android.models.api.request.users.RegenTokenRequest;
-import com.example.cs309android.models.api.response.GenericResponse;
-import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
-import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -86,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Tracker for the current fragment
      */
-    private int currentFragment = 2;
+    private static int currentFragment = 2;
     /**
      * GlobalClass for storing universal values
      */
@@ -95,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Navbar object at the bottom of the app.
      */
     private BottomNavigationView navbar;
-    /**
-     * Used to prevent back presses
-     */
-    private static boolean noBack = false;
 
     /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
@@ -184,22 +174,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
+        System.out.println(token);
         if (token != null) {
-            System.out.println(token);
-            new LoginTokenRequest(token).unspinOnComplete(response -> {
-                LoginResponse loginResponse = Util.objFromJson(response, LoginResponse.class);
-                // Checks if the result is valid or not. If not, opens the login page
-                int result = loginResponse.getResult();
-                System.out.println(result);
-
-                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0, loginResponse);
-                else if (result != RESULT_LOGGED_IN) startLoginFragment();
-                else Util.login(global, token, loginResponse, MainActivity.this);
-            }, error -> {
-                error.printStackTrace();
-                startLoginFragment();
-            }, MainActivity.this, getWindow().getDecorView());
-        } else startLoginFragment();
+            Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
+        } else {
+            unSpin(this);
+            startLoginActivity(false);
+        }
 
         navbar = findViewById(R.id.navbar);
 
@@ -284,6 +265,17 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    public void failedLogin() {
+        unSpin(this);
+        if (global.getAccounts().length > 0) {
+            Intent intent = new Intent(this, AccountSwitchActivity.class);
+            intent.putExtra(PARCEL_LOGGED_OUT, true);
+            startActivity(intent);
+        } else {
+            startLoginActivity(false);
+        }
+    }
+
     /**
      * Callback method used to control fragment activity
      * <p>
@@ -315,17 +307,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     public void callback(int op, Bundle bundle) {
         switch (op) {
-            case (CALLBACK_SWITCH_TO_REGISTER): {
-                loginWindowFragment = new RegisterFragment();
-                loginWindowFragment.setCallbackFragment(this);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.loginPopup, (Fragment) loginWindowFragment, null)
-                        .commit();
-                break;
-            }
             case (CALLBACK_CLOSE_LOGIN): {
                 findViewById(R.id.mainLayout).setAlpha(1);
                 findViewById(R.id.loginPopup).setClickable(false);
@@ -338,7 +319,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_START_LOGIN): {
-                startLoginFragment();
+                boolean backEnabled = false;
+                if (bundle != null) {
+                    backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);
+                }
+                startLoginActivity(backEnabled);
                 break;
             }
             case (CALLBACK_MOVE_TO_HOME): {
@@ -374,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .addToBackStack(null)
                         .replace(R.id.coordinator, (Fragment) mainFragment, null)
                         .commit();
-                currentFragment = 5;
+                currentFragment = 4;
                 break;
             }
         }
@@ -394,55 +379,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * First, makes MainActivity transparent and non-interactive
      * Then creates a new fragment and sets up the opening animations.
      */
-    public void startLoginFragment() {
-        findViewById(R.id.loginPopup).setClickable(true);
-
-        loginWindowFragment = new LoginFragment();
-        loginWindowFragment.setCallbackFragment(this);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                .add(R.id.loginPopup, (Fragment) loginWindowFragment)
-                .commit();
-    }
-
-    /**
-     * Regenerates a token (5 retries max)
-     *
-     * @param oldToken Old token for authentication
-     * @param depth    current retry counter
-     */
-    public void regenToken(String oldToken, int depth, LoginResponse oldResponse) {
-        String newToken = Hasher.genToken();
-
-        new RegenTokenRequest(newToken, oldToken).request(response -> {
-            GenericResponse loginResponse = Util.objFromJson(response, GenericResponse.class);
-            int result = loginResponse.getResult();
-
-            if (result == RESULT_REGEN_TOKEN && depth < TOKEN_MAX_DEPTH)
-                regenToken(oldToken, depth + 1, oldResponse);
-            else if (result == RESULT_LOGGED_IN)
-                Util.login(global, newToken, oldResponse, MainActivity.this);
-            else startLoginFragment();
-        }, MainActivity.this);
-    }
-
-    /**
-     * Only process back button when it is allowed
-     * (This prevents users from pressing back to get out of the login screen)
-     */
-    @Override
-    public void onBackPressed() {
-        if (!noBack) {
-            super.onBackPressed();
-        }
-    }
-
-    /**
-     * Setter for the noBack boolean
-     * @param noBack True if the MainActivity should prevent back presses
-     */
-    public static void setNoBack(boolean noBack) {
-        MainActivity.noBack = noBack;
+    public void startLoginActivity(boolean backEnabled) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        startActivity(intent);
     }
 }

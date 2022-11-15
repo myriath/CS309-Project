@@ -31,12 +31,23 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginVertical="16dp"
         android:layout_marginEnd="16dp"
         android:layout_toEndOf="@id/pfpCard"
+        android:layout_toStartOf="@id/remove"
         android:textAlignment="textStart"
         android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/remove"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:src="@drawable/ic_remove"
+        android:contentDescription="@string/remove" />
 
 </RelativeLayout>
