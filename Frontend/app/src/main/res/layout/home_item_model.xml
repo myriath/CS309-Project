@@ -36,6 +36,7 @@
             android:textSize="20sp"
             android:layout_toEndOf="@id/recipeImage"
             android:layout_below="@id/recipeTitle"
+            android:maxLines="2"
             android:enabled="false" />
 
     </RelativeLayout>
