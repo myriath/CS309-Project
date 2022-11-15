@@ -131,7 +131,7 @@ public class HomeFragment extends BaseFragment {
         LinearLayout layout = view.findViewById(R.id.feed);
 
         HomeRecipeView view1 = new HomeRecipeView(requireContext());
-        view1.initView("Test Recipe", "Test Description", view3 -> {
+        view1.initView("Test Recipe", "Test Description\nDescription\nDescription", view3 -> {
             // TODO: Load recipe details page
         });
         new GetRecipeImageRequest("0").request(view1::setImage, getContext());
