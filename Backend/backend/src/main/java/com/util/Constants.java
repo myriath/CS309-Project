@@ -1,7 +1,5 @@
 package com.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +9,6 @@ import org.slf4j.LoggerFactory;
  * @author Mitch Hudson
  */
 public class Constants {
-    /**
-     * Gson object used by the entire application.
-     */
-    public static final GsonBuilder GSON_BUILDER = new GsonBuilder()
-            .serializeNulls();
-    public static final Gson GSON = GSON_BUILDER.create();
-
     public static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
 
     /**
@@ -126,6 +117,10 @@ public class Constants {
      * Default banner image path
      */
     public static final String DEFAULT_BANNER = MEDIA_BASE + "defaultbanner.webp";
+    /**
+     * Recipe image storage location
+     */
+    public static final String RECIPE_SOURCE = MEDIA_BASE + "recipes/";
     /**
      * Regular image storage location
      */

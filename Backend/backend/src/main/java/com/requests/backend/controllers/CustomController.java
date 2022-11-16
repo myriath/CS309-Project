@@ -1,17 +1,11 @@
 package com.requests.backend.controllers;
 
-import ch.qos.logback.classic.Logger;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.io.JsonEOFException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.FoodResponse;
 import com.requests.backend.models.FoodsResponse;
 import com.requests.backend.models.Token;
 import com.requests.backend.models.requests.CustomFoodRequest;
 import com.requests.backend.models.responses.CustomFoodResponse;
-import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.CustomRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
@@ -20,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to custom foods.
+ *
+ * @author Logan
+ * @author Mitch
+ */
 @RestController
 @RequestMapping(path="/food")
 public class CustomController {
@@ -30,8 +30,13 @@ public class CustomController {
     @Autowired
     private CustomRepository customRepository;
 
+    /**
+     * Get custom foods that best match the given query.
+     * @param query Search query, this endpoint returns foods that have this in the name
+     * @return JSON string containing the results.
+     */
     @GetMapping("/get")
-    public String get(@RequestParam String query) throws JsonProcessingException {
+    public @ResponseBody FoodsResponse get(@RequestParam String query) {
 
         customRepository.queryGetCustomFoods(query);
         FoodsResponse res = new FoodsResponse();
@@ -40,14 +45,16 @@ public class CustomController {
 
         res.setItems(foods);
 
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson.toJson(res);
+        return res;
     }
 
+    /**
+     * Get information about a specific custom food by its ID.
+     * @param id ID of the item to get
+     * @return JSON string containing information about the food item.
+     */
     @GetMapping("/get/{id}")
-    public String get(@PathVariable int id) throws JsonProcessingException {
+    public @ResponseBody FoodResponse get(@PathVariable int id) {
         FoodResponse res = new FoodResponse();
 
         CustomFood[] foods = customRepository.queryGetByID(id);
@@ -58,18 +65,20 @@ public class CustomController {
             res.setItem(foods[0]);
             res.setResult(RESULT_OK);
         }
-        // Create a new GSON Builder and disable escaping (to allow for certain unicode characters like "="
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-        return gson.toJson(res);
+        return res;
     }
 
+    /**
+     * Add a new custom food item to the database.
+     * @param token Token for authentication
+     * @param req Custom food request containing the new custom food data
+     * @return JSON string containing the result of the operation.
+     */
     @PostMapping("/add/{token}")
-    public @ResponseBody String add(@PathVariable String token, @RequestBody String json) throws JsonProcessingException {
+    public @ResponseBody CustomFoodResponse add(@PathVariable String token, @RequestBody CustomFoodRequest req) {
 
         String hashedToken = Hasher.sha256(token);
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         // Find token in table
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -82,27 +91,17 @@ public class CustomController {
         }
         else {
 
-            CustomFoodRequest req = gson.fromJson(json, CustomFoodRequest.class);
+//            CustomFoodRequest req = gson.fromJson(req, CustomFoodRequest.class);
 
             CustomFood food = req.getItem();
-
-//            try {
                 CustomFood savedFood = new CustomFood(food.getName(), food.getIngredients(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
                 savedFood = customRepository.save(savedFood);
                 int dbId = savedFood.getDbId();
 
                 res.setResult(RESULT_OK);
                 res.setDbId(dbId);
-//            } catch (Exception e) {
-//                res.setResult(RESULT_ERROR);
-//            }
         }
 
-        return gson.toJson(res);
+        return res;
     }
-
-
-
-
-
 }

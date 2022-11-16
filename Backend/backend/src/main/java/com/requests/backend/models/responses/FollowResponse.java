@@ -1,11 +1,8 @@
 package com.requests.backend.models.responses;
 
-import com.requests.backend.models.Recipe;
-import com.requests.backend.models.User;
-
 public class FollowResponse {
     private int result;
-    private User[] users;
+    private String[] users;
 
     public int getResult() {
         return result;
@@ -15,11 +12,11 @@ public class FollowResponse {
         this.result = result;
     }
 
-    public User[] getUsers() {
+    public String[] getUsers() {
         return users;
     }
 
-    public void setUsers(User[] users) {
+    public void setUsers(String[] users) {
         this.users = users;
     }
 }

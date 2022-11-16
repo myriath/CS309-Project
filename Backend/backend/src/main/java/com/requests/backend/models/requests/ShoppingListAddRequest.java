@@ -1,27 +1,28 @@
 package com.requests.backend.models.requests;
 
-import com.requests.backend.models.AuthModel;
 import com.requests.backend.models.SimpleFoodItem;
 
 public class ShoppingListAddRequest {
 
     private SimpleFoodItem item;
 
-    private String token;
+    public ShoppingListAddRequest() {
+    }
+
+    public ShoppingListAddRequest(SimpleFoodItem item) {
+        this.item = item;
+    }
 
     public SimpleFoodItem getFoodItem() {
         return item;
     }
 
-    public void setFoodItem(SimpleFoodItem foodItem) {
-        this.item = foodItem;
+    public void setItem(SimpleFoodItem item) {
+        this.item = item;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setAuth(String token) {
-        this.token = token;
+    @Override
+    public String toString() {
+        return item.toString();
     }
 }

@@ -54,10 +54,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true
     )
     void queryGetBio(@Param("username") String username);
-
-    @Query(
-            value = "SELECT * FROM follows WHERE follower = :username",
-            nativeQuery = true
-    )
-    Collection<User> queryGetFollowing(@Param("username") String username);
 }

@@ -1,7 +1,5 @@
 package com.requests.backend.models.requests;
 
-import com.requests.backend.models.AuthModel;
-
 public class StrikeoutRequest {
     private int id;
     private boolean isCustom;

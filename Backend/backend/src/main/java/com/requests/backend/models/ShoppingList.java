@@ -1,9 +1,11 @@
 package com.requests.backend.models;
 
-import com.google.gson.annotations.Expose;
 import com.requests.backend.models.composites.ShoppingListPK;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="shopping_list")
@@ -13,16 +15,12 @@ public class ShoppingList {
     private String username;
 
     @Id
-    @Expose
     private Integer id;
 
-    @Expose
     private String description;
 
-    @Expose
     private Boolean  stricken;
 
-    @Expose
     private Boolean isCustom;
 
     public ShoppingList() {
@@ -45,12 +43,12 @@ public class ShoppingList {
         this.id = fdcId;
     }
 
-    public String getItemName() {
+    public String getDescription() {
         return description;
     }
 
-    public void setItemName(String itemName) {
-        this.description = itemName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getStricken() {

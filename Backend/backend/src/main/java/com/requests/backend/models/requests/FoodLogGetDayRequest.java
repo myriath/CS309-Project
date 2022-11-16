@@ -1,11 +1,6 @@
 package com.requests.backend.models.requests;
 
-import com.google.gson.annotations.Expose;
-
-import java.sql.Date;
-
 public class FoodLogGetDayRequest {
-    @Expose
     private String date;
 
     public String getDate() {

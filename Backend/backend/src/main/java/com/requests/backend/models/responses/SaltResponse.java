@@ -8,19 +8,27 @@ public class SaltResponse {
     public SaltResponse() {
     }
 
-    public SaltResponse(int responseCode) {
-        result = responseCode;
-    }
-    public SaltResponse(int responseCode, String salt) {
-        result = responseCode;
-        this.salt = salt;
-    }
-
     public void setResult(int result) {
         this.result = result;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    @Override
+    public String toString() {
+        return "SaltResponse{" +
+                "result=" + result +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }
