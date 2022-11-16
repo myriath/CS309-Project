@@ -112,6 +112,7 @@ public class ShoppingListController {
             String username = tokenQueryRes[0].getUsername();
 
 //            try {
+                LOGGER.info(req.toString());
                 shoppingRepository.queryCreateShoppingListEntry(itemName, username, fdcId, isCustom, stricken);
                 res.setResult(RESULT_OK);
 //            } catch (Exception e) {
