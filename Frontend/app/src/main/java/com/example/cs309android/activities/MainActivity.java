@@ -22,9 +22,13 @@ import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -53,6 +57,7 @@ import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Navbar object at the bottom of the app.
      */
     private BottomNavigationView navbar;
+
+    private boolean openMenu = false;
+    private FloatingActionButton mainButton, addShopping, addLog, addRecipe;
 
     /**
      * Shopping list items for the shopping list
@@ -132,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
+        Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
+
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
 
         global = ((GlobalClass) getApplicationContext());
@@ -143,14 +154,27 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             NukeSSLCerts.nuke();
         }
 
+        mainButton = findViewById(R.id.mainButton);
+        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
+        drawable.setDrawableByLayerId(R.id.closed, Util.mainButtonEdit);
+        drawable.setDrawableByLayerId(R.id.open, Util.mainButtonClose);
+        addShopping = findViewById(R.id.addShopping);
+        addLog = findViewById(R.id.addLog);
+        addRecipe = findViewById(R.id.addRecipe);
+
+        // Hides/un-hides other buttons
+        mainButton.setOnClickListener(view -> {
+            toggleMenu();
+        });
+
         // Recipe add button
-        findViewById(R.id.addRecipe).setOnClickListener(view -> {
+        addRecipe.setOnClickListener(view -> {
             Intent myIntent = new Intent(this, AddRecipeActivity.class);
             startActivity(myIntent);
         });
 
         // Shopping list add button
-        findViewById(R.id.addShopping).setOnClickListener(view -> {
+        addShopping.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
             intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);
@@ -158,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
 
         // Log add button
-        findViewById(R.id.addLog).setOnClickListener(view -> {
+        addLog.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             foodSearchLauncher.launch(intent);
         });
@@ -211,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         navbar = findViewById(R.id.navbar);
 
         navbar.setOnItemSelectedListener(item -> {
+            int previousFragment = currentFragment;
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
                 mainFragment.setCallbackFragment(this);
@@ -273,6 +298,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             } else {
                 return false;
             }
+
+            // Hides / shows the menu button
+            if (previousFragment == 4) {
+                menuButtonAnimation(false);
+            } else if (currentFragment == 4) {
+                menuButtonAnimation(true);
+            }
             return true;
         });
         navbar.setSelectedItemId(R.id.home);
@@ -291,6 +323,52 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    /**
+     * Hides and un-hides the menu button
+     *
+     * @param hide True if the animation should hide the menu button
+     */
+    public void menuButtonAnimation(boolean hide) {
+        if (hide) { // Hides the menu button
+            if (openMenu) toggleMenu(); // Closes the menu if it is open
+            mainButton.setVisibility(View.GONE);
+            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out));
+        } else {    // Shows the menu button
+            mainButton.setVisibility(View.VISIBLE);
+            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in));
+        }
+    }
+
+    /**
+     * Toggles display of the fab menu with animations
+     */
+    public void toggleMenu() {
+        Animation animation;
+        int visibility;
+        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
+        drawable.setCrossFadeEnabled(true);
+        if (openMenu) {
+            animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out);
+            visibility = View.GONE;
+            drawable.reverseTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        } else {
+            animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in);
+            visibility = View.VISIBLE;
+            drawable.startTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        }
+        addShopping.setVisibility(visibility);
+        addLog.setVisibility(visibility);
+        addRecipe.setVisibility(visibility);
+        addShopping.startAnimation(animation);
+        addLog.startAnimation(animation);
+        addRecipe.startAnimation(animation);
+
+        openMenu = !openMenu;
+    }
+
+    /**
+     * Runs when a login fails, opening the login activity or the switch activity
+     */
     public void failedLogin() {
         unSpin(this);
         if (global.getAccounts().length > 0) {

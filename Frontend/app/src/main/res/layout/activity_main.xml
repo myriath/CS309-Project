@@ -25,7 +25,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorTertiaryContainer"
             android:tint="?attr/colorOnTertiaryContainer"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_add_recipe"
             android:visibility="gone"
             android:contentDescription="@string/write_new_recipe" />
 
@@ -39,7 +39,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorTertiaryContainer"
             android:tint="?attr/colorOnTertiaryContainer"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_add_log"
             android:visibility="gone"
             android:contentDescription="@string/add_to_food_log" />
 
@@ -53,7 +53,7 @@
             android:layout_marginBottom="-16dp"
             android:backgroundTint="?attr/colorTertiaryContainer"
             android:tint="?attr/colorOnTertiaryContainer"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_add_to_cart"
             android:visibility="gone"
             android:contentDescription="@string/add_to_shopping_list" />
 
@@ -66,7 +66,7 @@
             android:layout_margin="32dp"
             android:backgroundTint="?attr/colorSecondaryContainer"
             android:tint="?attr/colorOnSecondaryContainer"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/transition_fab_main"
             android:contentDescription="@string/main_add_button" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

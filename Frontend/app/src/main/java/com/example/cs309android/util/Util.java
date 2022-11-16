@@ -13,8 +13,14 @@ import static com.example.cs309android.util.Constants.USERS_LATEST;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -61,6 +67,15 @@ public class Util {
      * GSON used for the entire application
      */
     public static final Gson GSON = GSON_BUILDER.create();
+
+    /**
+     * Bitmap drawable for the main button's closed state
+     */
+    public static BitmapDrawable mainButtonEdit;
+    /**
+     * Bitmap drawable for the main button's open state
+     */
+    public static BitmapDrawable mainButtonClose;
 
     /**
      * Scalar defined by MainActivity
@@ -160,6 +175,24 @@ public class Util {
     public static void hideKeyboard(View view, Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
+
+    /**
+     * Generates a BitmapDrawable from a vector drawable.
+     * This allows the drawables to be used for cross fade transitions
+     *
+     * @param context Context to get resources from
+     * @param id      R.drawable ID of the vector drawable
+     * @return BitmapDrawable for cross fade animations
+     */
+    public static BitmapDrawable bitmapDrawableFromVector(Context context, int id) {
+        Drawable drawable = ContextCompat.getDrawable(context, id);
+        if (drawable == null) return null;
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
 
     /**
