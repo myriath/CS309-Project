@@ -1,12 +1,10 @@
 package com.example.cs309android.fragments.home;
 
-import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -14,8 +12,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.HomeNutritionCardModel;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
 import com.example.cs309android.models.api.models.Recipe;
@@ -24,7 +22,6 @@ import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.example.cs309android.models.HomeNutritionCardModel;
 import com.example.cs309android.views.HomeRecipeView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -33,7 +30,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Home fragment for displaying the homepage
@@ -134,14 +130,14 @@ public class HomeFragment extends BaseFragment {
         view1.initView("Test Recipe", "Test Description\nDescription\nDescription", view3 -> {
             // TODO: Load recipe details page
         });
-        new GetRecipeImageRequest("0").request(view1::setImage, getContext());
+        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view1);
 
         HomeRecipeView view2 = new HomeRecipeView(requireContext());
         view2.initView("Test Recipe", "Test Description", view3 -> {
             // TODO: Load recipe details page
         });
-        new GetRecipeImageRequest("0").request(view2::setImage, getContext());
+        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view2);
 
 

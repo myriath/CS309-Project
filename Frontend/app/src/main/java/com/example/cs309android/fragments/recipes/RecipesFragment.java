@@ -116,7 +116,7 @@ public class RecipesFragment extends BaseFragment {
                 new Instruction(2, "juicy juicer")
         }, "apple"));
 
-        recipes.add(new Recipe(0, "Apples2", "Apples for apples", new Ingredient[]{
+        recipes.add(new Recipe(1, "Apples2", "Apples for apples", new Ingredient[]{
                 new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
                 new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
         }, new Instruction[]{

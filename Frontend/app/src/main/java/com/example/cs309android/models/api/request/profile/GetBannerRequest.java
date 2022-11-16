@@ -3,14 +3,14 @@ package com.example.cs309android.models.api.request.profile;
 import static com.example.cs309android.util.Constants.BANNER_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
+import com.example.cs309android.models.api.request.abstraction.ImageRequest;
 
 /**
  * Gets the banner image of a profile
  *
  * @author Mitch Hudson
  */
-public class GetBannerRequest extends GetImageRequest {
+public class GetBannerRequest extends ImageRequest {
     /**
      * Username to get the profile picture of
      */
