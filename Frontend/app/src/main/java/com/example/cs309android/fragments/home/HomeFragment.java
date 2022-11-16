@@ -137,7 +137,7 @@ public class HomeFragment extends BaseFragment {
         view2.initView("Test Recipe", "Test Description", view3 -> {
             // TODO: Load recipe details page
         });
-        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
+        new GetRecipeImageRequest("0").request((ImageView) view2.findViewById(R.id.recipeImage), getContext());
         layout.addView(view2);
 
 
