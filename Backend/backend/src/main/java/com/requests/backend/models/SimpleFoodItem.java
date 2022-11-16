@@ -8,7 +8,7 @@ package com.requests.backend.models;
 public class SimpleFoodItem {
 
     /**
-     * FDC ID from the api or Custom Food Id
+     * FDC ID from the api or Custom Food ID
      */
     private int id;
 
