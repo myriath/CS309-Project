@@ -111,12 +111,12 @@ public class ShoppingListController {
             // Get the username associated with the token
             String username = tokenQueryRes[0].getUsername();
 
-            try {
+//            try {
                 shoppingRepository.queryCreateShoppingListEntry(itemName, username, fdcId, isCustom, stricken);
                 res.setResult(RESULT_OK);
-            } catch (Exception e) {
-                res.setResult(RESULT_ERROR);
-            }
+//            } catch (Exception e) {
+//                res.setResult(RESULT_ERROR);
+//            }
         }
 
         return res;
