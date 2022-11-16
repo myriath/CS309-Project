@@ -55,26 +55,26 @@
 
             </RelativeLayout>
 
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="20sp"-->
+<!--                android:layout_margin="16dp"-->
+<!--                android:text="@string/recently_logged_foods" />-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/log"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_marginBottom="16dp"/>-->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_margin="16dp"
-                android:text="@string/recently_logged_foods" />
-
-            <LinearLayout
-                android:id="@+id/log"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_margin="16dp"
-                android:text="@string/creators_you_follow" />
+                android:text="@string/recipes_for_you" />
 
             <LinearLayout
                 android:id="@+id/feed"
