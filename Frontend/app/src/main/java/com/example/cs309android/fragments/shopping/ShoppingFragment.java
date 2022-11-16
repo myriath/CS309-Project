@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
@@ -36,40 +37,6 @@ import java.util.Arrays;
  */
 public class ShoppingFragment extends BaseFragment {
     /**
-     * All of the items to display
-     */
-    private static ArrayList<SimpleFoodItem> items;
-
-    /**
-     * Creates a new ShoppingFragment instance
-     *
-     * @return A new instance of fragment ShoppingFragment.
-     */
-    public static ShoppingFragment newInstance(ArrayList<SimpleFoodItem> items) {
-        ShoppingFragment fragment = new ShoppingFragment();
-        ShoppingFragment.items = items;
-        return fragment;
-    }
-
-    /**
-     * Removes the given item from the list
-     *
-     * @param i index of the item to remove
-     * @return True if the items list is empty
-     */
-    public static boolean removeItem(int i) {
-        items.remove(i);
-        return items.isEmpty();
-    }
-
-    /**
-     * Clears the item list.
-     */
-    public static void clearItems() {
-        items = null;
-    }
-
-    /**
      * Runs when the fragment is created.
      *
      * @param inflater           Inflates the fragment
@@ -85,20 +52,6 @@ public class ShoppingFragment extends BaseFragment {
 
         ListView listView = view.findViewById(R.id.shopping_list);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
-        if (items == null) {
-            items = new ArrayList<>();
-            new GetListRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
-                GetListResponse getResponse = Util.objFromJson(response, GetListResponse.class);
-                if (getResponse.getResult() == Constants.RESULT_OK) {
-                    items.addAll(Arrays.asList(getResponse.getShoppingList()));
-
-                    refreshList(view);
-                } else {
-                    Toaster.toastShort("Error", getContext());
-                }
-            }, requireActivity());
-        }
 
         refreshList(view);
 
@@ -120,6 +73,7 @@ public class ShoppingFragment extends BaseFragment {
      * @param view Root view of the fragment
      */
     public void refreshList(View view) {
+        ArrayList<SimpleFoodItem> items = MainActivity.getShoppingList();
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
 //        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);

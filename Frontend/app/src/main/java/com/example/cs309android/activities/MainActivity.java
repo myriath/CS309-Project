@@ -193,12 +193,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         foodSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST));
-                    } else {
-                        mainFragment = new ShoppingFragment();
-                    }
-
+                    shoppingListItems = Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
+                    mainFragment = new ShoppingFragment();
                     mainFragment.setCallbackFragment(this);
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -476,5 +472,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
         startActivity(intent);
+    }
+
+    public static void clearShoppingList() {
+        shoppingListItems.clear();
+    }
+
+    public static void addShoppingItem(SimpleFoodItem item) {
+        shoppingListItems.add(item);
+    }
+
+    public static boolean removeShoppingItem(int i) {
+        shoppingListItems.remove(i);
+        return shoppingListItems.isEmpty();
+    }
+
+    public static ArrayList<SimpleFoodItem> getShoppingList() {
+        return shoppingListItems;
     }
 }

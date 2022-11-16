@@ -22,6 +22,7 @@ import androidx.preference.Preference;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
@@ -68,7 +69,7 @@ public class SettingsFragment extends BasePreferenceFragment {
         // Switch user changes the logged in user
         Preference switchUser = Objects.requireNonNull(findPreference("switch_user"));
         switchUser.setOnPreferenceClickListener(preference -> {
-            ShoppingFragment.clearItems();
+            MainActivity.clearShoppingList();
             Intent intent = new Intent(getContext(), AccountSwitchActivity.class);
             switchUserLauncher.launch(intent);
             return true;
