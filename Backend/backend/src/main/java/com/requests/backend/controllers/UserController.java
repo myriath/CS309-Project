@@ -48,8 +48,6 @@ public class UserController {
     @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
-        LOGGER.info(username);
-
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
         SaltResponse res = new SaltResponse();
@@ -63,8 +61,6 @@ public class UserController {
             res.setResult(RESULT_OK);
             res.setSalt(salt);
         }
-
-        LOGGER.info(res.toString());
 
         return res;
     }
@@ -116,7 +112,6 @@ public class UserController {
             res.setResult(RESULT_ERROR);
         }
 
-        LOGGER.info(String.valueOf(res.getResult()));
         return res;
     }
 
