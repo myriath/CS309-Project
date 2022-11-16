@@ -94,7 +94,7 @@ public class ShoppingListController {
         SimpleFoodItem foodItem = req.getFoodItem();
 
         String itemName = foodItem.getDescription();
-        int fdcId = foodItem.getFdcId();
+        int fdcId = foodItem.getId();
         boolean stricken = false;
         boolean isCustom = foodItem.isCustom();
 
