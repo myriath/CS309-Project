@@ -1,10 +1,7 @@
 stages:
-  - maven-build
-  - android-build
-  - maven-test
-  - android-test
-  - maven-deploy
-  - android-deploy
+  - build
+  - test
+  - deploy
 
 variables:
   APP_VERSION: 1
@@ -31,7 +28,7 @@ build-spring-dev:
     - if: $CI_COMMIT_BRANCH == "backend-dev"
   tags:
     - springboot_tag
-  stage: maven-build
+  stage: build
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - cp Backend/backend/target/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/build/temp/
@@ -41,7 +38,7 @@ build-spring-main:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
-  stage: maven-build
+  stage: build
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
     - eval $(ssh-agent -s)
@@ -64,7 +61,7 @@ build-android:
   tags:
     - android_tag
   image: gjandres/android-ci:latest
-  stage: android-build
+  stage: build
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/gradlew
@@ -82,7 +79,7 @@ test-spring:
     - if: $CI_COMMIT_BRANCH == "backend-dev" || $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
-  stage: maven-test
+  stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
 
@@ -92,7 +89,7 @@ test-android:
   tags:
     - android_tag
   image: gjandres/android-ci:latest
-  stage: android-test
+  stage: test
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/gradlew
@@ -107,7 +104,7 @@ deploy-spring-dev:
     - if: $CI_COMMIT_BRANCH == "backend-dev"
   tags:
     - springboot_tag
-  stage: maven-deploy
+  stage: deploy
   script:
     - sudo systemctl stop cs309.service
     - cp /home/gitlab-runner/build/temp/* /home/gitlab-runner/build/
@@ -120,7 +117,7 @@ deploy-spring-main:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - springboot_tag
-  stage: maven-deploy
+  stage: deploy
   script:
     - sudo systemctl stop cs309prod.service
     - cp /home/gitlab-runner/release/temp/* /home/gitlab-runner/release/
@@ -135,7 +132,7 @@ deploy-spring-prod:
     GIT_STRATEGY: none
   tags:
     - deploy_tag
-  stage: maven-deploy
+  stage: deploy
   script:
     - sudo systemctl stop cs309.service
     - cp /home/gitlab-runner/temp/* /home/gitlab-runner/
