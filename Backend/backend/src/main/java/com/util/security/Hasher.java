@@ -1,5 +1,6 @@
 package com.util.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -142,6 +143,6 @@ public class Hasher {
      * @return Base64 encoded string.
      */
     public static String sha256plaintext(String in) {
-        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes())).trim();
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes(StandardCharsets.UTF_8))).trim();
     }
 }
