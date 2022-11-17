@@ -88,8 +88,8 @@ public class NutritionFragment extends BaseFragment {
         MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
         MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);
         MainActivity.addLogItem(new FoodLogItem("papajohn", "beef"), BREAKFAST_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "pork"), LUNCH_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "turkey"), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "pork"), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "turkey"), LUNCH_LOG);
         MainActivity.addLogItem(new FoodLogItem("papajohn", "eggs"), DINNER_LOG);
 
 //        foodSearchLauncher = registerForActivityResult(
@@ -128,7 +128,6 @@ public class NutritionFragment extends BaseFragment {
                 e.printStackTrace();
             }
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
-
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
             MainActivity.setLog(newItems, BREAKFAST_LOG);
@@ -227,7 +226,7 @@ public class NutritionFragment extends BaseFragment {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
                     startActivity(intent);
-                });
+                }, i == breakfast.size() - 1);
             }
             view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);
         } else {
@@ -241,7 +240,7 @@ public class NutritionFragment extends BaseFragment {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
                     startActivity(intent);
-                });
+                }, i == lunch.size() - 1);
             }
             view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);
         } else {
@@ -255,7 +254,7 @@ public class NutritionFragment extends BaseFragment {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
                     startActivity(intent);
-                });
+                }, i == dinner.size() - 1);
             }
             view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);
         } else {
@@ -263,14 +262,21 @@ public class NutritionFragment extends BaseFragment {
         }
     }
 
-    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener) {
-        TextView title = new TextView(requireContext());
-        title.setText(item.getFoodName());
-        int dp16 = (int) Util.scalePixels(16);
-        title.setPadding(dp16, dp16, dp16, dp16);
-        title.setOnClickListener(listener);
-        list.addView(title);
-        MaterialDivider divider = new MaterialDivider(requireContext());
-        list.addView(divider);
+    /**
+     * Adds a log item to the given linear layout
+     * @param item      Item to add
+     * @param list      LinearLayout to add to
+     * @param listener  OnClickListener for the item
+     */
+    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener, boolean lastItem) {
+        View view = View.inflate(getContext(), R.layout.ingredient_layout, null);
+        ((TextView) view.findViewById(R.id.quantity)).setText("TODO");
+        ((TextView) view.findViewById(R.id.name)).setText(item.getFoodName());
+        view.setOnClickListener(listener);
+        list.addView(view);
+        if (!lastItem) {
+            MaterialDivider divider = new MaterialDivider(requireContext());
+            list.addView(divider);
+        }
     }
 }
