@@ -123,5 +123,9 @@
     <string name="add_to_shopping_list">Add to shopping list</string>
     <string name="add_to_food_log">Add to food log</string>
     <string name="write_new_recipe">Write new recipe</string>
+    <string name="date">Date</string>
+    <string name="previous_day">Previous day</string>
+    <string name="next_day">Next day</string>
+    <string name="breakfast">Breakfast</string>
 
 </resources>
