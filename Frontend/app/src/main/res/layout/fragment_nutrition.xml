@@ -10,7 +10,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -317,15 +318,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="30dp"
-                        android:paddingVertical="5dp"
+                        android:layout_margin="16dp"
                         android:text="@string/breakfast"
                         android:textSize="24sp" />
 
                     <ListView
                         android:id="@+id/breakfastList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:divider="@drawable/list_divider"
                         android:layout_margin="16dp"/>
 
@@ -349,15 +349,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="30dp"
-                        android:paddingVertical="5dp"
-                        android:text="@string/breakfast"
+                        android:text="@string/lunch"
+                        android:layout_margin="16dp"
                         android:textSize="24sp" />
 
                     <ListView
                         android:id="@+id/lunchList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:divider="@drawable/list_divider"
                         android:layout_margin="16dp"/>
 
@@ -381,15 +380,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="30dp"
-                        android:paddingVertical="5dp"
-                        android:text="@string/breakfast"
+                        android:layout_margin="16dp"
+                        android:text="@string/dinner"
                         android:textSize="24sp" />
 
                     <ListView
                         android:id="@+id/dinnerList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:divider="@drawable/list_divider"
                         android:layout_margin="16dp"/>
 
@@ -398,7 +396,6 @@
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 
