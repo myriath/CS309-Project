@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ import java.util.Objects;
 /**
  * Nutrition page fragment to display nutrition info
  * TODO: Calculate or retrieve nutrition data and update the progress bars
+ * TODO: Food log lists seem like the adapter doesn't work right?
  *
  * @author Travis Massner
  */
@@ -200,12 +202,16 @@ public class NutritionFragment extends BaseFragment {
 
         refreshList(view);
 
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
+        // TODO: Clicks crash
+        AdapterView.OnItemClickListener listener = (parent, view1, position, id) -> {
             SimpleFoodItem selectedItem = (SimpleFoodItem) parent.getItemAtPosition(position);
             Intent i = new Intent(getActivity(), FoodDetailsActivity.class);
             i.putExtra(PARCEL_FOODITEM, selectedItem);
             startActivity(i);
-        });
+        };
+        ((ListView) view.findViewById(R.id.breakfastList)).setOnItemClickListener(listener);
+        ((ListView) view.findViewById(R.id.lunchList)).setOnItemClickListener(listener);
+        ((ListView) view.findViewById(R.id.dinnerList)).setOnItemClickListener(listener);
 
         format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
