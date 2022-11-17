@@ -12,12 +12,12 @@
     <color name="fat">#F6F1C2</color>
     <color name="faton">#DFD41E</color>
 
-    <color name="darkcarb">#222222</color>
-    <color name="darkcarbon">#222222</color>
-    <color name="darkprotein">#222222</color>
-    <color name="darkproteinon">#222222</color>
-    <color name="darkfat">#222222</color>
-    <color name="darkfaton">#222222</color>
+    <color name="darkcarb">#C7F3BD</color>
+    <color name="darkcarbon">#5E7E39</color>
+    <color name="darkprotein">#FAD1D1</color>
+    <color name="darkproteinon">#9A564D</color>
+    <color name="darkfat">#F6F1C2</color>
+    <color name="darkfaton">#B5A93A</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="white_medium">#99FFFFFF</color>
