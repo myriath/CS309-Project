@@ -11,14 +11,12 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.SearchActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
@@ -29,7 +27,6 @@ import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogReques
 import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
@@ -69,10 +66,6 @@ public class NutritionFragment extends BaseFragment {
      * List view to display the nutrition log
      */
     ListView listView;
-    /**
-     * Used to launch various activities.
-     */
-    ActivityResultLauncher<Intent> foodSearchLauncher;
     /**
      * Main window fragment
      */
@@ -166,7 +159,6 @@ public class NutritionFragment extends BaseFragment {
         leftButton = view.findViewById(R.id.previous_date_button);
         rightButton = view.findViewById(R.id.next_date_button);
         TextView dateText = view.findViewById(R.id.date);
-        FloatingActionButton fab = view.findViewById(R.id.fab);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
@@ -186,11 +178,6 @@ public class NutritionFragment extends BaseFragment {
             }
 
         }, requireContext());
-
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SearchActivity.class);
-            foodSearchLauncher.launch(intent);
-        });
 
         leftButton.setOnClickListener(v -> {
             date.add(Calendar.DATE, -1);

@@ -3,14 +3,14 @@ package com.example.cs309android.models.api.request.profile;
 import static com.example.cs309android.util.Constants.PROFILE_PICTURE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
+import com.example.cs309android.models.api.request.abstraction.ImageRequest;
 
 /**
  * Gets the profile picture of an account
  *
  * @author Mitch Hudson
  */
-public class GetProfilePictureRequest extends GetImageRequest {
+public class GetProfilePictureRequest extends ImageRequest {
     /**
      * Username to get the profile picture of
      */

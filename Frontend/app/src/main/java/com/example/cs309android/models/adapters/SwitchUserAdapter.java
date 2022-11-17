@@ -84,7 +84,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
         usernameView.setText(username);
 
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
-        new GetProfilePictureRequest(username).request(profilePicture::setImageBitmap, getContext());
+        new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
         return convertView;
     }

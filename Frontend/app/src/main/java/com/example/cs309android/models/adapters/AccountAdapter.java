@@ -72,7 +72,7 @@ public class AccountAdapter extends ArrayAdapter<String> {
         ((TextView) convertView.findViewById(R.id.username)).setText(username);
 
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
-        new GetProfilePictureRequest(username).request(profilePicture::setImageBitmap, getContext());
+        new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
         TextView bio = convertView.findViewById(R.id.bio);
         new GetProfileRequest(username).request(response -> {

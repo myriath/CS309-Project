@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/nutrientTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/nutrientImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/nutrientTitle"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/nutrient_image" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/nutrientProgressBar"
+        android:layout_width="170dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/nutrientImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        app:indicatorColor="?attr/colorPrimary"
+        app:indicatorDirectionLinear="startToEnd"
+        app:trackColor="?attr/colorOnPrimary"
+        app:trackCornerRadius="5dp"
+        app:trackThickness="10dp" />
+
+    <TextView
+        android:id="@+id/nutrientAmount"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nutrientProgressBar"
+        android:layout_toLeftOf="@id/slash"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/slash"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nutrientProgressBar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/slash"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/nutrientLimit"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nutrientProgressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/slash"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:ignore="RtlHardcoded" />
+
+</RelativeLayout>

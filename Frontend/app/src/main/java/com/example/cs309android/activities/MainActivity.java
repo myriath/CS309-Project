@@ -1,12 +1,12 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
@@ -22,9 +22,13 @@ import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -40,6 +44,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.activities.login.LoginActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
 import com.example.cs309android.fragments.account.AccountFragment;
 import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
@@ -52,7 +57,10 @@ import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -90,6 +98,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     private BottomNavigationView navbar;
 
+    private boolean openMenu = false;
+    private boolean menuHidden = false;
+    private FloatingActionButton mainButton, addShopping, addLog, addRecipe;
+
+    /**
+     * Shopping list items for the shopping list
+     */
+    private static ArrayList<SimpleFoodItem> shoppingListItems;
+
     /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
      */
@@ -105,11 +122,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onResume() {
         super.onResume();
+        if (openMenu) toggleMenu();
 //        navbar.setSelectedItemId(R.id.home);
 //        mainFragment = new HomeFragment();
 //        FragmentManager manager = getSupportFragmentManager();
 //        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+//        transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
 //        transaction.commit();
 //        currentFragment = 2;
     }
@@ -122,7 +140,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        if (shoppingListItems == null) {
+            shoppingListItems = new ArrayList<>();
+        }
+
+        Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
+        Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
 
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
 
@@ -135,7 +161,38 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             NukeSSLCerts.nuke();
         }
 
-        setContentView(R.layout.activity_main);
+        mainButton = findViewById(R.id.mainButton);
+        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
+        drawable.setDrawableByLayerId(R.id.closed, Util.mainButtonEdit);
+        drawable.setDrawableByLayerId(R.id.open, Util.mainButtonClose);
+        addShopping = findViewById(R.id.addShopping);
+        addLog = findViewById(R.id.addLog);
+        addRecipe = findViewById(R.id.addRecipe);
+
+        // Hides/un-hides other buttons
+        mainButton.setOnClickListener(view -> {
+            toggleMenu();
+        });
+
+        // Recipe add button
+        addRecipe.setOnClickListener(view -> {
+            Intent myIntent = new Intent(this, AddRecipeActivity.class);
+            startActivity(myIntent);
+        });
+
+        // Shopping list add button
+        addShopping.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
+            intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);
+            foodSearchLauncher.launch(intent);
+        });
+
+        // Log add button
+        addLog.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            foodSearchLauncher.launch(intent);
+        });
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
@@ -143,16 +200,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         foodSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        mainFragment = ShoppingFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST));
-                    } else {
-                        mainFragment = new ShoppingFragment();
-                    }
-
+                    shoppingListItems = Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
+                    mainFragment = new ShoppingFragment();
                     mainFragment.setCallbackFragment(this);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                            .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                             .commit();
                     currentFragment = 0;
                 }
@@ -185,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         navbar = findViewById(R.id.navbar);
 
         navbar.setOnItemSelectedListener(item -> {
+            int previousFragment = currentFragment;
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
                 mainFragment.setCallbackFragment(this);
@@ -192,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 0;
             } else if (item.getItemId() == R.id.nutrition) {
@@ -205,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 1;
             } else if (item.getItemId() == R.id.home) {
@@ -218,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 2;
             } else if (item.getItemId() == R.id.recipes) {
@@ -231,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 } else {
                     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 }
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
+                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
             } else if (item.getItemId() == R.id.account) {
@@ -241,12 +295,16 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
             } else {
                 return false;
             }
+
+            // Hides / shows the menu button
+            if (currentFragment == 4 && !menuHidden) toggleMenuHidden();
+            else if (currentFragment != 4 && menuHidden) toggleMenuHidden();
             return true;
         });
         navbar.setSelectedItemId(R.id.home);
@@ -265,6 +323,52 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
     }
 
+    /**
+     * Hides and un-hides the menu button
+     */
+    public void toggleMenuHidden() {
+        if (menuHidden) { // Shows the menu button
+            mainButton.setVisibility(View.VISIBLE);
+            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in));
+        } else {    // Hides the menu button
+            if (openMenu) toggleMenu(); // Closes the menu if it is open
+            mainButton.setVisibility(View.GONE);
+            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out));
+        }
+
+        menuHidden = !menuHidden;
+    }
+
+    /**
+     * Toggles display of the fab menu with animations
+     */
+    public void toggleMenu() {
+        Animation animation;
+        int visibility;
+        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
+        drawable.setCrossFadeEnabled(true);
+        if (openMenu) {
+            animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out);
+            visibility = View.GONE;
+            drawable.reverseTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        } else {
+            animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in);
+            visibility = View.VISIBLE;
+            drawable.startTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        }
+        addShopping.setVisibility(visibility);
+        addLog.setVisibility(visibility);
+        addRecipe.setVisibility(visibility);
+        addShopping.startAnimation(animation);
+        addLog.startAnimation(animation);
+        addRecipe.startAnimation(animation);
+
+        openMenu = !openMenu;
+    }
+
+    /**
+     * Runs when a login fails, opening the login activity or the switch activity
+     */
     public void failedLogin() {
         unSpin(this);
         if (global.getAccounts().length > 0) {
@@ -307,17 +411,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     public void callback(int op, Bundle bundle) {
         switch (op) {
-            case (CALLBACK_CLOSE_LOGIN): {
-                findViewById(R.id.mainLayout).setAlpha(1);
-                findViewById(R.id.loginPopup).setClickable(false);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
-                        .remove((Fragment) loginWindowFragment)
-                        .commit();
-                break;
-            }
             case (CALLBACK_START_LOGIN): {
                 boolean backEnabled = false;
                 if (bundle != null) {
@@ -330,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 mainFragment = new HomeFragment();
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
@@ -357,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                         .addToBackStack(null)
-                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)
                         .commit();
                 currentFragment = 4;
                 break;
@@ -383,5 +476,22 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
         startActivity(intent);
+    }
+
+    public static void clearShoppingList() {
+        shoppingListItems.clear();
+    }
+
+    public static boolean removeShoppingItem(int i) {
+        shoppingListItems.remove(i);
+        return shoppingListItems.isEmpty();
+    }
+
+    public static ArrayList<SimpleFoodItem> getShoppingList() {
+        return shoppingListItems;
+    }
+
+    public static void setShoppingList(SimpleFoodItem[] items) {
+        shoppingListItems.addAll(Arrays.asList(items));
     }
 }

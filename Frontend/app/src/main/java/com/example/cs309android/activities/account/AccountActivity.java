@@ -154,13 +154,8 @@ public class AccountActivity extends AppCompatActivity {
             }
         }, AccountActivity.this);
 
-        new GetProfilePictureRequest(username).request(response -> {
-            ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(response);
-        }, AccountActivity.this);
-
-        new GetBannerRequest(username).request(response -> {
-            ((ImageView) findViewById(R.id.banner)).setImageBitmap(response);
-        }, AccountActivity.this);
+        new GetProfilePictureRequest(username).request((ImageView) findViewById(R.id.profile_picture), AccountActivity.this);
+        new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountActivity.this);
 
         new GetRecipesRequest(username).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);

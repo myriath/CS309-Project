@@ -39,9 +39,9 @@ public class Constants {
      */
     public static final int TOKEN_MAX_DEPTH = 5;
     /**
-     * Tells MainActivity to close the login page
+     * Used to remove an item from a list
      */
-    public static final int CALLBACK_CLOSE_LOGIN = 0;
+    public static final int CALLBACK_REMOVE = 0;
     /**
      * Tells MainActivity to open the login page
      */
@@ -70,10 +70,6 @@ public class Constants {
      * Used to open the account page
      */
     public static final int CALLBACK_OPEN_ACCOUNT = 7;
-    /**
-     * Used to remove an item from a list
-     */
-    public static final int CALLBACK_REMOVE = 8;
     /**
      * Various intents tell the app what to do when certain things are done.
      */

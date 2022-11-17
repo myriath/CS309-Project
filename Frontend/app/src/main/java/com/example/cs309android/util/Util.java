@@ -13,19 +13,27 @@ import static com.example.cs309android.util.Constants.USERS_LATEST;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.interfaces.ErrorListener;
 import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
 import com.example.cs309android.models.api.request.users.LoginHashRequest;
 import com.example.cs309android.models.api.request.users.LoginTokenRequest;
@@ -33,6 +41,7 @@ import com.example.cs309android.models.api.request.users.RegenTokenRequest;
 import com.example.cs309android.models.api.request.users.RegisterRequest;
 import com.example.cs309android.models.api.request.users.SaltRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.models.api.response.users.SaltResponse;
@@ -61,6 +70,15 @@ public class Util {
      * GSON used for the entire application
      */
     public static final Gson GSON = GSON_BUILDER.create();
+
+    /**
+     * Bitmap drawable for the main button's closed state
+     */
+    public static BitmapDrawable mainButtonEdit;
+    /**
+     * Bitmap drawable for the main button's open state
+     */
+    public static BitmapDrawable mainButtonClose;
 
     /**
      * Scalar defined by MainActivity
@@ -163,6 +181,24 @@ public class Util {
     }
 
     /**
+     * Generates a BitmapDrawable from a vector drawable.
+     * This allows the drawables to be used for cross fade transitions
+     *
+     * @param context Context to get resources from
+     * @param id      R.drawable ID of the vector drawable
+     * @return BitmapDrawable for cross fade animations
+     */
+    public static BitmapDrawable bitmapDrawableFromVector(Context context, int id) {
+        Drawable drawable = ContextCompat.getDrawable(context, id);
+        if (drawable == null) return null;
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
+
+    /**
      * Sets variables necessary for app functions after a login
      * Also sets the preferences for a new token
      *
@@ -177,6 +213,12 @@ public class Util {
 
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
+
+        MainActivity.clearShoppingList();
+        new GetListRequest(token).request(response -> {
+            GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
+            MainActivity.setShoppingList(shoppingResponse.getShoppingList());
+        }, global);
     }
 
     /**
