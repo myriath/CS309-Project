@@ -2,9 +2,9 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/account_title">
         <Preference
-            android:key="logout"
-            android:title="@string/logout_title"
-            android:summary="@string/logout_msg" />
+            android:key="switch_user"
+            android:summary="@string/switch_user_msg"
+            android:title="@string/manage_accounts_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/display_title">

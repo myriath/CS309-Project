@@ -1,5 +1,8 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -13,14 +16,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
-import com.example.cs309android.activities.FoodSearchActivity;
-import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
+import com.example.cs309android.activities.SearchActivity;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 
 import java.util.ArrayList;
 
 /**
- * Custom adapter to display the list of food items in the shopping list fragment.
+ * Adapter to display the list of foods in the search activity
  *
  * @author Mitch Hudson
  */
@@ -37,7 +39,7 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
      * @param items   list of items to display.
      */
     public FoodSearchListAdapter(Context context, ArrayList<SimpleFoodItem> items) {
-        super(context, R.layout.shopping_list_item, items);
+        super(context, R.layout.food_search_branded, items);
         this.items = items;
     }
 
@@ -60,8 +62,8 @@ public class FoodSearchListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MainActivity.PARCEL_FOODITEM, item);
-            ((FoodSearchActivity) parent.getContext()).callback(FoodSearchActivity.CALLBACK_FOOD_DETAIL, bundle);
+            bundle.putParcelable(PARCEL_FOODITEM, item);
+            ((SearchActivity) parent.getContext()).callback(CALLBACK_FOOD_DETAIL, bundle);
         });
 
         TextView name = convertView.findViewById(R.id.name);

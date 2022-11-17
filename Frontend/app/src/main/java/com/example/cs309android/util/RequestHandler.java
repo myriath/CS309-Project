@@ -23,18 +23,16 @@ public class RequestHandler {
      * Context for the RequestHandler;
      */
     private final Context context;
-
+    /**
+     * ImageLoader to handle images.
+     */
+    private final ImageLoader imageLoader;
     /**
      * RequestQueue to make requests with
      */
     private RequestQueue queue;
     private Cache cache;
     private Network network;
-
-    /**
-     * ImageLoader to handle images.
-     */
-    private final ImageLoader imageLoader;
 
     /**
      * Public constructor
@@ -63,14 +61,11 @@ public class RequestHandler {
 
     /**
      * Getter for the queue. Generates it if it doesn't exist yet.
-     * @return  RequestQueue for the app.
+     *
+     * @return RequestQueue for the app.
      */
     public RequestQueue getQueue() {
         if (queue == null) {
-//            cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), 1024 * 1024);
-//            network = new BasicNetwork(new HurlStack());
-//
-//            queue = new RequestQueue(cache, network);
             queue = Volley.newRequestQueue(context);
         }
         return queue;
@@ -78,8 +73,9 @@ public class RequestHandler {
 
     /**
      * Adds a request to the queue.
-     * @param request   Request to add to the queue.
-     * @param <T>       Type of the request.
+     *
+     * @param request Request to add to the queue.
+     * @param <T>     Type of the request.
      */
     public <T> void add(Request<T> request) {
         getQueue().add(request);
@@ -87,8 +83,9 @@ public class RequestHandler {
 
     /**
      * Cancels all requests with the given tag.
-     * @param tag   Tag of requests to cancel.
-     * @param <T>   Type of tag.
+     *
+     * @param tag Tag of requests to cancel.
+     * @param <T> Type of tag.
      */
     public <T> void cancel(T tag) {
         getQueue().cancelAll(tag);
@@ -103,7 +100,8 @@ public class RequestHandler {
 
     /**
      * Getter for the ImageLoader.
-     * @return  ImageLoader for storing and loading images.
+     *
+     * @return ImageLoader for storing and loading images.
      */
     public ImageLoader getImageLoader() {
         return imageLoader;

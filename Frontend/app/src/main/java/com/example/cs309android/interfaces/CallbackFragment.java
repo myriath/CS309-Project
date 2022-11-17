@@ -11,7 +11,8 @@ public interface CallbackFragment {
     /**
      * Does something based on the callback op.
      *
-     * @param op Tells the class what to do.
+     * @param op     Tells the class what to do.
+     * @param bundle Bundle of callback arguments
      */
     void callback(int op, Bundle bundle);
 

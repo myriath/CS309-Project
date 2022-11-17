@@ -21,7 +21,7 @@ public class ParameterizedRequestURL {
      * Base url (no '?')
      * if null, the returned string will just be the encoded parameters.
      */
-    private final String url;
+    private final StringBuilder url;
 
     /**
      * Constructor for a new GetRequestURL that only outputs encoded parameters.
@@ -38,7 +38,7 @@ public class ParameterizedRequestURL {
      */
     public ParameterizedRequestURL(String url) {
         this.params = new ArrayList<>();
-        this.url = url;
+        this.url = new StringBuilder(url);
     }
 
     /**
@@ -49,7 +49,39 @@ public class ParameterizedRequestURL {
      */
     public ParameterizedRequestURL(String url, ArrayList<RequestParam> params) {
         this.params = params;
-        this.url = url;
+        this.url = new StringBuilder(url);
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(String variable) {
+        if (url != null) {
+            try {
+                if (url.charAt(url.length() - 1) != '/') url.append('/');
+                url.append(URLEncoder.encode(variable, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(int variable) {
+        if (url != null) {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(variable);
+        }
+        return this;
     }
 
     /**

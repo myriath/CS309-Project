@@ -1,15 +1,30 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
-import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_LOGIN;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.PREF_NAME;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,24 +37,24 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
+import com.example.cs309android.activities.login.LoginActivity;
+import com.example.cs309android.fragments.account.AccountFragment;
+import com.example.cs309android.fragments.account.SettingsFragment;
 import com.example.cs309android.fragments.home.HomeFragment;
-import com.example.cs309android.fragments.login.LoginFragment;
-import com.example.cs309android.fragments.login.RegisterFragment;
 import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
-import com.example.cs309android.fragments.settings.SettingsFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.gson.models.SimpleFoodItem;
-import com.example.cs309android.models.gson.request.users.LoginTokenRequest;
-import com.example.cs309android.models.gson.request.users.RegenTokenRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
-import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -47,69 +62,29 @@ import java.util.Objects;
  * Most pages should probably use fragments
  *
  * @author Mitch Hudson
+ * @author Travis Massner
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
-    /**
-     * DEBUG variable for testing Logs
-     * TODO: False for prod
-     */
-    public static final boolean DEBUG = true;
-
-    /**
-     * Name of the app for all mentions in the app
-     */
-    public static final String APP_NAME = "Föd";
-
-    /**
-     * Preference name for this app's shared preferences.
-     */
-    public static final String PREF_NAME = "COMS309";
-
-    /**
-     * Fragment containing the current login window.
-     */
-    private CallbackFragment loginWindowFragment;
-
-    /**
-     * Main window fragment
-     */
-    private CallbackFragment mainFragment;
-    private int currentFragment = 2;
-
-    /**
-     * Response codes for callback method. Used by Fragments for this class
-     */
-    public static final int CALLBACK_SWITCH_TO_REGISTER = 0;
-    public static final int CALLBACK_CLOSE_LOGIN = 1;
-    public static final int CALLBACK_START_LOGIN = 2;
-    public static final int CALLBACK_MOVE_TO_HOME = 3;
-    public static final int CALLBACK_FOOD_DETAIL = 4;
-    public static final int CALLBACK_SEARCH_FOOD = 5;
-//    public static final int CALLBACK_ = 0;
-
-    /**
-     * This is used wherever a food item needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEM = "fooditem";
-    /**
-     * This is used whenever a list of food items needs to be parceled.
-     */
-    public static final String PARCEL_FOODITEMS_LIST = "fooditems";
-    /**
-     * This is used to parcel the intent of opening an activity.
-     */
-    public static final String PARCEL_INTENT_CODE = "intentCode";
-
-    /**
-     * Preference key strings for the username and hash
-     */
-    public static final String PREF_TOKEN = "token";
-
     /**
      * Used to launch various activities.
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
-
+    /**
+     * Fragment containing the current login window.
+     */
+    private CallbackFragment loginWindowFragment;
+    /**
+     * Main window fragment
+     */
+    private CallbackFragment mainFragment;
+    /**
+     * Tracker for the current fragment
+     */
+    private static int currentFragment = 2;
+    /**
+     * GlobalClass for storing universal values
+     */
+    private GlobalClass global;
     /**
      * Navbar object at the bottom of the app.
      */
@@ -124,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         new RequestHandler(MainActivity.this).cancelAll();
     }
 
+    /**
+     * Resumes when the application is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -145,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
+
+        global = ((GlobalClass) getApplicationContext());
+        global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
 
         // TODO: Remove for production
         // Removes SSL certificate checking until we can create a cert with a cert authority
@@ -175,26 +158,32 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
-        // Gets stored username and password hash, if they exist
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String token = pref.getString(PREF_TOKEN, "").trim();
+        if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
+            // TODO: First time
+            global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();
+        }
+
+        // Gets stored password hash, if it exists
+        Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
+
+        if (users == null) users = new HashMap<>();
+        global.setUsers(users);
+        global.updateLoginPrefs();
+
+        String token = users.get(users.get(USERS_LATEST));
+
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        if (!token.equals("")) {
-            new LoginTokenRequest(token).unspinOnComplete(response -> {
-                // Checks if the result is valid or not. If not, opens the login page
-                int result = ((GenericResponse) Util.objFromJson(response, GenericResponse.class)).getResult();
-                if (result == RESULT_REGEN_TOKEN) regenToken(token, 0);
-                else if (result != RESULT_LOGGED_IN) startLoginFragment();
-                else ((GlobalClass) getApplicationContext()).setToken(token);
-            }, error -> {
-                error.printStackTrace();
-                startLoginFragment();
-            }, MainActivity.this, getWindow().getDecorView());
-        } else startLoginFragment();
+        System.out.println(token);
+        if (token != null) {
+            Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
+        } else {
+            unSpin(this);
+            startLoginActivity(false);
+        }
 
         navbar = findViewById(R.id.navbar);
-        navbar.setSelectedItemId(R.id.home);
+
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
@@ -245,8 +234,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
                 transaction.commit();
                 currentFragment = 3;
-            } else if (item.getItemId() == R.id.settings) {
-                mainFragment = new SettingsFragment();
+            } else if (item.getItemId() == R.id.account) {
+                mainFragment = new AccountFragment();
                 mainFragment.setCallbackFragment(this);
                 // Always slide right
                 getSupportFragmentManager()
@@ -260,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
             return true;
         });
+        navbar.setSelectedItemId(R.id.home);
         navbar.setOnItemReselectedListener(item -> {
             if (item.getItemId() == R.id.shopping) {
                 System.out.println("shopping re");
@@ -269,10 +259,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 System.out.println("home re");
             } else if (item.getItemId() == R.id.recipes) {
                 System.out.println("recipes re");
-            } else if (item.getItemId() == R.id.settings) {
+            } else if (item.getItemId() == R.id.account) {
                 System.out.println("settings re");
             }
         });
+    }
+
+    public void failedLogin() {
+        unSpin(this);
+        if (global.getAccounts().length > 0) {
+            Intent intent = new Intent(this, AccountSwitchActivity.class);
+            intent.putExtra(PARCEL_LOGGED_OUT, true);
+            startActivity(intent);
+        } else {
+            startLoginActivity(false);
+        }
     }
 
     /**
@@ -284,6 +285,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * CALLBACK_CLOSE_LOGIN:
      * Closes the login page with a nice animation and permits interaction and removes transparency
      * filter over the main activity
+     * <p>
+     * CALLBACK_START_LOGIN:
+     * Starts the login fragment
+     * <p>
+     * CALLBACK_MOVE_TO_HOME:
+     * Moves the current fragment to the home fragment
+     * <p>
+     * CALLBACK_FOOD_DETAIL:
+     * Starts the food details activity with the given fooditem
+     * <p>
+     * CALLBACK_SEARCH_FOOD:
+     * Starts the search activity
+     * <p>
+     * CALLBACK_MOVE_TO_SETTINGS:
+     * Moves the current fragment to the settings fragment
      *
      * @param op     Opcode to decide what to do
      * @param bundle Bundle with args
@@ -291,17 +307,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     public void callback(int op, Bundle bundle) {
         switch (op) {
-            case (CALLBACK_SWITCH_TO_REGISTER): {
-                loginWindowFragment = new RegisterFragment();
-                loginWindowFragment.setCallbackFragment(this);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .addToBackStack(null)
-                        .replace(R.id.loginPopup, (Fragment) loginWindowFragment, null)
-                        .commit();
-                break;
-            }
             case (CALLBACK_CLOSE_LOGIN): {
                 findViewById(R.id.mainLayout).setAlpha(1);
                 findViewById(R.id.loginPopup).setClickable(false);
@@ -314,15 +319,19 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 break;
             }
             case (CALLBACK_START_LOGIN): {
-                startLoginFragment();
+                boolean backEnabled = false;
+                if (bundle != null) {
+                    backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);
+                }
+                startLoginActivity(backEnabled);
                 break;
             }
             case (CALLBACK_MOVE_TO_HOME): {
                 mainFragment = new HomeFragment();
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.coordinator, (Fragment) mainFragment, null);
-                transaction.commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
                 currentFragment = 2;
                 navbar.setSelectedItemId(R.id.home);
                 break;
@@ -330,15 +339,27 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             case (CALLBACK_FOOD_DETAIL): {
                 Intent intent = new Intent(this, FoodDetailsActivity.class);
                 intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));
-                intent.putExtra(FoodDetailsActivity.PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
+                intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);
                 startActivity(intent);
                 break;
             }
             case (CALLBACK_SEARCH_FOOD): {
-                Intent intent = new Intent(this, FoodSearchActivity.class);
+                Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
                 foodSearchLauncher.launch(intent);
+                break;
+            }
+            case (CALLBACK_MOVE_TO_SETTINGS): {
+                mainFragment = new SettingsFragment();
+                mainFragment.setCallbackFragment(this);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .addToBackStack(null)
+                        .replace(R.id.coordinator, (Fragment) mainFragment, null)
+                        .commit();
+                currentFragment = 4;
                 break;
             }
         }
@@ -347,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Main activity has no callback.
      *
-     * @param fragment Callback fragment.
+     * @param fragment ignored
      */
     @Override
     public void setCallbackFragment(CallbackFragment fragment) {
@@ -355,42 +376,12 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Starts the login fragment.
-     * First, makes MainActivity transparent and non-interactable
+     * First, makes MainActivity transparent and non-interactive
      * Then creates a new fragment and sets up the opening animations.
      */
-    public void startLoginFragment() {
-        findViewById(R.id.loginPopup).setClickable(true);
-
-        loginWindowFragment = new LoginFragment();
-        loginWindowFragment.setCallbackFragment(this);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                .add(R.id.loginPopup, (Fragment) loginWindowFragment)
-                .commit();
-    }
-
-    public void regenToken(String oldToken, int depth) {
-        String newToken = Hasher.genToken();
-
-        new RegenTokenRequest(newToken, oldToken).request(response -> {
-            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-            int result = genericResponse.getResult();
-            if (result == RESULT_REGEN_TOKEN && depth < 5) {
-                regenToken(oldToken, depth + 1);
-            } else if (result == RESULT_LOGGED_IN) {
-                SharedPreferences pref = getSharedPreferences(MainActivity.PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString(MainActivity.PREF_TOKEN, newToken);
-                editor.apply();
-
-                ((GlobalClass) getApplicationContext()).setToken(newToken);
-            } else {
-                startLoginFragment();
-            }
-        }, error -> {
-            error.printStackTrace();
-            startLoginFragment();
-        }, MainActivity.this);
+    public void startLoginActivity(boolean backEnabled) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        startActivity(intent);
     }
 }

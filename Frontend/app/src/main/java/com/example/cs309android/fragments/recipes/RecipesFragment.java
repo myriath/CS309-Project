@@ -1,154 +1,157 @@
 package com.example.cs309android.fragments.recipes;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AddRecipeActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.gson.request.recipes.AddRecipe;
-import com.example.cs309android.models.gson.request.recipes.GetRecipeDetailsRequest;
-import com.example.cs309android.models.gson.response.GenericResponse;
-import com.example.cs309android.models.gson.response.recipes.GetRecipeDetailsResponse;
-import com.example.cs309android.util.Constants;
+import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment to display the Recipe feed
+ *
+ * @author Travis Massner
  */
 public class RecipesFragment extends BaseFragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
-
-    public RecipesFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Recipe list to display
+     */
+    private static ArrayList<Recipe> recipes;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Runs when the fragment is created
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipesFragment.
+     * @param savedInstanceState Saved state
      */
-
-    public static RecipesFragment newInstance(String param1, String param2) {
-        RecipesFragment fragment = new RecipesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        recipes = new ArrayList<>();
     }
 
+    /**
+     * Runs when the fragment view is created
+     *
+     * @param inflater           Inflates the layout
+     * @param container          Parent view group
+     * @param savedInstanceState Saved state
+     * @return Inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipes, container, false);
-        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.recipe_frame_layout), (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
-            return WindowInsetsCompat.CONSUMED;
-        });
 
-        ListView listView = view.findViewById(R.id.recipes_list);
-        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
-
-        //Search button triggers search by RID
-//        view.findViewById(R.id.recipe_search_button).setOnClickListener(view1 -> {
-//            TextView ridInput = view.findViewById(R.id.recipeRidInput);
-//            TextView recipes = view.findViewById(R.id.recipeName);
-//
-//            if(!(ridInput.getText().toString().matches("[0-9]+"))) {
-//                recipes.setText("Invalid Search");
-//                return;
-//            }
-//            int ridValue = Integer.parseInt(ridInput.getText().toString());
-//            new GetRecipeDetailsRequest(ridValue, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                GetRecipeDetailsResponse recipeResponse = Util.objFromJson(response, GetRecipeDetailsResponse.class);
-//
-//
-//                if (recipeResponse.getResult() == Constants.RESULT_OK) {
-//                    String stuff = recipeResponse.getRecipe().getRecipeName() + recipeResponse.getRecipe().getSteps();
-//                    recipes.setText(stuff);
-//                }
-//                else {
-//                    recipes.setText("Invalid RID");
-//                }
-//            },getContext());
-//        });
+        // Refresh the list of recipes
+        refreshList(view);
 
         //Add button adds recipe to db
         FloatingActionButton addRecipe = view.findViewById(R.id.add_recipe);
         addRecipe.setOnClickListener(view1 -> {
             Intent myIntent = new Intent(view.getContext(), AddRecipeActivity.class);
             startActivity(myIntent);
-
-//            TextView RnameInput = view.findViewById(R.id.recipeNameInput);
-//
-//            new AddRecipe(((GlobalClass) requireActivity().getApplicationContext()).getToken(), RnameInput.getText().toString(), "put this in that and do stuff").request(response -> {
-//                try {
-//                    System.out.print(response.toString(4));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                GenericResponse recipeResponse = Util.objFromJson(response, GenericResponse.class);
-//                TextView recipes = view.findViewById(R.id.recipeName);
-//                if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
-//                    recipes.setText("Recipe Created");
-//                }
-//                else if(recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
-//                    recipes.setText("That RID is taken");
-//                }
-//                else {
-//                    recipes.setText("Something went wrong");
-//                }
-//            },getContext());
+            refreshList(view);
         });
+
+        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.recipe_frame_layout), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         return view;
     }
 
+    /**
+     * Refreshes the list of recipes
+     *
+     * @param view View to get children of
+     */
+    public void refreshList(View view) {
+        new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
+            try {
+                System.out.println(response.toString(3));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
 
+            if (recipeResponse == null) {
+                Toaster.toastShort("Error getting recipes", requireContext());
+                return;
+            }
+
+            Recipe[] newItems = recipeResponse.getRecipes();
+            recipes = new ArrayList<>();
+            recipes.addAll(Arrays.asList(newItems));
+        }, requireContext());
+
+        TextView emptyText = view.findViewById(R.id.emptyText);
+
+        // TODO: Temporary data until get list works
+        recipes = new ArrayList<>();
+        recipes.add(new Recipe(0, "Apples", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "apple"));
+
+        recipes.add(new Recipe(0, "Apples2", "Apples for apples", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("apple", ":)"), 1, "gram"),
+                new Ingredient(new SimpleFoodItem("sinnamon", ":("), 123, "pound")
+        }, new Instruction[]{
+                new Instruction(1, "Gimbo"),
+                new Instruction(2, "juicy juicer")
+        }, "papajohn"));
+
+        if (recipes.isEmpty()) {
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            emptyText.setVisibility(View.INVISIBLE);
+        }
+
+        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        ListView listView = view.findViewById(R.id.recipes_list);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
+                Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+                i.putExtra("HomeFragment.recipe", selectedItem);
+                startActivity(i);
+            }
+        });
+    }
 }

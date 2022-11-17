@@ -28,9 +28,10 @@ public abstract class BaseFragment extends Fragment implements CallbackFragment 
     }
 
     /**
-     * Overridden by children classes with callback code.
+     * Overridden by children classes
      *
-     * @param op Tells the class what to do.
+     * @param op     Tells the class what to do.
+     * @param bundle Bundle of callback arguments
      */
     @Override
     public void callback(int op, Bundle bundle) {

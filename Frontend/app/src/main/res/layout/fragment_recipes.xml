@@ -12,19 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_recipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
         android:clickable="true"
         android:contentDescription="@string/add_item"
-        android:src="@drawable/ic_add" />
+        android:elevation="0dp"
+        android:src="@drawable/ic_add"
+        app:tint="?attr/colorOnSecondaryContainer" />
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:enabled="false"
+        android:text="@string/empty"
+        android:textSize="72sp" />
 
 
 </FrameLayout>
