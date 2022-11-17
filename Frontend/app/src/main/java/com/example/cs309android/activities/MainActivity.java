@@ -60,6 +60,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private BottomNavigationView navbar;
 
     private boolean openMenu = false;
+    private boolean menuHidden = false;
     private FloatingActionButton mainButton, addShopping, addLog, addRecipe;
 
     /**
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     @Override
     protected void onResume() {
         super.onResume();
+        if (openMenu) toggleMenu();
 //        navbar.setSelectedItemId(R.id.home);
 //        mainFragment = new HomeFragment();
 //        FragmentManager manager = getSupportFragmentManager();
@@ -139,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        if (shoppingListItems == null) {
+            shoppingListItems = new ArrayList<>();
+        }
 
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
@@ -296,11 +303,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             }
 
             // Hides / shows the menu button
-            if (previousFragment == 4) {
-                menuButtonAnimation(false);
-            } else if (currentFragment == 4) {
-                menuButtonAnimation(true);
-            }
+            if (currentFragment == 4 && !menuHidden) toggleMenuHidden();
+            else if (currentFragment != 4 && menuHidden) toggleMenuHidden();
             return true;
         });
         navbar.setSelectedItemId(R.id.home);
@@ -321,18 +325,18 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Hides and un-hides the menu button
-     *
-     * @param hide True if the animation should hide the menu button
      */
-    public void menuButtonAnimation(boolean hide) {
-        if (hide) { // Hides the menu button
+    public void toggleMenuHidden() {
+        if (menuHidden) { // Shows the menu button
+            mainButton.setVisibility(View.VISIBLE);
+            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in));
+        } else {    // Hides the menu button
             if (openMenu) toggleMenu(); // Closes the menu if it is open
             mainButton.setVisibility(View.GONE);
             mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out));
-        } else {    // Shows the menu button
-            mainButton.setVisibility(View.VISIBLE);
-            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in));
         }
+
+        menuHidden = !menuHidden;
     }
 
     /**
@@ -478,10 +482,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         shoppingListItems.clear();
     }
 
-    public static void addShoppingItem(SimpleFoodItem item) {
-        shoppingListItems.add(item);
-    }
-
     public static boolean removeShoppingItem(int i) {
         shoppingListItems.remove(i);
         return shoppingListItems.isEmpty();
@@ -489,5 +489,9 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     public static ArrayList<SimpleFoodItem> getShoppingList() {
         return shoppingListItems;
+    }
+
+    public static void setShoppingList(SimpleFoodItem[] items) {
+        shoppingListItems.addAll(Arrays.asList(items));
     }
 }
