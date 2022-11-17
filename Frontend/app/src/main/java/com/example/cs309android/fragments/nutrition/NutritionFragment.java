@@ -3,14 +3,12 @@ package com.example.cs309android.fragments.nutrition;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,7 +26,6 @@ import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.adapters.NutritionLogAdapter;
 import com.example.cs309android.models.api.models.FoodLogItem;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogRequest;
 import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.util.Toaster;
@@ -39,7 +36,6 @@ import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
@@ -77,11 +73,17 @@ public class NutritionFragment extends BaseFragment {
      */
     private CallbackFragment nutritionFragment;
 
+    /**
+     * Stores the value of dp8 in pixels
+     */
+    private int dp8;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         date = Calendar.getInstance();
+        dp8 = (int) Util.scalePixels(8);
 
         //THIS IS JUST TEST DATA
         MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
@@ -273,6 +275,7 @@ public class NutritionFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.quantity)).setText("TODO");
         ((TextView) view.findViewById(R.id.name)).setText(item.getFoodName());
         view.setOnClickListener(listener);
+        view.setPadding(dp8, dp8, dp8, dp8);
         list.addView(view);
         if (!lastItem) {
             MaterialDivider divider = new MaterialDivider(requireContext());
