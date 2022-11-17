@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogReques
 import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.google.android.material.divider.MaterialDivider;
 
 import org.json.JSONException;
 
@@ -45,7 +47,7 @@ import java.util.Objects;
 /**
  * Nutrition page fragment to display nutrition info
  * TODO: Calculate or retrieve nutrition data and update the progress bars
- * TODO: Food log lists seem like the adapter doesn't work right?
+ * TODO: Maybe replace FoodLogItem with just a regular simple food item? or otherwise have that information available
  *
  * @author Travis Massner
  */
@@ -202,17 +204,6 @@ public class NutritionFragment extends BaseFragment {
 
         refreshList(view);
 
-        // TODO: Clicks crash
-        AdapterView.OnItemClickListener listener = (parent, view1, position, id) -> {
-            SimpleFoodItem selectedItem = (SimpleFoodItem) parent.getItemAtPosition(position);
-            Intent i = new Intent(getActivity(), FoodDetailsActivity.class);
-            i.putExtra(PARCEL_FOODITEM, selectedItem);
-            startActivity(i);
-        };
-        ((ListView) view.findViewById(R.id.breakfastList)).setOnItemClickListener(listener);
-        ((ListView) view.findViewById(R.id.lunchList)).setOnItemClickListener(listener);
-        ((ListView) view.findViewById(R.id.dinnerList)).setOnItemClickListener(listener);
-
         format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
@@ -228,11 +219,58 @@ public class NutritionFragment extends BaseFragment {
         ArrayList<FoodLogItem> breakfast = MainActivity.getLog(BREAKFAST_LOG);
         ArrayList<FoodLogItem> lunch = MainActivity.getLog(LUNCH_LOG);
         ArrayList<FoodLogItem> dinner = MainActivity.getLog(DINNER_LOG);
-        ((ListView) view.findViewById(R.id.breakfastList)).setAdapter(new NutritionLogAdapter(this.getActivity(), breakfast));
-        ((ListView) view.findViewById(R.id.lunchList)).setAdapter(new NutritionLogAdapter(this.getActivity(), lunch));
-        ((ListView) view.findViewById(R.id.dinnerList)).setAdapter(new NutritionLogAdapter(this.getActivity(), dinner));
-        view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);
-        view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);
-        view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);
+        if (breakfast != null) {
+            LinearLayout list = view.findViewById(R.id.breakfastList);
+            for (int i = 0; i < breakfast.size(); i++) {
+                FoodLogItem item = breakfast.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                });
+            }
+            view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.breakfastCard).setVisibility(View.GONE);
+        }
+        if (lunch != null) {
+            LinearLayout list = view.findViewById(R.id.lunchList);
+            for (int i = 0; i < lunch.size(); i++) {
+                FoodLogItem item = lunch.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                });
+            }
+            view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.lunchCard).setVisibility(View.GONE);
+        }
+        if (dinner != null) {
+            LinearLayout list = view.findViewById(R.id.dinnerList);
+            for (int i = 0; i < dinner.size(); i++) {
+                FoodLogItem item = dinner.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                });
+            }
+            view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.dinnerCard).setVisibility(View.GONE);
+        }
+    }
+
+    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener) {
+        TextView title = new TextView(requireContext());
+        title.setText(item.getFoodName());
+        int dp16 = (int) Util.scalePixels(16);
+        title.setPadding(dp16, dp16, dp16, dp16);
+        title.setOnClickListener(listener);
+        list.addView(title);
+        MaterialDivider divider = new MaterialDivider(requireContext());
+        list.addView(divider);
     }
 }

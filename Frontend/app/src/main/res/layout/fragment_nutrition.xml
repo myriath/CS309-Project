@@ -322,11 +322,11 @@
                         android:text="@string/breakfast"
                         android:textSize="24sp" />
 
-                    <ListView
+                    <LinearLayout
                         android:id="@+id/breakfastList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="@drawable/list_divider"
+                        android:orientation="vertical"
                         android:layout_margin="16dp"/>
 
                 </LinearLayout>
@@ -353,11 +353,11 @@
                         android:layout_margin="16dp"
                         android:textSize="24sp" />
 
-                    <ListView
+                    <LinearLayout
                         android:id="@+id/lunchList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="@drawable/list_divider"
+                        android:orientation="vertical"
                         android:layout_margin="16dp"/>
 
                 </LinearLayout>
@@ -384,16 +384,20 @@
                         android:text="@string/dinner"
                         android:textSize="24sp" />
 
-                    <ListView
+                    <LinearLayout
                         android:id="@+id/dinnerList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="@drawable/list_divider"
+                        android:orientation="vertical"
                         android:layout_margin="16dp"/>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
 
         </LinearLayout>
 
