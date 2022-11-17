@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp">
 
                 <TextView
@@ -111,6 +112,7 @@
                 app:indicatorColor="?attr/colorPrimary"
                 app:indicatorDirectionLinear="startToEnd"
                 app:trackColor="?attr/colorOnPrimary"
+                android:max="1000"
                 app:trackCornerRadius="5dp"
                 app:trackThickness="10dp" />
 
@@ -168,53 +170,132 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginHorizontal="16dp"
-                app:indicatorColor="?attr/colorPrimary"
+                app:indicatorColor="@color/carbon"
                 app:indicatorDirectionLinear="startToEnd"
-                app:trackColor="?attr/colorOnPrimary"
+                app:trackColor="@color/carb"
                 app:trackCornerRadius="5dp"
+                android:max="1000"
                 app:trackThickness="10dp" />
 
-            <TextView
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="30dp"
-                android:paddingVertical="5dp"
-                android:text="@string/protein"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/proteinAmount"
+                    android:text="@string/protein"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/proteinAmount"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash3" />
+
+                <TextView
+                    android:id="@+id/slash3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/proteinLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/proteinLimit"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/proteinBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginHorizontal="16dp"
-                app:indicatorColor="?attr/colorPrimary"
+                app:indicatorColor="@color/proteinon"
                 app:indicatorDirectionLinear="startToEnd"
-                app:trackColor="?attr/colorOnPrimary"
+                app:trackColor="@color/protein"
+                android:max="1000"
                 app:trackCornerRadius="5dp"
                 app:trackThickness="10dp" />
 
-            <TextView
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="30dp"
-                android:paddingVertical="5dp"
-                android:text="@string/fat"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/fatAmount"
+                    android:text="@string/fat"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fatAmount"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash4" />
+
+                <TextView
+                    android:id="@+id/slash4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/fatLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/fatLimit"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/fatBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginHorizontal="16dp"
-                app:indicatorColor="?attr/colorPrimary"
+                app:indicatorColor="@color/faton"
                 app:indicatorDirectionLinear="startToEnd"
-                app:trackColor="?attr/colorOnPrimary"
+                app:trackColor="@color/fat"
+                android:max="1000"
                 app:trackCornerRadius="5dp"
                 app:trackThickness="10dp" />
 
