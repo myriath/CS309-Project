@@ -119,7 +119,7 @@ public class NutritionFragment extends BaseFragment {
      */
     private void updateDate() {
         TextView dateText = requireActivity().findViewById(R.id.date);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
         String dateStr = format.format(date.getTime());
@@ -219,7 +219,7 @@ public class NutritionFragment extends BaseFragment {
             startActivity(i);
         });
 
-        format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
         return view;
