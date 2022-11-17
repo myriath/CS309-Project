@@ -1,5 +1,8 @@
 package com.example.cs309android.fragments.home;
 
+import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +15,15 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
 import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
@@ -126,9 +133,22 @@ public class HomeFragment extends BaseFragment {
         adapter = new HomeItemAdapter(this.getActivity(), recipes);
         LinearLayout layout = view.findViewById(R.id.feed);
 
+        Recipe test = new Recipe(0, "Test Recipe", "Test Description", new Ingredient[] {
+                new Ingredient(new SimpleFoodItem("food", "brand"), 1, "mg"),
+                new Ingredient(new SimpleFoodItem("food", "brand"), 1, "mg"),
+                new Ingredient(new SimpleFoodItem("food", "brand"), 1, "mg"),
+                new Ingredient(new SimpleFoodItem("food", "brand"), 1, "mg")
+        }, new Instruction[] {
+                new Instruction(1, "hello"),
+                new Instruction(3, "john"),
+                new Instruction(2, "how"),
+                new Instruction(4, "are u")
+        }, "papajohn");
         HomeRecipeView view1 = new HomeRecipeView(requireContext());
-        view1.initView("Test Recipe", "Test Description\nDescription\nDescription", view3 -> {
-            // TODO: Load recipe details page
+        view1.initView(test.getRecipeName(), test.getDescription(), view3 -> {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, test);
+            startActivity(intent);
         });
         new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view1);
