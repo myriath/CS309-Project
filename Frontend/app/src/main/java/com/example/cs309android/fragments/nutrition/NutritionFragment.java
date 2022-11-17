@@ -86,6 +86,7 @@ public class NutritionFragment extends BaseFragment {
         dp8 = (int) Util.scalePixels(8);
 
         //THIS IS JUST TEST DATA
+        MainActivity.clearFoodLog();
         MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
         MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
         MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);

@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         navbar = findViewById(R.id.navbar);
 
         navbar.setOnItemSelectedListener(item -> {
-            int previousFragment = currentFragment;
             if (item.getItemId() == R.id.shopping) {
                 mainFragment = new ShoppingFragment();
                 mainFragment.setCallbackFragment(this);
