@@ -43,6 +43,7 @@ import java.util.Objects;
 
 /**
  * Nutrition page fragment to display nutrition info
+ * TODO: Calculate or retrieve nutrition data and update the progress bars
  *
  * @author Travis Massner
  */
