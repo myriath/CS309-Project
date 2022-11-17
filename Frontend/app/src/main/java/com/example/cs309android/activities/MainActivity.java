@@ -605,6 +605,28 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     }
 
     /**
+     * Setter for the individual food logs
+     * @param items Items to add to the food log
+     * @param logId Log ID constant for the log to add to
+     */
+    public static void setLog(FoodLogItem[] items, int logId) {
+        switch (logId) {
+            case BREAKFAST_LOG: {
+                breakfast.addAll(Arrays.asList(items));
+                break;
+            }
+            case LUNCH_LOG: {
+                lunch.addAll(Arrays.asList(items));
+                break;
+            }
+            case DINNER_LOG: {
+                dinner.addAll(Arrays.asList(items));
+                break;
+            }
+        }
+    }
+
+    /**
      * Getter for the food logs' items
      * @param i     Index of the item to retrieve
      * @param logId Log id constant for the log to retrieve from

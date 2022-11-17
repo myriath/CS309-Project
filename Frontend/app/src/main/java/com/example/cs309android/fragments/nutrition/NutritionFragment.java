@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Nutrition page fragment to display nutrition info
@@ -114,6 +115,7 @@ public class NutritionFragment extends BaseFragment {
         dateText.setText(format.format(date.getTime()));
 
         String dateStr = format.format(date.getTime());
+        // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
@@ -124,8 +126,7 @@ public class NutritionFragment extends BaseFragment {
 
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            breakfast = new ArrayList<>();
-            breakfast.addAll(Arrays.asList(newItems));
+            MainActivity.setLog(newItems, BREAKFAST_LOG);
 
         }, requireContext());
 
@@ -160,6 +161,7 @@ public class NutritionFragment extends BaseFragment {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
+        // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
@@ -167,13 +169,13 @@ public class NutritionFragment extends BaseFragment {
                 e.printStackTrace();
             }
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
-
-            FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            breakfast = new ArrayList<>();
-            breakfast.addAll(Arrays.asList(newItems));
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
+                return;
             }
+
+            FoodLogItem[] newItems = recipeResponse.getFoodLog();
+            MainActivity.setLog(newItems, BREAKFAST_LOG);
 
         }, requireContext());
 
@@ -216,8 +218,14 @@ public class NutritionFragment extends BaseFragment {
      * @param view view to find subviews of
      */
     public void refreshList(View view) {
-        ((ListView) view.findViewById(R.id.breakfastList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(BREAKFAST_LOG)));
-        ((ListView) view.findViewById(R.id.lunchList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(LUNCH_LOG)));
-        ((ListView) view.findViewById(R.id.dinnerList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(DINNER_LOG)));
+        ArrayList<FoodLogItem> breakfast = MainActivity.getLog(BREAKFAST_LOG);
+        ArrayList<FoodLogItem> lunch = MainActivity.getLog(LUNCH_LOG);
+        ArrayList<FoodLogItem> dinner = MainActivity.getLog(DINNER_LOG);
+        ((ListView) view.findViewById(R.id.breakfastList)).setAdapter(new NutritionLogAdapter(this.getActivity(), breakfast));
+        ((ListView) view.findViewById(R.id.lunchList)).setAdapter(new NutritionLogAdapter(this.getActivity(), lunch));
+        ((ListView) view.findViewById(R.id.dinnerList)).setAdapter(new NutritionLogAdapter(this.getActivity(), dinner));
+        view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);
+        view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);
+        view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);
     }
 }
