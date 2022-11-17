@@ -121,9 +121,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         Intent launchIntent = getIntent();
         Recipe recipe = launchIntent.getParcelableExtra(PARCEL_RECIPE);
         if (recipe != null) {
-            new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(response -> {
-                ((ImageView) findViewById(R.id.image_view)).setImageBitmap(response);
-            }, AddRecipeActivity.this);
+            new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request((ImageView) findViewById(R.id.image_view), AddRecipeActivity.this);
 
             Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeName)).getEditText()).setText(recipe.getRecipeName());
             Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeDescription)).getEditText()).setText(recipe.getDescription());

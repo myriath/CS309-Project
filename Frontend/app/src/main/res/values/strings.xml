@@ -112,5 +112,16 @@
     <string name="manage_accounts_title">Manage Accounts</string>
     <string name="switch_user_msg">Manage your stored accounts</string>
     <string name="add_account">ADD ACCOUNT</string>
+    <string name="recently_logged_foods">Recently logged foods</string>
+    <string name="recipes_for_you">Recipes for you</string>
+    <string name="nutrient_image">Nutrient Image</string>
+    <string name="left_button">Left Button</string>
+    <string name="right_button">Right Button</string>
+    <string name="slash">/</string>
+    <string name="recipe_image">Recipe Image</string>
+    <string name="main_add_button">Main Add Button</string>
+    <string name="add_to_shopping_list">Add to shopping list</string>
+    <string name="add_to_food_log">Add to food log</string>
+    <string name="write_new_recipe">Write new recipe</string>
 
 </resources>

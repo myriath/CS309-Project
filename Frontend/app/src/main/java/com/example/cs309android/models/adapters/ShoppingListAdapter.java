@@ -21,7 +21,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.shopping.ShoppingRemoveRequest;
 import com.example.cs309android.models.api.request.shopping.StrikeRequest;
@@ -126,9 +125,9 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             new ShoppingRemoveRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() == Constants.RESULT_OK) {
-                    if (ShoppingFragment.removeItem(position)) {
+                    if (MainActivity.removeShoppingItem(position)) {
                         ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
-                        ((TextView) view1.getRootView().findViewById(R.id.empty_text)).setVisibility(View.VISIBLE);
+                        view1.getRootView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
                     } else {
                         ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
                     }

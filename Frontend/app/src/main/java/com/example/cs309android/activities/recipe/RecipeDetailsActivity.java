@@ -84,12 +84,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
      */
     public void setDetails(Recipe recipe, GlobalClass global) {
         ImageView image = findViewById(R.id.image_view);
-        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image::setImageBitmap,
-                RecipeDetailsActivity.this);
+        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
+//        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image::setImageBitmap,
+//                RecipeDetailsActivity.this);
 
-        new GetProfilePictureRequest(recipe.getUsername()).request(response -> {
-            ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(response);
-        }, RecipeDetailsActivity.this);
+        new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> {
             Util.openAccountPage(global, recipe.getUsername(), this);
