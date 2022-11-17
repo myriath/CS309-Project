@@ -1,12 +1,15 @@
 package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
@@ -52,6 +55,7 @@ import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
@@ -98,14 +102,35 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      */
     private BottomNavigationView navbar;
 
+    /**
+     * Tracks whether the menu is open
+     */
     private boolean openMenu = false;
+    /**
+     * Tracks whether the menu is hidden
+     */
     private boolean menuHidden = false;
+    /**
+     * FAB Menu buttons
+     */
     private FloatingActionButton mainButton, addShopping, addLog, addRecipe;
 
     /**
      * Shopping list items for the shopping list
      */
     private static ArrayList<SimpleFoodItem> shoppingListItems;
+    /**
+     * Used to store the breakfast items
+     */
+    private static ArrayList<FoodLogItem> breakfast;
+    /**
+     * Used to store the lunch items
+     */
+    private static ArrayList<FoodLogItem> lunch;
+    /**
+     * Used to store the dinner items
+     */
+    private static ArrayList<FoodLogItem> dinner;
 
     /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
@@ -145,6 +170,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         if (shoppingListItems == null) {
             shoppingListItems = new ArrayList<>();
+        }
+        if (breakfast == null) {
+            breakfast = new ArrayList<>();
+        }
+        if (lunch == null) {
+            lunch = new ArrayList<>();
+        }
+        if (dinner == null) {
+            dinner = new ArrayList<>();
         }
 
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
@@ -478,20 +512,136 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         startActivity(intent);
     }
 
+    /**
+     * Clears the shopping list
+     */
     public static void clearShoppingList() {
         shoppingListItems.clear();
     }
 
+    /**
+     * Removes the item at the given index from the shopping list
+     * @param i Index of the item to remove
+     * @return True if the shopping list is now empty
+     */
     public static boolean removeShoppingItem(int i) {
         shoppingListItems.remove(i);
         return shoppingListItems.isEmpty();
     }
 
+    /**
+     * Getter for the shopping list
+     * @return ArrayList of food items
+     */
     public static ArrayList<SimpleFoodItem> getShoppingList() {
         return shoppingListItems;
     }
 
+    /**
+     * Setter for the shopping list
+     * @param items Array of food items to add to the shopping list
+     */
     public static void setShoppingList(SimpleFoodItem[] items) {
         shoppingListItems.addAll(Arrays.asList(items));
+    }
+
+    /**
+     * Clears the food log
+     */
+    public static void clearFoodLog() {
+        breakfast.clear();
+        lunch.clear();
+        dinner.clear();
+    }
+
+    /**
+     * Removes the given index from the given log
+     * @param i     Index of the item to remove
+     * @param logId Log id constant for the target of this remove
+     * @return      True if the target log is empty
+     */
+    public static boolean removeLogItem(int i, int logId) {
+        boolean ret = true;
+        switch (logId) {
+            case BREAKFAST_LOG: {
+                breakfast.remove(i);
+                ret = breakfast.isEmpty();
+                break;
+            }
+            case LUNCH_LOG: {
+                lunch.remove(i);
+                ret = lunch.isEmpty();
+                break;
+            }
+            case DINNER_LOG: {
+                dinner.remove(i);
+                ret = dinner.isEmpty();
+                break;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Adds the given item to the specified food log
+     * @param item  Item to add
+     * @param logId Log id constant for the log to target
+     */
+    public static void addLogItem(FoodLogItem item, int logId) {
+        switch (logId) {
+            case BREAKFAST_LOG: {
+                breakfast.add(item);
+                break;
+            }
+            case LUNCH_LOG: {
+                lunch.add(item);
+                break;
+            }
+            case DINNER_LOG: {
+                dinner.add(item);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Getter for the food logs' items
+     * @param i     Index of the item to retrieve
+     * @param logId Log id constant for the log to retrieve from
+     * @return      Item from the log, null if the logId is invalid
+     */
+    public static FoodLogItem getLogItem(int i, int logId) {
+        switch (logId) {
+            case BREAKFAST_LOG: {
+                return breakfast.get(i);
+            }
+            case LUNCH_LOG: {
+                return lunch.get(i);
+            }
+            case DINNER_LOG: {
+                return dinner.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Getter for the food logs
+     * @param logId ID of the log to retrieve
+     * @return      Food log list for an adapter
+     */
+    public static ArrayList<FoodLogItem> getLog(int logId) {
+        switch (logId) {
+            case BREAKFAST_LOG: {
+                return breakfast;
+            }
+            case LUNCH_LOG: {
+                return lunch;
+            }
+            case DINNER_LOG: {
+                return dinner;
+            }
+        }
+        return null;
     }
 }

@@ -219,6 +219,9 @@ public class Util {
             GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
             MainActivity.setShoppingList(shoppingResponse.getShoppingList());
         }, global);
+
+        MainActivity.clearFoodLog();
+        // TODO: Get the food log
     }
 
     /**

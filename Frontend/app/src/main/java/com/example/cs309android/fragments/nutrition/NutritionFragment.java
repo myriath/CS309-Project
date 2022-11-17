@@ -1,5 +1,8 @@
 package com.example.cs309android.fragments.nutrition;
 
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
 
 import android.content.Intent;
@@ -17,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
@@ -42,10 +46,6 @@ import java.util.Locale;
  * @author Travis Massner
  */
 public class NutritionFragment extends BaseFragment {
-    /**
-     * Used to store the list of simple food items
-     */
-    private static ArrayList<FoodLogItem> foods;
     /**
      * Calendar for tracking the date
      */
@@ -78,15 +78,13 @@ public class NutritionFragment extends BaseFragment {
         date = Calendar.getInstance();
 
         //THIS IS JUST TEST DATA
-        foods = new ArrayList<>();
-        FoodLogItem foodLog = new FoodLogItem("papajohn", "chicken");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "turkey");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "mayo");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "bread");
-        foods.add(foodLog);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "beef"), BREAKFAST_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "pork"), LUNCH_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "turkey"), LUNCH_LOG);
+        MainActivity.addLogItem(new FoodLogItem("papajohn", "eggs"), DINNER_LOG);
 
 //        foodSearchLauncher = registerForActivityResult(
 //                new ActivityResultContracts.StartActivityForResult(),
@@ -126,8 +124,8 @@ public class NutritionFragment extends BaseFragment {
 
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            foods = new ArrayList<>();
-            foods.addAll(Arrays.asList(newItems));
+            breakfast = new ArrayList<>();
+            breakfast.addAll(Arrays.asList(newItems));
 
         }, requireContext());
 
@@ -171,8 +169,8 @@ public class NutritionFragment extends BaseFragment {
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            foods = new ArrayList<>();
-            foods.addAll(Arrays.asList(newItems));
+            breakfast = new ArrayList<>();
+            breakfast.addAll(Arrays.asList(newItems));
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
             }
@@ -215,11 +213,11 @@ public class NutritionFragment extends BaseFragment {
     /**
      * Refreshes the nutrition log
      *
-     * @param view
+     * @param view view to find subviews of
      */
     public void refreshList(View view) {
-        adapter = new NutritionLogAdapter(this.getActivity(), foods);
-        listView = view.findViewById(R.id.log_list);
-        listView.setAdapter(adapter);
+        ((ListView) view.findViewById(R.id.breakfastList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(BREAKFAST_LOG)));
+        ((ListView) view.findViewById(R.id.lunchList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(LUNCH_LOG)));
+        ((ListView) view.findViewById(R.id.dinnerList)).setAdapter(new NutritionLogAdapter(this.getActivity(), MainActivity.getLog(DINNER_LOG)));
     }
 }

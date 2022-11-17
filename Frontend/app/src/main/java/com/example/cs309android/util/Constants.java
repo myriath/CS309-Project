@@ -35,6 +35,19 @@ public class Constants {
      */
     public static final String USERS_LATEST = "latest";
     /**
+     * Used to target the breakfast food log
+     */
+    public static final int BREAKFAST_LOG = 0;
+    /**
+     * Used to target the lunch food log
+     */
+    public static final int LUNCH_LOG = 1;
+    /**
+     * Used to target the dinner log
+     */
+    public static final int DINNER_LOG = 2;
+
+    /**
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
