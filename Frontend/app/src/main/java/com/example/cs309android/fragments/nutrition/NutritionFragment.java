@@ -86,14 +86,14 @@ public class NutritionFragment extends BaseFragment {
         dp8 = (int) Util.scalePixels(8);
 
         //THIS IS JUST TEST DATA
-        MainActivity.clearFoodLog();
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "beef"), BREAKFAST_LOG);
+//        MainActivity.clearFoodLog();
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "beef"), BREAKFAST_LOG);
 //        MainActivity.addLogItem(new FoodLogItem("papajohn", "pork"), LUNCH_LOG);
 //        MainActivity.addLogItem(new FoodLogItem("papajohn", "turkey"), LUNCH_LOG);
-        MainActivity.addLogItem(new FoodLogItem("papajohn", "eggs"), DINNER_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "eggs"), DINNER_LOG);
 
 //        foodSearchLauncher = registerForActivityResult(
 //                new ActivityResultContracts.StartActivityForResult(),
@@ -119,10 +119,10 @@ public class NutritionFragment extends BaseFragment {
      */
     private void updateDate() {
         TextView dateText = requireActivity().findViewById(R.id.date);
-        SimpleDateFormat format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
-        dateText.setText(format.format(date.getTime()));
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
+
         // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -133,10 +133,23 @@ public class NutritionFragment extends BaseFragment {
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            MainActivity.setLog(newItems, BREAKFAST_LOG);
 
+            for (FoodLogItem item : newItems) {
+                switch (item.getMeal()) {
+                    case "Breakfast":
+                        MainActivity.addLogItem(item, BREAKFAST_LOG);
+                        break;
+                    case "Lunch":
+                        MainActivity.addLogItem(item, LUNCH_LOG);
+                        break;
+                    case "Dinner":
+                        MainActivity.addLogItem(item, DINNER_LOG);
+                        break;
+                }
+            }
         }, requireContext());
-
+        format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
+        dateText.setText(format.format(date.getTime()));
     }
 
     /**
@@ -182,7 +195,23 @@ public class NutritionFragment extends BaseFragment {
             }
 
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            MainActivity.setLog(newItems, BREAKFAST_LOG);
+
+            for (FoodLogItem item : newItems) {
+                switch (item.getMeal()) {
+                    case "Breakfast":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, BREAKFAST_LOG);
+                        break;
+                    case "Lunch":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, LUNCH_LOG);
+                        break;
+                    case "Dinner":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, DINNER_LOG);
+                        break;
+                }
+            }
 
         }, requireContext());
 
