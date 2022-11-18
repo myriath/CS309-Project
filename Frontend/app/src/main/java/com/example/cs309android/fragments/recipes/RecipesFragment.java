@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -134,14 +133,11 @@ public class RecipesFragment extends BaseFragment {
         ListView listView = view.findViewById(R.id.recipes_list);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
-                Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
-                i.putExtra("HomeFragment.recipe", selectedItem);
-                startActivity(i);
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
+            Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+            i.putExtra("HomeFragment.recipe", selectedItem);
+            startActivity(i);
         });
     }
 }
