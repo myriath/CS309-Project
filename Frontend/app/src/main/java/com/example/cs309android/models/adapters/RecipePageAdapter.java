@@ -1,19 +1,19 @@
 package com.example.cs309android.models.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.HomeNutritionCardModel;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.example.cs309android.models.api.models.Recipe;
 
 /**
- * Adapter to use with the TabLayout for the homepage
+ * Adapter to use with the TabLayout for the recipe page
  *
  * @author Travis Massner
  * @author Mitch Hudson
@@ -22,14 +22,14 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
     /**
      * Holds the list of nutrition cards
      */
-    private HomeNutritionCardModel[] pagerItems;
+    private Recipe[] pagerItems;
 
     /**
      * Public constructor
      *
      * @param pagerItems Items list to display in the pager
      */
-    public RecipePageAdapter(HomeNutritionCardModel[] pagerItems) {
+    public RecipePageAdapter(Recipe[] pagerItems) {
         this.pagerItems = pagerItems;
     }
 
@@ -38,7 +38,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
      *
      * @return Models that make up the tabs in the TabLayout
      */
-    public HomeNutritionCardModel[] getPagerItems() {
+    public Recipe[] getPagerItems() {
         return pagerItems;
     }
 
@@ -47,7 +47,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
      *
      * @param items New list of nutrition cards
      */
-    public void setItems(HomeNutritionCardModel[] items) {
+    public void setItems(Recipe[] items) {
         this.pagerItems = items;
     }
 
@@ -98,7 +98,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
          * @param parent Parent of the holder
          */
         public ViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_model, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.pager_list, parent, false));
         }
 
         /**
@@ -106,19 +106,19 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
          *
          * @param model Model to bind to the view in this holder
          */
-        public void bind(HomeNutritionCardModel model) {
-            double amount = model.getAmount();
-            double limit = model.getLimit();
-            int progress = Math.max(Math.min((int) ((amount / limit) * 100), 100), 0);
-
-            ((TextView) itemView.findViewById(R.id.nutrientAmount)).setText(String.valueOf(amount));
-            ((TextView) itemView.findViewById(R.id.nutrientLimit)).setText(String.valueOf(limit));
-            ((LinearProgressIndicator) itemView.findViewById(R.id.nutrientProgressBar)).setProgress(progress);
-            ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageBitmap(model.getImage());
-            ((TextView) itemView.findViewById(R.id.nutrientTitle)).setText(model.getTitle());
-
-//            itemView.findViewById(R.id.leftButton).setOnClickListener(model.getLeftListener());
-//            itemView.findViewById(R.id.rightButton).setOnClickListener(model.getRightListener());
+        public void bind(Recipe model) {
+            ListView results = itemView.findViewById(R.id.search_results);
+            SearchView searchView = itemView.findViewById(R.id.search_bar);
+            if (!model.searchable()) {
+                searchView.setVisibility(View.GONE);
+                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), model.getRecipes()));
+            } else {
+                searchView.text;
+            }
+//            new GetRecipeImageRequest(String.valueOf(model.getRecipeID())).request((ImageView) itemView.findViewById(R.id.recipeImage), itemView.getContext());
+//            ((TextView) itemView.findViewById(R.id.recipeTitle)).setText(model.getRecipeName());
+//            ((TextView) itemView.findViewById(R.id.recipeDescription)).setText(model.getDescription());
+//            itemView.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         }
     }
 }
