@@ -61,7 +61,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/nutrientLimit"
+        android:id="@+id/calLimit"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/nutrientProgressBar"

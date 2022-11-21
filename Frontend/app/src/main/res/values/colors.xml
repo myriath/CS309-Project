@@ -5,6 +5,20 @@
     <color name="gray">#FF424242</color>
     <color name="lightgray">#C6C6C6</color>
 
+    <color name="carb">#C7F3BD</color>
+    <color name="carbon">#4B9C20</color>
+    <color name="protein">#FAD1D1</color>
+    <color name="proteinon">#B54242</color>
+    <color name="fat">#F6F1C2</color>
+    <color name="faton">#DFD41E</color>
+
+    <color name="darkcarb">#C7F3BD</color>
+    <color name="darkcarbon">#5E7E39</color>
+    <color name="darkprotein">#FAD1D1</color>
+    <color name="darkproteinon">#9A564D</color>
+    <color name="darkfat">#F6F1C2</color>
+    <color name="darkfaton">#B5A93A</color>
+
     <color name="white">#FFFFFFFF</color>
     <color name="white_medium">#99FFFFFF</color>
     <color name="white_disabled">#61FFFFFF</color>

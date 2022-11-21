@@ -18,6 +18,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.core.content.ContextCompat;
@@ -103,21 +104,18 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void spin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
     }
 
     /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
      *
-     * @param view View to find the spinner from.
+     * @param activity View to find the spinner from.
      */
-    public static void spin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+    public static void spin(Activity activity) {
+        spin(activity.getWindow().getDecorView());
     }
 
     /**
@@ -127,9 +125,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out));
     }
 
     /**
@@ -139,9 +136,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view, R.anim.fade_out));
     }
 
     /**
@@ -219,6 +215,9 @@ public class Util {
             GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
             MainActivity.setShoppingList(shoppingResponse.getShoppingList());
         }, global);
+
+        MainActivity.clearFoodLog();
+        // TODO: Get the food log
     }
 
     /**
