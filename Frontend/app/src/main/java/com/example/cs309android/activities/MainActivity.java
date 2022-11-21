@@ -57,6 +57,7 @@ import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
@@ -185,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
 
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
+        Constants.dp16 = Util.scalePixels(16);
+        Constants.dp8 = Util.scalePixels(8);
 
         global = ((GlobalClass) getApplicationContext());
         global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));

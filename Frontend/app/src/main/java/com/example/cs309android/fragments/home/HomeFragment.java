@@ -96,9 +96,7 @@ public class HomeFragment extends BaseFragment {
         HomeNutritionAdapter adapter1 = new HomeNutritionAdapter(models);
         nutritionPager.setAdapter(adapter1);
 
-        new TabLayoutMediator(nutritionTabs, nutritionPager, (tab, position) -> {
-
-        }).attach();
+        new TabLayoutMediator(nutritionTabs, nutritionPager, (tab, position) -> {}).attach();
 
         new GetUserFeedRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {

@@ -9,6 +9,15 @@ import static com.example.cs309android.BuildConfig.BASE_API_URL;
  */
 public class Constants {
     /**
+     * DP16 in pixels
+     */
+    public static float dp16;
+    /**
+     * DP8 in pixels
+     */
+    public static float dp8;
+
+    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
