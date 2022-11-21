@@ -1,5 +1,8 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.dp16;
+import static com.example.cs309android.util.Constants.dp8;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,17 +51,11 @@ public class RecipePageListAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(getContext(), R.layout.food_log_item, null);
+            convertView = View.inflate(getContext(), R.layout.home_item_model, null);
         }
 
-        TextView name = convertView.findViewById(R.id.log_item);
-        name.setText(items.get(position).getFoodName());
-
-        ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
-            return WindowInsetsCompat.CONSUMED;
-        });
+        TextView name = convertView.findViewById(R.id.recipeTitle);
+        name.setText(items.get(position).getRecipeName());
 
         return convertView;
     }

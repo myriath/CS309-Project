@@ -20,38 +20,6 @@ import com.example.cs309android.models.api.models.Recipe;
  */
 public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.ViewHolder> {
     /**
-     * Holds the list of nutrition cards
-     */
-    private Recipe[] pagerItems;
-
-    /**
-     * Public constructor
-     *
-     * @param pagerItems Items list to display in the pager
-     */
-    public RecipePageAdapter(Recipe[] pagerItems) {
-        this.pagerItems = pagerItems;
-    }
-
-    /**
-     * Getter for the list of tabs
-     *
-     * @return Models that make up the tabs in the TabLayout
-     */
-    public Recipe[] getPagerItems() {
-        return pagerItems;
-    }
-
-    /**
-     * Sets the list of the tabs
-     *
-     * @param items New list of nutrition cards
-     */
-    public void setItems(Recipe[] items) {
-        this.pagerItems = items;
-    }
-
-    /**
      * Creates a view holder for the TabLayout
      *
      * @param parent   Parent of the ViewHolder
@@ -72,7 +40,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(pagerItems[position]);
+        holder.bind(position);
     }
 
     /**
@@ -82,7 +50,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
      */
     @Override
     public int getItemCount() {
-        return pagerItems.length;
+        return 3;
     }
 
     /**
@@ -102,23 +70,40 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
         }
 
         /**
-         * Binds a model to the view
+         * Sets up the different tabs
          *
-         * @param model Model to bind to the view in this holder
+         * @param position Current tab number
          */
-        public void bind(Recipe model) {
+        public void bind(int position) {
+            // Array Lists for the results adapter should come from an api call
             ListView results = itemView.findViewById(R.id.search_results);
             SearchView searchView = itemView.findViewById(R.id.search_bar);
-            if (!model.searchable()) {
-                searchView.setVisibility(View.GONE);
-                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), model.getRecipes()));
-            } else {
-                searchView.text;
+            switch (position) {
+                case 0:
+                    // TODO: Get popular recipes
+//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+                    break;
+                case 1:
+                    // TODO: Get new recipes
+//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+                    break;
+                default:
+                    searchView.setVisibility(View.VISIBLE);
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            // TODO: search
+//                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            return false;
+                        }
+                    });
+                    break;
             }
-//            new GetRecipeImageRequest(String.valueOf(model.getRecipeID())).request((ImageView) itemView.findViewById(R.id.recipeImage), itemView.getContext());
-//            ((TextView) itemView.findViewById(R.id.recipeTitle)).setText(model.getRecipeName());
-//            ((TextView) itemView.findViewById(R.id.recipeDescription)).setText(model.getDescription());
-//            itemView.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         }
     }
 }
