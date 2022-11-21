@@ -3,6 +3,8 @@ package com.example.cs309android.activities.food;
 import static com.example.cs309android.models.USDA.Constants.Format;
 import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.dp16;
+import static com.example.cs309android.util.Constants.dp8;
 import static com.example.cs309android.util.Util.setSubtitle;
 
 import android.content.Intent;
@@ -48,15 +50,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public static final int CONTROL_ADD = 1;
 
     /**
-     * 16dp in pixels
-     */
-    private int dp16;
-    /**
-     * 8dp in pixels
-     */
-    private int dp8;
-
-    /**
      * Layout for displaying the food details
      */
     private LinearLayout detailsLayout;
@@ -74,9 +67,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dp16 = (int) Util.scalePixels(16);
-        dp8 = (int) Util.scalePixels(8);
 
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -175,7 +165,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         if (servingUnit != null) {
@@ -183,7 +173,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             subtitle.setText(String.format(Locale.getDefault(), "per %.02f %s serving", servingSize, servingUnit));
             subtitle.setTextSize(24f);
             subtitle.setEnabled(false);
-            subtitle.setPadding(dp16, dp8, dp16, dp8);
+            subtitle.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
             detailsLayout.addView(subtitle);
         }
 
@@ -192,10 +182,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight(dp16);
+        space.setMinimumHeight((int) dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -209,10 +199,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         // Micro nutrients
         // Body CardView
         cardView = new CardView(this);
-        cardView.setRadius(dp16);
+        cardView.setRadius((int) dp16);
         // Linear layout inside CardView with details
         layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -238,7 +228,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         // Macro nutrients
@@ -246,10 +236,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight(dp16);
+        space.setMinimumHeight((int) dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -314,7 +304,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.ingredients));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         // Body CardView
@@ -322,7 +312,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         TextView ingredients = new TextView(this);
         ingredients.setTextSize(20f);
-        ingredients.setPadding(dp16, dp16, dp16, dp16);
+        ingredients.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         ingredients.setText(ingredientsText);
         cardView.addView(ingredients);
         detailsLayout.addView(cardView);

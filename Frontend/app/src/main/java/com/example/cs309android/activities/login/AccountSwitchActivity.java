@@ -44,6 +44,7 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
         if (loggedOut) {
             toolbar.setNavigationIcon(null);
+            toolbar.setTitle("Select an account");
         } else {
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
