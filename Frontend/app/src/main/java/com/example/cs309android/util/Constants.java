@@ -145,9 +145,13 @@ public class Constants {
      */
     public static final String PARCEL_FOLLOWING = "following";
     /**
-     * Used in the account page
+     * Used in the account page and login page
      */
     public static final String PARCEL_USERNAME = "username";
+    /**
+     * Used in the login page to pass data to register
+     */
+    public static final String PARCEL_PASSWORD = "password";
     /**
      * Used in AccountListPage for transferring an array of usernames
      */

@@ -1,6 +1,8 @@
 package com.example.cs309android.activities.login;
 
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
 import static com.example.cs309android.util.Util.hideKeyboard;
 import static com.example.cs309android.util.Util.spin;
@@ -105,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(view1 -> {
             Intent intent = new Intent(this, RegisterActivity.class);
+            intent.putExtra(PARCEL_USERNAME, Objects.requireNonNull(usernameField.getEditText()).getText().toString());
+            intent.putExtra(PARCEL_PASSWORD, Objects.requireNonNull(passwordField.getEditText()).getText().toString());
             registerLauncher.launch(intent);
         });
     }
