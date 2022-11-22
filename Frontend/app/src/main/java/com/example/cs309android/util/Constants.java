@@ -61,6 +61,10 @@ public class Constants {
      */
     public static final int TOKEN_MAX_DEPTH = 5;
     /**
+     * Default callback for no particular use case
+     */
+    public static final int CALLBACK_DEFAULT = -1;
+    /**
      * Used to remove an item from a list
      */
     public static final int CALLBACK_REMOVE = 0;

@@ -3,7 +3,6 @@ package com.example.cs309android.fragments.account;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
-import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
-import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.util.Util;
 
 import java.util.Objects;
@@ -56,15 +54,7 @@ public class SettingsFragment extends BasePreferenceFragment {
 
         switchUserLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == CALLBACK_START_LOGIN) {
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean(PARCEL_BACK_ENABLED, true);
-                        callbackFragment.callback(CALLBACK_START_LOGIN, bundle);
-                    } else if (result.getResultCode() != Activity.RESULT_CANCELED) {
-                        callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
-                    }
-                }
+                result -> callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null)
         );
 
         // Switch user changes the logged in user
@@ -83,7 +73,6 @@ public class SettingsFragment extends BasePreferenceFragment {
             MainActivity.clearFoodLog();
             MainActivity.clearShoppingList();
             Util.logout(global, global.getUsername());
-//            callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
             callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
         });
