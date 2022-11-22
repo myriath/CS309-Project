@@ -1,6 +1,7 @@
 package com.example.cs309android.util;
 
 import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
@@ -13,19 +14,29 @@ import static com.example.cs309android.util.Constants.USERS_LATEST;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.account.AccountActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.interfaces.ErrorListener;
 import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
 import com.example.cs309android.models.api.request.users.LoginHashRequest;
 import com.example.cs309android.models.api.request.users.LoginTokenRequest;
@@ -33,6 +44,7 @@ import com.example.cs309android.models.api.request.users.RegenTokenRequest;
 import com.example.cs309android.models.api.request.users.RegisterRequest;
 import com.example.cs309android.models.api.request.users.SaltRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.models.api.response.users.SaltResponse;
@@ -63,6 +75,15 @@ public class Util {
     public static final Gson GSON = GSON_BUILDER.create();
 
     /**
+     * Bitmap drawable for the main button's closed state
+     */
+    public static BitmapDrawable mainButtonEdit;
+    /**
+     * Bitmap drawable for the main button's open state
+     */
+    public static BitmapDrawable mainButtonClose;
+
+    /**
      * Scalar defined by MainActivity
      * Scales pixels to DIPs
      */
@@ -85,21 +106,18 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void spin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
     }
 
     /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
      *
-     * @param view View to find the spinner from.
+     * @param activity View to find the spinner from.
      */
-    public static void spin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+    public static void spin(Activity activity) {
+        spin(activity.getWindow().getDecorView());
     }
 
     /**
@@ -109,9 +127,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out));
     }
 
     /**
@@ -121,9 +138,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view, R.anim.fade_out));
     }
 
     /**
@@ -163,6 +179,24 @@ public class Util {
     }
 
     /**
+     * Generates a BitmapDrawable from a vector drawable.
+     * This allows the drawables to be used for cross fade transitions
+     *
+     * @param context Context to get resources from
+     * @param id      R.drawable ID of the vector drawable
+     * @return BitmapDrawable for cross fade animations
+     */
+    public static BitmapDrawable bitmapDrawableFromVector(Context context, int id) {
+        Drawable drawable = ContextCompat.getDrawable(context, id);
+        if (drawable == null) return null;
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
+
+    /**
      * Sets variables necessary for app functions after a login
      * Also sets the preferences for a new token
      *
@@ -177,6 +211,15 @@ public class Util {
 
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
+
+        MainActivity.clearShoppingList();
+        new GetListRequest(token).request(response -> {
+            GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
+            MainActivity.setShoppingList(shoppingResponse.getShoppingList());
+        }, global);
+
+        MainActivity.clearFoodLog();
+        // TODO: Get the food log
     }
 
     /**

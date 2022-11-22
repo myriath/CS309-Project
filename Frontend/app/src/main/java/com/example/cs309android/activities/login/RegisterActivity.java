@@ -1,8 +1,11 @@
 package com.example.cs309android.activities.login;
 
+import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
 import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -38,6 +41,10 @@ public class RegisterActivity extends AppCompatActivity {
         TextInputLayout usernameField = findViewById(R.id.unameField);
         TextInputLayout emailField = findViewById(R.id.emailField);
         TextInputLayout passwordField = findViewById(R.id.passwordField);
+
+        Intent input = getIntent();
+        Objects.requireNonNull(usernameField.getEditText()).setText(input.getStringExtra(PARCEL_USERNAME));
+        Objects.requireNonNull(passwordField.getEditText()).setText(input.getStringExtra(PARCEL_PASSWORD));
 
         Button registerButton = findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(view1 -> {

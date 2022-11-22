@@ -3,14 +3,14 @@ package com.example.cs309android.models.api.request;
 import static com.example.cs309android.util.Constants.IMAGE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
-import com.example.cs309android.models.api.request.abstraction.GetImageRequest;
+import com.example.cs309android.models.api.request.abstraction.ImageRequest;
 
 /**
  * Gets an image by it's image id
  *
  * @author Mitch Hudson
  */
-public class GetImageByIdRequest extends GetImageRequest {
+public class GetImageByIdRequest extends ImageRequest {
     /**
      * Image id
      */

@@ -1,5 +1,6 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.CALLBACK_DEFAULT;
 import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
 import static com.example.cs309android.util.Constants.PARCEL_ITEM_POSITION;
 
@@ -67,10 +68,14 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
             convertView = View.inflate(parent.getContext(), R.layout.adapter_logged_in, null);
         }
 
+        if (username.equals(global.getUsername())) {
+            convertView.findViewById(R.id.selected).setVisibility(View.VISIBLE);
+        }
+
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Util.switchUser(global, username);
-            Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(0, null), System.out::println, System.out::println);
+            Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(CALLBACK_DEFAULT, null), System.out::println, System.out::println);
         });
 
         convertView.findViewById(R.id.remove).setOnClickListener(view -> {
@@ -84,7 +89,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
         usernameView.setText(username);
 
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
-        new GetProfilePictureRequest(username).request(profilePicture::setImageBitmap, getContext());
+        new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
         return convertView;
     }

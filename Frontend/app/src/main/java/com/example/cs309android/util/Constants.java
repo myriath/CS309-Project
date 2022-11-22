@@ -9,6 +9,15 @@ import static com.example.cs309android.BuildConfig.BASE_API_URL;
  */
 public class Constants {
     /**
+     * DP16 in pixels
+     */
+    public static float dp16;
+    /**
+     * DP8 in pixels
+     */
+    public static float dp8;
+
+    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
@@ -35,13 +44,30 @@ public class Constants {
      */
     public static final String USERS_LATEST = "latest";
     /**
+     * Used to target the breakfast food log
+     */
+    public static final int BREAKFAST_LOG = 0;
+    /**
+     * Used to target the lunch food log
+     */
+    public static final int LUNCH_LOG = 1;
+    /**
+     * Used to target the dinner log
+     */
+    public static final int DINNER_LOG = 2;
+
+    /**
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
     /**
-     * Tells MainActivity to close the login page
+     * Default callback for no particular use case
      */
-    public static final int CALLBACK_CLOSE_LOGIN = 0;
+    public static final int CALLBACK_DEFAULT = -1;
+    /**
+     * Used to remove an item from a list
+     */
+    public static final int CALLBACK_REMOVE = 0;
     /**
      * Tells MainActivity to open the login page
      */
@@ -70,10 +96,6 @@ public class Constants {
      * Used to open the account page
      */
     public static final int CALLBACK_OPEN_ACCOUNT = 7;
-    /**
-     * Used to remove an item from a list
-     */
-    public static final int CALLBACK_REMOVE = 8;
     /**
      * Various intents tell the app what to do when certain things are done.
      */
@@ -123,9 +145,13 @@ public class Constants {
      */
     public static final String PARCEL_FOLLOWING = "following";
     /**
-     * Used in the account page
+     * Used in the account page and login page
      */
     public static final String PARCEL_USERNAME = "username";
+    /**
+     * Used in the login page to pass data to register
+     */
+    public static final String PARCEL_PASSWORD = "password";
     /**
      * Used in AccountListPage for transferring an array of usernames
      */
