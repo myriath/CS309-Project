@@ -134,6 +134,25 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private static ArrayList<FoodLogItem> dinner;
 
     /**
+     * Public constructor
+     * Initializes arraylists if they are null
+     */
+    public MainActivity() {
+        if (shoppingListItems == null) {
+            shoppingListItems = new ArrayList<>();
+        }
+        if (breakfast == null) {
+            breakfast = new ArrayList<>();
+        }
+        if (lunch == null) {
+            lunch = new ArrayList<>();
+        }
+        if (dinner == null) {
+            dinner = new ArrayList<>();
+        }
+    }
+
+    /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
      */
     @Override
@@ -168,19 +187,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
-        if (shoppingListItems == null) {
-            shoppingListItems = new ArrayList<>();
-        }
-        if (breakfast == null) {
-            breakfast = new ArrayList<>();
-        }
-        if (lunch == null) {
-            lunch = new ArrayList<>();
-        }
-        if (dinner == null) {
-            dinner = new ArrayList<>();
-        }
 
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
