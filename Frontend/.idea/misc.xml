@@ -94,10 +94,12 @@
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add_log.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_account.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_switch_user.xml" value="0.25" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/adapter_logged_in.xml" value="0.6" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_account.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/home_item_model.xml" value="0.3" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/pager_list.xml" value="0.264" />

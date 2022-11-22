@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,16 +21,22 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.activities.account.AccountEditActivity;
 import com.example.cs309android.activities.account.AccountListActivity;
 import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
 import com.example.cs309android.models.api.request.social.GetFollowersRequest;
 import com.example.cs309android.models.api.request.social.GetFollowingRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -80,6 +87,14 @@ public class AccountFragment extends BaseFragment {
                     .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
             ((TextView) view.findViewById(R.id.bioTextView))
                     .setText(global.getBio());
+        }, requireContext());
+
+        new GetRecipesRequest(global.getUsername()).request(response -> {
+            GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
+            if (postsResponse.getItems() != null && postsResponse.getItems().length > 0) {
+                view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+                ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(getContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+            }
         }, requireContext());
     }
 

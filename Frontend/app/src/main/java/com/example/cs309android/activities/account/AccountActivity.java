@@ -20,7 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.adapters.FeedAdapter;
+import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
@@ -159,7 +159,10 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetRecipesRequest(username).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+            if (postsResponse.getItems() != null && postsResponse.getItems().length > 0) {
+                findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+                ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+            }
         }, AccountActivity.this);
     }
 
