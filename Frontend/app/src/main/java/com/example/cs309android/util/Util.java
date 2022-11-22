@@ -1,6 +1,7 @@
 package com.example.cs309android.util;
 
 import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
@@ -29,6 +30,7 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.account.AccountActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.interfaces.ErrorListener;
 import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;

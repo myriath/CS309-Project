@@ -448,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public void callback(int op, Bundle bundle) {
         switch (op) {
             case (CALLBACK_START_LOGIN): {
+                callback(CALLBACK_MOVE_TO_HOME, null);
                 boolean backEnabled = false;
                 if (bundle != null) {
                     backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);
@@ -509,8 +510,14 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginActivity(boolean backEnabled) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        Intent intent;
+        if (global.getUsers().size() > 1) {
+            intent = new Intent(this, AccountSwitchActivity.class);
+            intent.putExtra(PARCEL_LOGGED_OUT, !backEnabled);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        }
         startActivity(intent);
     }
 

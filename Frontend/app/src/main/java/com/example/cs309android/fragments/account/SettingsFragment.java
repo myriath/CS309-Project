@@ -3,6 +3,7 @@ package com.example.cs309android.fragments.account;
 import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -69,9 +70,21 @@ public class SettingsFragment extends BasePreferenceFragment {
         // Switch user changes the logged in user
         Preference switchUser = Objects.requireNonNull(findPreference("switch_user"));
         switchUser.setOnPreferenceClickListener(preference -> {
+            MainActivity.clearFoodLog();
             MainActivity.clearShoppingList();
             Intent intent = new Intent(getContext(), AccountSwitchActivity.class);
             switchUserLauncher.launch(intent);
+            return true;
+        });
+
+        // Logs out of the current account and prompts a login
+        Preference logout = Objects.requireNonNull(findPreference("log_out"));
+        logout.setOnPreferenceClickListener(preference -> {
+            MainActivity.clearFoodLog();
+            MainActivity.clearShoppingList();
+            Util.logout(global, global.getUsername());
+//            callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
+            callbackFragment.callback(CALLBACK_START_LOGIN, null);
             return true;
         });
     }
