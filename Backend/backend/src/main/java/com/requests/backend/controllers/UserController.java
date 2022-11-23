@@ -185,11 +185,13 @@ public class UserController {
         LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
+        Collection<User> users = userRepository.queryGetUserByUsername(username);
+        Collection<User> users2 = userRepository.queryGetUserByEmail(email);
 
         // If the token exists in the table, return RESULT_REGEN_TOKEN,
-        if (tokenQuery.length > 0) {
-            res.setResult(RESULT_REGEN_TOKEN);
-        }
+        if (tokenQuery.length > 0) res.setResult(RESULT_REGEN_TOKEN);
+        else if (!users.isEmpty()) res.setResult(RESULT_ERROR_USERNAME_TAKEN);
+        else if (!users2.isEmpty()) res.setResult(RESULT_ERROR_EMAIL_TAKEN);
         else {
             // If the token does not already exist, try to add the user to user table
             try {
