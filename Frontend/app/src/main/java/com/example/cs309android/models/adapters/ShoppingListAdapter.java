@@ -126,10 +126,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() == Constants.RESULT_OK) {
                     if (MainActivity.removeShoppingItem(position)) {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
                         view1.getRootView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                    } else {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
                     }
                     ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
                 } else {

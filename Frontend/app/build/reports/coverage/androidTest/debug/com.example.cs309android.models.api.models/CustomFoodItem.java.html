@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomFoodItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.api.models</a> &gt; <span class="el_source">CustomFoodItem.java</span></div><h1>CustomFoodItem.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.api.models;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * Simple food item used for displaying and moving data in the app
+ *
+ * @author Mitch Hudson
+ */
+public class CustomFoodItem implements Parcelable {
+    /**
+     * Parcelable required CREATOR object
+     */
+<span class="nc" id="L17">    public static final Creator&lt;CustomFoodItem&gt; CREATOR = new Creator&lt;CustomFoodItem&gt;() {</span>
+        @Override
+        public CustomFoodItem createFromParcel(Parcel in) {
+<span class="nc" id="L20">            return new CustomFoodItem(in);</span>
+        }
+
+        @Override
+        public CustomFoodItem[] newArray(int size) {
+<span class="nc" id="L25">            return new CustomFoodItem[size];</span>
+        }
+    };
+    /**
+     * Database id for the custom foods table
+     */
+    @Expose
+    private final int dbId;
+    /**
+     * Custom item name
+     */
+    @Expose
+    private final String name;
+    /**
+     * Custom item ingredients
+     */
+    @Expose
+    private final String ingredients;
+    /**
+     * Custom item calories
+     */
+    @Expose
+    private final float calories;
+    /**
+     * Custom item fat
+     */
+    @Expose
+    private final float fat;
+    /**
+     * Custom item carbohydrates
+     */
+    @Expose
+    private final float carbs;
+    /**
+     * Custom item protein
+     */
+    @Expose
+    private final float protein;
+    /**
+     * True if the item should appear with strikeout on the shopping list
+     */
+    @Expose
+    private boolean stricken;
+
+    /**
+     * Public constructor
+     *
+     * @param dbId        ID for the custom item
+     * @param name        Name of the item
+     * @param ingredients Ingredients of the item
+     * @param calories    Calories in the item
+     * @param fat         Fat in the item (grams)
+     * @param carbs       Carbohydrates in the item (grams)
+     * @param protein     Protein in the item (grams)
+     */
+<span class="nc" id="L80">    public CustomFoodItem(int dbId, String name, String ingredients, float calories, float fat, float carbs, float protein) {</span>
+<span class="nc" id="L81">        this.dbId = dbId;</span>
+<span class="nc" id="L82">        this.name = name;</span>
+<span class="nc" id="L83">        this.ingredients = ingredients;</span>
+<span class="nc" id="L84">        this.calories = calories;</span>
+<span class="nc" id="L85">        this.fat = fat;</span>
+<span class="nc" id="L86">        this.carbs = carbs;</span>
+<span class="nc" id="L87">        this.protein = protein;</span>
+<span class="nc" id="L88">        stricken = false;</span>
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Public constructor
+     *
+     * @param dbId        ID for the custom item
+     * @param name        Name of the item
+     * @param ingredients Ingredients of the item
+     * @param calories    Calories in the item
+     * @param fat         Fat in the item (grams)
+     * @param carbs       Carbohydrates in the item (grams)
+     * @param protein     Protein in the item (grams)
+     * @param stricken    True if the item is stricken on the grocery list
+     */
+<span class="nc" id="L103">    public CustomFoodItem(int dbId, String name, String ingredients, float calories, float fat, float carbs, float protein, boolean stricken) {</span>
+<span class="nc" id="L104">        this.dbId = dbId;</span>
+<span class="nc" id="L105">        this.name = name;</span>
+<span class="nc" id="L106">        this.ingredients = ingredients;</span>
+<span class="nc" id="L107">        this.calories = calories;</span>
+<span class="nc" id="L108">        this.fat = fat;</span>
+<span class="nc" id="L109">        this.carbs = carbs;</span>
+<span class="nc" id="L110">        this.protein = protein;</span>
+<span class="nc" id="L111">        this.stricken = stricken;</span>
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Constructor from parcel
+     *
+     * @param in Parcel to unpack
+     */
+<span class="nc" id="L119">    protected CustomFoodItem(Parcel in) {</span>
+<span class="nc" id="L120">        dbId = in.readInt();</span>
+<span class="nc" id="L121">        name = in.readString();</span>
+<span class="nc" id="L122">        ingredients = in.readString();</span>
+<span class="nc" id="L123">        calories = in.readFloat();</span>
+<span class="nc" id="L124">        fat = in.readFloat();</span>
+<span class="nc" id="L125">        carbs = in.readFloat();</span>
+<span class="nc" id="L126">        protein = in.readFloat();</span>
+<span class="nc" id="L127">        stricken = in.readBoolean();</span>
+<span class="nc" id="L128">    }</span>
+
+    /**
+     * Getter for the custom id
+     *
+     * @return item id
+     */
+    public int getDbId() {
+<span class="nc" id="L136">        return dbId;</span>
+    }
+
+    /**
+     * Getter for the description
+     *
+     * @return item description / title
+     */
+    public String getName() {
+<span class="nc" id="L145">        return name;</span>
+    }
+
+    /**
+     * Getter for the stricken boolean
+     *
+     * @return true if this item should be rendered with strikeout
+     */
+    public boolean isStricken() {
+<span class="nc" id="L154">        return stricken;</span>
+    }
+
+    /**
+     * Setter for the stricken boolean
+     *
+     * @param stricken true if this item should be rendered with strikeout
+     */
+    public void setStricken(boolean stricken) {
+<span class="nc" id="L163">        this.stricken = stricken;</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
+     * Getter for the ingredients
+     *
+     * @return ingredients
+     */
+    public String getIngredients() {
+<span class="nc" id="L172">        return ingredients;</span>
+    }
+
+    /**
+     * Getter for the calories
+     *
+     * @return calories
+     */
+    public float getCalories() {
+<span class="nc" id="L181">        return calories;</span>
+    }
+
+    /**
+     * Getter for the fat
+     *
+     * @return fat
+     */
+    public float getFat() {
+<span class="nc" id="L190">        return fat;</span>
+    }
+
+    /**
+     * Getter for the carbs
+     *
+     * @return carbs
+     */
+    public float getCarbs() {
+<span class="nc" id="L199">        return carbs;</span>
+    }
+
+    /**
+     * Getter for the protein
+     *
+     * @return protein
+     */
+    public float getProtein() {
+<span class="nc" id="L208">        return protein;</span>
+    }
+
+    /**
+     * Parcelable required method
+     *
+     * @return 0
+     */
+    @Override
+    public int describeContents() {
+<span class="nc" id="L218">        return 0;</span>
+    }
+
+    /**
+     * Adds this object to a parcel
+     *
+     * @param parcel parcel to add this object to
+     * @param i      flags
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+<span class="nc" id="L229">        parcel.writeInt(dbId);</span>
+<span class="nc" id="L230">        parcel.writeString(name);</span>
+<span class="nc" id="L231">        parcel.writeString(ingredients);</span>
+<span class="nc" id="L232">        parcel.writeFloat(calories);</span>
+<span class="nc" id="L233">        parcel.writeFloat(fat);</span>
+<span class="nc" id="L234">        parcel.writeFloat(carbs);</span>
+<span class="nc" id="L235">        parcel.writeFloat(protein);</span>
+<span class="nc" id="L236">        parcel.writeBoolean(stricken);</span>
+<span class="nc" id="L237">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

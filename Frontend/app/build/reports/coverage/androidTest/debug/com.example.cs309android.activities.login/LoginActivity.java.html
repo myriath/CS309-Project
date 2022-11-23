@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.login</a> &gt; <span class="el_source">LoginActivity.java</span></div><h1>LoginActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.login;
+
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import static com.example.cs309android.util.Util.hideKeyboard;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
+
+/**
+ * Login Activity handles logging into a new account
+ *
+ * @author Mitch Hudson
+ */
+<span class="fc" id="L32">public class LoginActivity extends AppCompatActivity {</span>
+    /**
+     * Password input field
+     */
+    private TextInputLayout passwordField;
+    /**
+     * Launcher for the register page
+     */
+    private ActivityResultLauncher&lt;Intent&gt; registerLauncher;
+
+    /**
+     * True if the back button should allow the user to return to the previous page
+     */
+    private boolean backEnabled;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L49">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L50">        setContentView(R.layout.activity_login);</span>
+
+<span class="fc" id="L52">        backEnabled = getIntent().getBooleanExtra(PARCEL_BACK_ENABLED, true);</span>
+
+<span class="fc" id="L54">        registerLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                    if (result.getResultCode() == RESULT_OK) {</span>
+<span class="nc" id="L58">                        setResult(RESULT_OK);</span>
+<span class="nc" id="L59">                        finish();</span>
+                    }
+<span class="nc" id="L61">                }</span>
+        );
+
+<span class="fc" id="L64">        TextInputLayout usernameField = findViewById(R.id.unameField);</span>
+<span class="fc" id="L65">        passwordField = findViewById(R.id.passwordField);</span>
+
+<span class="fc" id="L67">        Button loginButton = findViewById(R.id.buttonLogin);</span>
+<span class="fc" id="L68">        Button registerButton = findViewById(R.id.buttonRegister);</span>
+
+<span class="fc" id="L70">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="fc" id="L72">        loginButton.setOnClickListener(view1 -&gt; {</span>
+<span class="nc" id="L73">            hideKeyboard(view1, this);</span>
+
+<span class="nc" id="L75">            String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();</span>
+<span class="nc" id="L76">            String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();</span>
+<span class="nc" id="L77">            usernameField.setError(null);</span>
+<span class="nc" id="L78">            passwordField.setError(null);</span>
+
+            // Checks for empty fields
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (unm.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L82">                usernameField.setError(&quot;Username can't be empty&quot;);</span>
+<span class="nc" id="L83">                usernameField.requestFocus();</span>
+<span class="nc" id="L84">                return;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            } else if (pwd.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L86">                passwordField.setError(&quot;Password can't be empty&quot;);</span>
+<span class="nc" id="L87">                passwordField.requestFocus();</span>
+<span class="nc" id="L88">                return;</span>
+            }
+
+<span class="nc" id="L91">            spin(this);</span>
+<span class="nc" id="L92">            Util.loginAttempt(global, unm, pwd, () -&gt; {</span>
+<span class="nc" id="L93">                unSpin(this);</span>
+<span class="nc" id="L94">                setResult(RESULT_OK);</span>
+<span class="nc" id="L95">                finish();</span>
+<span class="nc" id="L96">            }, result -&gt; {</span>
+<span class="nc" id="L97">                unSpin(this);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (result == RESULT_ERROR_USER_HASH_MISMATCH) {</span>
+<span class="nc" id="L99">                    passwordField.setError(&quot;Username / Password mismatch&quot;);</span>
+                } else {
+<span class="nc" id="L101">                    Toaster.toastShort(&quot;Unexpected error&quot;, this);</span>
+                }
+<span class="nc" id="L103">            }, error -&gt; {</span>
+<span class="nc" id="L104">                unSpin(this);</span>
+<span class="nc" id="L105">            });</span>
+<span class="nc" id="L106">        });</span>
+
+<span class="fc" id="L108">        registerButton.setOnClickListener(view1 -&gt; {</span>
+<span class="fc" id="L109">            Intent intent = new Intent(this, RegisterActivity.class);</span>
+<span class="fc" id="L110">            intent.putExtra(PARCEL_USERNAME, Objects.requireNonNull(usernameField.getEditText()).getText().toString());</span>
+<span class="fc" id="L111">            intent.putExtra(PARCEL_PASSWORD, Objects.requireNonNull(passwordField.getEditText()).getText().toString());</span>
+<span class="fc" id="L112">            registerLauncher.launch(intent);</span>
+<span class="fc" id="L113">        });</span>
+<span class="fc" id="L114">    }</span>
+
+    @Override
+    public void onBackPressed() {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (backEnabled) {</span>
+<span class="nc" id="L119">            super.onBackPressed();</span>
+        }
+<span class="nc" id="L121">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

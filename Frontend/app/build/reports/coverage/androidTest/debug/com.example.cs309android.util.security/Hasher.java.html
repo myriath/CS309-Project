@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Hasher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.util.security</a> &gt; <span class="el_source">Hasher.java</span></div><h1>Hasher.java</h1><pre class="source lang-java linenums">package com.example.cs309android.util.security;
+
+import com.example.cs309android.models.Hash;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Random;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+/**
+ * Static utility class designed to streamline the secure generation of
+ * hashes from plaintext passwords.
+ *
+ * @author Mitch Hudson
+ */
+public class Hasher {
+    /**
+     * Static final SecureRandom object. Used for generating salts
+     */
+<span class="fc" id="L26">    private static final Random RANDOM = new SecureRandom();</span>
+    /**
+     * Number of iterations to hash passwords before returning the final hash.
+     */
+    private static final int ITERATIONS = 1000;
+    /**
+     * Number of bits of the generated hash.
+     */
+    private static final int KEY_LENGTH = 256;
+    /**
+     * Number of bytes for the salt.
+     */
+    private static final int SALT_LENGTH = 16;
+
+    /**
+     * Base64 url encoder.
+     * Encodes to a url-safe base64 string
+     */
+<span class="fc" id="L44">    public static final Base64.Encoder B64_URL_ENCODER = Base64.getUrlEncoder();</span>
+    /**
+     * Base64 url decoder.
+     * Decodes from an url-safe base64 string
+     */
+<span class="fc" id="L49">    public static final Base64.Decoder B64_URL_DECODER = Base64.getUrlDecoder();</span>
+
+    /**
+     * SHA256 message digest
+     */
+    public static final MessageDigest SHA_256;
+    static {
+        try {
+<span class="fc" id="L57">            SHA_256 = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="nc" id="L58">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L59">            throw new RuntimeException(e);</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Static util class
+     */
+    private Hasher() {
+    }
+
+    /**
+     * Randomly generates a 16 byte salt using the SecureRandom java class
+     * @return 16 byte array of the generated salt
+     */
+    public static byte[] generateSalt() {
+<span class="fc" id="L74">        byte[] salt = new byte[SALT_LENGTH];</span>
+<span class="fc" id="L75">        RANDOM.nextBytes(salt);</span>
+<span class="fc" id="L76">        return salt;</span>
+    }
+
+    /**
+     * Hashes the given password and salt with PBEKeySpec
+     * @param plaintext Password to hash
+     * @param slt       Randomly generated salt to use for hash
+     * @return byte[] of salted hashed password
+     */
+    public static byte[] hash(char[] plaintext, byte[] slt) {
+<span class="fc" id="L86">        PBEKeySpec spec = new PBEKeySpec(plaintext, slt, ITERATIONS, KEY_LENGTH);</span>
+<span class="fc" id="L87">        Arrays.fill(plaintext, Character.MIN_VALUE);</span>
+        try {
+<span class="fc" id="L89">            SecretKeyFactory factory = SecretKeyFactory.getInstance(&quot;PBKDF2WithHmacSHA256&quot;);</span>
+<span class="fc" id="L90">            return factory.generateSecret(spec).getEncoded();</span>
+<span class="nc" id="L91">        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {</span>
+<span class="nc" id="L92">            throw new AssertionError(&quot;Error while generating key: &quot; + e.getMessage());</span>
+        } finally {
+<span class="fc" id="L94">            spec.clearPassword();</span>
+        }
+    }
+
+    /**
+     * Generates a new random token (32 chars / 24 bytes)
+     * @return new token
+     */
+    public static String genToken() {
+<span class="fc" id="L103">        byte[] randomBytes = new byte[24];</span>
+<span class="fc" id="L104">        RANDOM.nextBytes(randomBytes);</span>
+<span class="fc" id="L105">        return B64_URL_ENCODER.encodeToString(randomBytes);</span>
+    }
+
+    /**
+     * Encodes the given bytes into base64
+     * @return B64 encoded string
+     */
+    public static String getEncoded(byte[] bytes) {
+<span class="fc" id="L113">        return B64_URL_ENCODER.encodeToString(bytes).trim();</span>
+    }
+
+    /**
+     * Generates a new hash from a random salt and the given plaintext
+     * @param plaintext Plaintext to hash
+     * @return {@link Hash} object containing the salt used and the hashed value
+     */
+    public static Hash generateNewHash(char[] plaintext) {
+<span class="fc" id="L122">        byte[] salt = generateSalt();</span>
+<span class="fc" id="L123">        byte[] hash = hash(plaintext, salt);</span>
+
+<span class="fc" id="L125">        return new Hash(salt, hash);</span>
+    }
+
+    /**
+     * Puts a simple hash on top of the encoded data.
+     *
+     * @param b64 Base64 encoded string
+     * @return Base64 encoded string.
+     */
+    public static String sha256(String b64) {
+<span class="nc" id="L135">        return B64_URL_ENCODER.encodeToString(SHA_256.digest(B64_URL_DECODER.decode(b64.trim()))).trim();</span>
+    }
+
+    /**
+     * Puts a simple hash on top of the data.
+     *
+     * @param in Plaintext string
+     * @return Base64 encoded string.
+     */
+    public static String sha256plaintext(String in) {
+<span class="fc" id="L145">        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes())).trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
