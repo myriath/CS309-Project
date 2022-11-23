@@ -14,6 +14,7 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.cs309android.GlobalClass;
+import com.example.cs309android.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.hamcrest.Description;
@@ -69,5 +70,16 @@ public class TestingUtil {
      */
     public static GlobalClass getGlobal() {
         return (GlobalClass) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
+    }
+
+    /**
+     * Ensures the app has a valid user to test with before running tests
+     */
+    public static void checkLogin() throws InterruptedException {
+        GlobalClass global = getGlobal();
+        if (global.getUsername() == null) {
+            Util.loginAttempt(global, "apple", "apple", () -> {}, result -> {}, error -> {});
+        }
+        Thread.sleep(2000);
     }
 }
