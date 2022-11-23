@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodUpdateLog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">FoodUpdateLog.java</span></div><h1>FoodUpdateLog.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Food Update Log model
+ *
+ * @author Mitch Hudson
+ */
+public class FoodUpdateLog {
+    /**
+     * FDC id
+     */
+    @Expose
+    private final int fdcId;
+    /**
+     * Available date
+     */
+    @Expose
+    private final String availableDate;
+    /**
+     * Brand owner
+     */
+    @Expose
+    private final String brandOwner;
+    /**
+     * Data source
+     */
+    @Expose
+    private final String dataSource;
+    /**
+     * Data type
+     */
+    @Expose
+    private final String dataType;
+    /**
+     * UPC code?
+     */
+    @Expose
+    private final String gtinUpc;
+    /**
+     * Household serving full text
+     */
+    @Expose
+    private final String householdServingFullText;
+    /**
+     * Ingredients
+     */
+    @Expose
+    private final String ingredients;
+    /**
+     * Modified date
+     */
+    @Expose
+    private final String modifiedDate;
+    /**
+     * Publication date
+     */
+    @Expose
+    private final String publicationDate;
+    /**
+     * Serving size
+     */
+    @Expose
+    private final double servingSize;
+    /**
+     * Unit for the serving size
+     */
+    @Expose
+    private final String servingSizeUnit;
+    /**
+     * Food category
+     */
+    @Expose
+    private final String brandedFoodCategory;
+    /**
+     * Changes
+     */
+    @Expose
+    private final String changes;
+    /**
+     * Attributes
+     */
+    @Expose
+    private final FoodAttribute[] foodAttributes;
+
+    /**
+     * Public constructor
+     *
+     * @param fdcId                    FDC id
+     * @param availableDate            date made available
+     * @param brandOwner               brand owner
+     * @param dataSource               data source
+     * @param dataType                 data type
+     * @param gtinUpc                  gtin upc
+     * @param householdServingFullText household serving full text
+     * @param ingredients              ingredients list from label
+     * @param modifiedDate             date last modified
+     * @param publicationDate          publication date
+     * @param servingSize              serving size
+     * @param servingSizeUnit          unit for the serving size
+     * @param brandedFoodCategory      food category
+     * @param changes                  changes
+     * @param foodAttributes           food attributes
+     */
+<span class="nc" id="L106">    public FoodUpdateLog(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, double servingSize, String servingSizeUnit, String brandedFoodCategory, String changes, FoodAttribute[] foodAttributes) {</span>
+<span class="nc" id="L107">        this.fdcId = fdcId;</span>
+<span class="nc" id="L108">        this.availableDate = availableDate;</span>
+<span class="nc" id="L109">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L110">        this.dataSource = dataSource;</span>
+<span class="nc" id="L111">        this.dataType = dataType;</span>
+<span class="nc" id="L112">        this.gtinUpc = gtinUpc;</span>
+<span class="nc" id="L113">        this.householdServingFullText = householdServingFullText;</span>
+<span class="nc" id="L114">        this.ingredients = ingredients;</span>
+<span class="nc" id="L115">        this.modifiedDate = modifiedDate;</span>
+<span class="nc" id="L116">        this.publicationDate = publicationDate;</span>
+<span class="nc" id="L117">        this.servingSize = servingSize;</span>
+<span class="nc" id="L118">        this.servingSizeUnit = servingSizeUnit;</span>
+<span class="nc" id="L119">        this.brandedFoodCategory = brandedFoodCategory;</span>
+<span class="nc" id="L120">        this.changes = changes;</span>
+<span class="nc" id="L121">        this.foodAttributes = foodAttributes;</span>
+<span class="nc" id="L122">    }</span>
+
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
+    public int getFdcId() {
+<span class="nc" id="L130">        return fdcId;</span>
+    }
+
+    /**
+     * Getter for the available date
+     *
+     * @return available date
+     */
+    public String getAvailableDate() {
+<span class="nc" id="L139">        return availableDate;</span>
+    }
+
+    /**
+     * Getter for the brand owner
+     *
+     * @return brand owner
+     */
+    public String getBrandOwner() {
+<span class="nc" id="L148">        return brandOwner;</span>
+    }
+
+    /**
+     * Getter for the data source
+     *
+     * @return data source
+     */
+    public String getDataSource() {
+<span class="nc" id="L157">        return dataSource;</span>
+    }
+
+    /**
+     * Getter for the data type
+     *
+     * @return data type
+     */
+    public String getDataType() {
+<span class="nc" id="L166">        return dataType;</span>
+    }
+
+    /**
+     * Getter for the upc code?
+     *
+     * @return upc code?
+     */
+    public String getGtinUpc() {
+<span class="nc" id="L175">        return gtinUpc;</span>
+    }
+
+    /**
+     * Getter for the household serving size text
+     *
+     * @return serving size text
+     */
+    public String getHouseholdServingFullText() {
+<span class="nc" id="L184">        return householdServingFullText;</span>
+    }
+
+    /**
+     * Getter for the ingredients
+     *
+     * @return ingredients from the label
+     */
+    public String getIngredients() {
+<span class="nc" id="L193">        return ingredients;</span>
+    }
+
+    /**
+     * Getter for the date last modified
+     *
+     * @return date last modified
+     */
+    public String getModifiedDate() {
+<span class="nc" id="L202">        return modifiedDate;</span>
+    }
+
+    /**
+     * Getter for the publication date
+     *
+     * @return publication date
+     */
+    public String getPublicationDate() {
+<span class="nc" id="L211">        return publicationDate;</span>
+    }
+
+    /**
+     * Getter for the serving size
+     *
+     * @return serving size
+     */
+    public double getServingSize() {
+<span class="nc" id="L220">        return servingSize;</span>
+    }
+
+    /**
+     * Getter for the serving size unit
+     *
+     * @return serving size unit
+     */
+    public String getServingSizeUnit() {
+<span class="nc" id="L229">        return servingSizeUnit;</span>
+    }
+
+    /**
+     * Getter for the branded food category
+     *
+     * @return food category
+     */
+    public String getBrandedFoodCategory() {
+<span class="nc" id="L238">        return brandedFoodCategory;</span>
+    }
+
+    /**
+     * Getter for the changes
+     *
+     * @return changes
+     */
+    public String getChanges() {
+<span class="nc" id="L247">        return changes;</span>
+    }
+
+    /**
+     * Getter for the food attributes
+     *
+     * @return food attributes
+     */
+    public FoodAttribute[] getFoodAttributes() {
+<span class="nc" id="L256">        return foodAttributes;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

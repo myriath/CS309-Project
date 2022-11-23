@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InputFoodSurvey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">InputFoodSurvey.java</span></div><h1>InputFoodSurvey.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Input Food Survey model
+ *
+ * @author Mitch Hudson
+ */
+public class InputFoodSurvey {
+    /**
+     * Survey id
+     */
+    @Expose
+    private final int id;
+    /**
+     * Amount
+     */
+    @Expose
+    private final float amount;
+    /**
+     * Food description
+     */
+    @Expose
+    private final String foodDescription;
+    /**
+     * Ingredient code
+     */
+    @Expose
+    private final int ingredientCode;
+    /**
+     * Ingredient description
+     */
+    @Expose
+    private final String ingredientDescription;
+    /**
+     * Ingredient weight
+     */
+    @Expose
+    private final float ingredientWeight;
+    /**
+     * Portion code
+     */
+    @Expose
+    private final String portionCode;
+    /**
+     * Portion description
+     */
+    @Expose
+    private final String portionDescription;
+    /**
+     * Sequence number
+     */
+    @Expose
+    private final int sequenceNumber;
+    /**
+     * Survey flag
+     */
+    @Expose
+    private final int surveyFlag;
+    /**
+     * Unit
+     */
+    @Expose
+    private final String unit;
+    /**
+     * Input food
+     */
+    @Expose
+    private final SurveyFoodItem inputFood;
+    /**
+     * Retention factor
+     */
+    @Expose
+    private final RetentionFactor retentionFactor;
+
+    /**
+     * Public constructor
+     *
+     * @param id                    survey id
+     * @param amount                amount
+     * @param foodDescription       food description
+     * @param ingredientCode        ingredient code
+     * @param ingredientDescription ingredient description
+     * @param ingredientWeight      ingredient weight
+     * @param portionCode           portion code
+     * @param portionDescription    portion description
+     * @param sequenceNumber        sequence number
+     * @param surveyFlag            survey flag
+     * @param unit                  unit
+     * @param inputFood             input food
+     * @param retentionFactor       retention factor
+     */
+<span class="nc" id="L94">    public InputFoodSurvey(int id, float amount, String foodDescription, int ingredientCode, String ingredientDescription, float ingredientWeight, String portionCode, String portionDescription, int sequenceNumber, int surveyFlag, String unit, SurveyFoodItem inputFood, RetentionFactor retentionFactor) {</span>
+<span class="nc" id="L95">        this.id = id;</span>
+<span class="nc" id="L96">        this.amount = amount;</span>
+<span class="nc" id="L97">        this.foodDescription = foodDescription;</span>
+<span class="nc" id="L98">        this.ingredientCode = ingredientCode;</span>
+<span class="nc" id="L99">        this.ingredientDescription = ingredientDescription;</span>
+<span class="nc" id="L100">        this.ingredientWeight = ingredientWeight;</span>
+<span class="nc" id="L101">        this.portionCode = portionCode;</span>
+<span class="nc" id="L102">        this.portionDescription = portionDescription;</span>
+<span class="nc" id="L103">        this.sequenceNumber = sequenceNumber;</span>
+<span class="nc" id="L104">        this.surveyFlag = surveyFlag;</span>
+<span class="nc" id="L105">        this.unit = unit;</span>
+<span class="nc" id="L106">        this.inputFood = inputFood;</span>
+<span class="nc" id="L107">        this.retentionFactor = retentionFactor;</span>
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * Getter for the survey id
+     *
+     * @return survey id
+     */
+    public int getId() {
+<span class="nc" id="L116">        return id;</span>
+    }
+
+    /**
+     * Getter for the amount
+     *
+     * @return amount
+     */
+    public float getAmount() {
+<span class="nc" id="L125">        return amount;</span>
+    }
+
+    /**
+     * Getter for the food description
+     *
+     * @return food description
+     */
+    public String getFoodDescription() {
+<span class="nc" id="L134">        return foodDescription;</span>
+    }
+
+    /**
+     * Getter for the ingredient code
+     *
+     * @return ingredient code
+     */
+    public int getIngredientCode() {
+<span class="nc" id="L143">        return ingredientCode;</span>
+    }
+
+    /**
+     * Getter for the ingredient description
+     *
+     * @return ingredient description
+     */
+    public String getIngredientDescription() {
+<span class="nc" id="L152">        return ingredientDescription;</span>
+    }
+
+    /**
+     * Getter for the ingredient weight
+     *
+     * @return ingredient weight
+     */
+    public float getIngredientWeight() {
+<span class="nc" id="L161">        return ingredientWeight;</span>
+    }
+
+    /**
+     * Getter for the portion code
+     *
+     * @return portion code
+     */
+    public String getPortionCode() {
+<span class="nc" id="L170">        return portionCode;</span>
+    }
+
+    /**
+     * Getter for the portion description
+     *
+     * @return portion description
+     */
+    public String getPortionDescription() {
+<span class="nc" id="L179">        return portionDescription;</span>
+    }
+
+    /**
+     * Getter for the sequence number
+     *
+     * @return sequence number
+     */
+    public int getSequenceNumber() {
+<span class="nc" id="L188">        return sequenceNumber;</span>
+    }
+
+    /**
+     * Getter for the survey flag
+     *
+     * @return survey flag
+     */
+    public int getSurveyFlag() {
+<span class="nc" id="L197">        return surveyFlag;</span>
+    }
+
+    /**
+     * Getter for the unit
+     *
+     * @return unit
+     */
+    public String getUnit() {
+<span class="nc" id="L206">        return unit;</span>
+    }
+
+    /**
+     * Getter for the input food
+     *
+     * @return input food
+     */
+    public SurveyFoodItem getInputFood() {
+<span class="nc" id="L215">        return inputFood;</span>
+    }
+
+    /**
+     * Getter for the retention factor
+     *
+     * @return retention factor
+     */
+    public RetentionFactor getRetentionFactor() {
+<span class="nc" id="L224">        return retentionFactor;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

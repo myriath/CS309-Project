@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SwitchUserAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.adapters</a> &gt; <span class="el_source">SwitchUserAdapter.java</span></div><h1>SwitchUserAdapter.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.adapters;
+
+import static com.example.cs309android.util.Constants.CALLBACK_DEFAULT;
+import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.PARCEL_ITEM_POSITION;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.util.Util;
+
+/**
+ * Custom adapter to display the list of logged in accounts
+ *
+ * @author Mitch Hudson
+ */
+public class SwitchUserAdapter extends ArrayAdapter&lt;String&gt; {
+    /**
+     * List of accounts that are logged in
+     */
+    private final String[] accounts;
+    /**
+     * Global used for setting the current account
+     */
+    private final GlobalClass global;
+    /**
+     * Used to start the login account
+     */
+    private final CallbackFragment callbackFragment;
+
+    /**
+     * Public constructor.
+     *
+     * @param context          context used by the superclass {@link ArrayAdapter}
+     * @param accounts         List of users to display
+     * @param global           GlobalClass to get account details from
+     * @param callbackFragment Used to start the login fragment
+     */
+    public SwitchUserAdapter(Context context, String[] accounts, GlobalClass global, CallbackFragment callbackFragment) {
+<span class="nc" id="L49">        super(context, R.layout.adapter_logged_in, accounts);</span>
+<span class="nc" id="L50">        this.accounts = accounts;</span>
+<span class="nc" id="L51">        this.global = global;</span>
+<span class="nc" id="L52">        this.callbackFragment = callbackFragment;</span>
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Ran for each of the child views (items in the list)
+     * Here is where button functionality for each item is given.
+     *
+     * @param position    index of the item in the list
+     * @param convertView converted view of the item in the list
+     * @param parent      ListView parent
+     * @return inflated view of the custom list_item view.
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+<span class="nc" id="L66">        String username = accounts[position];</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (convertView == null) {</span>
+<span class="nc" id="L68">            convertView = View.inflate(parent.getContext(), R.layout.adapter_logged_in, null);</span>
+        }
+
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (username.equals(global.getUsername())) {</span>
+<span class="nc" id="L72">            convertView.findViewById(R.id.selected).setVisibility(View.VISIBLE);</span>
+        }
+
+<span class="nc" id="L75">        convertView.setClickable(true);</span>
+<span class="nc" id="L76">        convertView.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L77">            Util.switchUser(global, username);</span>
+<span class="nc" id="L78">            Util.loginAttempt(global, global.getToken(), () -&gt; callbackFragment.callback(CALLBACK_DEFAULT, null), System.out::println, System.out::println);</span>
+<span class="nc" id="L79">        });</span>
+
+<span class="nc" id="L81">        convertView.findViewById(R.id.remove).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L82">            Util.logout(global, username);</span>
+<span class="nc" id="L83">            Bundle bundle = new Bundle();</span>
+<span class="nc" id="L84">            bundle.putInt(PARCEL_ITEM_POSITION, position);</span>
+<span class="nc" id="L85">            callbackFragment.callback(CALLBACK_REMOVE, bundle);</span>
+<span class="nc" id="L86">        });</span>
+
+<span class="nc" id="L88">        TextView usernameView = convertView.findViewById(R.id.username);</span>
+<span class="nc" id="L89">        usernameView.setText(username);</span>
+
+<span class="nc" id="L91">        ImageView profilePicture = convertView.findViewById(R.id.profile_picture);</span>
+<span class="nc" id="L92">        new GetProfilePictureRequest(username).request(profilePicture, getContext());</span>
+
+<span class="nc" id="L94">        return convertView;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
