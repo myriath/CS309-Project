@@ -47,6 +47,10 @@ android {
 }
 
 dependencies {
+    // Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     // Volley
     implementation 'com.android.volley:volley:1.2.1'
     // ML Kit Barcode Scanning
@@ -58,7 +62,8 @@ dependencies {
     // GSON
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
     // Mockito
-    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+//    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+//    androidTestImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     // CameraX
     def camerax_version = "1.1.0"
     implementation "androidx.camera:camera-core:${camerax_version}"
@@ -69,12 +74,6 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.8'
-    // Espresso
-    androidTestImplementation 'androidx.test:runner:1.5.1'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-
-
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
