@@ -203,11 +203,13 @@ public class Util {
      * @param global   GlobalClass for context and storing login details
      * @param username Username for the account to log into
      * @param token    Token used for authentication
+     * @param userType Type of the user. 0: regular, 1: moderator, 2: admin
      */
-    public static void login(GlobalClass global, String username, String token) {
+    public static void login(GlobalClass global, String username, String token, int userType) {
         global.setUsername(username);
         global.setToken(token);
         global.updateLoginPrefs();
+        global.setUserType(userType);
 
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
@@ -272,7 +274,7 @@ public class Util {
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token);
+                    login(global, username, token, loginResponse.getUserType());
                     listener.run();
                     break;
                 }
@@ -299,11 +301,11 @@ public class Util {
             int result = loginResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, loginResponse.getUsername(), token, listener, errorListener, errorListener2, 0);
+                    regenToken(global, loginResponse.getUsername(), loginResponse.getUserType(), token, listener, errorListener, errorListener2, 0);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, loginResponse.getUsername(), token);
+                    login(global, loginResponse.getUsername(), token, loginResponse.getUserType());
                     listener.run();
                     break;
                 }
@@ -324,7 +326,7 @@ public class Util {
      * @param errorListener ErrorListener to handle request errors and error codes
      * @param depth         Number of retries
      */
-    public static void regenToken(GlobalClass global, String username, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+    public static void regenToken(GlobalClass global, String username, int userType, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
         if (depth > TOKEN_MAX_DEPTH) {
             Toaster.toastShort("Unable to generate a token", global);
             return;
@@ -338,11 +340,11 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, username, oldToken, listener, errorListener, errorListener2, depth + 1);
+                    regenToken(global, username, userType, oldToken, listener, errorListener, errorListener2, depth + 1);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token);
+                    login(global, username, token, userType);
                     listener.run();
                     break;
                 }
@@ -379,7 +381,7 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_USER_CREATED: {
-                    Util.login(global, username, token);
+                    login(global, username, token, Constants.UserType.USER_REG);
                     listener.run();
                     break;
                 }

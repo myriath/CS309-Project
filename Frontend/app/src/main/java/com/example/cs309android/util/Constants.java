@@ -18,6 +18,24 @@ public class Constants {
     public static float dp8;
 
     /**
+     * User types interface
+     */
+    public interface UserType {
+        /**
+         * Regular user
+         */
+        int USER_REG = 0;
+        /**
+         * Moderator type
+         */
+        int USER_MOD = 1;
+        /**
+         * Administrator type
+         */
+        int USER_ADM = 2;
+    }
+
+    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
