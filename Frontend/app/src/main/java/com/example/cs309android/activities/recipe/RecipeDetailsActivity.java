@@ -1,7 +1,7 @@
 package com.example.cs309android.activities.recipe;
 
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -133,9 +133,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             findViewById(R.id.favoriteButton).setVisibility(View.GONE);
         }
 
-        findViewById(R.id.backButton).setOnClickListener(view -> {
-            onBackPressed();
-        });
+        findViewById(R.id.backButton).setOnClickListener(view -> onBackPressed());
 
         LinearLayout comments = findViewById(R.id.comments);
         for (Comment comment : recipe.getComments()) {

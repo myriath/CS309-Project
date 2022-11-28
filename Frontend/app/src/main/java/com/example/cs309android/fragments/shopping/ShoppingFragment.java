@@ -12,20 +12,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
-import com.example.cs309android.models.api.request.shopping.GetListRequest;
-import com.example.cs309android.models.api.response.shopping.GetListResponse;
-import com.example.cs309android.util.Constants;
-import com.example.cs309android.util.Toaster;
-import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Shopping list fragment.

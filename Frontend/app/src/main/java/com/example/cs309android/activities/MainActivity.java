@@ -2,20 +2,20 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
-import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
-import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
-import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
-import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
 import static com.example.cs309android.util.Constants.PREF_NAME;
@@ -213,9 +213,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addRecipe = findViewById(R.id.addRecipe);
 
         // Hides/un-hides other buttons
-        mainButton.setOnClickListener(view -> {
-            toggleMenu();
-        });
+        mainButton.setOnClickListener(view -> toggleMenu());
 
         // Recipe add button
         addRecipe.setOnClickListener(view -> {

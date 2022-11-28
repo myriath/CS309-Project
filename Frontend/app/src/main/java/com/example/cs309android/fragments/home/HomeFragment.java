@@ -18,7 +18,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
-import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
 import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
@@ -52,7 +52,7 @@ public class HomeFragment extends BaseFragment {
     /**
      * Adapter for the list view
      */
-    HomeItemAdapter adapter;
+    RecipeListAdapter adapter;
     /**
      * List view to display recipes
      */
@@ -129,7 +129,7 @@ public class HomeFragment extends BaseFragment {
 
         }, requireContext());
 
-        adapter = new HomeItemAdapter(this.getActivity(), recipes);
+        adapter = new RecipeListAdapter(this.getActivity(), recipes);
         LinearLayout layout = view.findViewById(R.id.feed);
 
         HomeRecipeView view1 = new HomeRecipeView(requireContext());

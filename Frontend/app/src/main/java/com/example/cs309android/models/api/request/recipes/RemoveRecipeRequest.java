@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.REMOVE_RECIPES_URL;
+import static com.example.cs309android.util.Constants.Urls.Recipes.REMOVE_RECIPES_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.DeleteRequest;

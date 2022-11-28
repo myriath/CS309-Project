@@ -1,16 +1,16 @@
 package com.example.cs309android.activities;
 
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.INTENT_NONE;
-import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
-import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Intents.INTENT_NONE;
+import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
+import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
-import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
-import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
 
 import android.content.Intent;
 import android.databinding.tool.util.StringUtils;
@@ -152,7 +152,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                 Util.spin(getWindow().getDecorView());
                                 new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
                                         items.add(item);
                                         Toaster.toastShort("Added", this);
                                     } else {
@@ -184,7 +184,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         Util.spin(getWindow().getDecorView());
                         new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
                                 items.add(item);
                                 Toaster.toastShort("Added", this);
                             } else {
@@ -331,7 +331,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         }
                         new FDCByUPCRequest(barcodes[0]).request(response -> {
                             FDCByUPCResponse fdcResponse = Util.objFromJson(response, FDCByUPCResponse.class);
-                            if (fdcResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {
+                            if (fdcResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
                                 new FoodsCriteria(fdcResponse.getFdcId(), Constants.Format.FULL, null).request(response1 -> {
                                     BrandedFoodItem item = Util.objFromJson(response, BrandedFoodItem.class);
                                     Intent intent = new Intent(this, FoodDetailsActivity.class);

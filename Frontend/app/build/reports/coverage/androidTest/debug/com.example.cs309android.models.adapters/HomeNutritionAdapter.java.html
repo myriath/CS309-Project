@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomeNutritionAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.adapters</a> &gt; <span class="el_source">HomeNutritionAdapter.java</span></div><h1>HomeNutritionAdapter.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.adapters;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs309android.R;
+import com.example.cs309android.models.HomeNutritionCardModel;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+/**
+ * Adapter to use with the TabLayout for the homepage
+ *
+ * @author Travis Massner
+ * @author Mitch Hudson
+ */
+public class HomeNutritionAdapter extends RecyclerView.Adapter&lt;HomeNutritionAdapter.ViewHolder&gt; {
+    /**
+     * Holds the list of nutrition cards
+     */
+    private HomeNutritionCardModel[] pagerItems;
+
+    /**
+     * Public constructor
+     * @param pagerItems Items list to display in the pager
+     */
+<span class="fc" id="L31">    public HomeNutritionAdapter(HomeNutritionCardModel[] pagerItems) {</span>
+<span class="fc" id="L32">        this.pagerItems = pagerItems;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Getter for the list of tabs
+     * @return Models that make up the tabs in the TabLayout
+     */
+    public HomeNutritionCardModel[] getPagerItems() {
+<span class="nc" id="L40">        return pagerItems;</span>
+    }
+
+    /**
+     * Sets the list of the tabs
+     * @param items New list of nutrition cards
+     */
+    public void setItems(HomeNutritionCardModel[] items) {
+<span class="nc" id="L48">        this.pagerItems = items;</span>
+<span class="nc" id="L49">    }</span>
+
+    /**
+     * Creates a view holder for the TabLayout
+     * @param parent    Parent of the ViewHolder
+     * @param viewType  unused
+     * @return          ViewHolder made with the parent
+     */
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+<span class="fc" id="L60">        return new ViewHolder(parent);</span>
+    }
+
+    /**
+     * Binds a view holder to an item in the list
+     * @param holder    ViewHolder to bind
+     * @param position  Position of the item to bind in the list
+     */
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+<span class="fc" id="L70">        holder.bind(pagerItems[position]);</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Getter for the item count
+     * @return Number of pages in the pager
+     */
+    @Override
+    public int getItemCount() {
+<span class="fc" id="L79">        return pagerItems.length;</span>
+    }
+
+    /**
+     * ViewHolder class used to display the card view
+     *
+     * @author Mitch Hudson
+     * @author Travis Massner
+     */
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * Public constructor
+         * @param parent Parent of the holder
+         */
+        public ViewHolder(ViewGroup parent) {
+<span class="fc" id="L94">            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nutrition_card, parent, false));</span>
+<span class="fc" id="L95">        }</span>
+
+        /**
+         * Binds a model to the view
+         * @param model Model to bind to the view in this holder
+         */
+        public void bind(HomeNutritionCardModel model) {
+<span class="fc" id="L102">            double amount = model.getAmount();</span>
+<span class="fc" id="L103">            double limit = model.getLimit();</span>
+<span class="fc" id="L104">            int progress = Math.max(Math.min((int) ((amount / limit) * 100), 100), 0);</span>
+
+<span class="fc" id="L106">            ((TextView) itemView.findViewById(R.id.nutrientAmount)).setText(String.valueOf(amount));</span>
+<span class="fc" id="L107">            ((TextView) itemView.findViewById(R.id.calLimit)).setText(String.valueOf(limit));</span>
+<span class="fc" id="L108">            ((LinearProgressIndicator) itemView.findViewById(R.id.nutrientProgressBar)).setProgress(progress);</span>
+<span class="fc" id="L109">            ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageBitmap(model.getImage());</span>
+<span class="fc" id="L110">            ((TextView) itemView.findViewById(R.id.nutrientTitle)).setText(model.getTitle());</span>
+
+//            itemView.findViewById(R.id.leftButton).setOnClickListener(model.getLeftListener());
+//            itemView.findViewById(R.id.rightButton).setOnClickListener(model.getRightListener());
+<span class="fc" id="L114">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

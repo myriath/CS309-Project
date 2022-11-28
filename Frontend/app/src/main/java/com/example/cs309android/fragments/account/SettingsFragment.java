@@ -1,10 +1,8 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;

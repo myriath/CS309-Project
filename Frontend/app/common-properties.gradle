@@ -14,7 +14,7 @@ android.buildTypes {
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     debug {
-        buildConfigField "String", "BASE_API_URL", "\"https://api.edek.xyz/\""
+        buildConfigField "String", "BASE_API_URL", "\"https://10.90.75.54:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
 }

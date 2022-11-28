@@ -1,9 +1,9 @@
 package com.example.cs309android.activities.login;
 
-import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
-import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_LOGGED_OUT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,9 +51,7 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
         loginLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    refreshView(global);
-                }
+                result -> refreshView(global)
         );
 
         loggedOut = getIntent().getBooleanExtra(PARCEL_LOGGED_OUT, false);

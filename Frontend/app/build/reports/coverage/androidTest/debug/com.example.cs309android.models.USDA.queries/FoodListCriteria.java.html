@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodListCriteria.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.queries</a> &gt; <span class="el_source">FoodListCriteria.java</span></div><h1>FoodListCriteria.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.queries;
+
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
+import static com.example.cs309android.models.USDA.Constants.API_URL_LIST_ENDPOINT;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.api.request.abstraction.GetRequest;
+import com.google.gson.annotations.Expose;
+
+/**
+ * JSON for request body of 'list' POST request
+ * &lt;p&gt;
+ * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodListCriteria
+ *
+ * @author Mitch Hudson
+ */
+public class FoodListCriteria extends GetRequest {
+    /**
+     * Array of data types to list
+     */
+    @Expose
+    private final String[] dataType;
+    /**
+     * Page size (# of elements per page)
+     */
+    @Expose
+    private final Integer pageSize;
+    /**
+     * Page number
+     */
+    @Expose
+    private final Integer pageNumber;
+    /**
+     * Sort by prompt
+     */
+    @Expose
+    private final String sortBy;
+    /**
+     * Sort order prompt
+     */
+    @Expose
+    private final String sortOrder;
+
+    /**
+     * Public constructor (String data type)
+     *
+     * @param dataType   data types to search for
+     * @param pageSize   # of elements per page
+     * @param pageNumber page number
+     * @param sortBy     sort by prompt
+     * @param sortOrder  sort order prompt
+     */
+<span class="nc" id="L54">    public FoodListCriteria(String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder) {</span>
+<span class="nc" id="L55">        this.dataType = dataType;</span>
+<span class="nc" id="L56">        this.pageSize = pageSize;</span>
+<span class="nc" id="L57">        this.pageNumber = pageNumber;</span>
+<span class="nc" id="L58">        this.sortBy = sortBy;</span>
+<span class="nc" id="L59">        this.sortOrder = sortOrder;</span>
+<span class="nc" id="L60">    }</span>
+
+    /**
+     * Public constructor (DataType data types)
+     *
+     * @param dataTypes  data types to search for
+     * @param pageSize   # of elements per page
+     * @param pageNumber page number
+     * @param sortBy     sort by prompt
+     * @param sortOrder  sort order prompt
+     */
+<span class="nc" id="L71">    public FoodListCriteria(Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder) {</span>
+<span class="nc" id="L72">        String[] dataType = new String[dataTypes.length];</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for (int i = 0; i &lt; dataTypes.length; i++) dataType[i] = dataTypes[i].getValue();</span>
+<span class="nc" id="L74">        this.dataType = dataType;</span>
+<span class="nc" id="L75">        this.pageSize = pageSize;</span>
+<span class="nc" id="L76">        this.pageNumber = pageNumber;</span>
+<span class="nc" id="L77">        this.sortBy = sortBy.getValue();</span>
+<span class="nc" id="L78">        this.sortOrder = sortOrder.getValue();</span>
+<span class="nc" id="L79">    }</span>
+
+    /**
+     * Getter for the data type prompt
+     *
+     * @return data type
+     */
+    public String[] getDataType() {
+<span class="nc" id="L87">        return dataType;</span>
+    }
+
+    /**
+     * Getter for the page size prompt
+     *
+     * @return page size
+     */
+    public Integer getPageSize() {
+<span class="nc" id="L96">        return pageSize;</span>
+    }
+
+    /**
+     * Getter for the page number
+     *
+     * @return page number
+     */
+    public Integer getPageNumber() {
+<span class="nc" id="L105">        return pageNumber;</span>
+    }
+
+    /**
+     * Getter for the sort by prompt
+     *
+     * @return sort by prompt
+     */
+    public String getSortBy() {
+<span class="nc" id="L114">        return sortBy;</span>
+    }
+
+    /**
+     * Getter for the sort order prompt
+     *
+     * @return sort order prompt
+     */
+    public String getSortOrder() {
+<span class="nc" id="L123">        return sortOrder;</span>
+    }
+
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
+    @Override
+    public String getURL() {
+<span class="nc" id="L133">        return new ParameterizedRequestURL(API_URL_LIST_ENDPOINT)</span>
+<span class="nc" id="L134">                .addArray(&quot;dataType&quot;, dataType)</span>
+<span class="nc" id="L135">                .addParam(&quot;pageSize&quot;, pageSize)</span>
+<span class="nc" id="L136">                .addParam(&quot;pageNumber&quot;, pageNumber)</span>
+<span class="nc" id="L137">                .addParam(&quot;sortBy&quot;, sortBy)</span>
+<span class="nc" id="L138">                .addParam(&quot;sortOrder&quot;, sortOrder)</span>
+<span class="nc" id="L139">                .addParam(&quot;api_key&quot;, API_KEY)</span>
+<span class="nc" id="L140">                .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

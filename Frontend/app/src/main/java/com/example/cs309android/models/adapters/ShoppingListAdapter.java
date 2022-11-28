@@ -1,7 +1,7 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -28,7 +28,6 @@ import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -97,7 +96,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             if (checkBox.isChecked()) {
                 new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                    if (genericResponse.getResult() == Constants.RESULT_OK) {
+                    if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         name.setEnabled(false);
                     } else {
@@ -108,7 +107,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             } else {
                 new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                    if (genericResponse.getResult() == Constants.RESULT_OK) {
+                    if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                         name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                         name.setEnabled(true);
                     } else {
@@ -124,12 +123,9 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             SimpleFoodItem item = items.get(position);
             new ShoppingRemoveRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                if (genericResponse.getResult() == Constants.RESULT_OK) {
+                if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                     if (MainActivity.removeShoppingItem(position)) {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
                         view1.getRootView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
-                    } else {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
                     }
                     ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
                 } else {

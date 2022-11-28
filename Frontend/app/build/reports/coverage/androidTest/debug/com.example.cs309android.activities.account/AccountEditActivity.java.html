@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountEditActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.account</a> &gt; <span class="el_source">AccountEditActivity.java</span></div><h1>AccountEditActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.account;
+
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.fragments.ModalImageSelect;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.request.profile.UpdateBannerImageRequest;
+import com.example.cs309android.models.api.request.profile.UpdateProfileImageRequest;
+import com.example.cs309android.models.api.request.profile.UpdateProfileRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Objects;
+
+/**
+ * Activity used to edit a user's profile
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L37">public class AccountEditActivity extends AppCompatActivity implements CallbackFragment {</span>
+    /**
+     * The destination for the image is none
+     */
+    private static final int NONE = -1;
+    /**
+     * The target image for callback is the banner
+     */
+    private static final int BANNER = 0;
+    /**
+     * The target image for callback is profile picture
+     */
+    private static final int PFP = 1;
+    /**
+     * Images to be filled in when a user sets an image
+     */
+    private Bitmap profileImage, bannerImage;
+    /**
+     * Current target
+     * Default NONE
+     */
+<span class="nc" id="L58">    private int imageDestination = NONE;</span>
+
+    /**
+     * Runs when the activity is started
+     *
+     * @param savedInstanceState saved state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L67">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L68">        setContentView(R.layout.activity_account_edit);</span>
+
+<span class="nc" id="L70">        imageDestination = NONE;</span>
+
+<span class="nc" id="L72">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="nc" id="L74">        ((TextView) findViewById(R.id.unameView)).setText(global.getUsername());</span>
+<span class="nc" id="L75">        TextInputLayout bioInput = findViewById(R.id.bioEdit);</span>
+<span class="nc" id="L76">        Objects.requireNonNull(bioInput.getEditText()).setText(global.getBio());</span>
+
+<span class="nc" id="L78">        findViewById(R.id.add_pfp).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L79">            imageDestination = PFP;</span>
+<span class="nc" id="L80">            imageChooser();</span>
+<span class="nc" id="L81">        });</span>
+<span class="nc" id="L82">        findViewById(R.id.add_banner).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L83">            imageDestination = BANNER;</span>
+<span class="nc" id="L84">            imageChooser();</span>
+<span class="nc" id="L85">        });</span>
+
+<span class="nc" id="L87">        ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());</span>
+<span class="nc" id="L88">        ((ImageView) findViewById(R.id.banner)).setImageBitmap(global.getBanner());</span>
+
+<span class="nc" id="L90">        ((TextView) findViewById(R.id.followerCount))</span>
+<span class="nc" id="L91">                .setText(String.format(Locale.getDefault(), &quot;%d Followers&quot;, global.getFollowers()));</span>
+<span class="nc" id="L92">        ((TextView) findViewById(R.id.followingCount))</span>
+<span class="nc" id="L93">                .setText(String.format(Locale.getDefault(), &quot;%d Following&quot;, global.getFollowing()));</span>
+
+<span class="nc" id="L95">        findViewById(R.id.saveButton).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L96">            Util.spin(this);</span>
+<span class="nc" id="L97">            new UpdateProfileRequest(global.getToken(), bioInput.getEditText().getText().toString()).request(response -&gt; {</span>
+<span class="nc" id="L98">                GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                if (genericResponse.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L100">                    global.setBio(bioInput.getEditText().getText().toString());</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                    if (profileImage == null) {</span>
+<span class="nc" id="L103">                        profileImage = global.getPfp();</span>
+                    }
+<span class="nc" id="L105">                    new UpdateProfileImageRequest(global.getToken(), profileImage).request(response1 -&gt; {</span>
+<span class="nc" id="L106">                        String json = new String(response1.data);</span>
+<span class="nc" id="L107">                        GenericResponse genericResponse1 = Util.objFromJson(json, GenericResponse.class);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                        if (genericResponse1.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L109">                            global.setPfp(profileImage);</span>
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                            if (bannerImage == null) {</span>
+<span class="nc" id="L112">                                bannerImage = global.getBanner();</span>
+                            }
+<span class="nc" id="L114">                            new UpdateBannerImageRequest(global.getToken(), bannerImage).request(response2 -&gt; {</span>
+<span class="nc" id="L115">                                String json1 = new String(response2.data);</span>
+<span class="nc" id="L116">                                GenericResponse genericResponse2 = Util.objFromJson(json1, GenericResponse.class);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                                if (genericResponse2.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L118">                                    global.setBanner(bannerImage);</span>
+<span class="nc" id="L119">                                    setResult(RESULT_OK);</span>
+                                } else {
+<span class="nc" id="L121">                                    Toaster.toastShort(&quot;Unexpected error&quot;, this);</span>
+<span class="nc" id="L122">                                    setResult(RESULT_CANCELED);</span>
+                                }
+<span class="nc" id="L124">                                finish();</span>
+<span class="nc" id="L125">                            }, AccountEditActivity.this);</span>
+                        } else {
+<span class="nc" id="L127">                            Toaster.toastShort(&quot;Unexpected error&quot;, this);</span>
+<span class="nc" id="L128">                            setResult(RESULT_CANCELED);</span>
+<span class="nc" id="L129">                            finish();</span>
+                        }
+<span class="nc" id="L131">                    }, AccountEditActivity.this);</span>
+                } else {
+<span class="nc" id="L133">                    Toaster.toastShort(&quot;Unexpected error&quot;, this);</span>
+<span class="nc" id="L134">                    setResult(RESULT_CANCELED);</span>
+<span class="nc" id="L135">                    finish();</span>
+                }
+<span class="nc" id="L137">            }, AccountEditActivity.this);</span>
+<span class="nc" id="L138">        });</span>
+
+<span class="nc" id="L140">        findViewById(R.id.backButton).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L141">            setResult(RESULT_CANCELED);</span>
+<span class="nc" id="L142">            finish();</span>
+<span class="nc" id="L143">        });</span>
+<span class="nc" id="L144">    }</span>
+
+    /**
+     * Shows the image source selection modal bottom sheet
+     */
+    public void imageChooser() {
+<span class="nc" id="L150">        ModalImageSelect select = new ModalImageSelect();</span>
+<span class="nc" id="L151">        select.setCallbackFragment(this);</span>
+<span class="nc" id="L152">        select.show(getSupportFragmentManager(), ModalImageSelect.TAG);</span>
+<span class="nc" id="L153">    }</span>
+
+    /**
+     * Takes opcode and bundle and does something with it
+     *
+     * @param op     Tells the activity what to do
+     * @param bundle Callback args
+     */
+    @Override
+    public void callback(int op, Bundle bundle) {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (op == CALLBACK_IMAGE_URI) {</span>
+            try {
+<span class="nc" id="L165">                Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);</span>
+<span class="nc" id="L166">                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (imageDestination == BANNER) {</span>
+<span class="nc" id="L168">                    bannerImage = ImageDecoder.decodeBitmap(source);</span>
+<span class="nc" id="L169">                    ((ImageView) findViewById(R.id.banner)).setImageBitmap(bannerImage);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                } else if (imageDestination == PFP) {</span>
+<span class="nc" id="L171">                    profileImage = ImageDecoder.decodeBitmap(source);</span>
+<span class="nc" id="L172">                    ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(profileImage);</span>
+                }
+<span class="nc" id="L174">                imageDestination = NONE;</span>
+<span class="nc" id="L175">            } catch (IOException e) {</span>
+<span class="nc" id="L176">                e.printStackTrace();</span>
+<span class="nc" id="L177">            }</span>
+        }
+<span class="nc" id="L179">    }</span>
+
+    /**
+     * Do nothing, no parent
+     *
+     * @param fragment ignored
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
+<span class="nc" id="L188">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

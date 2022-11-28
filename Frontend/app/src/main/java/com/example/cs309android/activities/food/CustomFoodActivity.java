@@ -1,7 +1,7 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -74,7 +74,7 @@ public class CustomFoodActivity extends AppCompatActivity {
             Util.spin(this);
             new CustomFoodAddRequest(customFoodItem, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                         CustomFoodAddResponse addResponse = Util.objFromJson(response, CustomFoodAddResponse.class);
-                        if (addResponse.getResult() == Constants.RESULT_OK) {
+                        if (addResponse.getResult() == Constants.Results.RESULT_OK) {
                             Intent intent1 = new Intent();
                             intent1.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(addResponse.getDbId(), name, "User added", true));
                             setResult(RESULT_OK, intent1);

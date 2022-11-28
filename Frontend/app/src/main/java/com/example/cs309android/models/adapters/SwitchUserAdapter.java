@@ -1,8 +1,8 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_DEFAULT;
-import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
-import static com.example.cs309android.util.Constants.PARCEL_ITEM_POSITION;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_DEFAULT;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ITEM_POSITION;
 
 import android.content.Context;
 import android.os.Bundle;

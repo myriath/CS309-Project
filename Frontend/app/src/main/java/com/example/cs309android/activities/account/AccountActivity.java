@@ -1,9 +1,9 @@
 package com.example.cs309android.activities.account;
 
-import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
-import static com.example.cs309android.util.Constants.PARCEL_TITLE;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -19,7 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.models.adapters.FeedAdapter;
+import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
@@ -92,7 +92,7 @@ public class AccountActivity extends AppCompatActivity {
                 if (!isFollowing()) {
                     new FollowRequest(global.getToken(), username).request(response -> {
                         FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
-                        if (followResponse.getResult() == Constants.RESULT_OK) {
+                        if (followResponse.getResult() == Constants.Results.RESULT_OK) {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));
                             followButton.setText(getResources().getString(R.string.unfollow));
                             setFollowing(true);
@@ -105,7 +105,7 @@ public class AccountActivity extends AppCompatActivity {
                 } else {
                     new UnfollowRequest(global.getToken(), username).request(response -> {
                         FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
-                        if (followResponse.getResult() == Constants.RESULT_OK) {
+                        if (followResponse.getResult() == Constants.Results.RESULT_OK) {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite, getTheme()));
                             followButton.setText(getResources().getString(R.string.follow));
                             setFollowing(false);
@@ -140,7 +140,7 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
-            if (profileResponse.getResult() == Constants.RESULT_OK) {
+            if (profileResponse.getResult() == Constants.Results.RESULT_OK) {
                 followers = profileResponse.getFollowers();
                 ((TextView) findViewById(R.id.unameView)).setText(username);
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
@@ -158,7 +158,10 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetRecipesRequest(username).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+            if (postsResponse.getItems() != null && postsResponse.getItems().length > 0) {
+                findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+                ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+            }
         }, AccountActivity.this);
     }
 

@@ -1,39 +1,23 @@
 package com.example.cs309android.fragments.recipes;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.adapters.HomeItemAdapter;
 import com.example.cs309android.models.adapters.RecipePageAdapter;
-import com.example.cs309android.models.api.models.Ingredient;
-import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
-import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
-import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
-import com.example.cs309android.util.Toaster;
-import com.example.cs309android.util.Util;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Fragment to display the Recipe feed

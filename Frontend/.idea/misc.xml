@@ -96,7 +96,19 @@
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/layout/fragment_navbar.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/layout/fragment_register.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Experiments/Mitch/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_add_log.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_account.xml" value="0.1" />
         <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_food_details.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_register.xml" value="0.11503623188405797" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/activity_switch_user.xml" value="0.25" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/adapter_logged_in.xml" value="0.6" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_account.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.1" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/home_item_model.xml" value="0.3" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/layout/pager_list.xml" value="0.264" />
+        <entry key="..\:/Users/mitch/StudioProjects/1_cw_2/Frontend/app/src/main/res/xml/settings_screen.xml" value="0.1" />
         <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_home.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/travi/Documents/COMS309/1_cw_2/Frontend/app/src/main/res/layout/fragment_recipes.xml" value="0.16666666666666666" />
       </map>
