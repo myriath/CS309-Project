@@ -133,5 +133,8 @@
     <string name="popular">Popular</string>
     <string name="explore">Explore</string>
     <string name="newText">New</string>
+    <string name="comments">Comments</string>
+    <string name="show_more"><u>Show more</u></string>
+    <string name="show_less"><u>Show less</u></string>
 
 </resources>

@@ -17,12 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.CommentView;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -138,5 +140,25 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(view -> {
             onBackPressed();
         });
+
+        LinearLayout comments = findViewById(R.id.comments);
+        // TODO: Replace with get request
+        Comment[] commentList = new Comment[]{
+                new Comment("Test1", "joe mama"),
+                new Comment("Test2", "joe mamajoe mama"),
+                new Comment("Test3", "joe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+        };
+        for (Comment comment : commentList) {
+            CommentView view = new CommentView(this);
+            view.initView(comment);
+            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));
+            comments.addView(view);
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.example.cs309android.activities.account;
 
 import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
-import static com.example.cs309android.util.Constants.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
 import static com.example.cs309android.util.Util.objFromJson;
@@ -72,9 +71,9 @@ public class AccountActivity extends AppCompatActivity {
         GlobalClass global = (GlobalClass) getApplicationContext();
 
         Intent intent = getIntent();
-        boolean owner = intent.getBooleanExtra(PARCEL_OWNER, false);
-        isFollowing = intent.getBooleanExtra(PARCEL_FOLLOWING, false);
         String username = intent.getStringExtra(PARCEL_USERNAME);
+        isFollowing = intent.getBooleanExtra(PARCEL_FOLLOWING, false);
+        boolean owner = global.getUsername().equals(username);
 
         ImageButton backButton = findViewById(R.id.backButton);
 
