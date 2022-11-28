@@ -17,12 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.CommentView;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -85,8 +87,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     public void setDetails(Recipe recipe, GlobalClass global) {
         ImageView image = findViewById(R.id.image_view);
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
-//        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image::setImageBitmap,
-//                RecipeDetailsActivity.this);
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
@@ -134,5 +134,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.backButton).setOnClickListener(view -> onBackPressed());
+
+        LinearLayout comments = findViewById(R.id.comments);
+        for (Comment comment : recipe.getComments()) {
+            CommentView view = new CommentView(this);
+            view.initView(comment);
+            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));
+            comments.addView(view);
+        }
     }
 }

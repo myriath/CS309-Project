@@ -1,5 +1,8 @@
 package com.example.cs309android.fragments.home;
 
+import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +15,16 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
 import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
+import com.example.cs309android.models.api.models.Comment;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
@@ -126,7 +134,31 @@ public class HomeFragment extends BaseFragment {
 
         HomeRecipeView view1 = new HomeRecipeView(requireContext());
         view1.initView("Test Recipe", "Test Description\nDescription\nDescription", view3 -> {
-            // TODO: Load recipe details page
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, new Recipe(
+                    0, "Test Recipe", "Test Description", new Ingredient[]{
+                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm")
+            }, new Instruction[]{
+                    new Instruction(1, "step"),
+                    new Instruction(2, "step"),
+                    new Instruction(3, "step"),
+                    new Instruction(4, "step")
+            }, "papajohn", new Comment[]{
+                    new Comment("Test1", "joe mama"),
+                    new Comment("Test2", "joe mamajoe mama"),
+                    new Comment("Test3", "joe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+            }
+            ));
+            startActivity(intent);
         });
         new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view1);
@@ -137,6 +169,10 @@ public class HomeFragment extends BaseFragment {
         });
         new GetRecipeImageRequest("0").request((ImageView) view2.findViewById(R.id.recipeImage), getContext());
         layout.addView(view2);
+
+        // TODO: Write recipe details code (2 steps)
+        //       1: Get image
+        //       2: Get recipe and open page
 
 
 //        listView.setOnItemClickListener((parent, view1, position, id) -> {

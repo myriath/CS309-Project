@@ -56,6 +56,11 @@ public class Recipe implements Parcelable {
      */
     @Expose
     private final String username;
+    /**
+     * Array of comments on the recipe
+     */
+    @Expose
+    private final Comment[] comments;
 
     /**
      * Public constructor
@@ -66,14 +71,16 @@ public class Recipe implements Parcelable {
      * @param ingredients  Ingredients
      * @param instructions Instructions
      * @param username     Creator's username
+     * @param comments     Comments on this recipe
      */
-    public Recipe(int rid, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions, String username) {
+    public Recipe(int rid, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions, String username, Comment[] comments) {
         this.rid = rid;
         this.recipeName = recipeName;
         this.description = description;
         this.ingredients = ingredients;
         this.instructions = instructions;
         this.username = username;
+        this.comments = comments;
     }
 
     /**
@@ -88,6 +95,7 @@ public class Recipe implements Parcelable {
         ingredients = in.createTypedArray(Ingredient.CREATOR);
         instructions = in.createTypedArray(Instruction.CREATOR);
         username = in.readString();
+        comments = in.createTypedArray(Comment.CREATOR);
     }
 
     /**
@@ -104,6 +112,7 @@ public class Recipe implements Parcelable {
         dest.writeTypedArray(ingredients, flags);
         dest.writeTypedArray(instructions, flags);
         dest.writeString(username);
+        dest.writeTypedArray(comments, flags);
     }
 
     /**
@@ -158,6 +167,15 @@ public class Recipe implements Parcelable {
      */
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Getter for the recipe's comments
+     *
+     * @return Recipe's comments
+     */
+    public Comment[] getComments() {
+        return comments;
     }
 
     /**
