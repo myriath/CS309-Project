@@ -1,8 +1,8 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_OPEN_ACCOUNT;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_OPEN_ACCOUNT;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_OK;
 
 import android.content.Context;
 import android.os.Bundle;

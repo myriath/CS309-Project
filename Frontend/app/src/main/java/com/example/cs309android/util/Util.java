@@ -1,13 +1,12 @@
 package com.example.cs309android.util;
 
-import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
-import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
-import static com.example.cs309android.util.Constants.PARCEL_OWNER;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Constants.RESULT_OK;
-import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
-import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.Results.RESULT_OK;
+import static com.example.cs309android.util.Constants.Results.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.Results.RESULT_USER_CREATED;
 import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 
@@ -30,7 +29,6 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.account.AccountActivity;
-import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.interfaces.ErrorListener;
 import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;

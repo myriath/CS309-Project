@@ -1,9 +1,9 @@
 package com.example.cs309android.activities.login;
 
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
-import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_ERROR_USER_HASH_MISMATCH;
 import static com.example.cs309android.util.Util.hideKeyboard;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
@@ -100,9 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Toaster.toastShort("Unexpected error", this);
                 }
-            }, error -> {
-                unSpin(this);
-            });
+            }, error -> unSpin(this));
         });
 
         registerButton.setOnClickListener(view1 -> {

@@ -10,7 +10,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.api.models.Recipe;
 
 /**
  * Adapter to use with the TabLayout for the recipe page

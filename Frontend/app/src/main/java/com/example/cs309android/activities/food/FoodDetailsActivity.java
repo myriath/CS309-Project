@@ -1,8 +1,8 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
-import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.dp16;
 import static com.example.cs309android.util.Constants.dp8;
 import static com.example.cs309android.util.Util.setSubtitle;
@@ -94,7 +94,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 CustomFoodGetResponse customFoodGetResponse = Util.objFromJson(response, CustomFoodGetResponse.class);
                 CustomFoodItem foodItem = customFoodGetResponse.getItem();
 
-                if (customFoodGetResponse.getResult() == Constants.RESULT_OK) {
+                if (customFoodGetResponse.getResult() == Constants.Results.RESULT_OK) {
                     setSubtitle("User added", toolbar);
                     fillIngredients(foodItem.getIngredients());
                     fillNutrition(foodItem);

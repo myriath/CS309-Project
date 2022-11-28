@@ -1,8 +1,8 @@
 package com.example.cs309android.fragments;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
 
 import android.Manifest;
 import android.content.Intent;

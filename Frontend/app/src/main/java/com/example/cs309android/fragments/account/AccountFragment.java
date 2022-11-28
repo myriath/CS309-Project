@@ -1,9 +1,9 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -21,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.account.AccountActivity;
 import com.example.cs309android.activities.account.AccountEditActivity;
 import com.example.cs309android.activities.account.AccountListActivity;
 import com.example.cs309android.fragments.BaseFragment;
@@ -122,9 +121,7 @@ public class AccountFragment extends BaseFragment {
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         ImageButton editButton = view.findViewById(R.id.editButton);
 
-        settingsButton.setOnClickListener(view1 -> {
-            callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null);
-        });
+        settingsButton.setOnClickListener(view1 -> callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null));
 
         editButton.setOnClickListener(view1 -> {
             Intent intent = new Intent(requireContext(), AccountEditActivity.class);

@@ -1,7 +1,7 @@
 package com.example.cs309android.activities.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
 
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -96,7 +96,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
             Util.spin(this);
             new UpdateProfileRequest(global.getToken(), bioInput.getEditText().getText().toString()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                if (genericResponse.getResult() == Constants.RESULT_OK) {
+                if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                     global.setBio(bioInput.getEditText().getText().toString());
 
                     if (profileImage == null) {
@@ -105,7 +105,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                     new UpdateProfileImageRequest(global.getToken(), profileImage).request(response1 -> {
                         String json = new String(response1.data);
                         GenericResponse genericResponse1 = Util.objFromJson(json, GenericResponse.class);
-                        if (genericResponse1.getResult() == Constants.RESULT_OK) {
+                        if (genericResponse1.getResult() == Constants.Results.RESULT_OK) {
                             global.setPfp(profileImage);
 
                             if (bannerImage == null) {
@@ -114,7 +114,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                             new UpdateBannerImageRequest(global.getToken(), bannerImage).request(response2 -> {
                                 String json1 = new String(response2.data);
                                 GenericResponse genericResponse2 = Util.objFromJson(json1, GenericResponse.class);
-                                if (genericResponse2.getResult() == Constants.RESULT_OK) {
+                                if (genericResponse2.getResult() == Constants.Results.RESULT_OK) {
                                     global.setBanner(bannerImage);
                                     setResult(RESULT_OK);
                                 } else {

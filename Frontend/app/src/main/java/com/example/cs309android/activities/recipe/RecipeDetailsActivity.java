@@ -1,7 +1,7 @@
 package com.example.cs309android.activities.recipe;
 
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -90,9 +90,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
-        findViewById(R.id.creator).setOnClickListener(view -> {
-            Util.openAccountPage(global, recipe.getUsername(), this);
-        });
+        findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
         ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
@@ -135,8 +133,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             findViewById(R.id.favoriteButton).setVisibility(View.GONE);
         }
 
-        findViewById(R.id.backButton).setOnClickListener(view -> {
-            onBackPressed();
-        });
+        findViewById(R.id.backButton).setOnClickListener(view -> onBackPressed());
     }
 }

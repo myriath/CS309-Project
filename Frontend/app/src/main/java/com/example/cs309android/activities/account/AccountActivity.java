@@ -1,10 +1,10 @@
 package com.example.cs309android.activities.account;
 
-import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
-import static com.example.cs309android.util.Constants.PARCEL_OWNER;
-import static com.example.cs309android.util.Constants.PARCEL_TITLE;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -93,7 +93,7 @@ public class AccountActivity extends AppCompatActivity {
                 if (!isFollowing()) {
                     new FollowRequest(global.getToken(), username).request(response -> {
                         FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
-                        if (followResponse.getResult() == Constants.RESULT_OK) {
+                        if (followResponse.getResult() == Constants.Results.RESULT_OK) {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));
                             followButton.setText(getResources().getString(R.string.unfollow));
                             setFollowing(true);
@@ -106,7 +106,7 @@ public class AccountActivity extends AppCompatActivity {
                 } else {
                     new UnfollowRequest(global.getToken(), username).request(response -> {
                         FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
-                        if (followResponse.getResult() == Constants.RESULT_OK) {
+                        if (followResponse.getResult() == Constants.Results.RESULT_OK) {
                             followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite, getTheme()));
                             followButton.setText(getResources().getString(R.string.follow));
                             setFollowing(false);
@@ -141,7 +141,7 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
-            if (profileResponse.getResult() == Constants.RESULT_OK) {
+            if (profileResponse.getResult() == Constants.Results.RESULT_OK) {
                 followers = profileResponse.getFollowers();
                 ((TextView) findViewById(R.id.unameView)).setText(username);
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
