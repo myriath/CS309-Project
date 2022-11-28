@@ -87,14 +87,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     public void setDetails(Recipe recipe, GlobalClass global) {
         ImageView image = findViewById(R.id.image_view);
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
-//        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image::setImageBitmap,
-//                RecipeDetailsActivity.this);
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
-        findViewById(R.id.creator).setOnClickListener(view -> {
-            Util.openAccountPage(global, recipe.getUsername(), this);
-        });
+        findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
         ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
@@ -142,19 +138,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         });
 
         LinearLayout comments = findViewById(R.id.comments);
-        // TODO: Replace with get request
-        Comment[] commentList = new Comment[]{
-                new Comment("Test1", "joe mama"),
-                new Comment("Test2", "joe mamajoe mama"),
-                new Comment("Test3", "joe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-        };
-        for (Comment comment : commentList) {
+        for (Comment comment : recipe.getComments()) {
             CommentView view = new CommentView(this);
             view.initView(comment);
             view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));

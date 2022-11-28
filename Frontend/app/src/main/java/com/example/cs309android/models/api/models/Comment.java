@@ -1,5 +1,8 @@
 package com.example.cs309android.models.api.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -7,7 +10,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author Mitch Hudson
  */
-public class Comment {
+public class Comment implements Parcelable {
     /**
      * Username of the account that made the comment
      */
@@ -33,6 +36,55 @@ public class Comment {
         this.username = username;
         this.comment = comment;
     }
+
+    /**
+     * Parcel constructor
+     *
+     * @param in Parcel to unpack
+     */
+    protected Comment(Parcel in) {
+        username = in.readString();
+        comment = in.readString();
+        showFull = in.readByte() != 0;
+    }
+
+    /**
+     * Writes this comment to a parcel
+     *
+     * @param dest  Destination parcel
+     * @param flags Flags
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(comment);
+        dest.writeByte((byte) (showFull ? 1 : 0));
+    }
+
+    /**
+     * Unused, returns 0
+     *
+     * @return 0
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Creator for the parcelable implementation
+     */
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 
     /**
      * Getter for the comment's creator's username
