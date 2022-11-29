@@ -14,6 +14,8 @@ import static com.example.cs309android.util.Constants.UserType.USER_DEV;
 import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -58,6 +60,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 /**
  * Utility class containing many commonly used methods

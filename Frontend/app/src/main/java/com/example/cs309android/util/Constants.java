@@ -2,6 +2,12 @@ package com.example.cs309android.util;
 
 import static com.example.cs309android.BuildConfig.BASE_API_URL;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+
+import java.util.Arrays;
+
 /**
  * Util constants class
  *
@@ -65,6 +71,36 @@ public class Constants {
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
+
+    public static NotificationManager manager;
+
+    public interface Notifications {
+        String[] DESCRIPTIONS = new String[] {
+                "high desc", "reg desc", "low desc"
+        };
+
+        String[] IDS = new String[] {
+                "cs309.notification.high", "cs309.notification", "cs309.notification.low"
+        };
+
+        String[] NAMES = new String[] {
+                "High Importance", "Regular Importance", "Low Importance"
+        };
+
+        NotificationChannel[] CHANNELS = new NotificationChannel[] {
+                new NotificationChannel(IDS[0], NAMES[0], NotificationManager.IMPORTANCE_HIGH),
+                new NotificationChannel(IDS[1], NAMES[1], NotificationManager.IMPORTANCE_DEFAULT),
+                new NotificationChannel(IDS[2], NAMES[2], NotificationManager.IMPORTANCE_LOW)
+        };
+
+        static void createNotificationChannels(Context context) {
+            for (int i = 0; i < CHANNELS.length; i++) {
+                CHANNELS[i].setDescription(DESCRIPTIONS[i]);
+            }
+            manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannels(Arrays.asList(CHANNELS));
+        }
+    }
 
     /**
      * User types interface

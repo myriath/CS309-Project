@@ -164,6 +164,20 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     }
 
     /**
+     * If on the homepage, close the app
+     * Otherwise, move back to the homepage
+     */
+    @Override
+    public void onBackPressed() {
+        if (currentFragment == 2) {
+            finish();
+        } else {
+            navbar.setSelectedItemId(R.id.home);
+            currentFragment = 2;
+        }
+    }
+
+    /**
      * Resumes when the application is resumed.
      */
     @Override
@@ -190,15 +204,21 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        // Creates notification channels
+        Constants.Notifications.createNotificationChannels(this);
+        // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 
+        // Creates main menu button icons
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
 
+        // Sets dp scalars for the app
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
         Constants.dp16 = Util.scalePixels(16);
         Constants.dp8 = Util.scalePixels(8);
 
+        // Sets global and gets the preferences
         global = ((GlobalClass) getApplicationContext());
         global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
 
@@ -208,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             NukeSSLCerts.nuke();
         }
 
+        // Sets up main buttons and animations
         mainButton = findViewById(R.id.mainButton);
         TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
         drawable.setDrawableByLayerId(R.id.closed, Util.mainButtonEdit);
@@ -239,9 +260,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             foodSearchLauncher.launch(intent);
         });
 
+        // Hides the keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
 
+        // Launches the search activity for a result
         foodSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -256,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
+        // Runs the tutorial on first run
         if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
             // TODO: First time
             global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();

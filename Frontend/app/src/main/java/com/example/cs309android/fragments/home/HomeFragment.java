@@ -95,10 +95,10 @@ public class HomeFragment extends BaseFragment {
         TabLayout nutritionTabs = view.findViewById(R.id.nutritionTabs);
 
         HomeNutritionCardModel[] models = new HomeNutritionCardModel[]{
-                new HomeNutritionCardModel("Calories", null),
-                new HomeNutritionCardModel("Carbohydrates", null),
-                new HomeNutritionCardModel("Protein", null),
-                new HomeNutritionCardModel("Fat", null)
+                new HomeNutritionCardModel("Calories", R.drawable.calories),
+                new HomeNutritionCardModel("Carbohydrates", R.drawable.sugar),
+                new HomeNutritionCardModel("Protein", R.drawable.meat),
+                new HomeNutritionCardModel("Fat", R.drawable.fat)
         };
 
         HomeNutritionAdapter adapter1 = new HomeNutritionAdapter(models);
