@@ -1,5 +1,6 @@
 package com.example.cs309android.activities.recipe;
 
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 import static com.example.cs309android.util.Constants.UserType.USER_REG;
@@ -27,11 +28,14 @@ import com.example.cs309android.models.api.request.profile.GetProfilePictureRequ
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.recipes.DeleteRecipeRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.models.api.request.social.CommentRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.CommentView;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -164,6 +168,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         findViewById(R.id.backButton).setOnClickListener(view -> onBackPressed());
 
         LinearLayout comments = findViewById(R.id.comments);
+        findViewById(R.id.postButton).setOnClickListener(view -> {
+            String commentText = Objects.requireNonNull(((TextInputLayout) findViewById(R.id.newComment)).getEditText()).getText().toString();
+            new CommentRequest(commentText, recipe.getRecipeID(), global.getToken()).request(response -> {
+                GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
+                    Toaster.toastShort("Error", this);
+                    return;
+                }
+                CommentView commentView = new CommentView(this);
+                Comment comment = new Comment(global.getUsername(), commentText, ITEM_ID_NULL);
+                commentView.initView(comment, onEdit -> commentView.toggleEditable(), onDelete -> comments.removeView(view), global);
+                comments.addView(commentView, 0);
+            }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
+        });
+
         for (Comment comment : recipe.getComments()) {
             CommentView view = new CommentView(this);
             view.initView(comment, toEdit -> view.toggleEditable(), deleted -> comments.removeView(view), global);
