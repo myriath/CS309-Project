@@ -196,7 +196,7 @@ public class AccountActivity extends AppCompatActivity {
                             deleteButton.setEnabled(false);
                             deleteButton.setVisible(false);
                         }
-                        if (global.getUserType() > USER_MOD && profileResponse.getUserType() < USER_ADM) {
+                        if (global.getUserType() > USER_ADM || (global.getUserType() > USER_MOD && profileResponse.getUserType() < USER_ADM)) {
                             MenuItem changeUserButton = menu.getMenu().findItem(R.id.change_type);
                             changeUserButton.setEnabled(true);
                             changeUserButton.setVisible(true);
