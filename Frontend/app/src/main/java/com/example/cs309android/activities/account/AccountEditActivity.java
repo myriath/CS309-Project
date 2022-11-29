@@ -2,7 +2,9 @@ package com.example.cs309android.activities.account;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -16,10 +18,14 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.profile.UpdateBannerImageRequest;
 import com.example.cs309android.models.api.request.profile.UpdateProfileImageRequest;
 import com.example.cs309android.models.api.request.profile.UpdateProfileRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -71,9 +77,37 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
         GlobalClass global = (GlobalClass) getApplicationContext();
 
-        ((TextView) findViewById(R.id.unameView)).setText(global.getUsername());
+        Intent intent = getIntent();
         TextInputLayout bioInput = findViewById(R.id.bioEdit);
-        Objects.requireNonNull(bioInput.getEditText()).setText(global.getBio());
+
+        String username = intent.getStringExtra(PARCEL_USERNAME);
+        if (username != null) {
+            ((TextView) findViewById(R.id.unameView)).setText(username);
+
+            new GetProfilePictureRequest(username).request((ImageView) findViewById(R.id.profile_picture), AccountEditActivity.this);
+            new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountEditActivity.this);
+
+            new GetProfileRequest(username).request(response -> {
+                GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
+
+                Objects.requireNonNull(bioInput.getEditText()).setText(profileResponse.getBio());
+                ((TextView) findViewById(R.id.followerCount))
+                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
+                ((TextView) findViewById(R.id.followingCount))
+                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
+            }, AccountEditActivity.this);
+        } else {
+            ((TextView) findViewById(R.id.unameView)).setText(global.getUsername());
+            Objects.requireNonNull(bioInput.getEditText()).setText(global.getBio());
+
+            ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
+            ((ImageView) findViewById(R.id.banner)).setImageBitmap(global.getBanner());
+
+            ((TextView) findViewById(R.id.followerCount))
+                    .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
+            ((TextView) findViewById(R.id.followingCount))
+                    .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+        }
 
         findViewById(R.id.add_pfp).setOnClickListener(view -> {
             imageDestination = PFP;
@@ -84,17 +118,9 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
             imageChooser();
         });
 
-        ((ImageView) findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-        ((ImageView) findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-
-        ((TextView) findViewById(R.id.followerCount))
-                .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
-        ((TextView) findViewById(R.id.followingCount))
-                .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
-
         findViewById(R.id.saveButton).setOnClickListener(view -> {
             Util.spin(this);
-            new UpdateProfileRequest(global.getToken(), bioInput.getEditText().getText().toString()).request(response -> {
+            new UpdateProfileRequest(global.getToken(), Objects.requireNonNull(bioInput.getEditText()).getText().toString()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                     global.setBio(bioInput.getEditText().getText().toString());

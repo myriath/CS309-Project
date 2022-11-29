@@ -10,15 +10,16 @@ import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_L
 import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
+import static com.example.cs309android.util.Constants.PICASSO;
+import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.PREF_NAME;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BACK_ENABLED;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_LOGGED_OUT;
-import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
-import static com.example.cs309android.util.Constants.PREF_LOGIN;
-import static com.example.cs309android.util.Constants.PREF_NAME;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
@@ -58,6 +59,7 @@ import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.PicassoSingleton;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
@@ -187,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        PICASSO = new PicassoSingleton();
 
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);

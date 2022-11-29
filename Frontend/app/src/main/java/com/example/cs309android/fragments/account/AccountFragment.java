@@ -79,6 +79,10 @@ public class AccountFragment extends BaseFragment {
             global.setBio(profileResponse.getBio());
             global.setFollowers(profileResponse.getFollowers());
             global.setFollowing(profileResponse.getFollowing());
+            global.setUserType(profileResponse.getUserType());
+
+            ImageView badge = view.findViewById(R.id.badge);
+            Util.getBadge(global.getUserType(), badge);
 
             ((TextView) view.findViewById(R.id.followerCount))
                     .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
@@ -119,7 +123,7 @@ public class AccountFragment extends BaseFragment {
         );
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
-        ImageButton editButton = view.findViewById(R.id.editButton);
+        ImageButton editButton = view.findViewById(R.id.menuButton);
 
         settingsButton.setOnClickListener(view1 -> callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null));
 

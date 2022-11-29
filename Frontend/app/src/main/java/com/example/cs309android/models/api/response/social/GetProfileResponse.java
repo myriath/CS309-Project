@@ -24,6 +24,12 @@ public class GetProfileResponse extends GenericResponse {
      */
     @Expose
     private final String bio;
+    /**
+     * Type of the user.
+     * Used to display the type badge
+     */
+    @Expose
+    private final int userType;
 
     /**
      * Public constructor
@@ -32,12 +38,14 @@ public class GetProfileResponse extends GenericResponse {
      * @param followers follower count
      * @param following number of users this user is following
      * @param bio       biography text
+     * @param userType  Type of the user
      */
-    public GetProfileResponse(int result, int followers, int following, String bio) {
+    public GetProfileResponse(int result, int followers, int following, String bio, int userType) {
         super(result);
         this.followers = followers;
         this.following = following;
         this.bio = bio;
+        this.userType = userType;
     }
 
     /**
@@ -65,5 +73,14 @@ public class GetProfileResponse extends GenericResponse {
      */
     public String getBio() {
         return bio;
+    }
+
+    /**
+     * Getter for the user type
+     *
+     * @return user type
+     */
+    public int getUserType() {
+        return userType;
     }
 }

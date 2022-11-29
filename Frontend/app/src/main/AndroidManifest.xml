@@ -39,7 +39,7 @@
             android:name=".activities.recipe.RecipeDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.food.CustomFoodActivity"
+            android:name=".activities.food.NewFoodActivity"
             android:exported="false" />
         <activity
             android:name=".activities.food.FoodDetailsActivity"

@@ -4,16 +4,23 @@ import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIS
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.UserType.USER_ADM;
+import static com.example.cs309android.util.Constants.UserType.USER_MOD;
+import static com.example.cs309android.util.Constants.UserType.USER_REG;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -28,6 +35,9 @@ import com.example.cs309android.models.api.request.social.FollowRequest;
 import com.example.cs309android.models.api.request.social.GetFollowersRequest;
 import com.example.cs309android.models.api.request.social.GetFollowingRequest;
 import com.example.cs309android.models.api.request.social.UnfollowRequest;
+import com.example.cs309android.models.api.request.users.ChangeUserTypeRequest;
+import com.example.cs309android.models.api.request.users.DeleteUserRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
@@ -57,6 +67,10 @@ public class AccountActivity extends AppCompatActivity {
      * Default 0
      */
     private int followers = 0;
+    /**
+     * Used to edit a user's account
+     */
+    private ActivityResultLauncher<Intent> editUserLauncher;
 
     /**
      * Runs when the activity is created
@@ -82,6 +96,11 @@ public class AccountActivity extends AppCompatActivity {
 
         TextView followerCount = findViewById(R.id.followerCount);
         TextView followingCount = findViewById(R.id.followingCount);
+
+        editUserLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> update(username, followerCount, followingCount, owner, global)
+        );
 
         if (!owner) {
             if (isFollowing) {
@@ -138,6 +157,19 @@ public class AccountActivity extends AppCompatActivity {
                     startActivity(intent1);
                 }, AccountActivity.this));
 
+        update(username, followerCount, followingCount, owner, global);
+    }
+
+    /**
+     * Updates the view with new data
+     *
+     * @param username       Username of the account to show
+     * @param followerCount  Follower count view
+     * @param followingCount Following count view
+     * @param owner          True if the account displayed is the account logged in
+     * @param global         GlobalClass for getting authentication token from
+     */
+    public void update(String username, TextView followerCount, TextView followingCount, boolean owner, GlobalClass global) {
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             if (profileResponse.getResult() == Constants.Results.RESULT_OK) {
@@ -148,8 +180,70 @@ public class AccountActivity extends AppCompatActivity {
                 followingCount.setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
 
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
-            } else {
-                Toaster.toastShort("Error", this);
+
+                ImageView badge = findViewById(R.id.badge);
+                Util.getBadge(global.getUserType(), badge);
+
+                // Setup menu button if necessary
+                if (global.getUserType() > USER_REG || owner) {
+                    findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
+                    findViewById(R.id.menuButton).setOnClickListener(view -> {
+                        PopupMenu menu = new PopupMenu(this, view);
+                        menu.inflate(R.menu.moderation_menu);
+                        menu.show();
+                        if (owner) {
+                            MenuItem deleteButton = menu.getMenu().findItem(R.id.delete);
+                            deleteButton.setEnabled(false);
+                            deleteButton.setVisible(false);
+                        }
+                        if (global.getUserType() > USER_ADM || (global.getUserType() > USER_MOD && profileResponse.getUserType() < USER_ADM)) {
+                            MenuItem changeUserButton = menu.getMenu().findItem(R.id.change_type);
+                            changeUserButton.setEnabled(true);
+                            changeUserButton.setVisible(true);
+                        }
+                        menu.setOnMenuItemClickListener(item -> {
+                            int id = item.getItemId();
+                            if (id == R.id.edit) {
+                                Intent intent1 = new Intent(this, AccountEditActivity.class);
+                                intent1.putExtra(PARCEL_USERNAME, username);
+                                editUserLauncher.launch(intent1);
+                            } else if (id == R.id.delete) {
+                                new DeleteUserRequest(username, global.getToken()).request(response1 -> {
+                                    GenericResponse genericResponse = Util.objFromJson(response1, GenericResponse.class);
+                                    if (genericResponse.getResult() != RESULT_OK) {
+                                        Toaster.toastShort("Error", this);
+                                    }
+                                }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+                                finish();
+                            } else if (id == R.id.change_type) {
+                                PopupMenu menu1 = new PopupMenu(this, menu.getMenu().findItem(R.id.change_type).getActionView());
+                                menu1.inflate(R.menu.user_types);
+                                menu1.show();
+                                menu1.setOnMenuItemClickListener(item1 -> {
+                                    int id1 = item1.getItemId();
+                                    int newType;
+                                    if (id1 == R.id.moderator) {
+                                        newType = USER_MOD;
+                                    } else if (id1 == R.id.admin) {
+                                        newType = USER_ADM;
+                                    } else {
+                                        newType = USER_REG;
+                                    }
+                                    new ChangeUserTypeRequest(username, global.getToken(), newType).request(response1 -> {
+                                        GenericResponse genericResponse = Util.objFromJson(response1, GenericResponse.class);
+                                        if (genericResponse.getResult() != RESULT_OK) {
+                                            Toaster.toastShort("Error", this);
+                                        }
+                                    }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+                                    return true;
+                                });
+                            }
+                            return true;
+                        });
+                    });
+                } else {
+                    Toaster.toastShort("Error", this);
+                }
             }
         }, AccountActivity.this);
 
