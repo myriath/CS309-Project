@@ -1,8 +1,7 @@
 android.buildTypes {
     demodev {
-//        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
-        // TODO: Replace with hostname once back on campus
-        buildConfigField "String", "BASE_API_URL", "\"https://10.90.75.54:8443/\""
+        buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
+//        buildConfigField "String", "BASE_API_URL", "\"https://10.90.75.54:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     demo {

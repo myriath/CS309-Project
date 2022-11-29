@@ -66,7 +66,7 @@ public class IngredientEditView extends FrameLayout {
         view = inflate(getContext(), R.layout.ingredient_add, this);
         ((TextView) view.findViewById(R.id.name)).setText(item.getCappedDescription(25));
         ((TextView) view.findViewById(R.id.unit)).setText(unit);
-        view.findViewById(R.id.remove).setOnClickListener(listener);
+        view.findViewById(R.id.menu).setOnClickListener(listener);
         this.item = item;
         this.unit = unit;
         this.position = position;

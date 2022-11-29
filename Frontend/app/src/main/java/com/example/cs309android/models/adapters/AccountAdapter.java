@@ -74,7 +74,7 @@ public class AccountAdapter extends ArrayAdapter<String> {
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
         new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
-        TextView bio = convertView.findViewById(R.id.bio);
+        TextView bio = convertView.findViewById(R.id.comment);
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
 

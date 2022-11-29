@@ -22,6 +22,11 @@ public class Comment implements Parcelable {
     @Expose
     private final String comment;
     /**
+     * Comment id from the database
+     */
+    @Expose
+    private final int id;
+    /**
      * Whether or not to show the full text
      */
     private boolean showFull = false;
@@ -31,10 +36,12 @@ public class Comment implements Parcelable {
      *
      * @param username username of the comment creator
      * @param comment  comment text
+     * @param id       comment id from the database
      */
-    public Comment(String username, String comment) {
+    public Comment(String username, String comment, int id) {
         this.username = username;
         this.comment = comment;
+        this.id = id;
     }
 
     /**
@@ -45,6 +52,7 @@ public class Comment implements Parcelable {
     protected Comment(Parcel in) {
         username = in.readString();
         comment = in.readString();
+        id = in.readInt();
         showFull = in.readByte() != 0;
     }
 
@@ -58,6 +66,7 @@ public class Comment implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
         dest.writeString(comment);
+        dest.writeInt(id);
         dest.writeByte((byte) (showFull ? 1 : 0));
     }
 
@@ -102,6 +111,15 @@ public class Comment implements Parcelable {
      */
     public String getComment() {
         return comment;
+    }
+
+    /**
+     * Getter for the comment id
+     *
+     * @return comment id
+     */
+    public int getId() {
+        return id;
     }
 
     /**

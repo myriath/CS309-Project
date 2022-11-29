@@ -1,6 +1,6 @@
 package com.example.cs309android.fragments.home;
 
-import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +18,8 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
-import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
+import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
@@ -147,15 +147,15 @@ public class HomeFragment extends BaseFragment {
                     new Instruction(3, "step"),
                     new Instruction(4, "step")
             }, "papajohn", new Comment[]{
-                    new Comment("Test1", "joe mama"),
-                    new Comment("Test2", "joe mamajoe mama"),
-                    new Comment("Test3", "joe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
-                    new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama"),
+                    new Comment("papajohn", "joe mama", 1),
+                    new Comment("Test2", "joe mamajoe mama", 2),
+                    new Comment("Test3", "joe mamajoe mamajoe mamajoe mama", 3),
+                    new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 4),
+                    new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 5),
+                    new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 6),
+                    new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 7),
+                    new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 8),
+                    new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 9),
             }
             ));
             startActivity(intent);

@@ -119,7 +119,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
             items.get(position).setStricken(checkBox.isChecked());
         });
 
-        convertView.findViewById(R.id.remove).setOnClickListener(view1 -> {
+        convertView.findViewById(R.id.menu).setOnClickListener(view1 -> {
             SimpleFoodItem item = items.get(position);
             new ShoppingRemoveRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);

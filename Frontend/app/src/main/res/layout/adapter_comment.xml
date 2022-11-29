@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/nonEditable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/pfpCard"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"
+            android:layout_marginVertical="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@string/profile_picture"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/menu"
+            android:layout_toEndOf="@id/pfpCard"
+            android:textAlignment="textStart"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toEndOf="@id/pfpCard"
+            android:enabled="false"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textAlignment="textStart"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/showMoreLess"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/comment"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/show_more"
+            android:visibility="gone"
+            android:textColor="@color/prim" />
+
+        <ImageButton
+            android:id="@+id/menu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_kebab"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:contentDescription="@string/menu" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/editable"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nonEditable">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/commentInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/comment"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textMultiLine"
+                android:maxLength="2000" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/commentInputLayout"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/update"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/cancel"
+                android:backgroundTint="?attr/colorSecondary"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

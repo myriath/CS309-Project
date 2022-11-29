@@ -33,7 +33,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_toStartOf="@id/remove"
+        android:layout_toStartOf="@id/menu"
         android:layout_toEndOf="@id/quantity"
         android:gravity="center_vertical"
         android:textSize="20sp" />
@@ -52,7 +52,7 @@
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/remove"
+        android:id="@+id/menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"

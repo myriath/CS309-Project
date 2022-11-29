@@ -32,13 +32,13 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_toStartOf="@id/remove"
+        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/pfpCard"
         android:textAlignment="textStart"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/bio"
+        android:id="@+id/comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/username"
@@ -51,29 +51,5 @@
         android:maxLines="3"
         android:textAlignment="textStart"
         android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/showMoreLess"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@id/bio"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:text="@string/show_more"
-        android:visibility="gone"
-        android:textColor="@color/prim" />
-
-    <ImageButton
-        android:id="@+id/remove"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_remove"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:visibility="gone"
-        android:contentDescription="@string/remove" />
 
 </RelativeLayout>

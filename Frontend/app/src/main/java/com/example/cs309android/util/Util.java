@@ -9,6 +9,9 @@ import static com.example.cs309android.util.Constants.Results.RESULT_REGEN_TOKEN
 import static com.example.cs309android.util.Constants.Results.RESULT_USER_CREATED;
 import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
+import static com.example.cs309android.util.Constants.UserType.USER_ADM;
+import static com.example.cs309android.util.Constants.UserType.USER_DEV;
+import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
@@ -479,5 +483,28 @@ public class Util {
                 .registerTypeAdapter(type, typeAdapter)
                 .create()
                 .fromJson(json, type);
+    }
+
+    /**
+     * Gets the badge R id for the user
+     *
+     * @param userType Type of the user
+     * @param badge    ImageView to change
+     */
+    public static void getBadge(int userType, ImageView badge) {
+        switch (userType) {
+            case USER_DEV: {
+                badge.setImageResource(R.drawable.gem);
+                break;
+            }
+            case USER_ADM: {
+                badge.setImageResource(R.drawable.gold);
+                break;
+            }
+            case USER_MOD: {
+                badge.setImageResource(R.drawable.silver);
+                break;
+            }
+        }
     }
 }

@@ -18,6 +18,11 @@ public class Constants {
     public static float dp8;
 
     /**
+     * Picasso Singleton for the app
+     */
+    public static PicassoSingleton PICASSO;
+
+    /**
      * DEBUG variable for testing Logs
      * TODO: False for prod
      */
@@ -77,6 +82,10 @@ public class Constants {
          * Administrator type
          */
         int USER_ADM = 2;
+        /**
+         * Developer type
+         */
+        int USER_DEV = 3;
     }
 
     /**
@@ -315,6 +324,14 @@ public class Constants {
              * URL to regen an expired token
              */
             String REGEN_TOKEN_URL = AUTH_URL + "regenToken/";
+            /**
+             * URL for deleting users (used by admin / moderator)
+             */
+            String DELETE_URL = AUTH_URL + "delete/";
+            /**
+             * URL for changing user types (used by admin)
+             */
+            String UPDATE_USER_TYPE_URL = AUTH_URL + "updateUserType/";
         }
 
         /**
@@ -337,6 +354,14 @@ public class Constants {
              * URL for getting fdc id from a upc code
              */
             String UPC_URL = FOOD_URL + "foodByUpc/";
+            /**
+             * URL for deleting custom food items
+             */
+            String DELETE_URL = FOOD_URL + "delete/";
+            /**
+             * URL for updating custom food items
+             */
+            String UPDATE_URL = FOOD_URL + "update/";
         }
 
         /**
@@ -397,6 +422,11 @@ public class Constants {
              * URL for getting a recipe's image
              */
             String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
+            /**
+             * URL for deleting a recipe
+             */
+            String DELETE_URL = RECIPES_URL + "delete/";
+
         }
 
         /**
@@ -408,9 +438,13 @@ public class Constants {
              */
             String COMMENT_URL = SOCIAL_URL + "comment";
             /**
+             * URL used when editing comments
+             */
+            String EDIT_COMMENT_URL = SOCIAL_URL + "editComment";
+            /**
              * URL for deleting a comment
              */
-            String REMOVE_COMMENT_URL = SOCIAL_URL + "removeComment";
+            String DELETE_COMMENT_URL = SOCIAL_URL + "removeComment";
             /**
              * URL for following an account
              */
