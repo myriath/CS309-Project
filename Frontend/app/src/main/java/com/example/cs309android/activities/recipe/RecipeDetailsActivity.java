@@ -2,12 +2,14 @@ package com.example.cs309android.activities.recipe;
 
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.UserType.USER_REG;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,7 +24,12 @@ import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.request.recipes.DeleteRecipeRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.CommentView;
 
@@ -89,6 +96,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
+        new GetProfileRequest(recipe.getUsername()).request(response -> {
+            GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
+            Util.getBadge(profileResponse.getUserType(), (ImageView) findViewById(R.id.badge));
+        }, RecipeDetailsActivity.this);
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
@@ -122,12 +133,29 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             instructionsList.addView(view);
         }
 
-        if (recipe.getUsername().equals(global.getUsername())) {
-            findViewById(R.id.editCard).setVisibility(View.VISIBLE);
-            findViewById(R.id.editButton).setOnClickListener(view -> {
-                Intent intent = new Intent(this, AddRecipeActivity.class);
-                intent.putExtra(PARCEL_RECIPE, recipe);
-                editLauncher.launch(intent);
+        if (recipe.getUsername().equals(global.getUsername()) || global.getUserType() > USER_REG) {
+            findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
+            findViewById(R.id.menuButton).setOnClickListener(view -> {
+                PopupMenu menu = new PopupMenu(this, view);
+                menu.inflate(R.menu.moderation_menu);
+                menu.show();
+                menu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.edit) {
+                        Intent intent = new Intent(this, AddRecipeActivity.class);
+                        intent.putExtra(PARCEL_RECIPE, recipe);
+                        editLauncher.launch(intent);
+                    } else if (id == R.id.delete) {
+                        new DeleteRecipeRequest(recipe, global.getToken()).request(response -> {
+                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                            if (genericResponse.getResult() != RESULT_OK) {
+                                Toaster.toastShort("Error", this);
+                            }
+                        }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
+                        finish();
+                    }
+                    return true;
+                });
             });
 
             findViewById(R.id.favoriteButton).setVisibility(View.GONE);
@@ -138,7 +166,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         LinearLayout comments = findViewById(R.id.comments);
         for (Comment comment : recipe.getComments()) {
             CommentView view = new CommentView(this);
-            view.initView(comment);
+            view.initView(comment, toEdit -> view.toggleEditable(), deleted -> comments.removeView(view), global);
             view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));
             comments.addView(view);
         }

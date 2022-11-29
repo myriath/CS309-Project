@@ -78,7 +78,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
             Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(CALLBACK_DEFAULT, null), System.out::println, System.out::println);
         });
 
-        convertView.findViewById(R.id.remove).setOnClickListener(view -> {
+        convertView.findViewById(R.id.menu).setOnClickListener(view -> {
             Util.logout(global, username);
             Bundle bundle = new Bundle();
             bundle.putInt(PARCEL_ITEM_POSITION, position);

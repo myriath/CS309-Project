@@ -136,5 +136,15 @@
     <string name="comments">Comments</string>
     <string name="show_more"><u>Show more</u></string>
     <string name="show_less"><u>Show less</u></string>
+    <string name="delete">Delete</string>
+    <string name="menu">Menu</string>
+    <string name="change_user_type">Change User Type</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="comment">Comment</string>
+    <string name="regular">Regular</string>
+    <string name="moderator">Moderator</string>
+    <string name="admin">Admin</string>
+    <string name="account_badge">Account badge</string>
 
 </resources>

@@ -2,10 +2,10 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Intents.INTENT_NONE;
 import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
-import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
@@ -35,8 +35,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.food.CustomFoodActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.food.NewFoodActivity;
 import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
@@ -308,7 +308,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             case (CALLBACK_FOOD_DETAIL): {
                 SimpleFoodItem item = bundle.getParcelable(PARCEL_FOODITEM);
                 if (item.getId() == ITEM_ID_NULL) {
-                    Intent intent = new Intent(this, CustomFoodActivity.class);
+                    Intent intent = new Intent(this, NewFoodActivity.class);
                     intent.putExtra(PARCEL_FOODITEM, item);
                     customDetailsLauncher.launch(intent);
                 } else {
