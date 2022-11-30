@@ -2,6 +2,7 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.INTENT_FOOD_LOG;
 import static com.example.cs309android.util.Constants.INTENT_NONE;
 import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
@@ -214,6 +215,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         Intent intent = new Intent();
         switch (intentCode) {
             case INTENT_SHOPPING_LIST: {
+                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
+                setResult(RESULT_OK, intent);
+                break;
+            }
+            case INTENT_FOOD_LOG: {
                 intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
                 setResult(RESULT_OK, intent);
                 break;

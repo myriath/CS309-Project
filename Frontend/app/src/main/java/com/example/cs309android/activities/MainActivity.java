@@ -8,6 +8,7 @@ import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.INTENT_FOOD_LOG;
 import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
@@ -228,6 +229,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Log add button
         addLog.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG);
+            intent.putExtra(PARCEL_FOODITEMS_LIST, breakfast);
             foodSearchLauncher.launch(intent);
         });
 

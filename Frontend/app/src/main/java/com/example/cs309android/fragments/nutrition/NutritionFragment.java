@@ -120,9 +120,8 @@ public class NutritionFragment extends BaseFragment {
     private void updateDate() {
         TextView dateText = requireActivity().findViewById(R.id.date);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
-
         // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
@@ -179,7 +178,7 @@ public class NutritionFragment extends BaseFragment {
         rightButton = view.findViewById(R.id.next_date_button);
         TextView dateText = view.findViewById(R.id.date);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
         // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {

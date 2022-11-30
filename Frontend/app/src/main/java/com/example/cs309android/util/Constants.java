@@ -105,6 +105,10 @@ public class Constants {
      */
     public static final int INTENT_RECIPE_ADD = 1;
     /**
+     * Intent code tells the SearchActivity it is from the food log
+     */
+    public static final int INTENT_FOOD_LOG = 2;
+    /**
      * Used to get an image uri from a parcel / intent
      */
     public static final String PARCEL_IMAGE_URI = "image_uri";
