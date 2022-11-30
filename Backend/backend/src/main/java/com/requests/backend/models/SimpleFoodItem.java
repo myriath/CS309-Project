@@ -1,15 +1,19 @@
 package com.requests.backend.models;
 
+import javax.persistence.*;
+
 /**
  * Simple food item used for displaying and moving data in the app
  *
  * @author Mitch Hudson
  */
+@Entity
+@Table(name = "simple_foods")
 public class SimpleFoodItem {
-
     /**
      * FDC ID from the api or Custom Food ID
      */
+    @Id
     private int id;
 
     /**
@@ -21,6 +25,7 @@ public class SimpleFoodItem {
      */
     private boolean stricken;
 
+    @Id
     private boolean isCustom;
 
     public SimpleFoodItem() {}

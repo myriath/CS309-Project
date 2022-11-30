@@ -8,9 +8,11 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredient_id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private SimpleFoodItem food;
+
     private int rid;
-    private int itemId;
-    private boolean isCustom;
     private double quantity;
     private String unit;
 
@@ -32,22 +34,6 @@ public class Ingredient {
         this.rid = rid;
     }
 
-    public int getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
-
-    public boolean isCustom() {
-        return isCustom;
-    }
-
-    public void setCustom(boolean custom) {
-        isCustom = custom;
-    }
-
     public double getQuantity() {
         return quantity;
     }
@@ -62,5 +48,13 @@ public class Ingredient {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public SimpleFoodItem getFood() {
+        return food;
+    }
+
+    public void setFood(SimpleFoodItem food) {
+        this.food = food;
     }
 }

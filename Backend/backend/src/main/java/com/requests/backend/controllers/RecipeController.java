@@ -5,16 +5,14 @@ import com.requests.backend.models.responses.AddRecipeResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;
 import com.requests.backend.models.responses.ResultResponse;
-import com.requests.backend.repositories.IngredientRepository;
-import com.requests.backend.repositories.InstructionRepository;
-import com.requests.backend.repositories.RecipeRepository;
-import com.requests.backend.repositories.TokenRepository;
+import com.requests.backend.repositories.*;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Iterator;
 
 import static com.util.Constants.*;
 
@@ -45,6 +43,9 @@ public class RecipeController {
     private InstructionRepository instructionRepository;
     @Autowired
     private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private SimpleFoodRepository simpleFoodRepository;
 
     /**
      * Get a list of all recipes from the database.
@@ -130,14 +131,13 @@ public class RecipeController {
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
                 recipe.setDescription(req.getDescription());
-//                recipe.setIngredients(List.of(req.getIngredients()));
-//                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe = recipeRepository.save(recipe);
                 for (Instruction instruction : instructions) {
-                    instructionRepository.queryCreateInstruction(recipe.getRid(), instruction.getStepNum(), instruction.getStepText());
+                    instructionRepository.save(instruction);
                 }
                 for (Ingredient ingredient : req.getIngredients()) {
-                    ingredientRepository.queryCreateIngredient(recipe.getRid(), ingredient.getItemId(), ingredient.isCustom(), ingredient.getQuantity(), ingredient.getUnit());
+                    simpleFoodRepository.save(ingredient.getFood());
+                    ingredientRepository.save(ingredient);
                 }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
