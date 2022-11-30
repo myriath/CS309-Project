@@ -2,6 +2,7 @@ package com.example.cs309android.activities.account;
 
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
 import static com.example.cs309android.util.Constants.UserType.USER_ADM;
@@ -26,6 +27,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
@@ -256,9 +258,13 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetRecipesRequest(username).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            if (postsResponse.getItems() != null && postsResponse.getItems().length > 0) {
+            if (postsResponse.getRecipes() != null && postsResponse.getRecipes().length > 0) {
                 findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
-                ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+                ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getRecipes())), recipe -> {
+                    Intent intent = new Intent(this, RecipeDetailsActivity.class);
+                    intent.putExtra(PARCEL_RECIPE, recipe);
+                    startActivity(intent);
+                }));
             }
         }, AccountActivity.this);
     }

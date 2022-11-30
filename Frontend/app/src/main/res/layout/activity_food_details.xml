@@ -45,7 +45,8 @@
         android:elevation="0dp"
         android:text="@string/add_item"
         app:fabSize="auto"
-        app:icon="@drawable/ic_add" />
+        app:icon="@drawable/ic_add"
+        android:fitsSystemWindows="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"

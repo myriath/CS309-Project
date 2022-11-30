@@ -27,7 +27,7 @@ import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
-import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.HomeRecipeView;
@@ -112,7 +112,7 @@ public class HomeFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
+            GetRecipesResponse recipeResponse = Util.objFromJson(response, GetRecipesResponse.class);
 
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
@@ -129,7 +129,11 @@ public class HomeFragment extends BaseFragment {
 
         }, requireContext());
 
-        adapter = new RecipeListAdapter(this.getActivity(), recipes);
+        adapter = new RecipeListAdapter(this.getActivity(), recipes, recipe -> {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, recipe);
+            startActivity(intent);
+        });
         LinearLayout layout = view.findViewById(R.id.feed);
 
         HomeRecipeView view1 = new HomeRecipeView(requireContext());

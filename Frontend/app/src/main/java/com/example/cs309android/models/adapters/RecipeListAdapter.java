@@ -27,6 +27,10 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
      * List of items in the recipe list
      */
     private final ArrayList<Recipe> items;
+    /**
+     * On click listener for when the item is clicked
+     */
+    private final RunWithRecipe runWithRecipe;
 
     /**
      * Public constructor.
@@ -34,9 +38,10 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public RecipeListAdapter(Context context, ArrayList<Recipe> items) {
+    public RecipeListAdapter(Context context, ArrayList<Recipe> items, RunWithRecipe runWithRecipe) {
         super(context, R.layout.home_item_model, items);
         this.items = items;
+        this.runWithRecipe = runWithRecipe;
     }
 
     /**
@@ -57,7 +62,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID()))
                 .request((ImageView) convertView.findViewById(R.id.recipeImage), getContext());
 
-        ((TextView) convertView.findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
+        ((TextView) convertView.findViewById(R.id.recipeTitle)).setText(recipe.getRname());
         ((TextView) convertView.findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
@@ -66,6 +71,17 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             return WindowInsetsCompat.CONSUMED;
         });
 
+        convertView.setOnClickListener(view -> {
+            runWithRecipe.run(recipe);
+        });
+
         return convertView;
+    }
+
+    /**
+     * Runs some code with a recipe
+     */
+    public interface RunWithRecipe {
+        void run(Recipe recipe);
     }
 }

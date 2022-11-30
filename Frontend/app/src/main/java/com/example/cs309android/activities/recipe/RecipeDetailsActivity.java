@@ -107,7 +107,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
-        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
+        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRname());
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         LinearLayout ingredientsList = findViewById(R.id.ingredients);
@@ -180,7 +180,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 Comment comment = new Comment(global.getUsername(), commentText, ITEM_ID_NULL);
                 commentView.initView(comment, onEdit -> commentView.toggleEditable(), onDelete -> comments.removeView(view), global);
                 comments.addView(commentView, 0);
-            }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
+            }, error -> {
+                error.printStackTrace();
+                Toaster.toastShort("Error", this);
+            }, RecipeDetailsActivity.this);
         });
 
         for (Comment comment : recipe.getComments()) {

@@ -3,6 +3,7 @@ package com.example.cs309android.fragments.account;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Util.objFromJson;
 
@@ -23,6 +24,7 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.account.AccountEditActivity;
 import com.example.cs309android.activities.account.AccountListActivity;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
@@ -99,9 +101,13 @@ public class AccountFragment extends BaseFragment {
 
         new GetRecipesRequest(global.getUsername()).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            if (postsResponse.getItems() != null && postsResponse.getItems().length > 0) {
+            if (postsResponse.getRecipes() != null && postsResponse.getRecipes().length > 0) {
                 view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
-                ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(getContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
+                ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(getContext(), new ArrayList<>(Arrays.asList(postsResponse.getRecipes())), recipe -> {
+                    Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+                    intent.putExtra(PARCEL_RECIPE, recipe);
+                    startActivity(intent);
+                }));
             }
         }, requireContext());
     }
