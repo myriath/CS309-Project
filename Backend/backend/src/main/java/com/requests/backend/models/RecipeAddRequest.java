@@ -1,31 +1,47 @@
 package com.requests.backend.models;
 
 public class RecipeAddRequest {
-
-    private int rid;
     private String recipeName;
-    private String instructions;
+    private String description;
+    private Instruction[] instructions;
+    private Ingredient[] ingredients;
 
-    public RecipeAddRequest(int rid, String recipeName, String instructions) {
-        this.rid = rid;
+    public RecipeAddRequest(String recipeName, String description, Instruction[] instructions, Ingredient[] ingredients) {
         this.recipeName = recipeName;
+        this.description = description;
         this.instructions = instructions;
-    }
-    public int getRid() {
-        return rid;
+        this.ingredients = ingredients;
     }
 
     public String getRecipeName() {
         return recipeName;
     }
 
-    public String getInstructions() {
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Instruction[] getInstructions() {
         return instructions;
     }
 
+    public void setInstructions(Instruction[] instructions) {
+        this.instructions = instructions;
+    }
 
+    public Ingredient[] getIngredients() {
+        return ingredients;
+    }
 
-
-
-
+    public void setIngredients(Ingredient[] ingredients) {
+        this.ingredients = ingredients;
+    }
 }

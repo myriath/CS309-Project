@@ -3,16 +3,13 @@ package com.requests.backend.models.responses;
 import com.requests.backend.models.Recipe;
 
 public class RecipeResponse extends ResultResponse {
-    private Recipe recipe;
+    private Recipe[] recipes;
 
-    public Recipe getRecipe() {
-        return recipe;
+    public Recipe[] getRecipes() {
+        return recipes;
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setRecipe(Recipe[] recipes) {
+        this.recipes = recipes;
     }
-
-
-
 }

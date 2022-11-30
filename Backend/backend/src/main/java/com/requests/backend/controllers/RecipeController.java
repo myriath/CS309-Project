@@ -1,11 +1,12 @@
 package com.requests.backend.controllers;
 
-import com.requests.backend.models.Recipe;
-import com.requests.backend.models.RecipeAddRequest;
-import com.requests.backend.models.Token;
+import com.requests.backend.models.*;
+import com.requests.backend.models.responses.AddRecipeResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;
 import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.repositories.IngredientRepository;
+import com.requests.backend.repositories.InstructionRepository;
 import com.requests.backend.repositories.RecipeRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
@@ -40,6 +41,11 @@ public class RecipeController {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private InstructionRepository instructionRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     /**
      * Get a list of all recipes from the database.
@@ -87,7 +93,7 @@ public class RecipeController {
             res.setResult(RESULT_ERROR);
         }
         else {
-            res.setRecipe(recipe[0]);
+            res.setRecipe(recipe);
             res.setResult(RESULT_OK);
         }
 
@@ -102,14 +108,14 @@ public class RecipeController {
      */
     @PostMapping(path="/add/{token}")
     @ResponseBody
-    public ResultResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) {
+    public AddRecipeResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
         String recipeName = req.getRecipeName();
-        String instructions = req.getInstructions();
+        Instruction[] instructions = req.getInstructions();
 
-        ResultResponse res = new ResultResponse();
+        AddRecipeResponse res = new AddRecipeResponse();
 
 
         if (tokenQueryRes.length == 0) {
@@ -119,8 +125,21 @@ public class RecipeController {
             String username = tokenQueryRes[0].getUsername();
 
             try {
-                recipeRepository.queryCreateRecipe(username, recipeName, instructions);
+                Recipe recipe = new Recipe();
+                recipe.setUsername(username);
+                recipe.setRname(req.getRecipeName());
+                recipe.setIngredients(req.getIngredients());
+                recipe.setInstructions(req.getInstructions());
+                recipe = recipeRepository.save(recipe);
+//                for (Instruction instruction : instructions) {
+//                    instructionRepository.queryCreateInstruction(instruction.getRid(), instruction.getStepNum(), instruction.getStepText());
+//                }
+//                for (Ingredient ingredient : req.getIngredients()) {
+//                    ingredientRepository.save()
+//                    ingredientRepository.queryCreateIngredient();
+//                }
                 res.setResult(RESULT_RECIPE_CREATED);
+                res.setRid(recipe.getRid());
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR_RID_TAKEN);
             }
@@ -181,15 +200,15 @@ public class RecipeController {
      */
     @DeleteMapping(path="/remove/{token}/{rid}")
     @ResponseBody
-    public RecipeResponse removeRecipe(@PathVariable  int rid, @PathVariable  String token) {
+    public ResultResponse removeRecipe(@PathVariable  int rid, @PathVariable  String token) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokens = recipeRepository.queryRecipeDeleteCheck(hashedToken);
-        RecipeResponse res = new RecipeResponse();
+        ResultResponse res = new ResultResponse();
         Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
 
         if (tokens.length == 0) {
             res.setResult(RESULT_ERROR);
-        } else if(tokens[0].getUsername() == recipe[0].getUsername()){
+        } else if(tokens[0].getUsername().equals(recipe[0].getUsername())){
             recipeRepository.queryDeleteRecipe(rid);
             res.setResult(RESULT_OK);
         }

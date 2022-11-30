@@ -94,12 +94,12 @@ public class CustomController {
 //            CustomFoodRequest req = gson.fromJson(req, CustomFoodRequest.class);
 
             CustomFood food = req.getItem();
-                CustomFood savedFood = new CustomFood(food.getName(), food.getIngredients(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
-                savedFood = customRepository.save(savedFood);
-                int dbId = savedFood.getDbId();
+            CustomFood savedFood = new CustomFood(food.getName(), food.getIngredients(), food.getCalories(), food.getCarbs(), food.getProtein(), food.getFat());
+            savedFood = customRepository.save(savedFood);
+            int dbId = savedFood.getDbId();
 
-                res.setResult(RESULT_OK);
-                res.setDbId(dbId);
+            res.setResult(RESULT_OK);
+            res.setDbId(dbId);
         }
 
         return res;

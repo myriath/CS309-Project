@@ -59,10 +59,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Modifying
     @Query(
             value =
-                    "INSERT INTO user_recipes (username, rname, instructions) VALUES (:username, :rname, :instructions)",
+                    "INSERT INTO user_recipes (username, rname) VALUES (:username, :rname)",
             nativeQuery = true)
     @Transactional
-    void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname, @Param("instructions") String instructions);
+    void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname);
 
     @Query(
             value ="SELECT * FROM user_recipes WHERE username " +
