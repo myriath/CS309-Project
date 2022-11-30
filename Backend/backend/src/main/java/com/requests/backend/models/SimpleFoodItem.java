@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Simple food item used for displaying and moving data in the app
@@ -9,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "simple_foods")
-public class SimpleFoodItem {
+public class SimpleFoodItem implements Serializable {
     /**
      * FDC ID from the api or Custom Food ID
      */
