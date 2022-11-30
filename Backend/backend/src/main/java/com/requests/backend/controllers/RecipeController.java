@@ -131,16 +131,15 @@ public class RecipeController {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
-                recipe.setIngredients(List.of(req.getIngredients()));
-                recipe.setInstructions(List.of(req.getInstructions()));
+//                recipe.setIngredients(List.of(req.getIngredients()));
+//                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe = recipeRepository.save(recipe);
-//                for (Instruction instruction : instructions) {
-//                    instructionRepository.queryCreateInstruction(instruction.getRid(), instruction.getStepNum(), instruction.getStepText());
-//                }
-//                for (Ingredient ingredient : req.getIngredients()) {
-//                    ingredientRepository.save()
-//                    ingredientRepository.queryCreateIngredient();
-//                }
+                for (Instruction instruction : instructions) {
+                    instructionRepository.queryCreateInstruction(recipe.getRid(), instruction.getStepNum(), instruction.getStepText());
+                }
+                for (Ingredient ingredient : req.getIngredients()) {
+                    ingredientRepository.queryCreateIngredient(recipe.getRid(), ingredient.getItemId(), ingredient.isCustom(), ingredient.getQuantity(), ingredient.getUnit());
+                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
 //            } catch (Exception e) {
