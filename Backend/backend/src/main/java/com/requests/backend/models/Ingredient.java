@@ -9,9 +9,12 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredient_id;
 
+    private int food_id;
+    private boolean is_custom;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
-            @JoinColumn(name = "id", referencedColumnName = "id"),
+            @JoinColumn(name = "food_id", referencedColumnName = "id"),
             @JoinColumn(name = "is_custom", referencedColumnName = "is_custom")
     })
     private SimpleFoodItem food;
