@@ -46,9 +46,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 
     @Query(
-            value = "SELECT rid, instructions, rname, username FROM user_recipes WHERE username = :Username",
+            value = "SELECT * FROM user_recipes WHERE username = :username",
             nativeQuery = true)
-    Recipe[] queryuserRecipeList(@Param("Username") String Username);
+    Recipe[] queryuserRecipeList(@Param("username") String username);
 
     @Query (
 

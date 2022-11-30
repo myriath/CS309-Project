@@ -9,7 +9,7 @@ public class RecipeResponse extends ResultResponse {
         return recipes;
     }
 
-    public void setRecipe(Recipe[] recipes) {
+    public void setRecipes(Recipe[] recipes) {
         this.recipes = recipes;
     }
 }

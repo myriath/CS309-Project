@@ -11,12 +11,10 @@ import com.requests.backend.repositories.RecipeRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.List;
 
 import static com.util.Constants.*;
 
@@ -94,7 +92,7 @@ public class RecipeController {
             res.setResult(RESULT_ERROR);
         }
         else {
-            res.setRecipe(recipe);
+            res.setRecipes(recipe);
             res.setResult(RESULT_OK);
         }
 
@@ -226,17 +224,17 @@ public class RecipeController {
      */
     @GetMapping(path="/userRecipeList/{Username}")
     @ResponseBody
-    public Recipe[] userRecipeList(@PathVariable String Username) {
+    public RecipeResponse userRecipeList(@PathVariable String Username) {
         Recipe[] recipe = recipeRepository.queryuserRecipeList(Username);
         RecipeResponse res = new RecipeResponse();
 
         if(recipe.length == 0) {
             res.setResult(RESULT_ERROR);
         } else {
-
+            res.setRecipes(recipe);
             res.setResult(RESULT_OK);
         }
 
-        return recipe;
+        return res;
     }
 }
