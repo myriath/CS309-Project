@@ -113,8 +113,8 @@ public class SimpleFoodItem {
     }
 
     public static class SimpleFoodItemPK implements Serializable {
-        private int id;
-        private boolean isCustom;
+        protected int id;
+        protected boolean isCustom;
 
         public SimpleFoodItemPK() {}
 
