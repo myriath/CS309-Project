@@ -176,19 +176,20 @@ public class RecipeController {
     /**
      * Remove a recipe from the database based on its recipe ID.
      * @param rid The recipe ID of the recipe to remove.
-     * @param username The username of the user removing the recipe.
      * @param token The token of the user removing the recipe.
      * @return A JSON response containing the result of the operation.
      */
-    @DeleteMapping(path="/remove")
+    @DeleteMapping(path="/remove/{token}/{rid}")
     @ResponseBody
-    public RecipeResponse removeRecipe(@RequestParam int rid, @RequestParam String username, @RequestParam String token) {
-        Recipe[] recipe = recipeRepository.queryRecipeDeleteCheck(token, username);
+    public RecipeResponse removeRecipe(@PathVariable  int rid, @PathVariable  String token) {
+        String hashedToken = Hasher.sha256(token);
+        Token[] tokens = recipeRepository.queryRecipeDeleteCheck(hashedToken);
         RecipeResponse res = new RecipeResponse();
+        Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
 
-        if(recipe.length == 0) {
+        if (tokens.length == 0) {
             res.setResult(RESULT_ERROR);
-        } else {
+        } else if(tokens[0].getUsername() == recipe[0].getUsername()){
             recipeRepository.queryDeleteRecipe(rid);
             res.setResult(RESULT_OK);
         }
@@ -196,39 +197,15 @@ public class RecipeController {
         return res;
     }
 
-
-    /*  to be modified after database changed
-    @GetMapping(path="/getImage/{rid}")
-    @ResponseBody
-    public String GetImage(@PathVariable int rid) {
-        Recipe[] recipe = recipeRepository.queryGetImageByrid(rid);
-
-        RecipeResponse res = new RecipeResponse();
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        if (recipe.length == 0) {
-            res.setResult(RESULT_ERROR);
-        }
-        else {
-            res.setRecipe(recipe[0]);
-            res.setResult(RESULT_OK);
-        }
-
-        return gson.toJson(recipe[0]);
-        //return null;
-    }
-     */
-
     /**
-     * Get a list of recipes based on a given token
-     * @param token The token of the user to get the recipes of.
+     * Get a list of recipes based on a given Username
+     * @param Username The token of the user to get the recipes of.
      * @return A JSON response containing the result of the operation and the list of recipes.
      */
-    @GetMapping(path="/userRecipeList/{token}")
+    @GetMapping(path="/userRecipeList/{Username}")
     @ResponseBody
-    public Recipe[] userRecipeList(@PathVariable String token) {
-        Recipe[] recipe = recipeRepository.queryuserRecipeList(token);
+    public Recipe[] userRecipeList(@PathVariable String Username) {
+        Recipe[] recipe = recipeRepository.queryuserRecipeList(Username);
         RecipeResponse res = new RecipeResponse();
 
         if(recipe.length == 0) {

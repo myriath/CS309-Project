@@ -1,6 +1,7 @@
 package com.requests.backend.repositories;
 
 import com.requests.backend.models.Recipe;
+import com.requests.backend.models.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -45,15 +46,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 
     @Query(
-            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token = :token",
+            value = "SELECT rid, instructions, rname, username FROM user_recipes WHERE username = :Username",
             nativeQuery = true)
-    Recipe[] queryuserRecipeList(@Param("token") String token);
+    Recipe[] queryuserRecipeList(@Param("Username") String Username);
 
     @Query (
 
-            value = "SELECT DISTINCT(rid), instructions, rname, r.username  FROM user_recipes r join tokens t on r.username = t.username where t.token = :Token and t.username = :username",
+            value = "SELECT token, creation_date, username FROM token WHERE t.token = :Token",
             nativeQuery = true)
-    Recipe[] queryRecipeDeleteCheck(@Param("Token") String Token, @Param("username") String username);
+    Token[] queryRecipeDeleteCheck(@Param("Token") String Token);
 
     @Modifying
     @Query(
