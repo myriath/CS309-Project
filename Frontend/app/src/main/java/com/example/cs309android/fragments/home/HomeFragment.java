@@ -96,7 +96,7 @@ public class HomeFragment extends BaseFragment {
 
         HomeNutritionCardModel[] models = new HomeNutritionCardModel[]{
                 new HomeNutritionCardModel("Calories", R.drawable.calories),
-                new HomeNutritionCardModel("Carbohydrates", R.drawable.sugar),
+                new HomeNutritionCardModel("Carbohydrates", R.drawable.carb),
                 new HomeNutritionCardModel("Protein", R.drawable.meat),
                 new HomeNutritionCardModel("Fat", R.drawable.fat)
         };
