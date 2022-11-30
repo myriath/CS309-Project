@@ -1,5 +1,7 @@
 package com.requests.backend.models.responses;
 
+
+//Everything But Bio needs to be moved into socailController
 public class ProfileResponse extends ResultResponse {
     private int followers;
     private int following;
