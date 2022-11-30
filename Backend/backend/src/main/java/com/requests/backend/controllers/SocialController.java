@@ -207,7 +207,7 @@ public class SocialController {
      * @param body The body contents of the comment.
      * @return A result code indicating if the comment was successfully added.
      */
-    @PostMapping (path="/comment/{token}")
+    @PostMapping (path="/comment/{token}/{rid}")
     public @ResponseBody ResultResponse comment(@PathVariable String token, @PathVariable int rid, @RequestBody String body) {
         String tokenHash = Hasher.sha256(token);
 
