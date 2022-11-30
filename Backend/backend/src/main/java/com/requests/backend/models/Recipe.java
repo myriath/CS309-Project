@@ -22,7 +22,7 @@ public class Recipe {
     private Collection<Ingredient> ingredients;
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="rid")
-    private Comment[] comments;
+    private Collection<Comment> comments;
 
     public String getUsername() {
         return username;
@@ -72,11 +72,11 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public Comment[] getComments() {
+    public Collection<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Comment[] comments) {
+    public void setComments(Collection<Comment> comments) {
         this.comments = comments;
     }
 
