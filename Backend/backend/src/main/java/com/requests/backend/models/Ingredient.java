@@ -10,6 +10,10 @@ public class Ingredient {
     private int ingredient_id;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "id", referencedColumnName = "id"),
+            @JoinColumn(name = "is_custom", referencedColumnName = "is_custom")
+    })
     private SimpleFoodItem food;
 
     private int rid;
