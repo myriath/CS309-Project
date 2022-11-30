@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.requests.backend.repositories.IngredientRepository;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -14,6 +16,8 @@ public class Ingredient {
     private boolean isCustom;
     private double quantity;
     private String unit;
+
+    public Ingredient() {}
 
     public int getIngredient_id() {
         return ingredient_id;

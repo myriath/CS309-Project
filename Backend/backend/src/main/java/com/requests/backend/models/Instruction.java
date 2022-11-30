@@ -18,6 +18,8 @@ public class Instruction {
         this.stepText = stepText;
     }
 
+    public Instruction() {}
+
     public int getInstruction_id() {
         return instruction_id;
     }

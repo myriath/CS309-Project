@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.requests.backend.models.responses.RecipeResponse;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
@@ -23,6 +25,8 @@ public class Recipe {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="rid")
     private Collection<Comment> comments;
+
+    public Recipe() {}
 
     public String getUsername() {
         return username;
