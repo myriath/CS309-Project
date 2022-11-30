@@ -111,6 +111,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         LinearLayout ingredientsList = findViewById(R.id.ingredients);
+        System.out.println(Arrays.toString(recipe.getIngredients()));
         for (Ingredient ingredient : recipe.getIngredients()) {
             View view = View.inflate(this, R.layout.ingredient_layout, null);
             String text = ingredient.getQuantity() + " " + ingredient.getUnit();
