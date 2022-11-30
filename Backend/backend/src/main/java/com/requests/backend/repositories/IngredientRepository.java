@@ -21,7 +21,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Integer>
     @Modifying
     @Query(
             value =
-                    "INSERT INTO recipe_ingredients (rid, itemId, isCustom, quantity, unit) VALUES (:rid, :itemId, :isCustom, :quantity, :unit)",
+                    "INSERT INTO recipe_ingredients (rid, item_id, is_custom, quantity, unit) VALUES (:rid, :itemId, :isCustom, :quantity, :unit)",
             nativeQuery = true)
     @Transactional
     void queryCreateIngredient(@Param("rid") int rid, @Param("itemId") int itemId, @Param("isCustom") boolean isCustom, @Param("quantity") double quantity, @Param("unit") String unit);

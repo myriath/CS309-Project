@@ -21,7 +21,7 @@ public interface InstructionRepository extends JpaRepository<Instruction, Intege
     @Modifying
     @Query(
             value =
-                    "INSERT INTO recipe_instructions (rid, stepNum, stepText) VALUES (:rid, :stepNum, :stepText)",
+                    "INSERT INTO recipe_instructions (rid, step_num, step_text) VALUES (:rid, :stepNum, :stepText)",
             nativeQuery = true)
     @Transactional
     void queryCreateInstruction(@Param("rid") int rid, @Param("stepNum") int stepNum, @Param("stepText") String stepText);
