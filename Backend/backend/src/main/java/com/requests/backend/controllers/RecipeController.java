@@ -131,6 +131,7 @@ public class RecipeController {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
+                recipe.setDescription(req.getDescription());
 //                recipe.setIngredients(List.of(req.getIngredients()));
 //                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe = recipeRepository.save(recipe);
