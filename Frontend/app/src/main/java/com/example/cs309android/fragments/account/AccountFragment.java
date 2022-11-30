@@ -29,6 +29,8 @@ import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
 import com.example.cs309android.models.api.request.social.GetFollowersRequest;
 import com.example.cs309android.models.api.request.social.GetFollowingRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
@@ -74,12 +76,15 @@ public class AccountFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.bioTextView))
                 .setText(global.getBio());
         // Checks for updates to the above values
+        new GetUserTypeRequest(global.getUsername()).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            global.setUserType(genericResponse.getResult());
+        }, requireContext());
         new GetProfileRequest(global.getUsername()).request(response -> {
             GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
             global.setBio(profileResponse.getBio());
             global.setFollowers(profileResponse.getFollowers());
             global.setFollowing(profileResponse.getFollowing());
-            global.setUserType(profileResponse.getUserType());
 
             ImageView badge = view.findViewById(R.id.badge);
             Util.getBadge(global.getUserType(), badge);

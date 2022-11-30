@@ -368,6 +368,10 @@ public class Constants {
              * URL for changing user types (used by admin)
              */
             String UPDATE_USER_TYPE_URL = AUTH_URL + "updateUserType/";
+            /**
+             * URL for getting user types
+             */
+            String GET_USER_TYPE_URL = AUTH_URL + "getUserType";
         }
 
         /**
@@ -433,11 +437,11 @@ public class Constants {
             /**
              * Add url for adding an item to recipes
              */
-            String ADD_RECIPES_URL = RECIPES_URL + "add/";
+            String ADD_RECIPES_URL = RECIPES_URL + "add";
             /**
              * URL for updating recipes
              */
-            String UPDATE_RECIPES_URL = RECIPES_URL + "update/";
+            String UPDATE_RECIPES_URL = RECIPES_URL + "update";
             /**
              * Remove url for removing an item from recipes
              */
@@ -445,7 +449,7 @@ public class Constants {
             /**
              * Url for getting an item from recipes
              */
-            String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
+            String GET_BY_RID_URL = RECIPES_URL + "getRecipeByRid/";
             /**
              * Url for getting an item from recipes
              */
@@ -458,11 +462,6 @@ public class Constants {
              * URL for getting a recipe's image
              */
             String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
-            /**
-             * URL for deleting a recipe
-             */
-            String DELETE_URL = RECIPES_URL + "delete/";
-
         }
 
         /**
@@ -473,6 +472,10 @@ public class Constants {
              * URL used when creating a comment
              */
             String COMMENT_URL = SOCIAL_URL + "comment";
+            /**
+             * URL for getting a recipe's comments
+             */
+            String GET_COMMENTS_URL = SOCIAL_URL + "getComments";
             /**
              * URL used when editing comments
              */

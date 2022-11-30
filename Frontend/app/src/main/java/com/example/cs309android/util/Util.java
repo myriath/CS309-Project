@@ -14,8 +14,6 @@ import static com.example.cs309android.util.Constants.UserType.USER_DEV;
 import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +40,7 @@ import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.request.users.LoginHashRequest;
 import com.example.cs309android.models.api.request.users.LoginTokenRequest;
 import com.example.cs309android.models.api.request.users.RegenTokenRequest;
@@ -60,7 +59,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.nio.charset.Charset;
 
 /**
  * Utility class containing many commonly used methods
@@ -210,12 +208,15 @@ public class Util {
      * @param token    Token used for authentication
      * @param userType Type of the user. 0: regular, 1: moderator, 2: admin
      */
-    public static void login(GlobalClass global, String username, String token, int userType) {
+    public static void login(GlobalClass global, String username, String token) {
         global.setUsername(username);
         global.setToken(token);
         global.updateLoginPrefs();
-        global.setUserType(userType);
 
+        new GetUserTypeRequest(username).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            global.setUserType(genericResponse.getResult());
+        }, global);
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
 
@@ -279,7 +280,7 @@ public class Util {
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token, loginResponse.getUserType());
+                    login(global, username, token);
                     listener.run();
                     break;
                 }
@@ -306,11 +307,11 @@ public class Util {
             int result = loginResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, loginResponse.getUsername(), loginResponse.getUserType(), token, listener, errorListener, errorListener2, 0);
+                    regenToken(global, loginResponse.getUsername(), token, listener, errorListener, errorListener2, 0);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, loginResponse.getUsername(), token, loginResponse.getUserType());
+                    login(global, loginResponse.getUsername(), token);
                     listener.run();
                     break;
                 }
@@ -331,7 +332,7 @@ public class Util {
      * @param errorListener ErrorListener to handle request errors and error codes
      * @param depth         Number of retries
      */
-    public static void regenToken(GlobalClass global, String username, int userType, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+    public static void regenToken(GlobalClass global, String username, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
         if (depth > TOKEN_MAX_DEPTH) {
             Toaster.toastShort("Unable to generate a token", global);
             return;
@@ -345,11 +346,11 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, username, userType, oldToken, listener, errorListener, errorListener2, depth + 1);
+                    regenToken(global, username, oldToken, listener, errorListener, errorListener2, depth + 1);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token, userType);
+                    login(global, username, token);
                     listener.run();
                     break;
                 }
@@ -386,7 +387,7 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_USER_CREATED: {
-                    login(global, username, token, Constants.UserType.USER_REG);
+                    login(global, username, token);
                     listener.run();
                     break;
                 }

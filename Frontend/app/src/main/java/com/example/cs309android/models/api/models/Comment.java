@@ -20,7 +20,7 @@ public class Comment implements Parcelable {
      * Comment text
      */
     @Expose
-    private final String comment;
+    private final String body;
     /**
      * Comment id from the database
      */
@@ -40,7 +40,7 @@ public class Comment implements Parcelable {
      */
     public Comment(String username, String comment, int id) {
         this.username = username;
-        this.comment = comment;
+        this.body = comment;
         this.id = id;
     }
 
@@ -51,7 +51,7 @@ public class Comment implements Parcelable {
      */
     protected Comment(Parcel in) {
         username = in.readString();
-        comment = in.readString();
+        body = in.readString();
         id = in.readInt();
         showFull = in.readByte() != 0;
     }
@@ -65,7 +65,7 @@ public class Comment implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
-        dest.writeString(comment);
+        dest.writeString(body);
         dest.writeInt(id);
         dest.writeByte((byte) (showFull ? 1 : 0));
     }
@@ -109,8 +109,8 @@ public class Comment implements Parcelable {
      *
      * @return comment text
      */
-    public String getComment() {
-        return comment;
+    public String getBody() {
+        return body;
     }
 
     /**

@@ -37,6 +37,7 @@ import com.example.cs309android.models.api.request.social.GetFollowingRequest;
 import com.example.cs309android.models.api.request.social.UnfollowRequest;
 import com.example.cs309android.models.api.request.users.ChangeUserTypeRequest;
 import com.example.cs309android.models.api.request.users.DeleteUserRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
@@ -183,68 +184,71 @@ public class AccountActivity extends AppCompatActivity {
 
                 ImageView badge = findViewById(R.id.badge);
                 Util.getBadge(global.getUserType(), badge);
+            }
+        }, AccountActivity.this);
 
-                // Setup menu button if necessary
-                if (global.getUserType() > USER_REG || owner) {
-                    findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
-                    findViewById(R.id.menuButton).setOnClickListener(view -> {
-                        PopupMenu menu = new PopupMenu(this, view);
-                        menu.inflate(R.menu.moderation_menu);
-                        menu.show();
-                        if (owner) {
-                            MenuItem deleteButton = menu.getMenu().findItem(R.id.delete);
-                            deleteButton.setEnabled(false);
-                            deleteButton.setVisible(false);
-                        }
-                        if (global.getUserType() > USER_ADM || (global.getUserType() > USER_MOD && profileResponse.getUserType() < USER_ADM)) {
-                            MenuItem changeUserButton = menu.getMenu().findItem(R.id.change_type);
-                            changeUserButton.setEnabled(true);
-                            changeUserButton.setVisible(true);
-                        }
-                        menu.setOnMenuItemClickListener(item -> {
-                            int id = item.getItemId();
-                            if (id == R.id.edit) {
-                                Intent intent1 = new Intent(this, AccountEditActivity.class);
-                                intent1.putExtra(PARCEL_USERNAME, username);
-                                editUserLauncher.launch(intent1);
-                            } else if (id == R.id.delete) {
-                                new DeleteUserRequest(username, global.getToken()).request(response1 -> {
-                                    GenericResponse genericResponse = Util.objFromJson(response1, GenericResponse.class);
-                                    if (genericResponse.getResult() != RESULT_OK) {
+        new GetUserTypeRequest(username).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            // Setup menu button if necessary
+            if (global.getUserType() > USER_REG || owner) {
+                findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
+                findViewById(R.id.menuButton).setOnClickListener(view -> {
+                    PopupMenu menu = new PopupMenu(this, view);
+                    menu.inflate(R.menu.moderation_menu);
+                    menu.show();
+                    if (owner) {
+                        MenuItem deleteButton = menu.getMenu().findItem(R.id.delete);
+                        deleteButton.setEnabled(false);
+                        deleteButton.setVisible(false);
+                    }
+                    if (global.getUserType() > USER_ADM || (global.getUserType() > USER_MOD && genericResponse.getResult() < USER_ADM)) {
+                        MenuItem changeUserButton = menu.getMenu().findItem(R.id.change_type);
+                        changeUserButton.setEnabled(true);
+                        changeUserButton.setVisible(true);
+                    }
+                    menu.setOnMenuItemClickListener(item -> {
+                        int id = item.getItemId();
+                        if (id == R.id.edit) {
+                            Intent intent1 = new Intent(this, AccountEditActivity.class);
+                            intent1.putExtra(PARCEL_USERNAME, username);
+                            editUserLauncher.launch(intent1);
+                        } else if (id == R.id.delete) {
+                            new DeleteUserRequest(username, global.getToken()).request(response1 -> {
+                                GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
+                                if (genericResponse1.getResult() != RESULT_OK) {
+                                    Toaster.toastShort("Error", this);
+                                }
+                            }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+                            finish();
+                        } else if (id == R.id.change_type) {
+                            PopupMenu menu1 = new PopupMenu(this, menu.getMenu().findItem(R.id.change_type).getActionView());
+                            menu1.inflate(R.menu.user_types);
+                            menu1.show();
+                            menu1.setOnMenuItemClickListener(item1 -> {
+                                int id1 = item1.getItemId();
+                                int newType;
+                                if (id1 == R.id.moderator) {
+                                    newType = USER_MOD;
+                                } else if (id1 == R.id.admin) {
+                                    newType = USER_ADM;
+                                } else {
+                                    newType = USER_REG;
+                                }
+                                new ChangeUserTypeRequest(username, global.getToken(), newType).request(response1 -> {
+                                    GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
+                                    if (genericResponse1.getResult() != RESULT_OK) {
                                         Toaster.toastShort("Error", this);
                                     }
                                 }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
-                                finish();
-                            } else if (id == R.id.change_type) {
-                                PopupMenu menu1 = new PopupMenu(this, menu.getMenu().findItem(R.id.change_type).getActionView());
-                                menu1.inflate(R.menu.user_types);
-                                menu1.show();
-                                menu1.setOnMenuItemClickListener(item1 -> {
-                                    int id1 = item1.getItemId();
-                                    int newType;
-                                    if (id1 == R.id.moderator) {
-                                        newType = USER_MOD;
-                                    } else if (id1 == R.id.admin) {
-                                        newType = USER_ADM;
-                                    } else {
-                                        newType = USER_REG;
-                                    }
-                                    new ChangeUserTypeRequest(username, global.getToken(), newType).request(response1 -> {
-                                        GenericResponse genericResponse = Util.objFromJson(response1, GenericResponse.class);
-                                        if (genericResponse.getResult() != RESULT_OK) {
-                                            Toaster.toastShort("Error", this);
-                                        }
-                                    }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
-                                    return true;
-                                });
-                            }
-                            return true;
-                        });
+                                return true;
+                            });
+                        }
+                        return true;
                     });
-                } else {
-                    Toaster.toastShort("Error", this);
-                }
+                });
             }
+
+            Util.getBadge(genericResponse.getResult(), findViewById(R.id.badge));
         }, AccountActivity.this);
 
         new GetProfilePictureRequest(username).request((ImageView) findViewById(R.id.profile_picture), AccountActivity.this);

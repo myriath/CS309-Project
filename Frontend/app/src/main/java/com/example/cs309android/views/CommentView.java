@@ -71,7 +71,7 @@ public class CommentView extends FrameLayout {
         TextView commentView = view.findViewById(R.id.comment);
         int maxLines = commentView.getMaxLines();
         commentView.setMaxLines(Integer.MAX_VALUE);
-        commentView.setText(comment.getComment());
+        commentView.setText(comment.getBody());
         commentView.post(() -> {
             if (commentView.getLineCount() > maxLines) {
                 commentView.setMaxLines(maxLines);
@@ -117,10 +117,10 @@ public class CommentView extends FrameLayout {
             });
 
             TextInputLayout commentInput = findViewById(R.id.commentInputLayout);
-            Objects.requireNonNull(commentInput.getEditText()).setText(comment.getComment());
+            Objects.requireNonNull(commentInput.getEditText()).setText(comment.getBody());
 
             findViewById(R.id.updateButton).setOnClickListener(view1 -> {
-                new EditCommentRequest(new Comment(comment.getUsername(), commentInput.getEditText().getText().toString(), comment.getId()), global.getToken()).request(response -> {
+                new EditCommentRequest(commentInput.getEditText().getText().toString(), comment.getId(), global.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                         Toaster.toastShort("Error", getContext());

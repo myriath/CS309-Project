@@ -25,12 +25,11 @@ import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.api.request.profile.GetProfileRequest;
-import com.example.cs309android.models.api.request.recipes.DeleteRecipeRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.models.api.request.recipes.RemoveRecipeRequest;
 import com.example.cs309android.models.api.request.social.CommentRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
-import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -100,10 +99,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
-        new GetProfileRequest(recipe.getUsername()).request(response -> {
-            GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
-            Util.getBadge(profileResponse.getUserType(), (ImageView) findViewById(R.id.badge));
+        new GetUserTypeRequest(recipe.getUsername()).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            Util.getBadge(genericResponse.getResult(), findViewById(R.id.badge));
         }, RecipeDetailsActivity.this);
+
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
@@ -150,7 +150,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         intent.putExtra(PARCEL_RECIPE, recipe);
                         editLauncher.launch(intent);
                     } else if (id == R.id.delete) {
-                        new DeleteRecipeRequest(recipe, global.getToken()).request(response -> {
+                        new RemoveRecipeRequest(recipe.getRecipeID(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                             if (genericResponse.getResult() != RESULT_OK) {
                                 Toaster.toastShort("Error", this);
