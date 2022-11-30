@@ -9,13 +9,16 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredient_id;
 
+    /**
+     * Composite key columns for the SimpleFoodItem
+     */
     private int food_id;
     private boolean is_custom;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
             @JoinColumn(name = "food_id", referencedColumnName = "id"),
-            @JoinColumn(name = "is_custom", referencedColumnName = "is_custom")
+            @JoinColumn(name = "is_custom", referencedColumnName = "isCustom")
     })
     private SimpleFoodItem food;
 
@@ -63,5 +66,21 @@ public class Ingredient {
 
     public void setFood(SimpleFoodItem food) {
         this.food = food;
+    }
+
+    public int getFood_id() {
+        return food_id;
+    }
+
+    public void setFood_id(int food_id) {
+        this.food_id = food_id;
+    }
+
+    public boolean isIs_custom() {
+        return is_custom;
+    }
+
+    public void setIs_custom(boolean is_custom) {
+        this.is_custom = is_custom;
     }
 }
