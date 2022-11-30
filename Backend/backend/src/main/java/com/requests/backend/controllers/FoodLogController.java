@@ -11,6 +11,8 @@ import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+
 import static com.util.Constants.*;
 
 /**
@@ -60,7 +62,7 @@ public class FoodLogController {
      * @return          A JSON array containing all food log entries for the given date
      */
     @GetMapping (path = "/getDay/{token}")
-    public @ResponseBody FoodLogGetResponse getLogByDay(@PathVariable String token, @RequestParam String date) {
+    public @ResponseBody FoodLogGetResponse getLogByDay(@PathVariable String token, @RequestParam Date date) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
