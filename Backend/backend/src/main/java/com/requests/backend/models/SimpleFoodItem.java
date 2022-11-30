@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "simple_foods")
 @IdClass(SimpleFoodItem.class)
-public class SimpleFoodItem {
+public class SimpleFoodItem implements Serializable {
     /**
      * FDC ID from the api or Custom Food ID
      */
