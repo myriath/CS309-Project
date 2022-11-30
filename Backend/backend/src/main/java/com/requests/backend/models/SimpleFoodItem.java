@@ -8,7 +8,7 @@ package com.requests.backend.models;
 public class SimpleFoodItem {
 
     /**
-     * FDC ID from the api or Custom Food Id
+     * FDC ID from the api or Custom Food ID
      */
     private int id;
 
@@ -23,14 +23,16 @@ public class SimpleFoodItem {
 
     private boolean isCustom;
 
+    public SimpleFoodItem() {}
+
     /**
      * Constructor for gson
      *
-     * @param fdcId       item id
+     * @param id       item id
      * @param description description / title
      */
-    public SimpleFoodItem(int fdcId, String description) {
-        this.id = fdcId;
+    public SimpleFoodItem(int id, String description) {
+        this.id = id;
         this.description = description;
         this.stricken = false;
     }
@@ -38,12 +40,12 @@ public class SimpleFoodItem {
     /**
      * Constructor for gson
      *
-     * @param fdcId       item id
+     * @param id       item id
      * @param description description / title
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int fdcId, String description, boolean stricken) {
-        this.id = fdcId;
+    public SimpleFoodItem(int id, String description, boolean stricken) {
+        this.id = id;
         this.description = description;
         this.stricken = stricken;
     }
@@ -53,7 +55,7 @@ public class SimpleFoodItem {
      *
      * @return item id
      */
-    public int getFdcId() {
+    public int getId() {
         return id;
     }
 

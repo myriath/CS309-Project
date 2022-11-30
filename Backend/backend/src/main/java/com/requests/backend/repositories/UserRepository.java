@@ -28,11 +28,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     Collection<User> queryValidateUsername(@Param("username") String username);
 
-
-
-
-
-
     @Modifying
     @Query(
             value =
@@ -54,4 +49,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true
     )
     void queryGetBio(@Param("username") String username);
+
+    @Query(
+            value = "SELECT * FROM users WHERE email = :email",
+            nativeQuery = true)
+    Collection<User> queryGetUserByEmail(@Param("email") String email);
 }

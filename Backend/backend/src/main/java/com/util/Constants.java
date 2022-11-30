@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
  * @author Mitch Hudson
  */
 public class Constants {
+    /**
+     * LOGGER for logging stuff
+     */
     public static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
 
     /**

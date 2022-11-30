@@ -10,6 +10,7 @@ import com.requests.backend.models.responses.SaltResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -41,19 +42,19 @@ public class UserController {
 
     /**
      * Gets the salt for a given username.
-     * @param username
+     * @param username Username to get the salt of
      * @return JSON string containing the salt for the given username.
      */
-    @GetMapping("/getSalt/{username}")
+    @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
-
         Collection<User> userRes = userRepository.queryValidateUsername(username);
 
         SaltResponse res = new SaltResponse();
 
         if (userRes.isEmpty()) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+            res.setSalt(null);
         } else {
             User user = userRes.iterator().next();
             String salt = user.getPSalt();
@@ -67,7 +68,7 @@ public class UserController {
     /**
      * Checks validity of a given token and returns the username associated with it if valid.
      * If invalid, returns an expired token status.
-     * @param token
+     * @param token Authentication token
      * @return JSON string containing the username associated with the given token and a status code.
      */
     @GetMapping(path="/validateToken/{token}") // /users/validateLogin/{token}
@@ -111,7 +112,6 @@ public class UserController {
             res.setResult(RESULT_ERROR);
         }
 
-        LOGGER.info(String.valueOf(res.getResult()));
         return res;
     }
 
@@ -185,11 +185,13 @@ public class UserController {
         LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
+        Collection<User> users = userRepository.queryGetUserByUsername(username);
+        Collection<User> users2 = userRepository.queryGetUserByEmail(email);
 
         // If the token exists in the table, return RESULT_REGEN_TOKEN,
-        if (tokenQuery.length > 0) {
-            res.setResult(RESULT_REGEN_TOKEN);
-        }
+        if (tokenQuery.length > 0) res.setResult(RESULT_REGEN_TOKEN);
+        else if (!users.isEmpty()) res.setResult(RESULT_ERROR_USERNAME_TAKEN);
+        else if (!users2.isEmpty()) res.setResult(RESULT_ERROR_EMAIL_TAKEN);
         else {
             // If the token does not already exist, try to add the user to user table
             try {

@@ -1,5 +1,6 @@
 package com.util.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -10,6 +11,8 @@ import java.util.Random;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+
+import static com.util.Constants.LOGGER;
 
 /**
  * Static utility class designed to streamline the secure generation of
@@ -142,6 +145,12 @@ public class Hasher {
      * @return Base64 encoded string.
      */
     public static String sha256plaintext(String in) {
-        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes())).trim();
+        byte[] input = in.trim().getBytes(StandardCharsets.UTF_8);
+        byte[] digest = SHA_256.digest(input);
+        String b64 = B64_URL_ENCODER.encodeToString(digest).trim();
+
+        LOGGER.info(in + "\nInput: " + Arrays.toString(input) + "\nSHA  : " + Arrays.toString(digest) + "\n" + b64);
+
+        return B64_URL_ENCODER.encodeToString(SHA_256.digest(in.trim().getBytes(StandardCharsets.UTF_8))).trim();
     }
 }

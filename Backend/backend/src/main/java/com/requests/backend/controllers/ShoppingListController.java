@@ -91,12 +91,10 @@ public class ShoppingListController {
     public @ResponseBody ResultResponse addToShoppingList(@PathVariable String token, @RequestBody ShoppingListAddRequest req) {
         String hashedToken = Hasher.sha256(token);
 
-        LOGGER.info(req.toString());
-
         SimpleFoodItem foodItem = req.getFoodItem();
 
         String itemName = foodItem.getDescription();
-        int fdcId = foodItem.getFdcId();
+        int fdcId = foodItem.getId();
         boolean stricken = false;
         boolean isCustom = foodItem.isCustom();
 
