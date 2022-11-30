@@ -118,6 +118,8 @@ public class RecipeController {
 
         AddRecipeResponse res = new AddRecipeResponse();
 
+        LOGGER.info(req.toString());
+
 
         if (tokenQueryRes.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);

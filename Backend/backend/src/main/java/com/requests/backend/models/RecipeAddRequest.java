@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import java.util.Arrays;
+
 public class RecipeAddRequest {
     private String recipeName;
     private String description;
@@ -43,5 +45,15 @@ public class RecipeAddRequest {
 
     public void setIngredients(Ingredient[] ingredients) {
         this.ingredients = ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return "RecipeAddRequest{" +
+                "recipeName='" + recipeName + '\'' +
+                ",\ndescription='" + description + '\'' +
+                ",\ninstructions=" + Arrays.toString(instructions) +
+                ",\ningredients=" + Arrays.toString(ingredients) +
+                '}';
     }
 }
