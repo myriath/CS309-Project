@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.List;
 
 import static com.util.Constants.*;
 
@@ -128,8 +129,8 @@ public class RecipeController {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
-                recipe.setIngredients(req.getIngredients());
-                recipe.setInstructions(req.getInstructions());
+                recipe.setIngredients(List.of(req.getIngredients()));
+                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe = recipeRepository.save(recipe);
 //                for (Instruction instruction : instructions) {
 //                    instructionRepository.queryCreateInstruction(instruction.getRid(), instruction.getStepNum(), instruction.getStepText());
