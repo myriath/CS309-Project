@@ -1,7 +1,6 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -16,13 +15,16 @@ public class Recipe {
     private String description;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid")
-    private Collection<Instruction> instructions;
+    @OrderColumn(name = "rid")
+    private Instruction[] instructions;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid")
-    private Collection<Ingredient> ingredients;
+    @OrderColumn(name = "rid")
+    private Ingredient[] ingredients;
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="rid")
-    private Collection<Comment> comments;
+    @OrderColumn(name = "rid")
+    private Comment[] comments;
 
     public String getUsername() {
         return username;
@@ -56,27 +58,27 @@ public class Recipe {
         this.rid = rid;
     }
 
-    public Collection<Instruction> getInstructions() {
+    public Instruction[] getInstructions() {
         return instructions;
     }
 
-    public void setInstructions(Collection<Instruction> instructions) {
+    public void setInstructions(Instruction[] instructions) {
         this.instructions = instructions;
     }
 
-    public Collection<Ingredient> getIngredients() {
+    public Ingredient[] getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Collection<Ingredient> ingredients) {
+    public void setIngredients(Ingredient[] ingredients) {
         this.ingredients = ingredients;
     }
 
-    public Collection<Comment> getComments() {
+    public Comment[] getComments() {
         return comments;
     }
 
-    public void setComments(Collection<Comment> comments) {
+    public void setComments(Comment[] comments) {
         this.comments = comments;
     }
 

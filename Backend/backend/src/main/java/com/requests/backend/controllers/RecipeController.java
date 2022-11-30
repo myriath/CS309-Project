@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.List;
 
 import static com.util.Constants.*;
 
@@ -125,12 +124,12 @@ public class RecipeController {
         else {
             String username = tokenQueryRes[0].getUsername();
 
-            try {
+//            try {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
-                recipe.setIngredients(List.of(req.getIngredients()));
-                recipe.setInstructions(List.of(req.getInstructions()));
+                recipe.setIngredients(req.getIngredients());
+                recipe.setInstructions(req.getInstructions());
                 recipe = recipeRepository.save(recipe);
 //                for (Instruction instruction : instructions) {
 //                    instructionRepository.queryCreateInstruction(instruction.getRid(), instruction.getStepNum(), instruction.getStepText());
@@ -141,9 +140,9 @@ public class RecipeController {
 //                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
-            } catch (Exception e) {
-                res.setResult(RESULT_ERROR_RID_TAKEN);
-            }
+//            } catch (Exception e) {
+//                res.setResult(RESULT_ERROR_RID_TAKEN);
+//            }
         }
 
         return res;
