@@ -1,15 +1,11 @@
 package com.requests.backend.models;
 
-import com.requests.backend.models.responses.RecipeResponse;
-
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Table(name="user_recipes")
 public class Recipe {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rid;

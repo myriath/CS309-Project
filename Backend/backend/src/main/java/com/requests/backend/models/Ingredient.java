@@ -1,9 +1,6 @@
 package com.requests.backend.models;
 
-import com.requests.backend.repositories.IngredientRepository;
-
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name="recipe_ingredients")
