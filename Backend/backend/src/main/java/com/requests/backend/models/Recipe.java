@@ -15,6 +15,7 @@ public class Recipe {
     private String description;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid")
+    @OrderColumn(name = "stepNum")
     private Instruction[] instructions;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid")
