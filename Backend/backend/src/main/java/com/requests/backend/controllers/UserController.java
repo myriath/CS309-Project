@@ -209,6 +209,17 @@ public class UserController {
         return res;
     }
 
+    @GetMapping(path = "/getUserType/{username}")
+    public @ResponseBody ResultResponse getType(@PathVariable String username) {
+        ResultResponse resultResponse = new ResultResponse();
+        try {
+            resultResponse.setResult(userRepository.queryGetUserByUsername(username)[0].getUserType());
+        } catch (Exception e) {
+            resultResponse.setResult(RESULT_ERROR);
+        }
+        return resultResponse;
+    }
+
     /**
      * Regenerates a token for a given username given the old, outdated token.
      * @param oldToken The old, outdated token.
