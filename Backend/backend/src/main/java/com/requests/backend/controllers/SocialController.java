@@ -2,19 +2,18 @@ package com.requests.backend.controllers;
 
 import com.requests.backend.models.Recipe;
 import com.requests.backend.models.Token;
+import com.requests.backend.models.User;
 import com.requests.backend.models.responses.FollowResponse;
+import com.requests.backend.models.responses.GetCommentsResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.ResultResponse;
-import com.requests.backend.repositories.CommentRepository;
-import com.requests.backend.repositories.FollowRepository;
-import com.requests.backend.repositories.RecipeRepository;
-import com.requests.backend.repositories.TokenRepository;
+import com.requests.backend.repositories.*;
 import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.util.Constants.RESULT_ERROR_USER_HASH_MISMATCH;
-import static com.util.Constants.RESULT_OK;
+import static com.util.Constants.*;
+import static com.util.Constants.UserType.USER_REG;
 
 /**
  * This class is responsible for handling all requests related to recipes.
@@ -27,7 +26,8 @@ public class SocialController {
 
     @Autowired
     private TokenRepository tokenRepository;
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -208,7 +208,7 @@ public class SocialController {
      * @return A result code indicating if the comment was successfully added.
      */
     @PostMapping (path="/comment/{token}")
-    public @ResponseBody ResultResponse comment(@PathVariable String token, @RequestParam int rid, @RequestParam String body) {
+    public @ResponseBody ResultResponse comment(@PathVariable String token, @PathVariable int rid, @RequestBody String body) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -227,5 +227,54 @@ public class SocialController {
         }
 
         return res;
+    }
+
+    /**
+     * Deletes a given comment by id.
+     * Works if the token is of the owner or moderator+
+     */
+    @DeleteMapping(path = "/removeComment/{token}/{commentId}")
+    public @ResponseBody ResultResponse deleteComment(@PathVariable String token, @PathVariable int commentId) {
+        token = Hasher.sha256(token);
+
+        return UserController.getUsernameFromToken(token, (username, res) -> {
+            if (commentRepository.queryGetCommentByCid(commentId)[0].getUsername().equals(username) || userRepository.queryGetUserByUsername(username)[0].getUserType() > USER_REG) {
+                commentRepository.queryRemoveComment(commentId);
+                res.setResult(RESULT_OK);
+            }
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        }, tokenRepository);
+    }
+
+    /**
+     * Edits a given comment
+     * Works if the token is of the owner or moderator+
+     */
+    @DeleteMapping(path = "/editComment/{token}/{commentId}")
+    public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody String body) {
+        token = Hasher.sha256(token);
+
+        return UserController.getUsernameFromToken(token, (username, res) -> {
+            if (commentRepository.queryGetCommentByCid(commentId)[0].getUsername().equals(username) || userRepository.queryGetUserByUsername(username)[0].getUserType() > USER_REG) {
+                commentRepository.queryUpdateComment(commentId, body);
+                res.setResult(RESULT_OK);
+            }
+            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
+        }, tokenRepository);
+    }
+
+    /**
+     * Gets the comments of a recipe
+     */
+    @GetMapping(path = "/getComments/{rid}")
+    public @ResponseBody GetCommentsResponse getComments(@PathVariable int rid) {
+        GetCommentsResponse response = new GetCommentsResponse();
+        try {
+            response.setComments(commentRepository.queryGetCommentsByRid(rid));
+            response.setResult(RESULT_OK);
+        } catch (Exception e) {
+            response.setResult(RESULT_ERROR);
+        }
+        return response;
     }
 }

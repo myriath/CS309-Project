@@ -63,9 +63,9 @@ public class ShoppingListController {
             // Get the username associated with the token
             String username = tokenQueryRes[0].getUsername();
 
-            Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
+            User[] userQueryRes = userRepository.queryValidateUsername(username);
 
-            if (userQueryRes.isEmpty()) {
+            if (userQueryRes.length == 0) {
                 res.setResult(RESULT_ERROR);
             }
             // If the credentials aren't valid, return hash mismatch error code.

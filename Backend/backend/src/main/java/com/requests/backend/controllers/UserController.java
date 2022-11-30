@@ -48,15 +48,15 @@ public class UserController {
     @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
-        Collection<User> userRes = userRepository.queryValidateUsername(username);
+        User[] userRes = userRepository.queryValidateUsername(username);
 
         SaltResponse res = new SaltResponse();
 
-        if (userRes.isEmpty()) {
+        if (userRes.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             res.setSalt(null);
         } else {
-            User user = userRes.iterator().next();
+            User user = userRes[0];
             String salt = user.getPSalt();
             res.setResult(RESULT_OK);
             res.setSalt(salt);
@@ -127,17 +127,17 @@ public class UserController {
         String pHash = Hasher.sha256(hash); // SHA-256's the incoming hash
         String tokenHash = Hasher.sha256(newToken); // SHA-256's the incoming token, this is added to the table as another hash for the username
 
-        Collection<User> userRes = userRepository.queryValidateUsername(username);
+        User[] userRes = userRepository.queryValidateUsername(username);
 
         LoginResponse res = new LoginResponse(RESULT_OK);
 
-        if (userRes.isEmpty()) {
+        if (userRes.length == 0) {
             res.setResult(RESULT_ERROR);
         }
         else {
 
             // If a user with the username is found, assign that user to the user variable
-            User user = userRes.iterator().next();
+            User user = userRes[0];
 
             // If the provided password does not match the user's password, return hash mismatch code
             if (user.getPHash().compareTo(pHash) != 0) {
@@ -185,13 +185,13 @@ public class UserController {
         LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
-        Collection<User> users = userRepository.queryGetUserByUsername(username);
-        Collection<User> users2 = userRepository.queryGetUserByEmail(email);
+        User[] users = userRepository.queryGetUserByUsername(username);
+        User[] users2 = userRepository.queryGetUserByEmail(email);
 
         // If the token exists in the table, return RESULT_REGEN_TOKEN,
         if (tokenQuery.length > 0) res.setResult(RESULT_REGEN_TOKEN);
-        else if (!users.isEmpty()) res.setResult(RESULT_ERROR_USERNAME_TAKEN);
-        else if (!users2.isEmpty()) res.setResult(RESULT_ERROR_EMAIL_TAKEN);
+        else if (users.length != 0) res.setResult(RESULT_ERROR_USERNAME_TAKEN);
+        else if (users2.length != 0) res.setResult(RESULT_ERROR_EMAIL_TAKEN);
         else {
             // If the token does not already exist, try to add the user to user table
             try {

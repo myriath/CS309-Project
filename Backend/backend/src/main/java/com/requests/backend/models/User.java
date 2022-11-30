@@ -13,7 +13,7 @@ public class User {
 
     private String pSalt;
 
-    private String userType;
+    private int userType;
 
     private String bio;
 
@@ -57,11 +57,11 @@ public class User {
 
     public void setPSalt(String pSalt) { this.pSalt = pSalt;}
 
-    public String getUserType() {
+    public int getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(int userType) {
         this.userType = userType;
     }
 

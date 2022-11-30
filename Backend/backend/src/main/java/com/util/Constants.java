@@ -129,6 +129,27 @@ public class Constants {
      */
     public static final String MEDIA_SOURCE = MEDIA_BASE + "images/";
 
+    /**
+     * User types interface
+     */
+    public interface UserType {
+        /**
+         * Regular user
+         */
+        int USER_REG = 0;
+        /**
+         * Moderator type
+         */
+        int USER_MOD = 1;
+        /**
+         * Administrator type
+         */
+        int USER_ADM = 2;
+        /**
+         * Developer type
+         */
+        int USER_DEV = 3;
+    }
 
     // TAGS
 
