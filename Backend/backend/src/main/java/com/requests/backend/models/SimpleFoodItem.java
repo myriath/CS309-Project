@@ -2,6 +2,7 @@ package com.requests.backend.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Simple food item used for displaying and moving data in the app
@@ -10,7 +11,8 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "simple_foods")
-public class SimpleFoodItem implements Serializable {
+@IdClass(SimpleFoodItem.class)
+public class SimpleFoodItem {
     /**
      * FDC ID from the api or Custom Food ID
      */
@@ -108,5 +110,38 @@ public class SimpleFoodItem implements Serializable {
                 ", stricken=" + stricken +
                 ", isCustom=" + isCustom +
                 '}';
+    }
+
+    public static class SimpleFoodItemPK implements Serializable {
+        private int id;
+        private boolean isCustom;
+
+        public SimpleFoodItemPK() {}
+
+        public SimpleFoodItemPK(int id, boolean isCustom) {
+            this.isCustom = isCustom;
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public boolean isCustom() {
+            return isCustom;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, isCustom);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
+            return other.isCustom == isCustom && other.id == id;
+        }
     }
 }
