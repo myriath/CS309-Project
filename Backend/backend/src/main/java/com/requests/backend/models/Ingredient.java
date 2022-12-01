@@ -21,8 +21,6 @@ public class Ingredient {
             @JoinColumn(name = "is_custom", referencedColumnName = "isCustom", nullable = false)
     })
     private SimpleFoodItem food;
-
-    private int rid;
     private double quantity;
     private String unit;
 
@@ -34,14 +32,6 @@ public class Ingredient {
 
     public void setIngredient_id(int ingredient_id) {
         this.ingredient_id = ingredient_id;
-    }
-
-    public int getRid() {
-        return rid;
-    }
-
-    public void setRid(int rid) {
-        this.rid = rid;
     }
 
     public double getQuantity() {
