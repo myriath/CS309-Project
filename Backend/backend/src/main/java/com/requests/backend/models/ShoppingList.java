@@ -14,7 +14,6 @@ public class ShoppingList {
     @Expose
     private String username;
     @Id
-    @OneToOne(optional = false)
     @Expose
     private SimpleFoodItem foodItem;
     @Expose
