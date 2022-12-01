@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.util.Collection;
 
 import static com.util.Constants.*;
+import static com.util.Constants.UserType.USER_REG;
 
 /**
  * This class is responsible for handling all requests related to users login, register, etc.
@@ -195,11 +196,22 @@ public class UserController {
         else {
             // If the token does not already exist, try to add the user to user table
             try {
-                userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
+                User user = new User();
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setPHash(pHash);
+                user.setPSalt(pSalt);
+                user.setUserType(USER_REG);
+                userRepository.save(user);
+
+                Token token = new Token();
+                token.setUsername(username);
+                token.setToken(tokenHash);
+                token.setCreationDate(new Date(System.currentTimeMillis()));
+                tokenRepository.save(token);
+
                 res.setResult(RESULT_USER_CREATED);
                 res.setUsername(username);
-
             // If the username already exists in the user table, return an error result
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
