@@ -1,5 +1,7 @@
 package com.requests.backend.models.requests;
 
+import com.google.gson.annotations.Expose;
+
 import java.sql.Date;
 
 public class FoodLogAddRequest {
@@ -7,21 +9,25 @@ public class FoodLogAddRequest {
     /**
      * The fdcId of the food item
      */
+    @Expose
     private int fdcId;
 
     /**
      * The name of the food item
      */
+    @Expose
     private String foodName;
 
     /**
      * Amount of servings consumed by the user
      */
+    @Expose
     private double servingAmt;
 
     /**
      * What servings are measured in (i.e. g, oz, Ml, etc.)
      */
+    @Expose
     private String servingUnit;
 
     // Label nutrient variables //
@@ -29,46 +35,55 @@ public class FoodLogAddRequest {
     /**
      * The amount of fat per serving in grams
      */
+    @Expose
     private double fat;
 
     /**
      * The amount of saturated fat per serving, in grams
      */
+    @Expose
     private double satFat;
 
     /**
      * The amount of sodium per serving, in milligrams
      */
+    @Expose
     private double sodium;
 
     /**
      * The amount of carbohydrates per serving, in grams
      */
+    @Expose
     private double carbohydrates;
 
     /**
      * The amount of fiber per serving, in grams
      */
+    @Expose
     private double fiber;
 
     /**
      * The amount of sugars per serving, in grams
      */
+    @Expose
     private double sugars;
 
     /**
      * The amount of protein per serving, in grams
      */
+    @Expose
     private double protein;
 
     /**
      * Date the food was added to the log
      */
+    @Expose
     private Date date;
 
     /**
      * Which meal the food is associated with. Can be Breakfast, Lunch, Dinner, or Snack.
      */
+    @Expose
     private String meal;
 
     public int getFdcId() {

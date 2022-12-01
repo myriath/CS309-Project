@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,6 +9,7 @@ import javax.persistence.*;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private int ingredient_id;
 
 //    /**
@@ -20,8 +23,11 @@ public class Ingredient {
             @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "is_custom", referencedColumnName = "isCustom", nullable = false)
     })
+    @Expose
     private SimpleFoodItem food;
+    @Expose
     private double quantity;
+    @Expose
     private String unit;
 
     public Ingredient() {}

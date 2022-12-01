@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,10 +11,13 @@ import java.util.Objects;
 @IdClass(ShoppingList.ShoppingListPK.class)
 public class ShoppingList {
     @Id
+    @Expose
     private String username;
     @Id
     @OneToOne(optional = false)
+    @Expose
     private SimpleFoodItem foodItem;
+    @Expose
     private Boolean  stricken;
 
     public ShoppingList() {

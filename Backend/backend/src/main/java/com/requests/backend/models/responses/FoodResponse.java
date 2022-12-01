@@ -1,8 +1,10 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
 import com.requests.backend.models.CustomFood;
 
 public class FoodResponse extends ResultResponse {
+    @Expose
     private CustomFood item;
 
     public FoodResponse() {

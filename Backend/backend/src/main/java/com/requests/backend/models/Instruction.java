@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,8 +9,11 @@ import javax.persistence.*;
 public class Instruction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private int instruction_id;
+    @Expose
     private int stepNum;
+    @Expose
     private String stepText;
 
     public Instruction(int stepNum, String stepText) {

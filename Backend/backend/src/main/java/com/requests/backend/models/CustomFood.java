@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,18 +11,25 @@ public class CustomFood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     int dbId;
 
+    @Expose
     String name;
 
+    @Expose
     String ingredients;
 
+    @Expose
     double calories;
 
+    @Expose
     double carbs;
 
+    @Expose
     double protein;
 
+    @Expose
     double fat;
 
     public CustomFood() {

@@ -1,6 +1,7 @@
 package com.requests.backend.controllers;
 
 import com.requests.backend.models.*;
+import com.requests.backend.models.requests.RecipeAddRequest;
 import com.requests.backend.models.responses.AddRecipeResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;

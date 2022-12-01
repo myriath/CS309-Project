@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
@@ -8,14 +10,14 @@ import java.util.Set;
 @Table(name="users")
 public class User {
     @Id
+    @Expose
     private String username;
     private String email;
     private String pHash;
-
     private String pSalt;
-
+    @Expose
     private int userType;
-
+    @Expose
     private String bio;
 
     @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })

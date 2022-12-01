@@ -1,7 +1,11 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
+
 public class FollowResponse {
+    @Expose
     private int result;
+    @Expose
     private String[] users;
 
     public int getResult() {

@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +26,7 @@ public class Vote {
      * False = -1
      */
     @Column(name = "rating")
+    @Expose
     private boolean rating;
 
     public Vote() {

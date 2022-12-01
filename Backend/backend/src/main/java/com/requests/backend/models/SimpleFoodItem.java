@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,18 +19,22 @@ public class SimpleFoodItem {
      * FDC ID from the api or Custom Food ID
      */
     @Id
+    @Expose
     private int id;
 
     /**
      * Description / Item name from api
      */
+    @Expose
     private String description;
     /**
      * True if the item should appear with strikeout on the shopping list
      */
+    @Expose
     private boolean stricken;
 
     @Id
+    @Expose
     private boolean isCustom;
 
     public SimpleFoodItem() {}

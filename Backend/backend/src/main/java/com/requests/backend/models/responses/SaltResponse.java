@@ -1,8 +1,11 @@
 package com.requests.backend.models.responses;
 
-public class SaltResponse {
+import com.google.gson.annotations.Expose;
 
+public class SaltResponse {
+    @Expose
     private int result;
+    @Expose
     private String salt;
 
     public SaltResponse() {

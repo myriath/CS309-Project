@@ -4,6 +4,7 @@ import com.requests.backend.models.Comment;
 import com.requests.backend.models.Recipe;
 import com.requests.backend.models.Token;
 import com.requests.backend.models.User;
+import com.requests.backend.models.requests.CommentRequest;
 import com.requests.backend.models.responses.FollowResponse;
 import com.requests.backend.models.responses.GetCommentsResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
@@ -209,7 +210,7 @@ public class SocialController {
      * @return A result code indicating if the comment was successfully added.
      */
     @PostMapping (path="/comment/{token}/{rid}")
-    public @ResponseBody ResultResponse comment(@PathVariable String token, @PathVariable int rid, @RequestBody String body) {
+    public @ResponseBody ResultResponse comment(@PathVariable String token, @PathVariable int rid, @RequestBody CommentRequest body) {
         String tokenHash = Hasher.sha256(token);
 
         Token[] tokenQueryRes = tokenRepository.queryGetToken(tokenHash);
@@ -222,7 +223,7 @@ public class SocialController {
         else return UserController.getUserFromToken(token, (user, res1) -> {
                 Comment comment = new Comment();
                 comment.setUser(user);
-                comment.setBody(body);
+                comment.setBody(body.comment);
                 Recipe recipe = recipeRepository.queryGetRecipeByRid(rid)[0];
                 recipe.addComment(comment);
                 recipeRepository.save(recipe);
@@ -255,7 +256,7 @@ public class SocialController {
      * Edits a given comment
      * Works if the token is of the owner or moderator+
      */
-    @DeleteMapping(path = "/editComment/{token}/{commentId}")
+    @PatchMapping(path = "/editComment/{token}/{commentId}")
     public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody String body) {
         token = Hasher.sha256(token);
 
