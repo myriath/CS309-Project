@@ -17,7 +17,7 @@ public class Comment {
 
     private String body;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cid")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
     private Set<Vote> votes;
 
     public Integer getCid() {
