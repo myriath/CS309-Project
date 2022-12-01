@@ -12,9 +12,9 @@ public class User {
     @Id
     @Expose
     private String username;
-    private String email;
-    private String pHash;
-    private String pSalt;
+    private transient String email;
+    private transient String pHash;
+    private transient String pSalt;
     @Expose
     private int userType;
     @Expose
@@ -24,13 +24,10 @@ public class User {
     @JoinTable(name = "follows",
             joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
             inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
-    private Set<User> followers;
-
-
+    private transient Set<User> followers;
 
     public User() {
     }
-
 
     public String getUsername() {
         return username;
