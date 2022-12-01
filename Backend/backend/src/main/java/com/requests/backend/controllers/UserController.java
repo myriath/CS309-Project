@@ -10,14 +10,9 @@ import com.requests.backend.models.responses.SaltResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Date;
-import java.util.Collection;
 
 import static com.util.Constants.*;
 import static com.util.Constants.UserType.USER_REG;
@@ -98,12 +93,12 @@ public class UserController {
                 // If the difference is one day or greater, a new token needs to be generated.
                 if (outdatedToken) {
                     res.setResult(RESULT_REGEN_TOKEN);
-                    res.setUsername(dbToken.getUsername());
+                    res.setUsername(dbToken.getUser().getUsername());
                 }
                 // Otherwise, the user should be logged in, as the token is valid.
                 else {
                     res.setResult(RESULT_LOGGED_IN);
-                    res.setUsername(dbToken.getUsername());
+                    res.setUsername(dbToken.getUser().getUsername());
                 }
             }
 
@@ -202,10 +197,10 @@ public class UserController {
                 user.setPHash(pHash);
                 user.setPSalt(pSalt);
                 user.setUserType(USER_REG);
-                userRepository.save(user);
+                user = userRepository.save(user);
 
                 Token token = new Token();
-                token.setUsername(username);
+                token.setUser(user);
                 token.setToken(tokenHash);
                 token.setCreationDate(new Date(System.currentTimeMillis()));
                 tokenRepository.save(token);
@@ -281,7 +276,7 @@ public class UserController {
      * @param tokenRepository The token repository.
      * @return JSON string containing the result code and username.
      */
-    public static ResultResponse getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
+    public static ResultResponse getUserFromToken(String token, RunWithUser runner, TokenRepository tokenRepository) {
         String hashedToken = Hasher.sha256(token);
 
         ResultResponse res = new ResultResponse();
@@ -294,7 +289,7 @@ public class UserController {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             else {
-                runner.run(tokenQuery[0].getUsername(), res);
+                runner.run(tokenQuery[0].getUser(), res);
             }
 
             // If the server encounters an error, return RESULT_ERROR
@@ -306,7 +301,7 @@ public class UserController {
         return res;
     }
 
-    public interface RunWithUsername {
-        void run(String username, ResultResponse res);
+    public interface RunWithUser {
+        void run(User user, ResultResponse res);
     }
 }

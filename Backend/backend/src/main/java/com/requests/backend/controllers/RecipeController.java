@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.util.Constants.*;
@@ -125,7 +124,7 @@ public class RecipeController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
 //            try {
                 Recipe recipe = new Recipe();
@@ -162,9 +161,9 @@ public class RecipeController {
     @PostMapping(path="/addPicture/{rid}/{token}")
     @ResponseBody
     public ResultResponse addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
-        return UserController.getUsernameFromToken(token, (username, res) -> {
+        return UserController.getUserFromToken(token, (user, res) -> {
             Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
-            if (recipes.length == 0 || !recipes[0].getUsername().equals(username)) {
+            if (recipes.length == 0 || !recipes[0].getUsername().equals(user.getUsername())) {
                 res.setResult(RESULT_ERROR);
             } else {
                 String filename = Hasher.sha256plaintext(rid) + ".webp";
@@ -212,7 +211,7 @@ public class RecipeController {
 
         if (tokens.length == 0) {
             res.setResult(RESULT_ERROR);
-        } else if(tokens[0].getUsername().equals(recipe[0].getUsername())){
+        } else if(tokens[0].getUser().getUsername().equals(recipe[0].getUsername())){
             recipeRepository.queryDeleteRecipe(rid);
             res.setResult(RESULT_OK);
         }

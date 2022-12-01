@@ -10,6 +10,7 @@ import com.requests.backend.models.requests.StrikeoutRequest;
 import com.requests.backend.models.responses.ResultResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
+import com.requests.backend.repositories.SimpleFoodRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
@@ -35,6 +36,8 @@ public class ShoppingListController {
     private UserRepository userRepository;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private SimpleFoodRepository simpleFoodRepository;
 
     /**
      * Gets the users shopping list if the hash provided is valid.
@@ -61,7 +64,7 @@ public class ShoppingListController {
         // Otherwise, the token exists in the table
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             User[] userQueryRes = userRepository.queryValidateUsername(username);
 
@@ -93,11 +96,6 @@ public class ShoppingListController {
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        String itemName = foodItem.getDescription();
-        int fdcId = foodItem.getId();
-        boolean stricken = false;
-        boolean isCustom = foodItem.isCustom();
-
         ResultResponse res = new ResultResponse();
 
         // Find token in table
@@ -109,10 +107,15 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             try {
-                shoppingRepository.queryCreateShoppingListEntry(itemName, username, fdcId, isCustom, stricken);
+                simpleFoodRepository.save(foodItem);
+                ShoppingList list = new ShoppingList();
+                list.setFoodItem(foodItem);
+                list.setStricken(false);
+                list.setUsername(username);
+                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -146,7 +149,7 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             // User does not exist
             try {
@@ -185,7 +188,7 @@ public class ShoppingListController {
         else {
 
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             try {
                 // User already passed authentication from token lookup

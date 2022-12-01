@@ -105,7 +105,7 @@ public class ProfileEndpointController {
      */
     @PatchMapping(path="/updateProfile/{token}")
     public @ResponseBody ResultResponse updateProfile(@PathVariable String token, @RequestBody UpdateProfileRequest req) {
-        return UserController.getUsernameFromToken(token, (username, res) -> userRepository.queryUpdateBio(username, req.getNewBio()), tokenRepository);
+        return UserController.getUserFromToken(token, (user, res) -> userRepository.queryUpdateBio(user.getUsername(), req.getNewBio()), tokenRepository);
     }
 
     /**
@@ -138,8 +138,8 @@ public class ProfileEndpointController {
      * @return Result response with the result code to be handled by the backend
      */
     public ResultResponse updateImage(String token, MultipartFile file, String basePath) {
-        return UserController.getUsernameFromToken(token, (username, res) -> {
-            String filename = Hasher.sha256plaintext(username) + ".webp";
+        return UserController.getUserFromToken(token, (user, res) -> {
+            String filename = Hasher.sha256plaintext(user.getUsername()) + ".webp";
             File file1 = new File(basePath, filename);
             try (FileOutputStream outputStream = new FileOutputStream(file1)) {
                 outputStream.write(file.getBytes());

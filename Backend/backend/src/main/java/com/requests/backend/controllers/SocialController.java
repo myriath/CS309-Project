@@ -1,5 +1,6 @@
 package com.requests.backend.controllers;
 
+import com.requests.backend.models.Comment;
 import com.requests.backend.models.Recipe;
 import com.requests.backend.models.Token;
 import com.requests.backend.models.User;
@@ -106,7 +107,7 @@ public class SocialController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String follower = tokenQueryRes[0].getUsername();
+            String follower = tokenQueryRes[0].getUser().getUsername();
 
             followRepository.queryAddFollow(follower, following);
 
@@ -134,7 +135,7 @@ public class SocialController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String follower = tokenQueryRes[0].getUsername();
+            String follower = tokenQueryRes[0].getUser().getUsername();
 
             followRepository.queryRemoveFollow(follower, following);
 
@@ -161,7 +162,7 @@ public class SocialController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             Recipe[] feed = recipeRepository.queryGetFeed(username);
 
@@ -189,7 +190,7 @@ public class SocialController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             Recipe[] feed = recipeRepository.queryGetRecipeByUsername(username);
 
@@ -218,13 +219,14 @@ public class SocialController {
         if (tokenQueryRes.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
-        else {
-            String username = tokenQueryRes[0].getUsername();
-
-            commentRepository.queryCreateComment(rid, username, body);
-
-            res.setResult(RESULT_OK);
-        }
+        else return UserController.getUserFromToken(token, (user, res1) -> {
+                Comment comment = new Comment();
+                comment.setUser(user);
+                comment.setBody(body);
+                comment.setUpvotes(0);
+                commentRepository.save(comment);
+                res.setResult(RESULT_OK);
+            }, tokenRepository);
 
         return res;
     }
@@ -237,8 +239,10 @@ public class SocialController {
     public @ResponseBody ResultResponse deleteComment(@PathVariable String token, @PathVariable int commentId) {
         token = Hasher.sha256(token);
 
-        return UserController.getUsernameFromToken(token, (username, res) -> {
-            if (commentRepository.queryGetCommentByCid(commentId)[0].getUsername().equals(username) || userRepository.queryGetUserByUsername(username)[0].getUserType() > USER_REG) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
+
+            if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 commentRepository.queryRemoveComment(commentId);
                 res.setResult(RESULT_OK);
             }
@@ -254,8 +258,10 @@ public class SocialController {
     public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody String body) {
         token = Hasher.sha256(token);
 
-        return UserController.getUsernameFromToken(token, (username, res) -> {
-            if (commentRepository.queryGetCommentByCid(commentId)[0].getUsername().equals(username) || userRepository.queryGetUserByUsername(username)[0].getUserType() > USER_REG) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
+
+            if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 commentRepository.queryUpdateComment(commentId, body);
                 res.setResult(RESULT_OK);
             }

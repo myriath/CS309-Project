@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -8,6 +9,9 @@ import java.util.Set;
 public class User {
     @Id
     private String username;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", nullable = false)
+    private Collection<Token> tokens;
     private String email;
     private String pHash;
 
@@ -79,5 +83,13 @@ public class User {
 
     public void setFollowers(Set<User> followers) {
         this.followers = followers;
+    }
+
+    public Collection<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Collection<Token> tokens) {
+        this.tokens = tokens;
     }
 }
