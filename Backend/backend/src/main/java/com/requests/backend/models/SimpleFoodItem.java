@@ -34,31 +34,6 @@ public class SimpleFoodItem {
     public SimpleFoodItem() {}
 
     /**
-     * Constructor for gson
-     *
-     * @param id       item id
-     * @param description description / title
-     */
-    public SimpleFoodItem(int id, String description) {
-        this.id = id;
-        this.description = description;
-        this.stricken = false;
-    }
-
-    /**
-     * Constructor for gson
-     *
-     * @param id       item id
-     * @param description description / title
-     * @param stricken    true if the item should appear with strikeout on the shopping list
-     */
-    public SimpleFoodItem(int id, String description, boolean stricken) {
-        this.id = id;
-        this.description = description;
-        this.stricken = stricken;
-    }
-
-    /**
      * Getter for the id
      *
      * @return item id
