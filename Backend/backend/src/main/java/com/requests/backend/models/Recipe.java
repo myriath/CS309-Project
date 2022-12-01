@@ -13,13 +13,13 @@ public class Recipe {
     private String rname;
     private String description;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "rid", nullable = false)
     private Collection<Instruction> instructions;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "rid", nullable = false)
     private Collection<Ingredient> ingredients;
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="rid")
+    @JoinColumn(name="rid", nullable = false)
     private Collection<Comment> comments;
 
     public Recipe() {}

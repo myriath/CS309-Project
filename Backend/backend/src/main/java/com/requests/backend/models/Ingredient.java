@@ -17,8 +17,8 @@ public class Ingredient {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
-            @JoinColumn(name = "food_id", referencedColumnName = "id"),
-            @JoinColumn(name = "is_custom", referencedColumnName = "isCustom")
+            @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
+            @JoinColumn(name = "is_custom", referencedColumnName = "isCustom", nullable = false)
     })
     private SimpleFoodItem food;
 
