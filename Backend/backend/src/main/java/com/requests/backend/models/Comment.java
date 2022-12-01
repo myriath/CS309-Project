@@ -12,6 +12,10 @@ public class Comment {
     private Integer cid;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rid", referencedColumnName = "rid", nullable = false)
+    private Recipe recipe;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     private User user;
 
@@ -50,5 +54,13 @@ public class Comment {
 
     public void setVotes(Set<Vote> votes) {
         this.votes = votes;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

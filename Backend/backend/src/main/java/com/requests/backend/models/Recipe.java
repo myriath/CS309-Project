@@ -18,8 +18,7 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid", nullable = false)
     private Collection<Ingredient> ingredients;
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="rid", nullable = false)
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "recipe")
     private Collection<Comment> comments;
 
     public Recipe() {}
