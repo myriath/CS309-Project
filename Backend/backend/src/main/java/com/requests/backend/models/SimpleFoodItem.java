@@ -1,7 +1,5 @@
 package com.requests.backend.models;
 
-import com.google.gson.annotations.Expose;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,30 +11,24 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "simple_foods")
+@IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
 public class SimpleFoodItem {
-    @EmbeddedId
-    private SimpleFoodItemPK key;
-
     /**
      * FDC ID from the api or Custom Food ID
      */
-    @Expose
-    @MapsId("id")
+    @Id
     private int id;
 
     /**
      * Description / Item name from api
      */
-    @Expose
     private String description;
     /**
      * True if the item should appear with strikeout on the shopping list
      */
-    @Expose
     private boolean stricken;
 
-    @Expose
-    @MapsId("isCustom")
+    @Id
     private boolean isCustom;
 
     public SimpleFoodItem() {}
@@ -120,7 +112,6 @@ public class SimpleFoodItem {
                 '}';
     }
 
-    @Embeddable
     public static class SimpleFoodItemPK implements Serializable {
         protected int id;
         protected boolean isCustom;
@@ -130,14 +121,6 @@ public class SimpleFoodItem {
         public SimpleFoodItemPK(int id, boolean isCustom) {
             this.isCustom = isCustom;
             this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public boolean isCustom() {
-            return isCustom;
         }
 
         @Override
