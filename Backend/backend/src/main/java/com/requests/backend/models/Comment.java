@@ -20,11 +20,8 @@ public class Comment {
     @Column(columnDefinition = "INTEGER DEFAULT 0")
     private int upvotes;
 
-    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
-    @JoinTable(name = "comment_votes",
-            joinColumns = { @JoinColumn(name = "cid", referencedColumnName = "cid") },
-            inverseJoinColumns = { @JoinColumn(name = "username", referencedColumnName = "username") })
-    private Set<User> voters;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comments")
+    private Set<Vote> votes;
 
     public Integer getCid() {
         return cid;
@@ -56,5 +53,13 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 }
