@@ -1,9 +1,6 @@
 package com.requests.backend.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +11,7 @@ public class ShoppingList {
     @Id
     private String username;
     @Id
+    @OneToOne(optional = false)
     private SimpleFoodItem foodItem;
     private Boolean  stricken;
 
