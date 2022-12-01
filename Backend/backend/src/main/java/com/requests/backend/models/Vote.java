@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public class Vote {
         this.rating = rating;
     }
 
-    public static class VotePK {
+    public static class VotePK implements Serializable {
         protected User user;
         protected Comment comment;
 
