@@ -110,7 +110,6 @@ public class ShoppingListController {
             String username = tokenQueryRes[0].getUser().getUsername();
 
 //            try {
-                simpleFoodRepository.save(foodItem);
                 ShoppingList list = new ShoppingList();
                 list.setFoodItem(foodItem);
                 list.setStricken(false);
