@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -28,7 +28,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
-import com.example.cs309android.models.adapters.RecipeListAdapter;
+import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
@@ -47,10 +47,9 @@ import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.HomeRecipeView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -258,13 +257,18 @@ public class AccountActivity extends AppCompatActivity {
 
         new GetRecipesRequest(username).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            if (postsResponse.getRecipes() != null && postsResponse.getRecipes().length > 0) {
-                findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
-                ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(this, new ArrayList<>(Arrays.asList(postsResponse.getRecipes())), recipe -> {
+
+            findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+            LinearLayout recipeList = findViewById(R.id.yourRecipesList);
+            for (Recipe recipe : postsResponse.getRecipes()) {
+                HomeRecipeView recipeView = new HomeRecipeView(this);
+                recipeView.initView(recipe, view1 -> {
                     Intent intent = new Intent(this, RecipeDetailsActivity.class);
                     intent.putExtra(PARCEL_RECIPE, recipe);
                     startActivity(intent);
-                }));
+                });
+
+                recipeList.addView(recipeView);
             }
         }, AccountActivity.this);
     }

@@ -3,7 +3,11 @@ package com.example.cs309android.models.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
+
+import java.util.Arrays;
 
 /**
  * Simple recipe item used for displaying and moving data in the app
@@ -186,5 +190,19 @@ public class Recipe implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "rid=" + rid +
+                ", username='" + username + '\'' +
+                ", rname='" + rname + '\'' +
+                ", description='" + description + '\'' +
+                ", ingredients=" + Arrays.toString(ingredients) +
+                ", instructions=" + Arrays.toString(instructions) +
+                ", comments=" + Arrays.toString(comments) +
+                '}';
     }
 }

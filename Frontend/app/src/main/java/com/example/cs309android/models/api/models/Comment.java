@@ -15,7 +15,7 @@ public class Comment implements Parcelable {
      * Username of the account that made the comment
      */
     @Expose
-    private final String username;
+    private final User user;
     /**
      * Comment text
      */
@@ -34,12 +34,12 @@ public class Comment implements Parcelable {
     /**
      * Public constructor
      *
-     * @param username username of the comment creator
-     * @param comment  comment text
-     * @param id       comment id from the database
+     * @param user    username of the comment creator
+     * @param comment comment text
+     * @param id      comment id from the database
      */
-    public Comment(String username, String comment, int id) {
-        this.username = username;
+    public Comment(User user, String comment, int id) {
+        this.user = user;
         this.body = comment;
         this.id = id;
     }
@@ -50,7 +50,7 @@ public class Comment implements Parcelable {
      * @param in Parcel to unpack
      */
     protected Comment(Parcel in) {
-        username = in.readString();
+        user = in.readTypedObject(User.CREATOR);
         body = in.readString();
         id = in.readInt();
         showFull = in.readByte() != 0;
@@ -64,7 +64,7 @@ public class Comment implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(username);
+        dest.writeTypedObject(user, flags);
         dest.writeString(body);
         dest.writeInt(id);
         dest.writeByte((byte) (showFull ? 1 : 0));
@@ -100,8 +100,8 @@ public class Comment implements Parcelable {
      *
      * @return creator's username
      */
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     /**

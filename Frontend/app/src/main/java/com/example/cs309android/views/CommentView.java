@@ -62,7 +62,7 @@ public class CommentView extends FrameLayout {
     public void initView(Comment comment, RunWithComment onEdit, RunWithComment onDelete, GlobalClass global) {
         View view = inflate(getContext(), R.layout.adapter_comment, this);
 
-        String username = comment.getUsername();
+        String username = comment.getUser().getUsername();
         ((TextView) view.findViewById(R.id.username)).setText(username);
 
         ImageView profilePicture = view.findViewById(R.id.profile_picture);

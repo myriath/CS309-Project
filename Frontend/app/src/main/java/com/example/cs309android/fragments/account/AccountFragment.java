@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,7 +26,7 @@ import com.example.cs309android.activities.account.AccountEditActivity;
 import com.example.cs309android.activities.account.AccountListActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.adapters.RecipeListAdapter;
+import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
 import com.example.cs309android.models.api.request.social.GetFollowersRequest;
@@ -37,9 +37,8 @@ import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.views.HomeRecipeView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -77,6 +76,8 @@ public class AccountFragment extends BaseFragment {
                 .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
         ((TextView) view.findViewById(R.id.bioTextView))
                 .setText(global.getBio());
+        Util.getBadge(global.getUserType(), view.findViewById(R.id.badge));
+
         // Checks for updates to the above values
         new GetUserTypeRequest(global.getUsername()).request(response -> {
             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
@@ -101,13 +102,19 @@ public class AccountFragment extends BaseFragment {
 
         new GetRecipesRequest(global.getUsername()).request(response -> {
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            if (postsResponse.getRecipes() != null && postsResponse.getRecipes().length > 0) {
-                view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
-                ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new RecipeListAdapter(getContext(), new ArrayList<>(Arrays.asList(postsResponse.getRecipes())), recipe -> {
+            if (postsResponse.getRecipes() == null || postsResponse.getRecipes().length < 1) return;
+
+            view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+            LinearLayout recipeList = view.findViewById(R.id.yourRecipesList);
+            for (Recipe recipe : postsResponse.getRecipes()) {
+                HomeRecipeView recipeView = new HomeRecipeView(requireContext());
+                recipeView.initView(recipe, view1 -> {
                     Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
                     intent.putExtra(PARCEL_RECIPE, recipe);
                     startActivity(intent);
-                }));
+                });
+
+                recipeList.addView(recipeView);
             }
         }, requireContext());
     }

@@ -71,9 +71,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             return WindowInsetsCompat.CONSUMED;
         });
 
-        convertView.setOnClickListener(view -> {
-            runWithRecipe.run(recipe);
-        });
+        convertView.setOnClickListener(view -> runWithRecipe.run(recipe));
 
         return convertView;
     }
