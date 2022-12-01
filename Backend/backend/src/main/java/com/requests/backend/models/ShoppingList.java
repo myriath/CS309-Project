@@ -18,7 +18,7 @@ public class ShoppingList {
     @Expose
     private SimpleFoodItem foodItem;
     @Expose
-    private Boolean  stricken;
+    private Boolean stricken;
 
     public ShoppingList() {
 
