@@ -18,8 +18,8 @@ public class SimpleFoodItem {
     /**
      * FDC ID from the api or Custom Food ID
      */
-    @Id
     @Expose
+    @MapsId("id")
     private int id;
 
     /**
@@ -33,8 +33,8 @@ public class SimpleFoodItem {
     @Expose
     private boolean stricken;
 
-    @Id
     @Expose
+    @MapsId("isCustom")
     private boolean isCustom;
 
     public SimpleFoodItem() {}
