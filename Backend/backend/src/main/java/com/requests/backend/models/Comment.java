@@ -17,10 +17,7 @@ public class Comment {
 
     private String body;
 
-    @Column(columnDefinition = "INTEGER DEFAULT 0")
-    private int upvotes;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comments")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
     private Set<Vote> votes;
 
     public Integer getCid() {
@@ -37,14 +34,6 @@ public class Comment {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public int getUpvotes() {
-        return upvotes;
-    }
-
-    public void setUpvotes(int upvotes) {
-        this.upvotes = upvotes;
     }
 
     public User getUser() {
