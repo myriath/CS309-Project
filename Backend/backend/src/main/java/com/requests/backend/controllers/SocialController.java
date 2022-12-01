@@ -223,8 +223,9 @@ public class SocialController {
                 Comment comment = new Comment();
                 comment.setUser(user);
                 comment.setBody(body);
-                comment.setRecipe(recipeRepository.queryGetRecipeByRid(rid)[0]);
-                commentRepository.save(comment);
+                Recipe recipe = recipeRepository.queryGetRecipeByRid(rid)[0];
+                recipe.addComment(comment);
+                recipeRepository.save(recipe);
                 res.setResult(RESULT_OK);
             }, tokenRepository);
 

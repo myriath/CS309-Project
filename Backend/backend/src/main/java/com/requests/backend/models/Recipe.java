@@ -18,7 +18,8 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rid", nullable = false)
     private Collection<Ingredient> ingredients;
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "recipe")
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="rid", nullable = false)
     private Collection<Comment> comments;
 
     public Recipe() {}
@@ -79,4 +80,7 @@ public class Recipe {
         this.comments = comments;
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }

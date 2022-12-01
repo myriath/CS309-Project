@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,19 +11,19 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private Integer cid;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid", referencedColumnName = "rid", nullable = false)
-    private Recipe recipe;
-
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @Expose
     private User user;
 
+    @Expose
     private String body;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+    @Expose
     private Set<Vote> votes;
 
     public Integer getCid() {
@@ -54,13 +56,5 @@ public class Comment {
 
     public void setVotes(Set<Vote> votes) {
         this.votes = votes;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
     }
 }
