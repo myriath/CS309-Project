@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.util.Constants.*;
 
@@ -130,15 +131,17 @@ public class RecipeController {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
+                recipe.setIngredients(List.of(req.getIngredients()));
+                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe.setDescription(req.getDescription());
                 recipe = recipeRepository.save(recipe);
-                for (Instruction instruction : instructions) {
-                    instructionRepository.save(instruction);
-                }
-                for (Ingredient ingredient : req.getIngredients()) {
-                    simpleFoodRepository.save(ingredient.getFood());
-                    ingredientRepository.save(ingredient);
-                }
+//                for (Instruction instruction : instructions) {
+//                    instructionRepository.save(instruction);
+//                }
+//                for (Ingredient ingredient : req.getIngredients()) {
+//                    simpleFoodRepository.save(ingredient.getFood());
+//                    ingredientRepository.save(ingredient);
+//                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
 //            } catch (Exception e) {
