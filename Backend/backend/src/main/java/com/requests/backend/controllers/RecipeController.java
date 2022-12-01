@@ -127,7 +127,7 @@ public class RecipeController {
         else {
             String username = tokenQueryRes[0].getUser().getUsername();
 
-//            try {
+            try {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
@@ -144,9 +144,9 @@ public class RecipeController {
 //                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
-//            } catch (Exception e) {
-//                res.setResult(RESULT_ERROR_RID_TAKEN);
-//            }
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return res;
