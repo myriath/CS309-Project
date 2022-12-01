@@ -13,8 +13,10 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "simple_foods")
-@IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
 public class SimpleFoodItem {
+    @EmbeddedId
+    private SimpleFoodItemPK key;
+
     /**
      * FDC ID from the api or Custom Food ID
      */
@@ -118,6 +120,7 @@ public class SimpleFoodItem {
                 '}';
     }
 
+    @Embeddable
     public static class SimpleFoodItemPK implements Serializable {
         protected int id;
         protected boolean isCustom;
