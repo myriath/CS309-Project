@@ -8,10 +8,6 @@ public class Instruction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int instruction_id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid")
-    private Recipe recipe;
     private int stepNum;
     private String stepText;
 
@@ -28,14 +24,6 @@ public class Instruction {
 
     public void setInstruction_id(int instruction_id) {
         this.instruction_id = instruction_id;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
     }
 
     public int getStepNum() {

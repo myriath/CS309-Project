@@ -1,5 +1,6 @@
-package com.requests.backend.models;
+package com.requests.backend.models.responses;
 
+import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.responses.ResultResponse;
 
 public class FoodResponse extends ResultResponse {
