@@ -8,12 +8,14 @@ public class Instruction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int instruction_id;
-    private int rid;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rid")
+    private Recipe recipe;
     private int stepNum;
     private String stepText;
 
-    public Instruction(int rid, int stepNum, String stepText) {
-        this.rid = rid;
+    public Instruction(int stepNum, String stepText) {
         this.stepNum = stepNum;
         this.stepText = stepText;
     }
@@ -28,12 +30,12 @@ public class Instruction {
         this.instruction_id = instruction_id;
     }
 
-    public int getRid() {
-        return rid;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setRid(int rid) {
-        this.rid = rid;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 
     public int getStepNum() {
