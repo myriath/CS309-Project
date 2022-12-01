@@ -94,7 +94,7 @@ public class SimpleFoodItem implements Parcelable {
      * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int id, int dbId, String description, String brand, boolean stricken, boolean isCustom) {
+    public SimpleFoodItem(int id, String description, String brand, boolean stricken, boolean isCustom) {
         this.id = id;
         this.description = description;
         this.brand = brand;

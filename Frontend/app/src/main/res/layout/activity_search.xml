@@ -75,17 +75,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/scanButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="75dp"
-        android:layout_marginEnd="32dp"
-        android:contentDescription="@string/scan_barcode"
-        android:fitsSystemWindows="true"
-        android:elevation="0dp"
-        android:src="@drawable/ic_scan" />
+    <!--    Commented out because the barcode stuff doesn't work, might revisit in the future -->
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--        android:id="@+id/scanButton"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom|end"-->
+    <!--        android:layout_marginBottom="75dp"-->
+    <!--        android:layout_marginEnd="32dp"-->
+    <!--        android:contentDescription="@string/scan_barcode"-->
+    <!--        android:fitsSystemWindows="true"-->
+    <!--        android:elevation="0dp"-->
+    <!--        android:src="@drawable/ic_scan" />-->
 
     <FrameLayout
         android:id="@+id/bottom_sheet"
