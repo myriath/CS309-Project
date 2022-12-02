@@ -2,10 +2,7 @@ package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -34,6 +31,7 @@ public class SimpleFoodItem {
      * True if the item should appear with strikeout on the shopping list
      */
     @Expose
+    @Transient
     private boolean stricken;
 
     @Id

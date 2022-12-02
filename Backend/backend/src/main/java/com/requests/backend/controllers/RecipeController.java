@@ -124,10 +124,14 @@ public class RecipeController {
         else {
             String username = tokenQueryRes[0].getUser().getUsername();
 
-            try {
+//            try {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
+//                Ingredient[] ingredients = req.getIngredients();
+//                for (int i = 0; i < ingredients.length; i++) {
+//                    if (ingredients[i].getFood().)
+//                }
                 recipe.setIngredients(List.of(req.getIngredients()));
                 recipe.setInstructions(List.of(req.getInstructions()));
                 recipe.setDescription(req.getDescription());
@@ -141,9 +145,9 @@ public class RecipeController {
 //                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
-            } catch (Exception e) {
-                res.setResult(RESULT_ERROR);
-            }
+//            } catch (Exception e) {
+//                res.setResult(RESULT_ERROR);
+//            }
         }
 
         return res;
