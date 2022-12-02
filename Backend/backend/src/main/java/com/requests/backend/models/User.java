@@ -13,11 +13,11 @@ public class User {
     @Id
     @Expose
     private String username;
-    @SkipSerialization
+
     private String email;
-    @SkipSerialization
+
     private String pHash;
-    @SkipSerialization
+
     private String pSalt;
     @Expose
     private int userType;
@@ -28,7 +28,11 @@ public class User {
     @JoinTable(name = "follows",
             joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
             inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
-    private transient Set<User> followers;
+    private Set<User> followers;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    private Set<ShoppingList> shoppingLists;
 
     public User() {
     }
@@ -83,6 +87,18 @@ public class User {
 
     public void setFollowers(Set<User> followers) {
         this.followers = followers;
+    }
+
+    public Set<ShoppingList> getShoppingLists() {
+        return shoppingLists;
+    }
+
+    public void setShoppingLists(Set<ShoppingList> shoppingLists) {
+        this.shoppingLists = shoppingLists;
+    }
+
+    public void addShoppingList(ShoppingList list) {
+        this.shoppingLists.add(list);
     }
 
     @Override

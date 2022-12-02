@@ -9,14 +9,7 @@ import java.util.Objects;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="shopping_list")
 public class ShoppingList {
-    @EmbeddedId
-    private ShoppingListPK pk;
-
-    @MapsId("username")
-    @ManyToOne(cascade = CascadeType.ALL)
-    @Expose
-    private User user;
-    @MapsId("foodItem")
+    @Id
     @ManyToOne(cascade = CascadeType.ALL)
     @Expose
     private SimpleFoodItem foodItem;
@@ -27,13 +20,13 @@ public class ShoppingList {
 
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public Boolean getStricken() {
         return stricken;

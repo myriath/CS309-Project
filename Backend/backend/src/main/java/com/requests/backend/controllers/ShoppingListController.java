@@ -114,8 +114,9 @@ public class ShoppingListController {
                 ShoppingList list = new ShoppingList();
                 list.setFoodItem(foodItem);
                 list.setStricken(false);
-                list.setUser(user);
-                shoppingRepository.save(list);
+                user.addShoppingList(list);
+                userRepository.save(user);
+//                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
 //            } catch (Exception e) {
 //                res.setResult(RESULT_ERROR);
