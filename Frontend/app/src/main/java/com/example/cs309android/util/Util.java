@@ -206,7 +206,6 @@ public class Util {
      * @param global   GlobalClass for context and storing login details
      * @param username Username for the account to log into
      * @param token    Token used for authentication
-     * @param userType Type of the user. 0: regular, 1: moderator, 2: admin
      */
     public static void login(GlobalClass global, String username, String token) {
         global.setUsername(username);
@@ -243,6 +242,7 @@ public class Util {
         new SaltRequest(username).request(response -> {
             SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);
 
+            System.out.println(response);
             int result = saltResponse.getResult();
             if (result == RESULT_OK) {
                 byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());

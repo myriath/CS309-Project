@@ -38,6 +38,8 @@ import com.example.cs309android.models.api.response.social.FollowResponse;
 import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.util.Util;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -100,6 +102,11 @@ public class AccountFragment extends BaseFragment {
         }, requireContext());
 
         new GetRecipesRequest(global.getUsername()).request(response -> {
+            try {
+                System.out.println(response.toString(4));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
             if (postsResponse.getRecipes() != null && postsResponse.getRecipes().length > 0) {
                 view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);

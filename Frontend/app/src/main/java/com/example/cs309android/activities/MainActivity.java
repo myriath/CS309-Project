@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Gets stored password hash, if it exists
         Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
 
-        if (users == null) users = new HashMap<>();
+        if (users == null || users.size() == 0) users = new HashMap<>();
         global.setUsers(users);
         global.updateLoginPrefs();
 
