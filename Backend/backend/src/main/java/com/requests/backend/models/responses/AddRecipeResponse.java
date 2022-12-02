@@ -1,6 +1,9 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
+
 public class AddRecipeResponse extends ResultResponse {
+    @Expose
     private int rid;
 
     public int getRid() {

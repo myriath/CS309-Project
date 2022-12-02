@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "simple_foods")
-@IdClass(SimpleFoodItem.class)
+@IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
 public class SimpleFoodItem {
     /**
      * FDC ID from the api or Custom Food ID
@@ -32,31 +32,6 @@ public class SimpleFoodItem {
     private boolean isCustom;
 
     public SimpleFoodItem() {}
-
-    /**
-     * Constructor for gson
-     *
-     * @param id       item id
-     * @param description description / title
-     */
-    public SimpleFoodItem(int id, String description) {
-        this.id = id;
-        this.description = description;
-        this.stricken = false;
-    }
-
-    /**
-     * Constructor for gson
-     *
-     * @param id       item id
-     * @param description description / title
-     * @param stricken    true if the item should appear with strikeout on the shopping list
-     */
-    public SimpleFoodItem(int id, String description, boolean stricken) {
-        this.id = id;
-        this.description = description;
-        this.stricken = stricken;
-    }
 
     /**
      * Getter for the id
@@ -113,22 +88,14 @@ public class SimpleFoodItem {
     }
 
     public static class SimpleFoodItemPK implements Serializable {
-        private int id;
-        private boolean isCustom;
+        protected int id;
+        protected boolean isCustom;
 
         public SimpleFoodItemPK() {}
 
         public SimpleFoodItemPK(int id, boolean isCustom) {
             this.isCustom = isCustom;
             this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public boolean isCustom() {
-            return isCustom;
         }
 
         @Override

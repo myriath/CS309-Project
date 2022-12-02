@@ -1,6 +1,7 @@
 package com.requests.backend.controllers;
 
 import com.requests.backend.models.*;
+import com.requests.backend.models.requests.RecipeAddRequest;
 import com.requests.backend.models.responses.AddRecipeResponse;
 import com.requests.backend.models.responses.RecipeListResponse;
 import com.requests.backend.models.responses.RecipeResponse;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Iterator;
+import java.util.List;
 
 import static com.util.Constants.*;
 
@@ -124,26 +125,28 @@ public class RecipeController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
-//            try {
+            try {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
+                recipe.setIngredients(List.of(req.getIngredients()));
+                recipe.setInstructions(List.of(req.getInstructions()));
                 recipe.setDescription(req.getDescription());
                 recipe = recipeRepository.save(recipe);
-                for (Instruction instruction : instructions) {
-                    instructionRepository.save(instruction);
-                }
-                for (Ingredient ingredient : req.getIngredients()) {
-                    simpleFoodRepository.save(ingredient.getFood());
-                    ingredientRepository.save(ingredient);
-                }
+//                for (Instruction instruction : instructions) {
+//                    instructionRepository.save(instruction);
+//                }
+//                for (Ingredient ingredient : req.getIngredients()) {
+//                    simpleFoodRepository.save(ingredient.getFood());
+//                    ingredientRepository.save(ingredient);
+//                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
-//            } catch (Exception e) {
-//                res.setResult(RESULT_ERROR_RID_TAKEN);
-//            }
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return res;
@@ -159,9 +162,9 @@ public class RecipeController {
     @PostMapping(path="/addPicture/{rid}/{token}")
     @ResponseBody
     public ResultResponse addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
-        return UserController.getUsernameFromToken(token, (username, res) -> {
+        return UserController.getUserFromToken(token, (user, res) -> {
             Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
-            if (recipes.length == 0 || !recipes[0].getUsername().equals(username)) {
+            if (recipes.length == 0 || !recipes[0].getUsername().equals(user.getUsername())) {
                 res.setResult(RESULT_ERROR);
             } else {
                 String filename = Hasher.sha256plaintext(rid) + ".webp";
@@ -209,7 +212,7 @@ public class RecipeController {
 
         if (tokens.length == 0) {
             res.setResult(RESULT_ERROR);
-        } else if(tokens[0].getUsername().equals(recipe[0].getUsername())){
+        } else if(tokens[0].getUser().getUsername().equals(recipe[0].getUsername())){
             recipeRepository.queryDeleteRecipe(rid);
             res.setResult(RESULT_OK);
         }

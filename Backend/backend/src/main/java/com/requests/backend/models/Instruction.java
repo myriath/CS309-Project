@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,13 +9,14 @@ import javax.persistence.*;
 public class Instruction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private int instruction_id;
-    private int rid;
+    @Expose
     private int stepNum;
+    @Expose
     private String stepText;
 
-    public Instruction(int rid, int stepNum, String stepText) {
-        this.rid = rid;
+    public Instruction(int stepNum, String stepText) {
         this.stepNum = stepNum;
         this.stepText = stepText;
     }
@@ -26,14 +29,6 @@ public class Instruction {
 
     public void setInstruction_id(int instruction_id) {
         this.instruction_id = instruction_id;
-    }
-
-    public int getRid() {
-        return rid;
-    }
-
-    public void setRid(int rid) {
-        this.rid = rid;
     }
 
     public int getStepNum() {

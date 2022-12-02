@@ -1,11 +1,19 @@
-package com.requests.backend.models;
+package com.requests.backend.models.requests;
+
+import com.google.gson.annotations.Expose;
+import com.requests.backend.models.Ingredient;
+import com.requests.backend.models.Instruction;
 
 import java.util.Arrays;
 
 public class RecipeAddRequest {
+    @Expose
     private String recipeName;
+    @Expose
     private String description;
+    @Expose
     private Instruction[] instructions;
+    @Expose
     private Ingredient[] ingredients;
 
     public RecipeAddRequest(String recipeName, String description, Instruction[] instructions, Ingredient[] ingredients) {

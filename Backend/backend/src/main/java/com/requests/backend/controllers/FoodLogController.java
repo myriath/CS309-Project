@@ -45,7 +45,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
             FoodLog[] foodLog = foodLogRepository.queryGetFoodLog(username);
 
             res.setFoodLog(foodLog);
@@ -72,7 +72,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             FoodLog[] foodLog = foodLogRepository.queryGetLogByDay(username, date);
 
@@ -100,7 +100,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             foodLogRepository.queryAddToLog(username, req.getFdcId(), req.getFoodName(), req.getServingAmt(),
                     req.getServingUnit(), req.getFat(), req.getSatFat(), req.getSodium(), req.getCarbohydrates(),

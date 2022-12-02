@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -8,18 +10,25 @@ import java.util.Collection;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private int rid;
+    @Expose
     private String username;
+    @Expose
     private String rname;
+    @Expose
     private String description;
+    @Expose
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "rid", nullable = false)
     private Collection<Instruction> instructions;
+    @Expose
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "rid", nullable = false)
     private Collection<Ingredient> ingredients;
+    @Expose
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="rid")
+    @JoinColumn(name="rid", nullable = false)
     private Collection<Comment> comments;
 
     public Recipe() {}
@@ -80,4 +89,7 @@ public class Recipe {
         this.comments = comments;
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }
