@@ -12,6 +12,7 @@ import java.util.Objects;
 public class ShoppingList {
     @Id
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username")
     @Expose
     private User user;
     @Id
@@ -50,13 +51,13 @@ public class ShoppingList {
     }
 
     public static class ShoppingListPK implements Serializable {
-        protected String username;
+        protected User user;
         protected SimpleFoodItem foodItem;
 
         public ShoppingListPK() {}
 
-        public ShoppingListPK(String username, SimpleFoodItem foodItem) {
-            this.username = username;
+        public ShoppingListPK(User user, SimpleFoodItem foodItem) {
+            this.user = user;
             this.foodItem = foodItem;
         }
 
@@ -65,12 +66,12 @@ public class ShoppingList {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ShoppingListPK that = (ShoppingListPK) o;
-            return Objects.equals(username, that.username) && Objects.equals(foodItem, that.foodItem);
+            return Objects.equals(user, that.user) && Objects.equals(foodItem, that.foodItem);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(username, foodItem);
+            return Objects.hash(user, foodItem);
         }
     }
 }
