@@ -12,7 +12,7 @@ public class ShoppingList {
     @Expose
     private int shoppingId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "food_custom", referencedColumnName = "isCustom", nullable = false)

@@ -19,15 +19,15 @@ public class Recipe {
     @Expose
     private String description;
     @Expose
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "rid", nullable = false)
     private Collection<Instruction> instructions;
     @Expose
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "rid", nullable = false)
     private Collection<Ingredient> ingredients;
     @Expose
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name="rid", nullable = false)
     private Collection<Comment> comments;
 

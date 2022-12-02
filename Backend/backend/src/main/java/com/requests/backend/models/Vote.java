@@ -12,12 +12,12 @@ import java.util.Set;
 @Table(name = "votes")
 public class Vote {
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "cid")
     private Comment comment;
 
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "username")
     private User user;
 

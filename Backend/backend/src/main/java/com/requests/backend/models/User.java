@@ -24,13 +24,13 @@ public class User {
     @Expose
     private String bio;
 
-    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
+    @ManyToMany(targetEntity = User.class)
     @JoinTable(name = "follows",
             joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
             inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
     private Set<User> followers;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn
     private Set<ShoppingList> shoppingLists;
 
