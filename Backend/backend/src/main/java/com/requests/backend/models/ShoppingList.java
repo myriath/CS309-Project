@@ -13,6 +13,7 @@ public class ShoppingList {
     private int shoppingId;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumns({@JoinColumn(name = "food_id"), @JoinColumn(name = "food_custom")})
     @Expose
     private SimpleFoodItem foodItem;
     @Expose
