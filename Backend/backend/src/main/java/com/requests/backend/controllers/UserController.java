@@ -58,6 +58,7 @@ public class UserController {
         } else {
             User user = userRes[0];
             String salt = user.getPSalt();
+            LOGGER.info(salt);
             res.setResult(RESULT_OK);
             res.setSalt(salt);
         }
