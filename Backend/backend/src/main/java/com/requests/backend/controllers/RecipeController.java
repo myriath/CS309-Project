@@ -126,14 +126,14 @@ public class RecipeController {
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
                 Ingredient[] ingredients = req.getIngredients();
-                for (int i = 0; i < ingredients.length; i++) {
-                    ingredients[i].setFood(simpleFoodRepository.save(ingredients[i].getFood()));
-                    ingredients[i] = ingredientRepository.save(ingredients[i]);
-                }
+//                for (int i = 0; i < ingredients.length; i++) {
+//                    ingredients[i].setFood(simpleFoodRepository.save(ingredients[i].getFood()));
+//                    ingredients[i] = ingredientRepository.save(ingredients[i]);
+//                }
                 Instruction[] instructions = req.getInstructions();
-                for (int i = 0; i < instructions.length; i++) {
-                    instructions[i] = instructionRepository.save(instructions[i]);
-                }
+//                for (int i = 0; i < instructions.length; i++) {
+//                    instructions[i] = instructionRepository.save(instructions[i]);
+//                }
                 recipe.setIngredients(List.of(ingredients));
                 recipe.setInstructions(List.of(instructions));
                 recipe.setDescription(req.getDescription());
