@@ -8,7 +8,6 @@ import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
 
@@ -74,11 +73,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
      */
     private static FoodSearchListAdapter adapter;
     /**
-     * List of existing items from whatever called this.
-     * Completing a search adds that item to this list.
-     */
-    private ArrayList<SimpleFoodItem> items;
-    /**
      * List of search results from the search to display
      */
     private ArrayList<SimpleFoodItem> searchResults;
@@ -112,18 +106,15 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         ListView listView = findViewById(R.id.search_results);
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-        items = getIntent().getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
-        if (items == null) {
-            items = new ArrayList<>();
-        }
-
         searchResults = new ArrayList<>();
 
         TextView empty = findViewById(R.id.empty_text);
-        if (items.isEmpty()) {
-            empty.setVisibility(View.VISIBLE);
-        } else {
-            empty.setVisibility(View.INVISIBLE);
+        if (intentCode == INTENT_SHOPPING_LIST) {
+            if (MainActivity.getShoppingList().isEmpty()) {
+                empty.setVisibility(View.VISIBLE);
+            } else {
+                empty.setVisibility(View.INVISIBLE);
+            }
         }
 
         adapter = new FoodSearchListAdapter(this, searchResults);
@@ -138,7 +129,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             return WindowInsetsCompat.CONSUMED;
         });
 
-        findViewById(R.id.scanButton).setOnClickListener(view -> imageChooser());
+//        findViewById(R.id.scanButton).setOnClickListener(view -> imageChooser());
 
         foodDetailsLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -152,8 +143,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                 Util.spin(getWindow().getDecorView());
                                 new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                                    System.out.println(response);
                                     if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
-                                        items.add(item);
+                                        MainActivity.getShoppingList().add(item);
                                         Toaster.toastShort("Added", this);
                                     } else {
                                         Toaster.toastShort("Error", this);
@@ -185,7 +177,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                             if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
-                                items.add(item);
+                                MainActivity.getShoppingList().add(item);
                                 Toaster.toastShort("Added", this);
                             } else {
                                 Toaster.toastShort("Error", this);
@@ -214,7 +206,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         Intent intent = new Intent();
         switch (intentCode) {
             case INTENT_SHOPPING_LIST: {
-                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
                 setResult(RESULT_OK, intent);
                 break;
             }

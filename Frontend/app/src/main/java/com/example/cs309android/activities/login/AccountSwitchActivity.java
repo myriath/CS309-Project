@@ -51,7 +51,10 @@ public class AccountSwitchActivity extends AppCompatActivity implements Callback
 
         loginLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> refreshView(global)
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) finish();
+                    else refreshView(global);
+                }
         );
 
         loggedOut = getIntent().getBooleanExtra(PARCEL_LOGGED_OUT, false);

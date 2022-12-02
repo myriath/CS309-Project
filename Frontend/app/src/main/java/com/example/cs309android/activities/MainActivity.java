@@ -70,7 +70,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Main activity
@@ -84,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Used to launch various activities.
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
-    /**
-     * Fragment containing the current login window.
-     */
-    private CallbackFragment loginWindowFragment;
     /**
      * Main window fragment
      */
@@ -250,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addShopping.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
-            intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);
             foodSearchLauncher.launch(intent);
         });
 
@@ -268,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         foodSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    shoppingListItems = Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
                     mainFragment = new ShoppingFragment();
                     mainFragment.setCallbackFragment(this);
                     getSupportFragmentManager()

@@ -38,6 +38,7 @@ import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
 import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
@@ -49,6 +50,7 @@ import com.example.cs309android.models.api.request.users.SaltRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.models.api.response.users.SaltResponse;
 import com.example.cs309android.util.security.Hasher;
@@ -218,6 +220,10 @@ public class Util {
         }, global);
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
+        new GetProfileRequest(username).request(response -> {
+            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+            global.setBio(profileResponse.getBio());
+        }, global);
 
         MainActivity.clearShoppingList();
         new GetListRequest(token).request(response -> {

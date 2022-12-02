@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.food.FoodDetailsActivity">
+    tools:context=".activities.food.FoodDetailsActivity"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -45,8 +46,7 @@
         android:elevation="0dp"
         android:text="@string/add_item"
         app:fabSize="auto"
-        app:icon="@drawable/ic_add"
-        android:fitsSystemWindows="true" />
+        app:icon="@drawable/ic_add" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"

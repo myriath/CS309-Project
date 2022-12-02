@@ -24,12 +24,15 @@ import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.User;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 import com.example.cs309android.models.api.request.recipes.RemoveRecipeRequest;
 import com.example.cs309android.models.api.request.social.CommentRequest;
+import com.example.cs309android.models.api.request.social.GetCommentsRequest;
 import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.social.CommentsResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -111,7 +114,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         LinearLayout ingredientsList = findViewById(R.id.ingredients);
-        System.out.println(Arrays.toString(recipe.getIngredients()));
         for (Ingredient ingredient : recipe.getIngredients()) {
             View view = View.inflate(this, R.layout.ingredient_layout, null);
             String text = ingredient.getQuantity() + " " + ingredient.getUnit();
@@ -178,7 +180,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 CommentView commentView = new CommentView(this);
-                Comment comment = new Comment(global.getUsername(), commentText, ITEM_ID_NULL);
+                Comment comment = new Comment(new User(global.getUsername(), 0, ""), commentText, ITEM_ID_NULL);
                 commentView.initView(comment, onEdit -> commentView.toggleEditable(), onDelete -> comments.removeView(view), global);
                 comments.addView(commentView, 0);
             }, error -> {
@@ -187,11 +189,29 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }, RecipeDetailsActivity.this);
         });
 
-        for (Comment comment : recipe.getComments()) {
+        new GetCommentsRequest(recipe.getRecipeID()).request(response -> {
+            CommentsResponse commentsResponse = Util.objFromJson(response, CommentsResponse.class);
+            refreshComments(commentsResponse.getComments(), comments, global);
+        }, RecipeDetailsActivity.this);
+
+        refreshComments(recipe.getComments(), comments, global);
+    }
+
+    /**
+     * Refreshes the comments
+     *
+     * @param comments New comments
+     * @param layout   LinearLayout to display comments
+     * @param global   GlobalClass for user type checking
+     */
+    public void refreshComments(Comment[] comments, LinearLayout layout, GlobalClass global) {
+        if (comments == null) return;
+        layout.removeAllViews();
+        for (Comment comment : comments) {
             CommentView view = new CommentView(this);
-            view.initView(comment, toEdit -> view.toggleEditable(), deleted -> comments.removeView(view), global);
-            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));
-            comments.addView(view);
+            view.initView(comment, toEdit -> view.toggleEditable(), deleted -> layout.removeView(view), global);
+            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUser().getUsername(), this));
+            layout.addView(view);
         }
     }
 }

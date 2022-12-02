@@ -174,12 +174,10 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
 
         Response.Listener<JSONObject> listener = response -> {
             AddRecipeResponse recipeResponse = Util.objFromJson(response, AddRecipeResponse.class);
-
             if (recipeResponse.getResult() == Constants.Results.RESULT_RECIPE_CREATED) {
                 if (image != null) {
                     new AddRecipeImageRequest(image, token, String.valueOf(recipeResponse.getRid())).request(response1 -> {
                         GenericResponse recipeResponse1 = Util.objFromJson(response, GenericResponse.class);
-
                         if (recipeResponse1.getResult() != Constants.Results.RESULT_OK) {
                             Toaster.toastShort("Something went wrong", this);
                         } else {
