@@ -8,7 +8,6 @@ import java.util.Objects;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="shopping_list")
-@IdClass(ShoppingList.ShoppingListPK.class)
 public class ShoppingList {
     @EmbeddedId
     private ShoppingListPK pk;
