@@ -15,13 +15,11 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-@ConditionalOnBean(name = { "gsonBuilder" })
+@ConditionalOnClass(Gson.class)
 public class GsonConfig {
     @Bean
-    public GsonBuilder gsonBuilder(List<GsonBuilderCustomizer> customizers) {
-        GsonBuilder builder = new GsonBuilder();
-        customizers.forEach((c) -> c.customize(builder));
-        return builder.addSerializationExclusionStrategy(new ExclusionStrategy() {
+    public Gson gson() {
+        return new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes fieldAttributes) {
                 return fieldAttributes.getAnnotation(SkipSerialization.class) != null;
@@ -31,6 +29,6 @@ public class GsonConfig {
             public boolean shouldSkipClass(Class<?> aClass) {
                 return false;
             }
-        }).setPrettyPrinting().serializeNulls();
+        }).setPrettyPrinting().serializeNulls().create();
     }
 }
