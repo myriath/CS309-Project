@@ -10,6 +10,9 @@ import java.util.Objects;
 @Table(name="shopping_list")
 public class ShoppingList {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @Expose
     private SimpleFoodItem foodItem;
@@ -44,31 +47,39 @@ public class ShoppingList {
         this.foodItem = foodItem;
     }
 
-    @Embeddable
-    public static class ShoppingListPK implements Serializable {
-        protected String username;
-        protected SimpleFoodItem.SimpleFoodItemPK foodItem;
-
-        public ShoppingListPK() {}
-
-        public ShoppingListPK(String username, SimpleFoodItem.SimpleFoodItemPK foodItem) {
-            this.username = username;
-            this.foodItem = foodItem;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ShoppingListPK that = (ShoppingListPK) o;
-            return Objects.equals(username, that.username) && Objects.equals(foodItem, that.foodItem);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(username, foodItem);
-        }
+    public int getId() {
+        return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    //    @Embeddable
+//    public static class ShoppingListPK implements Serializable {
+//        protected String username;
+//        protected SimpleFoodItem.SimpleFoodItemPK foodItem;
+//
+//        public ShoppingListPK() {}
+//
+//        public ShoppingListPK(String username, SimpleFoodItem.SimpleFoodItemPK foodItem) {
+//            this.username = username;
+//            this.foodItem = foodItem;
+//        }
+//
+//        @Override
+//        public boolean equals(Object o) {
+//            if (this == o) return true;
+//            if (o == null || getClass() != o.getClass()) return false;
+//            ShoppingListPK that = (ShoppingListPK) o;
+//            return Objects.equals(username, that.username) && Objects.equals(foodItem, that.foodItem);
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            return Objects.hash(username, foodItem);
+//        }
+//    }
 }
 
 
