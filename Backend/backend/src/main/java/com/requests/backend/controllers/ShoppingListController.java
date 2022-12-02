@@ -111,9 +111,11 @@ public class ShoppingListController {
 
 //            try {
             LOGGER.info(req.toString());
+                foodItem = simpleFoodRepository.save(foodItem);
                 ShoppingList list = new ShoppingList();
                 list.setFoodItem(foodItem);
                 list.setStricken(false);
+                list = shoppingRepository.save(list);
                 user.addShoppingList(list);
                 userRepository.save(user);
 //                shoppingRepository.save(list);
