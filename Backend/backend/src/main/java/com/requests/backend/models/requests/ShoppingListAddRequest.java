@@ -25,6 +25,6 @@ public class ShoppingListAddRequest {
 
     @Override
     public String toString() {
-        return item.toString();
+        return "Request: {" + item.toString() + "}";
     }
 }

@@ -11,8 +11,9 @@ import java.util.Objects;
 @IdClass(ShoppingList.ShoppingListPK.class)
 public class ShoppingList {
     @Id
+    @ManyToOne(cascade = CascadeType.ALL)
     @Expose
-    private String username;
+    private User user;
     @Id
     @ManyToOne(cascade = CascadeType.ALL)
     @Expose
@@ -24,12 +25,12 @@ public class ShoppingList {
 
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Boolean getStricken() {

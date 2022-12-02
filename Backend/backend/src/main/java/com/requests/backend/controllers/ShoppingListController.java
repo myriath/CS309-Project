@@ -107,14 +107,14 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUser().getUsername();
+            User user = tokenQueryRes[0].getUser();
 
 //            try {
-            LOGGER.info(foodItem.toString());
+            LOGGER.info(req.toString());
                 ShoppingList list = new ShoppingList();
                 list.setFoodItem(foodItem);
                 list.setStricken(false);
-                list.setUsername(username);
+                list.setUser(user);
                 shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
 //            } catch (Exception e) {
