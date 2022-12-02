@@ -80,4 +80,17 @@ public class User {
     public void setFollowers(Set<User> followers) {
         this.followers = followers;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", pHash='" + pHash + '\'' +
+                ", pSalt='" + pSalt + '\'' +
+                ", userType=" + userType +
+                ", bio='" + bio + '\'' +
+                ", followers=" + followers +
+                '}';
+    }
 }
