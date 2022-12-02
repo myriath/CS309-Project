@@ -14,7 +14,7 @@ public class ShoppingList {
     @Expose
     private String username;
     @Id
-    @OneToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     @Expose
     private SimpleFoodItem foodItem;
     @Expose
