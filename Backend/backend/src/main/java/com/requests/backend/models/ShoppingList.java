@@ -3,15 +3,14 @@ package com.requests.backend.models;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="shopping_list")
 public class ShoppingList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Expose
+    private int shoppingId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @Expose
@@ -47,12 +46,12 @@ public class ShoppingList {
         this.foodItem = foodItem;
     }
 
-    public int getId() {
-        return id;
+    public int getShoppingId() {
+        return shoppingId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setShoppingId(int shoppingId) {
+        this.shoppingId = shoppingId;
     }
 
     //    @Embeddable
