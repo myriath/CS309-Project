@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import com.util.SkipSerialization;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,9 +13,12 @@ public class User {
     @Id
     @Expose
     private String username;
-    private transient String email;
-    private transient String pHash;
-    private transient String pSalt;
+    @SkipSerialization
+    private String email;
+    @SkipSerialization
+    private String pHash;
+    @SkipSerialization
+    private String pSalt;
     @Expose
     private int userType;
     @Expose

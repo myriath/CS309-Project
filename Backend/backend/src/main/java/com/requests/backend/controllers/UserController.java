@@ -50,7 +50,6 @@ public class UserController {
 
         if (userRes.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            res.setSalt(null);
         } else {
             User user = userRes[0];
             String salt = user.getPSalt();
