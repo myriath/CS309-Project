@@ -14,7 +14,7 @@ public class Token {
     private String token;
     private Date creationDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     private User user;
 

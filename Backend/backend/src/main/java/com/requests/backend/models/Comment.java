@@ -14,7 +14,7 @@ public class Comment {
     @Expose
     private Integer cid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     @Expose
     private User user;
@@ -22,7 +22,7 @@ public class Comment {
     @Expose
     private String body;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
     @Expose
     private Set<Vote> votes;
 
