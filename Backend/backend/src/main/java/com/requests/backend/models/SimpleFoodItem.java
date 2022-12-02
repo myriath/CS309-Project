@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,7 +33,7 @@ public class SimpleFoodItem {
      */
     @Expose
     @Transient
-    private boolean stricken;
+    private boolean stricken = false;
 
     @Id
     @Expose
