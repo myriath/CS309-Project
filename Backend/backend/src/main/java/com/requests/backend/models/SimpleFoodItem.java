@@ -1,7 +1,6 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -113,9 +113,6 @@ public class RecipeController {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
-        String recipeName = req.getRecipeName();
-        Instruction[] instructions = req.getInstructions();
-
         AddRecipeResponse res = new AddRecipeResponse();
 
         if (tokenQueryRes.length == 0) {
@@ -128,12 +125,16 @@ public class RecipeController {
                 Recipe recipe = new Recipe();
                 recipe.setUsername(username);
                 recipe.setRname(req.getRecipeName());
-//                Ingredient[] ingredients = req.getIngredients();
-//                for (int i = 0; i < ingredients.length; i++) {
-//                    if (ingredients[i].getFood().)
-//                }
-                recipe.setIngredients(List.of(req.getIngredients()));
-                recipe.setInstructions(List.of(req.getInstructions()));
+                Ingredient[] ingredients = req.getIngredients();
+                for (int i = 0; i < ingredients.length; i++) {
+                    ingredients[i] = ingredientRepository.save(ingredients[i]);
+                }
+                Instruction[] instructions = req.getInstructions();
+                for (int i = 0; i < instructions.length; i++) {
+                    instructions[i] = instructionRepository.save(instructions[i]);
+                }
+                recipe.setIngredients(List.of(ingredients));
+                recipe.setInstructions(List.of(instructions));
                 recipe.setDescription(req.getDescription());
                 recipe = recipeRepository.save(recipe);
 //                for (Instruction instruction : instructions) {

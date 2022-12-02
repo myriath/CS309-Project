@@ -14,8 +14,8 @@ public class ShoppingList {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
-            @JoinColumn(name = "food_id", referencedColumnName = "id"),
-            @JoinColumn(name = "food_custom", referencedColumnName = "isCustom")
+            @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
+            @JoinColumn(name = "food_custom", referencedColumnName = "isCustom", nullable = false)
     })
     @Expose
     private SimpleFoodItem foodItem;
