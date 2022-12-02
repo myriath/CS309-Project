@@ -64,21 +64,11 @@ public class ShoppingListController {
         // Otherwise, the token exists in the table
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUser().getUsername();
+            User user = tokenQueryRes[0].getUser();
 
-            User[] userQueryRes = userRepository.queryValidateUsername(username);
-
-            if (userQueryRes.length == 0) {
-                res.setResult(RESULT_ERROR);
-            }
-            // If the credentials aren't valid, return hash mismatch error code.
-            else {
-                ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
-
-                // User already passed authentication, just return shopping list
-                res.setResult(RESULT_OK);
-                res.setShoppingList(listItems);
-            }
+            // User already passed authentication, just return shopping list
+            res.setResult(RESULT_OK);
+            res.setShoppingList(user.getShoppingLists().toArray(new ShoppingList[0]));
         }
 
         return res;
@@ -177,7 +167,8 @@ public class ShoppingListController {
     public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @RequestBody ShoppingListRemoveRequest req) {
         String hashedToken = Hasher.sha256(token);
 
-        int reqId = req.getId();
+        int foodId = req.getId();
+        boolean foodCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -195,7 +186,7 @@ public class ShoppingListController {
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(username, reqId);
+                shoppingRepository.queryDeleteListItem(foodId, foodCustom, username);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
