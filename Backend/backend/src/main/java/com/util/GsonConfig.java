@@ -1,4 +1,4 @@
-package com.requests.backend.scripts.security;
+package com.util;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
