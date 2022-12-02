@@ -99,8 +99,7 @@ public class ShoppingListController {
             // Get the username associated with the token
             User user = tokenQueryRes[0].getUser();
 
-//            try {
-            LOGGER.info(req.toString());
+            try {
                 foodItem = simpleFoodRepository.save(foodItem);
                 ShoppingList list = new ShoppingList();
                 list.setFoodItem(foodItem);
@@ -108,11 +107,10 @@ public class ShoppingListController {
                 list = shoppingRepository.save(list);
                 user.addShoppingList(list);
                 userRepository.save(user);
-//                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
-//            } catch (Exception e) {
-//                res.setResult(RESULT_ERROR);
-//            }
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
+            }
         }
 
         return res;

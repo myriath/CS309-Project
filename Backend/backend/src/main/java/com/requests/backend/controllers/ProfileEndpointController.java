@@ -72,8 +72,8 @@ public class ProfileEndpointController {
     @GetMapping(path="/profilePicture/{username}", produces="image/webp")
     public @ResponseBody byte[] getPFP(@PathVariable String username) throws IOException {
         File img = new File(PFP_SOURCE, Hasher.sha256plaintext(username) + ".webp");
-        LOGGER.info(username + " " + Hasher.sha256plaintext(username) + ".webp " + img.exists());
-        LOGGER.info(img.getAbsolutePath());
+//        LOGGER.info(username + " " + Hasher.sha256plaintext(username) + ".webp " + img.exists());
+//        LOGGER.info(img.getAbsolutePath());
         if (!img.exists()) {
             img = new File(DEFAULT_PFP);
         }
