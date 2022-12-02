@@ -10,12 +10,14 @@ import java.util.Objects;
 @Table(name="shopping_list")
 @IdClass(ShoppingList.ShoppingListPK.class)
 public class ShoppingList {
-    @Id
+    @EmbeddedId
+    private ShoppingListPK pk;
+
+    @MapsId("username")
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username")
     @Expose
     private User user;
-    @Id
+    @MapsId("foodItem")
     @ManyToOne(cascade = CascadeType.ALL)
     @Expose
     private SimpleFoodItem foodItem;
@@ -50,14 +52,15 @@ public class ShoppingList {
         this.foodItem = foodItem;
     }
 
+    @Embeddable
     public static class ShoppingListPK implements Serializable {
-        protected User user;
-        protected SimpleFoodItem foodItem;
+        protected String username;
+        protected SimpleFoodItem.SimpleFoodItemPK foodItem;
 
         public ShoppingListPK() {}
 
-        public ShoppingListPK(User user, SimpleFoodItem foodItem) {
-            this.user = user;
+        public ShoppingListPK(String username, SimpleFoodItem.SimpleFoodItemPK foodItem) {
+            this.username = username;
             this.foodItem = foodItem;
         }
 
@@ -66,12 +69,12 @@ public class ShoppingList {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ShoppingListPK that = (ShoppingListPK) o;
-            return Objects.equals(user, that.user) && Objects.equals(foodItem, that.foodItem);
+            return Objects.equals(username, that.username) && Objects.equals(foodItem, that.foodItem);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(user, foodItem);
+            return Objects.hash(username, foodItem);
         }
     }
 }
