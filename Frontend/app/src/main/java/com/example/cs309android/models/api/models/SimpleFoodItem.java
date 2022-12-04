@@ -5,6 +5,8 @@ import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -209,5 +211,17 @@ public class SimpleFoodItem implements Parcelable {
         parcel.writeString(brand);
         parcel.writeBoolean(stricken);
         parcel.writeBoolean(isCustom);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SimpleFoodItem{" +
+                "id=" + id +
+                ", isCustom=" + isCustom +
+                ", description='" + description + '\'' +
+                ", brand='" + brand + '\'' +
+                ", stricken=" + stricken +
+                '}';
     }
 }

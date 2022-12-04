@@ -4,7 +4,13 @@ import static com.example.cs309android.BuildConfig.BASE_API_URL;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.example.cs309android.R;
 
 import java.util.Arrays;
 
@@ -72,33 +78,153 @@ public class Constants {
      */
     public static final int TOKEN_MAX_DEPTH = 5;
 
+    /**
+     * Notification manager for the application
+     */
     public static NotificationManager manager;
 
+    /**
+     * Notifications constants
+     */
     public interface Notifications {
-        String[] DESCRIPTIONS = new String[] {
+        /**
+         * New comment notification builder index
+         */
+        int NOTIFICATION_NEW_COMMENT = 0;
+        /**
+         * Recipe liked notification builder index
+         */
+        int NOTIFICATION_LIKED = 1;
+        /**
+         * New follower notification builder index
+         */
+        int NOTIFICATION_FOLLOWER = 2;
+        /**
+         * New recipe notification builder index
+         */
+        int NOTIFICATION_NEW_RECIPE = 3;
+
+        /**
+         * Descriptions for the notification channels
+         */
+        String[] DESCRIPTIONS = new String[]{
                 "high desc", "reg desc", "low desc"
         };
 
-        String[] IDS = new String[] {
+        /**
+         * IDs for the notification channels
+         */
+        String[] IDS = new String[]{
                 "cs309.notification.high", "cs309.notification", "cs309.notification.low"
         };
 
-        String[] NAMES = new String[] {
+        /**
+         * Names for the notification channels
+         */
+        String[] NAMES = new String[]{
                 "High Importance", "Regular Importance", "Low Importance"
         };
 
-        NotificationChannel[] CHANNELS = new NotificationChannel[] {
+        /**
+         * Array of existing notification channels
+         */
+        NotificationChannel[] CHANNELS = new NotificationChannel[]{
                 new NotificationChannel(IDS[0], NAMES[0], NotificationManager.IMPORTANCE_HIGH),
                 new NotificationChannel(IDS[1], NAMES[1], NotificationManager.IMPORTANCE_DEFAULT),
                 new NotificationChannel(IDS[2], NAMES[2], NotificationManager.IMPORTANCE_LOW)
         };
 
+        /**
+         * Comment on recipe, Favorite recipe, Follows you, Someone you follow posts
+         */
+        NotificationCompat.Builder[] BUILDERS = new NotificationCompat.Builder[4];
+
+        /**
+         * Priorities for the various notification types
+         */
+        int[] PRIORITIES = new int[]{
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT
+        };
+
+        /**
+         * Icons for the various notifications
+         */
+        int[] ICONS = new int[]{
+                R.drawable.ic_add_comment,
+                R.drawable.ic_favorite,
+                R.drawable.ic_add_user,
+                R.drawable.ic_add_recipe
+        };
+
+        /**
+         * Titles for the various notifications
+         */
+        String[] TITLES = new String[]{
+                "New comment",
+                "Someone liked your recipe",
+                "New follower",
+                "New for you"
+        };
+
+        /**
+         * Descriptions for the various notifications
+         */
+        String[] TEXTS = new String[]{
+                "%s commented on your recipe",
+                "%s liked your recipe",
+                "%s started following you",
+                "%s created a new recipe"
+        };
+
+        /**
+         * Generates and registers the notification channels
+         *
+         * @param context Context for the application
+         */
         static void createNotificationChannels(Context context) {
             for (int i = 0; i < CHANNELS.length; i++) {
                 CHANNELS[i].setDescription(DESCRIPTIONS[i]);
             }
             manager = context.getSystemService(NotificationManager.class);
             manager.createNotificationChannels(Arrays.asList(CHANNELS));
+
+            for (int i = 0; i < BUILDERS.length; i++) {
+                BUILDERS[i] = createBuilder(context, Math.min(2, i), i);
+            }
+        }
+
+        /**
+         * Creates a notification with the given builder
+         *
+         * @param context  Context for the notification
+         * @param index    Index for the builder in the BUILDERS array
+         * @param username Username for the account being notified about
+         * @param intent   Intent to open with parameters when clicked
+         */
+        static void notify(Context context, int index, String username, PendingIntent intent) {
+            NotificationManagerCompat.from(context).notify(index, BUILDERS[index]
+                    .setContentTitle(String.format(TITLES[index], username))
+                    .setContentText(String.format(TEXTS[index], username))
+                    .setContentIntent(intent)
+                    .build());
+        }
+
+        /**
+         * Creates a new notification builder to be put into the
+         *
+         * @param context   Context for the application
+         * @param channelId Index for the channel id from the IDS array
+         * @param index     Index for the builder. Uses the index of respective arrays for details of the builder
+         * @return Notification builder to be used to create and display notifications
+         */
+        static NotificationCompat.Builder createBuilder(Context context, int channelId, int index) {
+            return new NotificationCompat.Builder(context, IDS[channelId])
+                    .setSmallIcon(ICONS[index])
+                    .setPriority(PRIORITIES[index])
+                    .setAutoCancel(true);
         }
     }
 

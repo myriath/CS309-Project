@@ -10,6 +10,7 @@ import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_L
 import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
+import static com.example.cs309android.util.Constants.Notifications.NOTIFICATION_NEW_COMMENT;
 import static com.example.cs309android.util.Constants.PICASSO;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
@@ -201,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Creates notification channels
         Constants.Notifications.createNotificationChannels(this);
+        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 

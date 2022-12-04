@@ -4,6 +4,8 @@ import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
+import java.util.Arrays;
+
 /**
  * Response object for the get shopping list request
  *
@@ -33,6 +35,7 @@ public class GetListResponse extends GenericResponse {
      * @return Array of simple food items.
      */
     public SimpleFoodItem[] getShoppingList() {
+        System.out.println(Arrays.toString(shoppingList));
         return shoppingList;
     }
 }
