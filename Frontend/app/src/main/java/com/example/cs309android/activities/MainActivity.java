@@ -8,6 +8,7 @@ import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;

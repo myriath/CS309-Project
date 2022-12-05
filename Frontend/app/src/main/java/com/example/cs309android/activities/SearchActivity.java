@@ -2,18 +2,14 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.INTENT_FOOD_LOG;
-import static com.example.cs309android.util.Constants.INTENT_NONE;
-import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
-import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG;
 import static com.example.cs309android.util.Constants.Intents.INTENT_NONE;
 import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
 
@@ -209,12 +205,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public void onBackPressed() {
         Intent intent = new Intent();
         switch (intentCode) {
-            case INTENT_SHOPPING_LIST: {
-                setResult(RESULT_OK, intent);
-                break;
-            }
+            case INTENT_SHOPPING_LIST:
             case INTENT_FOOD_LOG: {
-                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);
                 setResult(RESULT_OK, intent);
                 break;
             }

@@ -310,6 +310,10 @@ public class Constants {
          * Tells the SearchActivity it was opened from recipe add
          */
         int INTENT_RECIPE_ADD = 1;
+        /**
+         * Used to tell SearchActivity the intent is a food log
+         */
+        int INTENT_FOOD_LOG = 2;
     }
 
     /**
