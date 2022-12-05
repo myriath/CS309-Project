@@ -36,8 +36,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
@@ -82,10 +80,6 @@ import java.util.Map;
  * @author Travis Massner
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
-    /**
-     * Used to launch various activities.
-     */
-    ActivityResultLauncher<Intent> foodSearchLauncher;
     /**
      * Main window fragment
      */
@@ -171,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             finish();
         } else {
             navbar.setSelectedItemId(R.id.home);
-            currentFragment = 2;
         }
     }
 
@@ -253,32 +246,18 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addShopping.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
-            foodSearchLauncher.launch(intent);
+            startActivity(intent);
         });
 
         // Log add button
         addLog.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
-            foodSearchLauncher.launch(intent);
+            startActivity(intent);
         });
 
         // Hides the keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
-
-        // Launches the search activity for a result
-        foodSearchLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    mainFragment = new ShoppingFragment();
-                    mainFragment.setCallbackFragment(this);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.mainLayout, (Fragment) mainFragment, null)
-                            .commit();
-                    currentFragment = 0;
-                }
-        );
 
         // Runs the tutorial on first run
         if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
@@ -510,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
-                foodSearchLauncher.launch(intent);
+                startActivity(intent);
                 break;
             }
             case (CALLBACK_MOVE_TO_SETTINGS): {

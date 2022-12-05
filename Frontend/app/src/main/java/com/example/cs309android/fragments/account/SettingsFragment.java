@@ -2,6 +2,7 @@ package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.Notifications.CHANNELS;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
-import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 
 import java.util.Objects;
@@ -79,10 +79,10 @@ public class SettingsFragment extends BasePreferenceFragment {
 
         // Notification settings
         Preference notification0 = Objects.requireNonNull(findPreference("notification0"));
-        notification0.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
+        notification0.setOnPreferenceClickListener(preference -> startNotificationSettings(0));
 
         Preference notification1 = Objects.requireNonNull(findPreference("notification1"));
-        notification1.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
+        notification1.setOnPreferenceClickListener(preference -> startNotificationSettings(1));
 
         Preference notification2 = Objects.requireNonNull(findPreference("notification2"));
         notification2.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
@@ -91,7 +91,7 @@ public class SettingsFragment extends BasePreferenceFragment {
     public boolean startNotificationSettings(int channel) {
         Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
-        intent.putExtra(Settings.EXTRA_CHANNEL_ID, Constants.Notifications.CHANNELS[channel].getId());
+        intent.putExtra(Settings.EXTRA_CHANNEL_ID, CHANNELS[channel].getId());
         startActivity(intent);
         return true;
     }
