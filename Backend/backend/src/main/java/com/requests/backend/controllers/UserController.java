@@ -235,19 +235,17 @@ public class UserController {
     @PatchMapping(path = "/updateUserType/{token}")
     public @ResponseBody ResultResponse updateType(@PathVariable String token, @RequestParam String username, @RequestParam int type) {
         return getUserFromToken(token, (user, res) -> {
+            int userType = user.getUserType();
             User other = userRepository.queryGetUserByUsername(username)[0];
-            switch (user.getUserType()) {
-                case USER_ADM:
-                    if (other.getUserType() > USER_MOD) break;
-                case USER_DEV:
-                    if (type > USER_ADM || other.getUserType() == USER_DEV) break;
-                    other.setUserType(type);
-                    userRepository.save(other);
-                    res.setResult(RESULT_OK);
-                    return;
-                default: break;
+            int otherType = other.getUserType();
+
+            if (userType > USER_MOD && type < userType && otherType < userType) {
+                other.setUserType(type);
+                userRepository.save(other);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
             }
-            res.setResult(RESULT_ERROR);
         }, tokenRepository);
     }
 
