@@ -68,13 +68,8 @@ public class RecipeController {
 
         RecipeListResponse res = new RecipeListResponse();
 
-        if (recipes.length == 0) {
-            res.setResult(RESULT_ERROR);
-        }
-        else {
-            res.setRecipes(recipes);
-            res.setResult(RESULT_OK);
-        }
+        res.setRecipes(recipes);
+        res.setResult(RESULT_OK);
 
         return res;
     }
