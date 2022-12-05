@@ -456,7 +456,9 @@ public class Constants {
          * URL for getting images
          */
         String IMAGE_URL = BASE_API_URL + "images/";
-
+        /**
+         * URL for the notification websocket
+         */
         String NOTIFICATIONS_URL = WEBSOCKETS_URL + "notifications/";
 
         /**

@@ -516,6 +516,8 @@ public class Util {
                 badge.setImageResource(R.drawable.silver);
                 break;
             }
+            default:
+                badge.setImageBitmap(null);
         }
     }
 }

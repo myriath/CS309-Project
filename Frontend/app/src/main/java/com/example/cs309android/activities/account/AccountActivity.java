@@ -213,13 +213,13 @@ public class AccountActivity extends AppCompatActivity {
                         } else if (id == R.id.delete) {
                             new DeleteUserRequest(username, global.getToken()).request(response1 -> {
                                 GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
-                                if (genericResponse1.getResult() != RESULT_OK) {
+                                if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
                                     Toaster.toastShort("Error", this);
                                 }
                             }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
                             finish();
                         } else if (id == R.id.change_type) {
-                            PopupMenu menu1 = new PopupMenu(this, menu.getMenu().findItem(R.id.change_type).getActionView());
+                            PopupMenu menu1 = new PopupMenu(this, view);
                             menu1.inflate(R.menu.user_types);
                             menu1.show();
                             menu1.setOnMenuItemClickListener(item1 -> {
@@ -234,9 +234,11 @@ public class AccountActivity extends AppCompatActivity {
                                 }
                                 new ChangeUserTypeRequest(username, global.getToken(), newType).request(response1 -> {
                                     GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
-                                    if (genericResponse1.getResult() != RESULT_OK) {
+                                    if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
                                         Toaster.toastShort("Error", this);
+                                        return;
                                     }
+                                    Util.getBadge(newType, findViewById(R.id.badge));
                                 }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
                                 return true;
                             });
@@ -253,7 +255,7 @@ public class AccountActivity extends AppCompatActivity {
         new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountActivity.this);
 
         new GetRecipesRequest(username).request(response -> {
-            System.out.println(response);
+//            System.out.println(response);
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
             if (postsResponse.getRecipes() == null || postsResponse.getRecipes().length == 0)
                 return;
