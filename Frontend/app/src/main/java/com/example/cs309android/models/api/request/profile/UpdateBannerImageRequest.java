@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.profile;
 
-import static com.example.cs309android.util.Constants.UPDATE_BANNER_URL;
+import static com.example.cs309android.util.Constants.Urls.Profile.UPDATE_BANNER_URL;
 
 import android.graphics.Bitmap;
 

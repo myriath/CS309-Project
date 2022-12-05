@@ -66,7 +66,7 @@ public class IngredientEditView extends FrameLayout {
         view = inflate(getContext(), R.layout.ingredient_add, this);
         ((TextView) view.findViewById(R.id.name)).setText(item.getCappedDescription(25));
         ((TextView) view.findViewById(R.id.unit)).setText(unit);
-        view.findViewById(R.id.remove).setOnClickListener(listener);
+        view.findViewById(R.id.menu).setOnClickListener(listener);
         this.item = item;
         this.unit = unit;
         this.position = position;
@@ -78,7 +78,9 @@ public class IngredientEditView extends FrameLayout {
      * @return quantity
      */
     public float getQuantity() {
-        return Float.parseFloat(((EditText) view.findViewById(R.id.quantity)).getText().toString());
+        String text = ((EditText) view.findViewById(R.id.quantity)).getText().toString();
+        if (text.length() == 0) return 0;
+        return Float.parseFloat(text);
     }
 
     /**

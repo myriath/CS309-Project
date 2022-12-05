@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VolleyMultipartRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.api.request.abstraction</a> &gt; <span class="el_source">VolleyMultipartRequest.java</span></div><h1>VolleyMultipartRequest.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.api.request.abstraction;
+
+import androidx.annotation.Nullable;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+/**
+ * Multipart request for sending images
+ *
+ * @author Mitch Hudson, based on code from https://www.maxester.com/blog/2019/10/04/upload-file-image-to-the-server-using-volley-in-android/
+ */
+public class VolleyMultipartRequest extends Request&lt;NetworkResponse&gt; {
+    /**
+     * Two hyphens, used for headers
+     */
+    public static final String TWO_HYPHENS = &quot;--&quot;;
+    /**
+     * CRLF, used for headers
+     */
+    public static final String LINE_END = &quot;\r\n&quot;;
+    /**
+     * Boundary for the headers
+     */
+<span class="nc" id="L37">    public static final String BOUNDARY = &quot;apiclient-&quot; + System.currentTimeMillis();</span>
+
+    /**
+     * Runs when the request completes successfully
+     */
+    private final Response.Listener&lt;NetworkResponse&gt; listener;
+    /**
+     * Runs when the request completes with an error
+     */
+    private final Response.ErrorListener errorListener;
+    /**
+     * Header mapping
+     */
+    private Map&lt;String, String&gt; headers;
+
+    /**
+     * Constructor
+     *
+     * @param method        Request.Method
+     * @param url           URL for the request
+     * @param listener      Runs when the request completes successfully
+     * @param errorListener Runs when the request completes with an error
+     */
+    public VolleyMultipartRequest(int method, String url, Response.Listener&lt;NetworkResponse&gt; listener, @Nullable Response.ErrorListener errorListener) {
+<span class="nc" id="L61">        super(method, url, errorListener);</span>
+<span class="nc" id="L62">        this.listener = listener;</span>
+<span class="nc" id="L63">        this.errorListener = errorListener;</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Gets the headers
+     *
+     * @return header mapping
+     * @throws AuthFailureError
+     */
+    @Override
+    public Map&lt;String, String&gt; getHeaders() throws AuthFailureError {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        return headers != null ? headers : super.getHeaders();</span>
+    }
+
+    /**
+     * Gets the content type
+     *
+     * @return content type
+     */
+    @Override
+    public String getBodyContentType() {
+<span class="nc" id="L84">        return &quot;multipart/form-data;boundary=&quot; + BOUNDARY;</span>
+    }
+
+    /**
+     * Gets the body
+     *
+     * @return body bytes
+     * @throws AuthFailureError
+     */
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+<span class="nc" id="L95">        ByteArrayOutputStream bos = new ByteArrayOutputStream();</span>
+<span class="nc" id="L96">        DataOutputStream dos = new DataOutputStream(bos);</span>
+
+        try {
+<span class="nc" id="L99">            Map&lt;String, String&gt; params = getParams();</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">            if (params != null &amp;&amp; params.size() &gt; 0) {</span>
+<span class="nc" id="L101">                textParse(dos, params, getParamsEncoding());</span>
+            }
+
+<span class="nc" id="L104">            Map&lt;String, DataPart&gt; data = getByteData();</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">            if (data != null &amp;&amp; data.size() &gt; 0) {</span>
+<span class="nc" id="L106">                dataParse(dos, data);</span>
+            }
+
+<span class="nc" id="L109">            dos.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS + LINE_END);</span>
+
+<span class="nc" id="L111">            return bos.toByteArray();</span>
+<span class="nc" id="L112">        } catch (IOException e) {</span>
+<span class="nc" id="L113">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L115">        return null;</span>
+    }
+
+    /**
+     * Overridden by children
+     *
+     * @return Map data part label with data byte
+     */
+    protected Map&lt;String, DataPart&gt; getByteData() {
+<span class="nc" id="L124">        return null;</span>
+    }
+
+    /**
+     * Handles the network response
+     *
+     * @param response Response from the request
+     * @return Either success or error
+     */
+    @Override
+    protected Response&lt;NetworkResponse&gt; parseNetworkResponse(NetworkResponse response) {
+        try {
+<span class="nc" id="L136">            return Response.success(response, HttpHeaderParser.parseCacheHeaders(response));</span>
+<span class="nc" id="L137">        } catch (Exception e) {</span>
+<span class="nc" id="L138">            return Response.error(new ParseError(e));</span>
+        }
+    }
+
+    /**
+     * Delivers the response to the listener
+     *
+     * @param response Response from the request
+     */
+    @Override
+    protected void deliverResponse(NetworkResponse response) {
+<span class="nc" id="L149">        listener.onResponse(response);</span>
+<span class="nc" id="L150">    }</span>
+
+    /**
+     * Delivers the error to the listener
+     *
+     * @param error Error from the request
+     */
+    @Override
+    public void deliverError(VolleyError error) {
+<span class="nc" id="L159">        errorListener.onErrorResponse(error);</span>
+<span class="nc" id="L160">    }</span>
+
+    /**
+     * Parse string map into data output stream by key and value
+     *
+     * @param dos      data output stream
+     * @param params   inputs collection
+     * @param encoding encode the inputs, default UTF-8
+     * @throws IOException
+     */
+    private void textParse(DataOutputStream dos, Map&lt;String, String&gt; params, String encoding) throws IOException {
+        try {
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; entry : params.entrySet()) {</span>
+<span class="nc" id="L173">                buildTextPart(dos, entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L174">            }</span>
+<span class="nc" id="L175">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L176">            throw new RuntimeException(&quot;Encoding not supported: &quot; + encoding, e);</span>
+<span class="nc" id="L177">        }</span>
+<span class="nc" id="L178">    }</span>
+
+    /**
+     * Parses data into the data output stream
+     *
+     * @param dos  Data output stream
+     * @param data Data to parse
+     * @throws IOException
+     */
+    private void dataParse(DataOutputStream dos, Map&lt;String, DataPart&gt; data) throws IOException {
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        for (Map.Entry&lt;String, DataPart&gt; entry : data.entrySet()) {</span>
+<span class="nc" id="L189">            buildDataPart(dos, entry.getValue(), entry.getKey());</span>
+<span class="nc" id="L190">        }</span>
+<span class="nc" id="L191">    }</span>
+
+    /**
+     * Writes string data into the header and data output stream
+     *
+     * @param dos   Data output stream
+     * @param param name of the input
+     * @param value value of the input
+     * @throws IOException
+     */
+    private void buildTextPart(DataOutputStream dos, String param, String value) throws IOException {
+<span class="nc" id="L202">        dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);</span>
+<span class="nc" id="L203">        dos.writeBytes(&quot;Content-Disposition: form-data; name=\&quot;&quot; + param + &quot;\&quot;&quot; + LINE_END);</span>
+<span class="nc" id="L204">        dos.writeBytes(LINE_END);</span>
+<span class="nc" id="L205">        dos.writeBytes(value + LINE_END);</span>
+<span class="nc" id="L206">    }</span>
+
+    /**
+     * Write data into the header and data output stream
+     *
+     * @param dos  Data output stream
+     * @param data Data to write
+     * @param name Name of the input
+     * @throws IOException
+     */
+    private void buildDataPart(DataOutputStream dos, DataPart data, String name) throws IOException {
+<span class="nc" id="L217">        dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);</span>
+<span class="nc" id="L218">        dos.writeBytes(&quot;Content-Disposition: form-data; name=\&quot;&quot; +</span>
+<span class="nc" id="L219">                name + &quot;\&quot;; filename=\&quot;&quot; + data.getName() + &quot;\&quot;&quot; + LINE_END);</span>
+<span class="nc bnc" id="L220" title="All 4 branches missed.">        if (data.getType() != null &amp;&amp; !data.getType().trim().isEmpty()) {</span>
+<span class="nc" id="L221">            dos.writeBytes(&quot;Content-Type: &quot; + data.getType() + LINE_END);</span>
+        }
+<span class="nc" id="L223">        dos.writeBytes(LINE_END);</span>
+
+<span class="nc" id="L225">        ByteArrayInputStream in = new ByteArrayInputStream(data.getContent());</span>
+<span class="nc" id="L226">        int bytesAvailable = in.available();</span>
+
+<span class="nc" id="L228">        int maxBufferSize = 1024 * 1024;</span>
+<span class="nc" id="L229">        int bufferSize = Math.min(bytesAvailable, maxBufferSize);</span>
+<span class="nc" id="L230">        byte[] buffer = new byte[bufferSize];</span>
+
+<span class="nc" id="L232">        int bytesRead = in.read(buffer, 0, bufferSize);</span>
+
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        while (bytesRead &gt; 0) {</span>
+<span class="nc" id="L235">            dos.write(buffer, 0, bufferSize);</span>
+<span class="nc" id="L236">            bytesAvailable = in.available();</span>
+<span class="nc" id="L237">            bufferSize = Math.min(bytesAvailable, maxBufferSize);</span>
+<span class="nc" id="L238">            bytesRead = in.read(buffer, 0, bufferSize);</span>
+        }
+
+<span class="nc" id="L241">        dos.writeBytes(LINE_END);</span>
+<span class="nc" id="L242">    }</span>
+
+    /**
+     * Represents a part of the multipart request data
+     */
+    static class DataPart {
+        /**
+         * Name of the file
+         */
+        private String name;
+        /**
+         * Content bytes
+         */
+        private byte[] content;
+        /**
+         * MIME type
+         */
+        private String type;
+
+        /**
+         * Default constructor
+         */
+<span class="nc" id="L264">        public DataPart() {</span>
+<span class="nc" id="L265">        }</span>
+
+        /**
+         * Constructor
+         *
+         * @param name    name of the data
+         * @param content bytes of the content
+         */
+<span class="nc" id="L273">        DataPart(String name, byte[] content) {</span>
+<span class="nc" id="L274">            this.name = name;</span>
+<span class="nc" id="L275">            this.content = content;</span>
+<span class="nc" id="L276">        }</span>
+
+        /**
+         * Getter for the name
+         *
+         * @return data name
+         */
+        public String getName() {
+<span class="nc" id="L284">            return name;</span>
+        }
+
+        /**
+         * Getter for the content
+         *
+         * @return content bytes
+         */
+        public byte[] getContent() {
+<span class="nc" id="L293">            return content;</span>
+        }
+
+        /**
+         * Getter for the type
+         *
+         * @return MIME type
+         */
+        public String getType() {
+<span class="nc" id="L302">            return type;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

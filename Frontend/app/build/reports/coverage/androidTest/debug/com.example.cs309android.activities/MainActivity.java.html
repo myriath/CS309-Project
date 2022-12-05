@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities</a> &gt; <span class="el_source">MainActivity.java</span></div><h1>MainActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities;
+
+import static com.example.cs309android.BuildConfig.SSL_OFF;
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.PREF_NAME;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
+import static com.example.cs309android.util.Util.spin;
+import static com.example.cs309android.util.Util.unSpin;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
+import com.example.cs309android.activities.login.LoginActivity;
+import com.example.cs309android.activities.recipe.AddRecipeActivity;
+import com.example.cs309android.fragments.account.AccountFragment;
+import com.example.cs309android.fragments.account.SettingsFragment;
+import com.example.cs309android.fragments.home.HomeFragment;
+import com.example.cs309android.fragments.nutrition.NutritionFragment;
+import com.example.cs309android.fragments.recipes.RecipesFragment;
+import com.example.cs309android.fragments.shopping.ShoppingFragment;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.RequestHandler;
+import com.example.cs309android.util.Util;
+import com.example.cs309android.util.security.NukeSSLCerts;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * Main activity
+ * Most pages should probably use fragments
+ *
+ * @author Mitch Hudson
+ * @author Travis Massner
+ */
+public class MainActivity extends AppCompatActivity implements CallbackFragment {
+    /**
+     * Used to launch various activities.
+     */
+    ActivityResultLauncher&lt;Intent&gt; foodSearchLauncher;
+    /**
+     * Fragment containing the current login window.
+     */
+    private CallbackFragment loginWindowFragment;
+    /**
+     * Main window fragment
+     */
+    private CallbackFragment mainFragment;
+    /**
+     * Tracker for the current fragment
+     */
+<span class="fc" id="L96">    private static int currentFragment = 2;</span>
+    /**
+     * GlobalClass for storing universal values
+     */
+    private GlobalClass global;
+    /**
+     * Navbar object at the bottom of the app.
+     */
+    private BottomNavigationView navbar;
+
+    /**
+     * Tracks whether the menu is open
+     */
+<span class="fc" id="L109">    private boolean openMenu = false;</span>
+    /**
+     * Tracks whether the menu is hidden
+     */
+<span class="fc" id="L113">    private boolean menuHidden = false;</span>
+    /**
+     * FAB Menu buttons
+     */
+    private FloatingActionButton mainButton, addShopping, addLog, addRecipe;
+
+    /**
+     * Shopping list items for the shopping list
+     */
+    private static ArrayList&lt;SimpleFoodItem&gt; shoppingListItems;
+    /**
+     * Used to store the breakfast items
+     */
+    private static ArrayList&lt;FoodLogItem&gt; breakfast;
+    /**
+     * Used to store the lunch items
+     */
+    private static ArrayList&lt;FoodLogItem&gt; lunch;
+    /**
+     * Used to store the dinner items
+     */
+    private static ArrayList&lt;FoodLogItem&gt; dinner;
+
+    /**
+     * Public constructor
+     * Initializes arraylists if they are null
+     */
+<span class="fc" id="L140">    public MainActivity() {</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (shoppingListItems == null) {</span>
+<span class="fc" id="L142">            shoppingListItems = new ArrayList&lt;&gt;();</span>
+        }
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (breakfast == null) {</span>
+<span class="fc" id="L145">            breakfast = new ArrayList&lt;&gt;();</span>
+        }
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (lunch == null) {</span>
+<span class="fc" id="L148">            lunch = new ArrayList&lt;&gt;();</span>
+        }
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (dinner == null) {</span>
+<span class="fc" id="L151">            dinner = new ArrayList&lt;&gt;();</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Cancels all Volley requests when the application is closed or otherwise stopped.
+     */
+    @Override
+    protected void onStop() {
+<span class="fc" id="L160">        super.onStop();</span>
+<span class="fc" id="L161">        new RequestHandler(MainActivity.this).cancelAll();</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Resumes when the application is resumed.
+     */
+    @Override
+    protected void onResume() {
+<span class="fc" id="L169">        super.onResume();</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (openMenu) toggleMenu();</span>
+//        navbar.setSelectedItemId(R.id.home);
+//        mainFragment = new HomeFragment();
+//        FragmentManager manager = getSupportFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);
+//        transaction.commit();
+//        currentFragment = 2;
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * Starts up the app.
+     *
+     * @param savedInstanceState Saved instance state data
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L187">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L188">        setContentView(R.layout.activity_main);</span>
+<span class="fc" id="L189">        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);</span>
+
+<span class="fc" id="L191">        Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);</span>
+<span class="fc" id="L192">        Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);</span>
+
+<span class="fc" id="L194">        Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());</span>
+<span class="fc" id="L195">        Constants.dp16 = Util.scalePixels(16);</span>
+<span class="fc" id="L196">        Constants.dp8 = Util.scalePixels(8);</span>
+
+<span class="fc" id="L198">        global = ((GlobalClass) getApplicationContext());</span>
+<span class="fc" id="L199">        global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));</span>
+
+        // TODO: Remove for production
+        // Removes SSL certificate checking until we can create a cert with a cert authority
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">        if (SSL_OFF) {</span>
+<span class="fc" id="L204">            NukeSSLCerts.nuke();</span>
+        }
+
+<span class="fc" id="L207">        mainButton = findViewById(R.id.mainButton);</span>
+<span class="fc" id="L208">        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();</span>
+<span class="fc" id="L209">        drawable.setDrawableByLayerId(R.id.closed, Util.mainButtonEdit);</span>
+<span class="fc" id="L210">        drawable.setDrawableByLayerId(R.id.open, Util.mainButtonClose);</span>
+<span class="fc" id="L211">        addShopping = findViewById(R.id.addShopping);</span>
+<span class="fc" id="L212">        addLog = findViewById(R.id.addLog);</span>
+<span class="fc" id="L213">        addRecipe = findViewById(R.id.addRecipe);</span>
+
+        // Hides/un-hides other buttons
+<span class="fc" id="L216">        mainButton.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L217">            toggleMenu();</span>
+<span class="nc" id="L218">        });</span>
+
+        // Recipe add button
+<span class="fc" id="L221">        addRecipe.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L222">            Intent myIntent = new Intent(this, AddRecipeActivity.class);</span>
+<span class="nc" id="L223">            startActivity(myIntent);</span>
+<span class="nc" id="L224">        });</span>
+
+        // Shopping list add button
+<span class="fc" id="L227">        addShopping.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L228">            Intent intent = new Intent(this, SearchActivity.class);</span>
+<span class="nc" id="L229">            intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);</span>
+<span class="nc" id="L230">            intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);</span>
+<span class="nc" id="L231">            foodSearchLauncher.launch(intent);</span>
+<span class="nc" id="L232">        });</span>
+
+        // Log add button
+<span class="fc" id="L235">        addLog.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L236">            Intent intent = new Intent(this, SearchActivity.class);</span>
+<span class="nc" id="L237">            foodSearchLauncher.launch(intent);</span>
+<span class="nc" id="L238">        });</span>
+
+<span class="fc" id="L240">        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);</span>
+<span class="fc" id="L241">        imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);</span>
+
+<span class="fc" id="L243">        foodSearchLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc" id="L246">                    shoppingListItems = Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);</span>
+<span class="nc" id="L247">                    mainFragment = new ShoppingFragment();</span>
+<span class="nc" id="L248">                    mainFragment.setCallbackFragment(this);</span>
+<span class="nc" id="L249">                    getSupportFragmentManager()</span>
+<span class="nc" id="L250">                            .beginTransaction()</span>
+<span class="nc" id="L251">                            .replace(R.id.mainLayout, (Fragment) mainFragment, null)</span>
+<span class="nc" id="L252">                            .commit();</span>
+<span class="nc" id="L253">                    currentFragment = 0;</span>
+<span class="nc" id="L254">                }</span>
+        );
+
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {</span>
+            // TODO: First time
+<span class="nc" id="L259">            global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();</span>
+        }
+
+        // Gets stored password hash, if it exists
+<span class="fc" id="L263">        Map&lt;String, String&gt; users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, &quot;&quot;).trim(), Map.class);</span>
+
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        if (users == null) users = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L266">        global.setUsers(users);</span>
+<span class="fc" id="L267">        global.updateLoginPrefs();</span>
+
+<span class="fc" id="L269">        String token = users.get(users.get(USERS_LATEST));</span>
+
+        // Attempts a login with stored creds. If they are invalid or don't exist, open login page
+<span class="fc" id="L272">        spin(this);</span>
+<span class="fc" id="L273">        System.out.println(token);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (token != null) {</span>
+<span class="pc" id="L275">            Util.loginAttempt(global, token, () -&gt; unSpin(this), result -&gt; failedLogin(), error -&gt; failedLogin());</span>
+        } else {
+<span class="nc" id="L277">            unSpin(this);</span>
+<span class="nc" id="L278">            startLoginActivity(false);</span>
+        }
+
+<span class="fc" id="L281">        navbar = findViewById(R.id.navbar);</span>
+
+<span class="fc" id="L283">        navbar.setOnItemSelectedListener(item -&gt; {</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            if (item.getItemId() == R.id.shopping) {</span>
+<span class="fc" id="L285">                mainFragment = new ShoppingFragment();</span>
+<span class="fc" id="L286">                mainFragment.setCallbackFragment(this);</span>
+                // Always slide left (furthest left)
+<span class="fc" id="L288">                getSupportFragmentManager()</span>
+<span class="fc" id="L289">                        .beginTransaction()</span>
+<span class="fc" id="L290">                        .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)</span>
+<span class="fc" id="L291">                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)</span>
+<span class="fc" id="L292">                        .commit();</span>
+<span class="fc" id="L293">                currentFragment = 0;</span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">            } else if (item.getItemId() == R.id.nutrition) {</span>
+<span class="nc" id="L295">                mainFragment = new NutritionFragment();</span>
+<span class="nc" id="L296">                FragmentManager manager = getSupportFragmentManager();</span>
+<span class="nc" id="L297">                FragmentTransaction transaction = manager.beginTransaction();</span>
+                // if coming from shopping slide right, otherwise slide left
+<span class="nc bnc" id="L299" title="All 2 branches missed.">                if (currentFragment == 0) {</span>
+<span class="nc" id="L300">                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);</span>
+                } else {
+<span class="nc" id="L302">                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);</span>
+                }
+<span class="nc" id="L304">                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);</span>
+<span class="nc" id="L305">                transaction.commit();</span>
+<span class="nc" id="L306">                currentFragment = 1;</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">            } else if (item.getItemId() == R.id.home) {</span>
+<span class="fc" id="L308">                mainFragment = new HomeFragment();</span>
+<span class="fc" id="L309">                FragmentManager manager = getSupportFragmentManager();</span>
+<span class="fc" id="L310">                FragmentTransaction transaction = manager.beginTransaction();</span>
+                // if coming from shopping/nutrition, slide right, otherwise slide left
+<span class="fc bfc" id="L312" title="All 2 branches covered.">                if (currentFragment &lt; 2) {</span>
+<span class="fc" id="L313">                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);</span>
+                } else {
+<span class="fc" id="L315">                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);</span>
+                }
+<span class="fc" id="L317">                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);</span>
+<span class="fc" id="L318">                transaction.commit();</span>
+<span class="fc" id="L319">                currentFragment = 2;</span>
+<span class="pc bnc" id="L320" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.recipes) {</span>
+<span class="nc" id="L321">                mainFragment = new RecipesFragment();</span>
+<span class="nc" id="L322">                FragmentManager manager = getSupportFragmentManager();</span>
+<span class="nc" id="L323">                FragmentTransaction transaction = manager.beginTransaction();</span>
+                // if coming from settings, slide left, otherwise slide right
+<span class="nc bnc" id="L325" title="All 2 branches missed.">                if (currentFragment == 4) {</span>
+<span class="nc" id="L326">                    transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);</span>
+                } else {
+<span class="nc" id="L328">                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);</span>
+                }
+<span class="nc" id="L330">                transaction.replace(R.id.mainLayout, (Fragment) mainFragment, null);</span>
+<span class="nc" id="L331">                transaction.commit();</span>
+<span class="nc" id="L332">                currentFragment = 3;</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.account) {</span>
+<span class="nc" id="L334">                mainFragment = new AccountFragment();</span>
+<span class="nc" id="L335">                mainFragment.setCallbackFragment(this);</span>
+                // Always slide right
+<span class="nc" id="L337">                getSupportFragmentManager()</span>
+<span class="nc" id="L338">                        .beginTransaction()</span>
+<span class="nc" id="L339">                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)</span>
+<span class="nc" id="L340">                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)</span>
+<span class="nc" id="L341">                        .commit();</span>
+<span class="nc" id="L342">                currentFragment = 4;</span>
+            } else {
+<span class="nc" id="L344">                return false;</span>
+            }
+
+            // Hides / shows the menu button
+<span class="pc bpc" id="L348" title="3 of 4 branches missed.">            if (currentFragment == 4 &amp;&amp; !menuHidden) toggleMenuHidden();</span>
+<span class="pc bpc" id="L349" title="2 of 4 branches missed.">            else if (currentFragment != 4 &amp;&amp; menuHidden) toggleMenuHidden();</span>
+<span class="fc" id="L350">            return true;</span>
+        });
+<span class="fc" id="L352">        navbar.setSelectedItemId(R.id.home);</span>
+<span class="fc" id="L353">        navbar.setOnItemReselectedListener(item -&gt; {</span>
+<span class="nc bnc" id="L354" title="All 2 branches missed.">            if (item.getItemId() == R.id.shopping) {</span>
+<span class="nc" id="L355">                System.out.println(&quot;shopping re&quot;);</span>
+<span class="nc bnc" id="L356" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nutrition) {</span>
+<span class="nc" id="L357">                System.out.println(&quot;nutrition re&quot;);</span>
+<span class="nc bnc" id="L358" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.home) {</span>
+<span class="nc" id="L359">                System.out.println(&quot;home re&quot;);</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.recipes) {</span>
+<span class="nc" id="L361">                System.out.println(&quot;recipes re&quot;);</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.account) {</span>
+<span class="nc" id="L363">                System.out.println(&quot;settings re&quot;);</span>
+            }
+<span class="nc" id="L365">        });</span>
+<span class="fc" id="L366">    }</span>
+
+    /**
+     * Hides and un-hides the menu button
+     */
+    public void toggleMenuHidden() {
+<span class="nc bnc" id="L372" title="All 2 branches missed.">        if (menuHidden) { // Shows the menu button</span>
+<span class="nc" id="L373">            mainButton.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L374">            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in));</span>
+        } else {    // Hides the menu button
+<span class="nc bnc" id="L376" title="All 2 branches missed.">            if (openMenu) toggleMenu(); // Closes the menu if it is open</span>
+<span class="nc" id="L377">            mainButton.setVisibility(View.GONE);</span>
+<span class="nc" id="L378">            mainButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out));</span>
+        }
+
+<span class="nc bnc" id="L381" title="All 2 branches missed.">        menuHidden = !menuHidden;</span>
+<span class="nc" id="L382">    }</span>
+
+    /**
+     * Toggles display of the fab menu with animations
+     */
+    public void toggleMenu() {
+        Animation animation;
+        int visibility;
+<span class="nc" id="L390">        TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();</span>
+<span class="nc" id="L391">        drawable.setCrossFadeEnabled(true);</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">        if (openMenu) {</span>
+<span class="nc" id="L393">            animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right_fade_out);</span>
+<span class="nc" id="L394">            visibility = View.GONE;</span>
+<span class="nc" id="L395">            drawable.reverseTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));</span>
+        } else {
+<span class="nc" id="L397">            animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right_fade_in);</span>
+<span class="nc" id="L398">            visibility = View.VISIBLE;</span>
+<span class="nc" id="L399">            drawable.startTransition(getResources().getInteger(android.R.integer.config_shortAnimTime));</span>
+        }
+<span class="nc" id="L401">        addShopping.setVisibility(visibility);</span>
+<span class="nc" id="L402">        addLog.setVisibility(visibility);</span>
+<span class="nc" id="L403">        addRecipe.setVisibility(visibility);</span>
+<span class="nc" id="L404">        addShopping.startAnimation(animation);</span>
+<span class="nc" id="L405">        addLog.startAnimation(animation);</span>
+<span class="nc" id="L406">        addRecipe.startAnimation(animation);</span>
+
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        openMenu = !openMenu;</span>
+<span class="nc" id="L409">    }</span>
+
+    /**
+     * Runs when a login fails, opening the login activity or the switch activity
+     */
+    public void failedLogin() {
+<span class="nc" id="L415">        unSpin(this);</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">        if (global.getAccounts().length &gt; 0) {</span>
+<span class="nc" id="L417">            Intent intent = new Intent(this, AccountSwitchActivity.class);</span>
+<span class="nc" id="L418">            intent.putExtra(PARCEL_LOGGED_OUT, true);</span>
+<span class="nc" id="L419">            startActivity(intent);</span>
+<span class="nc" id="L420">        } else {</span>
+<span class="nc" id="L421">            startLoginActivity(false);</span>
+        }
+<span class="nc" id="L423">    }</span>
+
+    /**
+     * Callback method used to control fragment activity
+     * &lt;p&gt;
+     * CALLBACK_SWITCH_TO_REGISTER:
+     * Switches the login screen to the register screen with a nice animation
+     * &lt;p&gt;
+     * CALLBACK_CLOSE_LOGIN:
+     * Closes the login page with a nice animation and permits interaction and removes transparency
+     * filter over the main activity
+     * &lt;p&gt;
+     * CALLBACK_START_LOGIN:
+     * Starts the login fragment
+     * &lt;p&gt;
+     * CALLBACK_MOVE_TO_HOME:
+     * Moves the current fragment to the home fragment
+     * &lt;p&gt;
+     * CALLBACK_FOOD_DETAIL:
+     * Starts the food details activity with the given fooditem
+     * &lt;p&gt;
+     * CALLBACK_SEARCH_FOOD:
+     * Starts the search activity
+     * &lt;p&gt;
+     * CALLBACK_MOVE_TO_SETTINGS:
+     * Moves the current fragment to the settings fragment
+     *
+     * @param op     Opcode to decide what to do
+     * @param bundle Bundle with args
+     */
+    @Override
+    public void callback(int op, Bundle bundle) {
+<span class="nc bnc" id="L455" title="All 6 branches missed.">        switch (op) {</span>
+            case (CALLBACK_START_LOGIN): {
+<span class="nc" id="L457">                callback(CALLBACK_MOVE_TO_HOME, null);</span>
+<span class="nc" id="L458">                boolean backEnabled = false;</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (bundle != null) {</span>
+<span class="nc" id="L460">                    backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);</span>
+                }
+<span class="nc" id="L462">                startLoginActivity(backEnabled);</span>
+<span class="nc" id="L463">                break;</span>
+            }
+            case (CALLBACK_MOVE_TO_HOME): {
+<span class="nc" id="L466">                mainFragment = new HomeFragment();</span>
+<span class="nc" id="L467">                getSupportFragmentManager()</span>
+<span class="nc" id="L468">                        .beginTransaction()</span>
+<span class="nc" id="L469">                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)</span>
+<span class="nc" id="L470">                        .commit();</span>
+<span class="nc" id="L471">                currentFragment = 2;</span>
+<span class="nc" id="L472">                navbar.setSelectedItemId(R.id.home);</span>
+<span class="nc" id="L473">                break;</span>
+            }
+            case (CALLBACK_FOOD_DETAIL): {
+<span class="nc" id="L476">                Intent intent = new Intent(this, FoodDetailsActivity.class);</span>
+<span class="nc" id="L477">                intent.putExtra(PARCEL_FOODITEM, (SimpleFoodItem) bundle.getParcelable(PARCEL_FOODITEM));</span>
+<span class="nc" id="L478">                intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_NONE);</span>
+<span class="nc" id="L479">                startActivity(intent);</span>
+<span class="nc" id="L480">                break;</span>
+            }
+            case (CALLBACK_SEARCH_FOOD): {
+<span class="nc" id="L483">                Intent intent = new Intent(this, SearchActivity.class);</span>
+<span class="nc" id="L484">                intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));</span>
+<span class="nc" id="L485">                intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));</span>
+<span class="nc" id="L486">                foodSearchLauncher.launch(intent);</span>
+<span class="nc" id="L487">                break;</span>
+            }
+            case (CALLBACK_MOVE_TO_SETTINGS): {
+<span class="nc" id="L490">                mainFragment = new SettingsFragment();</span>
+<span class="nc" id="L491">                mainFragment.setCallbackFragment(this);</span>
+<span class="nc" id="L492">                getSupportFragmentManager()</span>
+<span class="nc" id="L493">                        .beginTransaction()</span>
+<span class="nc" id="L494">                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)</span>
+<span class="nc" id="L495">                        .addToBackStack(null)</span>
+<span class="nc" id="L496">                        .replace(R.id.mainLayout, (Fragment) mainFragment, null)</span>
+<span class="nc" id="L497">                        .commit();</span>
+<span class="nc" id="L498">                currentFragment = 4;</span>
+                break;
+            }
+        }
+<span class="nc" id="L502">    }</span>
+
+    /**
+     * Main activity has no callback.
+     *
+     * @param fragment ignored
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
+<span class="nc" id="L511">    }</span>
+
+    /**
+     * Starts the login fragment.
+     * First, makes MainActivity transparent and non-interactive
+     * Then creates a new fragment and sets up the opening animations.
+     */
+    public void startLoginActivity(boolean backEnabled) {
+        Intent intent;
+<span class="nc bnc" id="L520" title="All 2 branches missed.">        if (global.getUsers().size() &gt; 1) {</span>
+<span class="nc" id="L521">            intent = new Intent(this, AccountSwitchActivity.class);</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">            intent.putExtra(PARCEL_LOGGED_OUT, !backEnabled);</span>
+        } else {
+<span class="nc" id="L524">            intent = new Intent(this, LoginActivity.class);</span>
+<span class="nc" id="L525">            intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);</span>
+        }
+<span class="nc" id="L527">        startActivity(intent);</span>
+<span class="nc" id="L528">    }</span>
+
+    /**
+     * Clears the shopping list
+     */
+    public static void clearShoppingList() {
+<span class="fc" id="L534">        shoppingListItems.clear();</span>
+<span class="fc" id="L535">    }</span>
+
+    /**
+     * Removes the item at the given index from the shopping list
+     * @param i Index of the item to remove
+     * @return True if the shopping list is now empty
+     */
+    public static boolean removeShoppingItem(int i) {
+<span class="fc" id="L543">        shoppingListItems.remove(i);</span>
+<span class="fc" id="L544">        return shoppingListItems.isEmpty();</span>
+    }
+
+    /**
+     * Getter for the shopping list
+     * @return ArrayList of food items
+     */
+    public static ArrayList&lt;SimpleFoodItem&gt; getShoppingList() {
+<span class="fc" id="L552">        return shoppingListItems;</span>
+    }
+
+    /**
+     * Setter for the shopping list
+     * @param items Array of food items to add to the shopping list
+     */
+    public static void setShoppingList(SimpleFoodItem[] items) {
+<span class="fc" id="L560">        shoppingListItems.addAll(Arrays.asList(items));</span>
+<span class="fc" id="L561">    }</span>
+
+    /**
+     * Clears the food log
+     */
+    public static void clearFoodLog() {
+<span class="fc" id="L567">        breakfast.clear();</span>
+<span class="fc" id="L568">        lunch.clear();</span>
+<span class="fc" id="L569">        dinner.clear();</span>
+<span class="fc" id="L570">    }</span>
+
+    /**
+     * Removes the given index from the given log
+     * @param i     Index of the item to remove
+     * @param logId Log id constant for the target of this remove
+     * @return      True if the target log is empty
+     */
+    public static boolean removeLogItem(int i, int logId) {
+<span class="nc" id="L579">        boolean ret = true;</span>
+<span class="nc bnc" id="L580" title="All 4 branches missed.">        switch (logId) {</span>
+            case BREAKFAST_LOG: {
+<span class="nc" id="L582">                breakfast.remove(i);</span>
+<span class="nc" id="L583">                ret = breakfast.isEmpty();</span>
+<span class="nc" id="L584">                break;</span>
+            }
+            case LUNCH_LOG: {
+<span class="nc" id="L587">                lunch.remove(i);</span>
+<span class="nc" id="L588">                ret = lunch.isEmpty();</span>
+<span class="nc" id="L589">                break;</span>
+            }
+            case DINNER_LOG: {
+<span class="nc" id="L592">                dinner.remove(i);</span>
+<span class="nc" id="L593">                ret = dinner.isEmpty();</span>
+                break;
+            }
+        }
+<span class="nc" id="L597">        return ret;</span>
+    }
+
+    /**
+     * Adds the given item to the specified food log
+     * @param item  Item to add
+     * @param logId Log id constant for the log to target
+     */
+    public static void addLogItem(FoodLogItem item, int logId) {
+<span class="nc bnc" id="L606" title="All 4 branches missed.">        switch (logId) {</span>
+            case BREAKFAST_LOG: {
+<span class="nc" id="L608">                breakfast.add(item);</span>
+<span class="nc" id="L609">                break;</span>
+            }
+            case LUNCH_LOG: {
+<span class="nc" id="L612">                lunch.add(item);</span>
+<span class="nc" id="L613">                break;</span>
+            }
+            case DINNER_LOG: {
+<span class="nc" id="L616">                dinner.add(item);</span>
+                break;
+            }
+        }
+<span class="nc" id="L620">    }</span>
+
+    /**
+     * Setter for the individual food logs
+     * @param items Items to add to the food log
+     * @param logId Log ID constant for the log to add to
+     */
+    public static void setLog(FoodLogItem[] items, int logId) {
+<span class="nc bnc" id="L628" title="All 4 branches missed.">        switch (logId) {</span>
+            case BREAKFAST_LOG: {
+<span class="nc" id="L630">                breakfast.addAll(Arrays.asList(items));</span>
+<span class="nc" id="L631">                break;</span>
+            }
+            case LUNCH_LOG: {
+<span class="nc" id="L634">                lunch.addAll(Arrays.asList(items));</span>
+<span class="nc" id="L635">                break;</span>
+            }
+            case DINNER_LOG: {
+<span class="nc" id="L638">                dinner.addAll(Arrays.asList(items));</span>
+                break;
+            }
+        }
+<span class="nc" id="L642">    }</span>
+
+    /**
+     * Getter for the food logs' items
+     * @param i     Index of the item to retrieve
+     * @param logId Log id constant for the log to retrieve from
+     * @return      Item from the log, null if the logId is invalid
+     */
+    public static FoodLogItem getLogItem(int i, int logId) {
+<span class="nc bnc" id="L651" title="All 4 branches missed.">        switch (logId) {</span>
+            case BREAKFAST_LOG: {
+<span class="nc" id="L653">                return breakfast.get(i);</span>
+            }
+            case LUNCH_LOG: {
+<span class="nc" id="L656">                return lunch.get(i);</span>
+            }
+            case DINNER_LOG: {
+<span class="nc" id="L659">                return dinner.get(i);</span>
+            }
+        }
+<span class="nc" id="L662">        return null;</span>
+    }
+
+    /**
+     * Getter for the food logs
+     * @param logId ID of the log to retrieve
+     * @return      Food log list for an adapter
+     */
+    public static ArrayList&lt;FoodLogItem&gt; getLog(int logId) {
+<span class="nc bnc" id="L671" title="All 4 branches missed.">        switch (logId) {</span>
+            case BREAKFAST_LOG: {
+<span class="nc" id="L673">                return breakfast;</span>
+            }
+            case LUNCH_LOG: {
+<span class="nc" id="L676">                return lunch;</span>
+            }
+            case DINNER_LOG: {
+<span class="nc" id="L679">                return dinner;</span>
+            }
+        }
+<span class="nc" id="L682">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

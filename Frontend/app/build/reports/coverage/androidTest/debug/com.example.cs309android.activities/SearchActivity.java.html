@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities</a> &gt; <span class="el_source">SearchActivity.java</span></div><h1>SearchActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities;
+
+import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.INTENT_NONE;
+import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
+import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
+
+import android.content.Intent;
+import android.databinding.tool.util.StringUtils;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.food.CustomFoodActivity;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.fragments.ModalImageSelect;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.USDA.models.BrandedFoodItem;
+import com.example.cs309android.models.USDA.queries.FoodSearchCriteria;
+import com.example.cs309android.models.USDA.queries.FoodsCriteria;
+import com.example.cs309android.models.USDA.queries.SearchResult;
+import com.example.cs309android.models.USDA.queries.SearchResultFood;
+import com.example.cs309android.models.adapters.FoodSearchListAdapter;
+import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.food.FDCByUPCRequest;
+import com.example.cs309android.models.api.request.food.GetCustomFoodsRequest;
+import com.example.cs309android.models.api.request.shopping.ShoppingAddRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.food.FDCByUPCResponse;
+import com.example.cs309android.models.api.response.food.GetCustomFoodsResponse;
+import com.example.cs309android.util.BarcodeAnalyzer;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+
+/**
+ * Activity used to search and display search results
+ * Can be used for food items and recipes
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L71">public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, CallbackFragment {</span>
+    /**
+     * Adapter for the search results
+     */
+    private static FoodSearchListAdapter adapter;
+    /**
+     * List of existing items from whatever called this.
+     * Completing a search adds that item to this list.
+     */
+    private ArrayList&lt;SimpleFoodItem&gt; items;
+    /**
+     * List of search results from the search to display
+     */
+    private ArrayList&lt;SimpleFoodItem&gt; searchResults;
+    /**
+     * Launches the food details activity for a food item clicked in the search results
+     */
+    private ActivityResultLauncher&lt;Intent&gt; foodDetailsLauncher;
+    /**
+     * Launches the add custom food activity for the custom food item button in the search results
+     */
+    private ActivityResultLauncher&lt;Intent&gt; customDetailsLauncher;
+
+    /**
+     * Various intents tell the app what to do when certain things are done.
+     */
+    private int intentCode;
+
+    /**
+     * Runs when the activity is created.
+     *
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L106">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L107">        setContentView(R.layout.activity_search);</span>
+<span class="nc" id="L108">        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);</span>
+
+<span class="nc" id="L110">        intentCode = getIntent().getIntExtra(PARCEL_INTENT_CODE, INTENT_NONE);</span>
+
+<span class="nc" id="L112">        ListView listView = findViewById(R.id.search_results);</span>
+<span class="nc" id="L113">        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);</span>
+
+<span class="nc" id="L115">        items = getIntent().getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (items == null) {</span>
+<span class="nc" id="L117">            items = new ArrayList&lt;&gt;();</span>
+        }
+
+<span class="nc" id="L120">        searchResults = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L122">        TextView empty = findViewById(R.id.empty_text);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (items.isEmpty()) {</span>
+<span class="nc" id="L124">            empty.setVisibility(View.VISIBLE);</span>
+        } else {
+<span class="nc" id="L126">            empty.setVisibility(View.INVISIBLE);</span>
+        }
+
+<span class="nc" id="L129">        adapter = new FoodSearchListAdapter(this, searchResults);</span>
+<span class="nc" id="L130">        listView.setAdapter(adapter);</span>
+
+<span class="nc" id="L132">        SearchView searchView = findViewById(R.id.search_bar);</span>
+<span class="nc" id="L133">        searchView.requestFocus();</span>
+<span class="nc" id="L134">        searchView.setOnQueryTextListener(this);</span>
+<span class="nc" id="L135">        ViewCompat.setOnApplyWindowInsetsListener(searchView, (v, windowInsets) -&gt; {</span>
+<span class="nc" id="L136">            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());</span>
+<span class="nc" id="L137">            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;</span>
+<span class="nc" id="L138">            return WindowInsetsCompat.CONSUMED;</span>
+        });
+
+<span class="nc" id="L141">        findViewById(R.id.scanButton).setOnClickListener(view -&gt; imageChooser());</span>
+
+<span class="nc" id="L143">        foodDetailsLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if (result.getResultCode() == RESULT_OK) {</span>
+<span class="nc" id="L147">                        Intent intent = result.getData();</span>
+<span class="nc bnc" id="L148" title="All 3 branches missed.">                        switch (intentCode) {</span>
+                            case INTENT_SHOPPING_LIST: {
+<span class="nc" id="L150">                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);</span>
+
+<span class="nc" id="L152">                                Util.spin(getWindow().getDecorView());</span>
+<span class="nc" id="L153">                                new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -&gt; {</span>
+<span class="nc" id="L154">                                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {</span>
+<span class="nc" id="L156">                                        items.add(item);</span>
+<span class="nc" id="L157">                                        Toaster.toastShort(&quot;Added&quot;, this);</span>
+                                    } else {
+<span class="nc" id="L159">                                        Toaster.toastShort(&quot;Error&quot;, this);</span>
+                                    }
+<span class="nc" id="L161">                                }, SearchActivity.this, getWindow().getDecorView());</span>
+<span class="nc" id="L162">                                break;</span>
+                            }
+                            case INTENT_RECIPE_ADD: {
+<span class="nc" id="L165">                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);</span>
+
+<span class="nc" id="L167">                                Intent intent1 = new Intent();</span>
+<span class="nc" id="L168">                                intent1.putExtra(PARCEL_FOODITEM, item);</span>
+<span class="nc" id="L169">                                setResult(RESULT_OK, intent1);</span>
+<span class="nc" id="L170">                                finish();</span>
+<span class="nc" id="L171">                                break;</span>
+                            }
+                        }
+                    }
+<span class="nc" id="L175">                }</span>
+        );
+
+<span class="nc" id="L178">        customDetailsLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc bnc" id="L181" title="All 2 branches missed.">                    if (result.getResultCode() == RESULT_OK) {</span>
+<span class="nc" id="L182">                        Intent intent = result.getData();</span>
+<span class="nc" id="L183">                        SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);</span>
+<span class="nc" id="L184">                        Util.spin(getWindow().getDecorView());</span>
+<span class="nc" id="L185">                        new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -&gt; {</span>
+<span class="nc" id="L186">                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {</span>
+<span class="nc" id="L188">                                items.add(item);</span>
+<span class="nc" id="L189">                                Toaster.toastShort(&quot;Added&quot;, this);</span>
+                            } else {
+<span class="nc" id="L191">                                Toaster.toastShort(&quot;Error&quot;, this);</span>
+                            }
+<span class="nc" id="L193">                        }, SearchActivity.this, getWindow().getDecorView());</span>
+                    }
+<span class="nc" id="L195">                }</span>
+        );
+<span class="nc" id="L197">    }</span>
+
+    /**
+     * Shows the image source selection modal bottom sheet
+     */
+    public void imageChooser() {
+<span class="nc" id="L203">        ModalImageSelect select = new ModalImageSelect();</span>
+<span class="nc" id="L204">        select.setCallbackFragment(this);</span>
+<span class="nc" id="L205">        select.show(getSupportFragmentManager(), ModalImageSelect.TAG);</span>
+<span class="nc" id="L206">    }</span>
+
+    /**
+     * Runs when the system back button is pressed or the app's back button is pressed.
+     * Sends all selected items back to the activity that called this activity.
+     */
+    @Override
+    public void onBackPressed() {
+<span class="nc" id="L214">        Intent intent = new Intent();</span>
+<span class="nc bnc" id="L215" title="All 3 branches missed.">        switch (intentCode) {</span>
+            case INTENT_SHOPPING_LIST: {
+<span class="nc" id="L217">                intent.putParcelableArrayListExtra(PARCEL_FOODITEMS_LIST, items);</span>
+<span class="nc" id="L218">                setResult(RESULT_OK, intent);</span>
+<span class="nc" id="L219">                break;</span>
+            }
+            case INTENT_RECIPE_ADD: {
+<span class="nc" id="L222">                setResult(RESULT_CANCELED);</span>
+                break;
+            }
+        }
+<span class="nc" id="L226">        finish();</span>
+<span class="nc" id="L227">        super.onBackPressed();</span>
+<span class="nc" id="L228">    }</span>
+
+    /**
+     * Ran when the search is ran.
+     * First, gets data based on the query from Nutritionix, then displays a list of the items.
+     * Each item can be clicked on for more info which should open in a new fragment and then have an ok button.
+     *
+     * @param query Query text
+     * @return true on successful query
+     */
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+<span class="nc" id="L240">        findViewById(R.id.search_bar).clearFocus();</span>
+
+<span class="nc" id="L242">        Util.spin(this);</span>
+<span class="nc" id="L243">        searchResults.clear();</span>
+<span class="nc" id="L244">        searchResults.add(new SimpleFoodItem(StringUtils.capitalize(query.toLowerCase()), &quot;Add custom item&quot;));</span>
+<span class="nc" id="L245">        new GetCustomFoodsRequest(query).request(response -&gt; {</span>
+<span class="nc" id="L246">            GetCustomFoodsResponse result = Util.objFromJson(response, GetCustomFoodsResponse.class);</span>
+
+<span class="nc bnc" id="L248" title="All 2 branches missed.">            if (result.getItems() != null) {</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                for (CustomFoodItem food : result.getItems()) {</span>
+<span class="nc" id="L250">                    searchResults.add(new SimpleFoodItem(food.getDbId(), StringUtils.capitalize(food.getName().toLowerCase()), &quot;User added&quot;, true));</span>
+                }
+            }
+
+<span class="nc" id="L254">            new FoodSearchCriteria(query, Constants.DataType.BRANDED).unspinOnComplete(response1 -&gt; {</span>
+<span class="nc" id="L255">                SearchResult result1 = Util.objFromJson(response1, SearchResult.class);</span>
+
+<span class="nc bnc" id="L257" title="All 2 branches missed.">                if (result1.getFoods() != null) {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">                    for (SearchResultFood food : result1.getFoods()) {</span>
+<span class="nc" id="L259">                        searchResults.add(new SimpleFoodItem(food.getFdcId(), StringUtils.capitalize(food.getDescription().toLowerCase()), food.getBrandOwner(), false));</span>
+                    }
+                }
+
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                if (!searchResults.isEmpty()) {</span>
+<span class="nc" id="L264">                    findViewById(R.id.empty_text).setVisibility(View.GONE);</span>
+                } else {
+<span class="nc" id="L266">                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);</span>
+                }
+<span class="nc" id="L268">                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);</span>
+<span class="nc" id="L269">            }, error -&gt; {</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">                if (!searchResults.isEmpty()) {</span>
+<span class="nc" id="L271">                    findViewById(R.id.empty_text).setVisibility(View.GONE);</span>
+                } else {
+<span class="nc" id="L273">                    findViewById(R.id.empty_text).setVisibility(View.VISIBLE);</span>
+                }
+<span class="nc" id="L275">                ((ListView) findViewById(R.id.search_results)).setAdapter(adapter);</span>
+<span class="nc" id="L276">            }, SearchActivity.this, getWindow().getDecorView());</span>
+<span class="nc" id="L277">        }, SearchActivity.this);</span>
+<span class="nc" id="L278">        return true;</span>
+    }
+
+    /**
+     * Runs when the search query is changed. Shouldn't do anything to reduce api calls.
+     *
+     * @param s Query text.
+     * @return false
+     */
+    @Override
+    public boolean onQueryTextChange(String s) {
+<span class="nc" id="L289">        return false;</span>
+    }
+
+    /**
+     * Callback method used to control fragment activity
+     * &lt;p&gt;
+     * CALLBACK_FOOD_DETAIL:
+     * Opens the food detail window for the given food item
+     * &lt;p&gt;
+     * CALLBACK_IMAGE_URI:
+     * Loads the barcode image and analyzes it for the UPC code
+     * If valid, it will open the food details window for the given barcode
+     *
+     * @param op     Opcode to decide what to do
+     * @param bundle Bundle with args
+     */
+    @Override
+    public void callback(int op, Bundle bundle) {
+<span class="nc bnc" id="L307" title="All 3 branches missed.">        switch (op) {</span>
+            case (CALLBACK_FOOD_DETAIL): {
+<span class="nc" id="L309">                SimpleFoodItem item = bundle.getParcelable(PARCEL_FOODITEM);</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">                if (item.getId() == ITEM_ID_NULL) {</span>
+<span class="nc" id="L311">                    Intent intent = new Intent(this, CustomFoodActivity.class);</span>
+<span class="nc" id="L312">                    intent.putExtra(PARCEL_FOODITEM, item);</span>
+<span class="nc" id="L313">                    customDetailsLauncher.launch(intent);</span>
+<span class="nc" id="L314">                } else {</span>
+<span class="nc" id="L315">                    Intent intent = new Intent(this, FoodDetailsActivity.class);</span>
+<span class="nc" id="L316">                    intent.putExtra(PARCEL_FOODITEM, item);</span>
+<span class="nc" id="L317">                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);</span>
+<span class="nc" id="L318">                    foodDetailsLauncher.launch(intent);</span>
+                }
+<span class="nc" id="L320">                break;</span>
+            }
+            case (CALLBACK_IMAGE_URI): {
+                try {
+<span class="nc" id="L324">                    Uri imageUri = bundle.getParcelable(PARCEL_IMAGE_URI);</span>
+<span class="nc" id="L325">                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageUri);</span>
+<span class="nc" id="L326">                    Bitmap bitmap = ImageDecoder.decodeBitmap(source);</span>
+<span class="nc" id="L327">                    BarcodeAnalyzer analyzer = new BarcodeAnalyzer(barcodes -&gt; {</span>
+<span class="nc bnc" id="L328" title="All 4 branches missed.">                        if (barcodes == null || barcodes.length == 0) {</span>
+<span class="nc" id="L329">                            Toaster.toastShort(&quot;Error reading barcode&quot;, this);</span>
+<span class="nc" id="L330">                            return;</span>
+                        }
+<span class="nc" id="L332">                        new FDCByUPCRequest(barcodes[0]).request(response -&gt; {</span>
+<span class="nc" id="L333">                            FDCByUPCResponse fdcResponse = Util.objFromJson(response, FDCByUPCResponse.class);</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">                            if (fdcResponse.getResult() == com.example.cs309android.util.Constants.RESULT_OK) {</span>
+<span class="nc" id="L335">                                new FoodsCriteria(fdcResponse.getFdcId(), Constants.Format.FULL, null).request(response1 -&gt; {</span>
+<span class="nc" id="L336">                                    BrandedFoodItem item = Util.objFromJson(response, BrandedFoodItem.class);</span>
+<span class="nc" id="L337">                                    Intent intent = new Intent(this, FoodDetailsActivity.class);</span>
+<span class="nc" id="L338">                                    intent.putExtra(PARCEL_FOODITEM, new SimpleFoodItem(item.getFdcId(), item.getDescription(), item.getBrandOwner(), false));</span>
+<span class="nc" id="L339">                                    intent.putExtra(PARCEL_BUTTON_CONTROL, FoodDetailsActivity.CONTROL_ADD);</span>
+<span class="nc" id="L340">                                    foodDetailsLauncher.launch(intent);</span>
+<span class="nc" id="L341">                                }, SearchActivity.this);</span>
+                            } else {
+<span class="nc" id="L343">                                Toaster.toastShort(&quot;Error reading barcode&quot;, this);</span>
+                            }
+<span class="nc" id="L345">                        }, SearchActivity.this);</span>
+<span class="nc" id="L346">                    }, error -&gt; {</span>
+<span class="nc" id="L347">                        Toaster.toastShort(&quot;Error reading barcode&quot;, this);</span>
+<span class="nc" id="L348">                        error.printStackTrace();</span>
+<span class="nc" id="L349">                    });</span>
+<span class="nc" id="L350">                    analyzer.analyze(bitmap);</span>
+<span class="nc" id="L351">                } catch (IOException e) {</span>
+<span class="nc" id="L352">                    e.printStackTrace();</span>
+<span class="nc" id="L353">                }</span>
+                break;
+            }
+        }
+<span class="nc" id="L357">    }</span>
+
+    /**
+     * Activity has no callbacks
+     *
+     * @param fragment Callback fragment.
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
+<span class="nc" id="L366">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.ADD_RECIPES_URL;
+import static com.example.cs309android.util.Constants.Urls.Recipes.ADD_RECIPES_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.Ingredient;

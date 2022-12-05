@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.login</a> &gt; <span class="el_source">RegisterActivity.java</span></div><h1>RegisterActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.login;
+
+import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
+import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.models.Hash;
+import com.example.cs309android.util.Util;
+import com.example.cs309android.util.security.Hasher;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
+
+/**
+ * Register activity handles registering a new account with the server
+ *
+ * @author Mitch Hudson
+ */
+<span class="fc" id="L28">public class RegisterActivity extends AppCompatActivity {</span>
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState Saved state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L36">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L37">        setContentView(R.layout.activity_register);</span>
+
+<span class="fc" id="L39">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="fc" id="L41">        TextInputLayout usernameField = findViewById(R.id.unameField);</span>
+<span class="fc" id="L42">        TextInputLayout emailField = findViewById(R.id.emailField);</span>
+<span class="fc" id="L43">        TextInputLayout passwordField = findViewById(R.id.passwordField);</span>
+
+<span class="fc" id="L45">        Intent input = getIntent();</span>
+<span class="fc" id="L46">        Objects.requireNonNull(usernameField.getEditText()).setText(input.getStringExtra(PARCEL_USERNAME));</span>
+<span class="fc" id="L47">        Objects.requireNonNull(passwordField.getEditText()).setText(input.getStringExtra(PARCEL_PASSWORD));</span>
+
+<span class="fc" id="L49">        Button registerButton = findViewById(R.id.buttonRegister);</span>
+<span class="fc" id="L50">        registerButton.setOnClickListener(view1 -&gt; {</span>
+<span class="fc" id="L51">            Util.hideKeyboard(view1, this);</span>
+
+<span class="fc" id="L53">            emailField.setError(null);</span>
+<span class="fc" id="L54">            usernameField.setError(null);</span>
+<span class="fc" id="L55">            passwordField.setError(null);</span>
+<span class="fc" id="L56">            String unm = Objects.requireNonNull(usernameField.getEditText()).getText().toString();</span>
+<span class="fc" id="L57">            String email = Objects.requireNonNull(emailField.getEditText()).getText().toString();</span>
+<span class="fc" id="L58">            String pwd = Objects.requireNonNull(passwordField.getEditText()).getText().toString();</span>
+
+            // Basic checks for empty/non-matching fields.
+            // More checks should be ran serverside for duplicate accounts.
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (email.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L63">                emailField.setError(&quot;Username can't be empty&quot;);</span>
+<span class="fc" id="L64">                emailField.requestFocus();</span>
+<span class="fc" id="L65">                return;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            } else if (unm.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L67">                usernameField.setError(&quot;Email can't be empty&quot;);</span>
+<span class="nc" id="L68">                usernameField.requestFocus();</span>
+<span class="nc" id="L69">                return;</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            } else if (pwd.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L71">                passwordField.setError(&quot;Password can't be empty&quot;);</span>
+<span class="nc" id="L72">                passwordField.requestFocus();</span>
+<span class="nc" id="L73">                return;</span>
+            }
+
+<span class="fc" id="L76">            Util.spin(this);</span>
+
+            // Generates a new hash with the given password.
+<span class="fc" id="L79">            Hash pwdHash = Hasher.generateNewHash(pwd.toCharArray());</span>
+<span class="fc" id="L80">            String hash = Hasher.getEncoded(pwdHash.getHash());</span>
+<span class="fc" id="L81">            String salt = Hasher.getEncoded(pwdHash.getSalt());</span>
+
+<span class="fc" id="L83">            Util.register(global, email, unm, hash, salt, () -&gt; {</span>
+<span class="nc" id="L84">                Util.unSpin(this);</span>
+<span class="nc" id="L85">                setResult(RESULT_OK);</span>
+<span class="nc" id="L86">                finish();</span>
+<span class="nc" id="L87">            }, result -&gt; {</span>
+<span class="pc bpc" id="L88" title="2 of 3 branches missed.">                switch (result) {</span>
+                    case RESULT_ERROR_USERNAME_TAKEN: {
+<span class="fc" id="L90">                        usernameField.setError(&quot;Username taken&quot;);</span>
+<span class="fc" id="L91">                        break;</span>
+                    }
+                    case RESULT_ERROR_EMAIL_TAKEN: {
+<span class="nc" id="L94">                        emailField.setError(&quot;Account for this email already exists&quot;);</span>
+<span class="nc" id="L95">                        break;</span>
+                    }
+                    default: {
+<span class="nc" id="L98">                        System.out.println(result);</span>
+                    }
+                }
+<span class="fc" id="L101">            }, error -&gt; {</span>
+<span class="nc" id="L102">                Util.unSpin(this);</span>
+<span class="nc" id="L103">            }, 0);</span>
+<span class="fc" id="L104">        });</span>
+<span class="fc" id="L105">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

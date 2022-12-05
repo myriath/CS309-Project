@@ -5,11 +5,25 @@
             android:key="switch_user"
             android:summary="@string/switch_user_msg"
             android:title="@string/switch_user_title" />
-
         <Preference
-            android:key="logout"
+            android:key="log_out"
             android:summary="@string/logout_msg"
             android:title="@string/logout_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/notification_category">
+        <Preference
+            android:key="notification0"
+            android:summary="High"
+            android:title="Notification0"/>
+        <Preference
+            android:key="notification1"
+            android:summary="Regular"
+            android:title="Notification1"/>
+        <Preference
+            android:key="notification2"
+            android:summary="Low"
+            android:title="Notification2"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/display_title">

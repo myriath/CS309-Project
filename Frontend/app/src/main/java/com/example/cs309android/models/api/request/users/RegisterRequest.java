@@ -45,7 +45,7 @@ public class RegisterRequest extends PostRequest {
      * @param pSalt    Salt used for hashing
      */
     public RegisterRequest(String email, String username, String pHash, String pSalt, String token) {
-        super(Constants.REGISTER_URL);
+        super(Constants.Urls.Users.REGISTER_URL);
         this.email = email;
         this.username = username;
         this.pHash = pHash;

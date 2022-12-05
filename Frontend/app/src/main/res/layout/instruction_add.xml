@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/remove"
+        android:layout_toStartOf="@id/menu"
         android:padding="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -23,7 +23,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/remove"
+        android:id="@+id/menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"

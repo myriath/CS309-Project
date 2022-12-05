@@ -1,6 +1,11 @@
 package com.example.cs309android.models.adapters;
 
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_DEFAULT;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ITEM_POSITION;
+
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -63,17 +68,28 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
             convertView = View.inflate(parent.getContext(), R.layout.adapter_logged_in, null);
         }
 
+        if (username.equals(global.getUsername())) {
+            convertView.findViewById(R.id.selected).setVisibility(View.VISIBLE);
+        }
+
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Util.switchUser(global, username);
-            callbackFragment.callback(0, null);
+            Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(CALLBACK_DEFAULT, null), System.out::println, System.out::println);
+        });
+
+        convertView.findViewById(R.id.menu).setOnClickListener(view -> {
+            Util.logout(global, username);
+            Bundle bundle = new Bundle();
+            bundle.putInt(PARCEL_ITEM_POSITION, position);
+            callbackFragment.callback(CALLBACK_REMOVE, bundle);
         });
 
         TextView usernameView = convertView.findViewById(R.id.username);
         usernameView.setText(username);
 
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
-        new GetProfilePictureRequest(username).request(profilePicture::setImageBitmap, getContext());
+        new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
         return convertView;
     }

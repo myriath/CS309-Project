@@ -55,7 +55,7 @@ public class InstructionEditView extends FrameLayout {
      */
     public void initView(OnClickListener listener, int position) {
         view = inflate(getContext(), R.layout.instruction_add, this);
-        view.findViewById(R.id.remove).setOnClickListener(listener);
+        view.findViewById(R.id.menu).setOnClickListener(listener);
         setPosition(position);
     }
 
@@ -93,6 +93,6 @@ public class InstructionEditView extends FrameLayout {
      * @return Instruction representing this view
      */
     public Instruction getInstruction() {
-        return new Instruction(position, getInstructionText());
+        return new Instruction(position + 1, getInstructionText());
     }
 }
