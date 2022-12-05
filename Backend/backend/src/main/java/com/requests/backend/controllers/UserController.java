@@ -293,7 +293,7 @@ public class UserController {
 
             // If the server encounters an error, return RESULT_ERROR
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
             res.setResult(RESULT_ERROR);
         }
 
