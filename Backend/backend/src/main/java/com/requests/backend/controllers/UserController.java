@@ -285,9 +285,11 @@ public class UserController {
         try {
             // If the token is not valid, return RESULT_USER_HASH_MISMATCH
             if (tokenQuery.length == 0) {
+                LOGGER.info("No tokens match");
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             else {
+                LOGGER.info(tokenQuery[0].getUser().getUsername());
                 runner.run(tokenQuery[0].getUser(), res);
             }
 
