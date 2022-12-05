@@ -14,19 +14,19 @@ import java.util.Collection;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value="SELECT * FROM users", nativeQuery = true)
-    User[] queryGetAllUsers();
+    Collection<User> queryGetAllUsers();
 
     @Query(
             value = "SELECT * FROM users WHERE username = :username",
             nativeQuery = true)
-    User[] queryGetUserByUsername(@Param("username") String username);
+    Collection<User> queryGetUserByUsername(@Param("username") String username);
 
     @Query(
             value = "SELECT * " +
                     "FROM users " +
                     "WHERE username = :username",
             nativeQuery = true)
-    User[] queryValidateUsername(@Param("username") String username);
+    Collection<User> queryValidateUsername(@Param("username") String username);
 
     @Modifying
     @Query(
@@ -53,5 +53,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(
             value = "SELECT * FROM users WHERE email = :email",
             nativeQuery = true)
-    User[] queryGetUserByEmail(@Param("email") String email);
+    Collection<User> queryGetUserByEmail(@Param("email") String email);
 }

@@ -6,6 +6,8 @@ public class LoginResponse extends ResultResponse {
     @Expose
     private String username;
 
+    private int userType;
+
     public LoginResponse() {
     }
 
@@ -19,5 +21,13 @@ public class LoginResponse extends ResultResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getuserType() {
+        return userType;
+    }
+
+    public void setuserType(int userType) {
+        this.userType = userType;
     }
 }

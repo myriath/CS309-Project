@@ -48,16 +48,15 @@ public class ProfileEndpointController {
     @GetMapping(path="/getProfile/{username}")
     public @ResponseBody ProfileResponse getProfile(@PathVariable String username) {
         ProfileResponse res = new ProfileResponse();
-
-        User[] users = userRepository.queryGetUserByUsername(username);
-        if (users.length == 0) {
+        Collection<User> users = userRepository.queryGetUserByUsername(username);
+        if (users.size() == 0) {
             res.setResult(RESULT_ERROR);
         } else {
             res.setResult(RESULT_OK);
 
             res.setFollowers(followRepository.queryGetFollowers(username).length);
             res.setFollowing(followRepository.queryGetFollowing(username).length);
-            res.setBio(users[0].getBio());
+            res.setBio(users.iterator().next().getBio());
         }
 
         return res;

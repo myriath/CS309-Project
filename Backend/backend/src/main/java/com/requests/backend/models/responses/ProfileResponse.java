@@ -12,6 +12,8 @@ public class ProfileResponse extends ResultResponse {
     @Expose
     private String bio;
 
+    private int userType;
+
     public int getFollowers() {
         return followers;
     }
@@ -35,4 +37,8 @@ public class ProfileResponse extends ResultResponse {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+
+
+
 }
