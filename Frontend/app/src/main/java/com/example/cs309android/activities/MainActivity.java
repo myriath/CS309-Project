@@ -10,7 +10,6 @@ import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_L
 import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
-import static com.example.cs309android.util.Constants.Notifications.NOTIFICATION_NEW_COMMENT;
 import static com.example.cs309android.util.Constants.PICASSO;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
@@ -59,6 +58,7 @@ import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.services.NotificationService;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.PicassoSingleton;
 import com.example.cs309android.util.RequestHandler;
@@ -202,7 +202,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Creates notification channels
         Constants.Notifications.createNotificationChannels(this);
-        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
+//        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
+
+        // Starts the notification service
+        startService(new Intent(this, NotificationService.class));
+
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 

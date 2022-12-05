@@ -1,6 +1,7 @@
 package com.example.cs309android.util;
 
 import static com.example.cs309android.BuildConfig.BASE_API_URL;
+import static com.example.cs309android.BuildConfig.WEBSOCKETS_URL;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -344,6 +345,10 @@ public class Constants {
          */
         String PARCEL_RECIPE = "HomeFragment.recipe";
         /**
+         * Used to parcel a recipe id
+         */
+        String PARCEL_RECIPE_ID = "rid";
+        /**
          * Used in the account page to tell if it is the owner or not
          */
         String PARCEL_OWNER = "owner";
@@ -461,6 +466,8 @@ public class Constants {
          * URL for getting images
          */
         String IMAGE_URL = BASE_API_URL + "images/";
+
+        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "notifications/";
 
         /**
          * URLs for the users endpoint
