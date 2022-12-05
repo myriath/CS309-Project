@@ -245,7 +245,7 @@ public class SocialController {
             User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
 
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
-                commentRepository.queryRemoveComment(commentId);
+                commentRepository.deleteById(commentId);
                 res.setResult(RESULT_OK);
             }
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
@@ -257,14 +257,16 @@ public class SocialController {
      * Works if the token is of the owner or moderator+
      */
     @PatchMapping(path = "/editComment/{token}/{commentId}")
-    public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody String body) {
+    public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody CommentRequest body) {
         token = Hasher.sha256(token);
 
         return UserController.getUserFromToken(token, (user, res) -> {
             User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
 
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
-                commentRepository.queryUpdateComment(commentId, body);
+                Comment comment = commentRepository.getReferenceById(commentId);
+                comment.setBody(body.comment);
+                commentRepository.save(comment);
                 res.setResult(RESULT_OK);
             }
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);

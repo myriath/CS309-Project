@@ -5,7 +5,6 @@ import com.google.gson.annotations.Expose;
 public class CommentRequest {
     @Expose
     public String comment;
-
     public CommentRequest() {
     }
 }
