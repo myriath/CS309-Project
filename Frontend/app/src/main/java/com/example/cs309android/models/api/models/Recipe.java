@@ -3,7 +3,11 @@ package com.example.cs309android.models.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
+
+import java.util.Arrays;
 
 /**
  * Simple recipe item used for displaying and moving data in the app
@@ -32,10 +36,15 @@ public class Recipe implements Parcelable {
     @Expose
     private final int rid;
     /**
+     * Creator of the recipe's username
+     */
+    @Expose
+    private final String username;
+    /**
      * Name of the recipe
      */
     @Expose
-    private final String recipeName;
+    private final String rname;
     /**
      * Description of the recipe
      */
@@ -52,11 +61,6 @@ public class Recipe implements Parcelable {
     @Expose
     private final Instruction[] instructions;
     /**
-     * Creator of the recipe's username
-     */
-    @Expose
-    private final String username;
-    /**
      * Array of comments on the recipe
      */
     @Expose
@@ -66,16 +70,16 @@ public class Recipe implements Parcelable {
      * Public constructor
      *
      * @param rid          Recipe id
-     * @param recipeName   Recipe name
+     * @param rname        Recipe name
      * @param description  Description
      * @param ingredients  Ingredients
      * @param instructions Instructions
      * @param username     Creator's username
      * @param comments     Comments on this recipe
      */
-    public Recipe(int rid, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions, String username, Comment[] comments) {
+    public Recipe(int rid, String rname, String description, Ingredient[] ingredients, Instruction[] instructions, String username, Comment[] comments) {
         this.rid = rid;
-        this.recipeName = recipeName;
+        this.rname = rname;
         this.description = description;
         this.ingredients = ingredients;
         this.instructions = instructions;
@@ -90,7 +94,7 @@ public class Recipe implements Parcelable {
      */
     protected Recipe(Parcel in) {
         rid = in.readInt();
-        recipeName = in.readString();
+        rname = in.readString();
         description = in.readString();
         ingredients = in.createTypedArray(Ingredient.CREATOR);
         instructions = in.createTypedArray(Instruction.CREATOR);
@@ -107,7 +111,7 @@ public class Recipe implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(rid);
-        dest.writeString(recipeName);
+        dest.writeString(rname);
         dest.writeString(description);
         dest.writeTypedArray(ingredients, flags);
         dest.writeTypedArray(instructions, flags);
@@ -138,8 +142,8 @@ public class Recipe implements Parcelable {
      *
      * @return recipe name
      */
-    public String getRecipeName() {
-        return recipeName;
+    public String getRname() {
+        return rname;
     }
 
     /**
@@ -186,5 +190,19 @@ public class Recipe implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "rid=" + rid +
+                ", username='" + username + '\'' +
+                ", rname='" + rname + '\'' +
+                ", description='" + description + '\'' +
+                ", ingredients=" + Arrays.toString(ingredients) +
+                ", instructions=" + Arrays.toString(instructions) +
+                ", comments=" + Arrays.toString(comments) +
+                '}';
     }
 }

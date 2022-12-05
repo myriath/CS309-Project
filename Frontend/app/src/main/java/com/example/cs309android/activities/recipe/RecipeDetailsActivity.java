@@ -8,6 +8,7 @@ import static com.example.cs309android.util.Constants.UserType.USER_REG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -24,13 +25,15 @@ import com.example.cs309android.models.api.models.Comment;
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.User;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.api.request.profile.GetProfileRequest;
-import com.example.cs309android.models.api.request.recipes.DeleteRecipeRequest;
 import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.models.api.request.recipes.RemoveRecipeRequest;
 import com.example.cs309android.models.api.request.social.CommentRequest;
+import com.example.cs309android.models.api.request.social.GetCommentsRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
-import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.models.api.response.social.CommentsResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -100,14 +103,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
 
         new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
-        new GetProfileRequest(recipe.getUsername()).request(response -> {
-            GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
-            Util.getBadge(profileResponse.getUserType(), (ImageView) findViewById(R.id.badge));
+        new GetUserTypeRequest(recipe.getUsername()).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            Util.getBadge(genericResponse.getResult(), findViewById(R.id.badge));
         }, RecipeDetailsActivity.this);
+
         ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
         findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
 
-        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());
+        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRname());
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         LinearLayout ingredientsList = findViewById(R.id.ingredients);
@@ -150,7 +154,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         intent.putExtra(PARCEL_RECIPE, recipe);
                         editLauncher.launch(intent);
                     } else if (id == R.id.delete) {
-                        new DeleteRecipeRequest(recipe, global.getToken()).request(response -> {
+                        new RemoveRecipeRequest(recipe.getRecipeID(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                             if (genericResponse.getResult() != RESULT_OK) {
                                 Toaster.toastShort("Error", this);
@@ -169,7 +173,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         LinearLayout comments = findViewById(R.id.comments);
         findViewById(R.id.postButton).setOnClickListener(view -> {
-            String commentText = Objects.requireNonNull(((TextInputLayout) findViewById(R.id.newComment)).getEditText()).getText().toString();
+            EditText inputEditText = ((TextInputLayout) findViewById(R.id.newComment)).getEditText();
+            String commentText = Objects.requireNonNull(inputEditText).getText().toString();
             new CommentRequest(commentText, recipe.getRecipeID(), global.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
@@ -177,17 +182,41 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 CommentView commentView = new CommentView(this);
-                Comment comment = new Comment(global.getUsername(), commentText, ITEM_ID_NULL);
+                Comment comment = new Comment(new User(global.getUsername(), 0, ""), commentText, ITEM_ID_NULL);
                 commentView.initView(comment, onEdit -> commentView.toggleEditable(), onDelete -> comments.removeView(view), global);
                 comments.addView(commentView, 0);
-            }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
+                inputEditText.setText(null);
+                Util.hideKeyboard(view, this);
+
+            }, error -> {
+                error.printStackTrace();
+                Toaster.toastShort("Error", this);
+            }, RecipeDetailsActivity.this);
         });
 
-        for (Comment comment : recipe.getComments()) {
+        new GetCommentsRequest(recipe.getRecipeID()).request(response -> {
+            CommentsResponse commentsResponse = Util.objFromJson(response, CommentsResponse.class);
+            refreshComments(commentsResponse.getComments(), comments, global);
+        }, RecipeDetailsActivity.this);
+
+        refreshComments(recipe.getComments(), comments, global);
+    }
+
+    /**
+     * Refreshes the comments
+     *
+     * @param comments New comments
+     * @param layout   LinearLayout to display comments
+     * @param global   GlobalClass for user type checking
+     */
+    public void refreshComments(Comment[] comments, LinearLayout layout, GlobalClass global) {
+        if (comments == null) return;
+        layout.removeAllViews();
+        for (Comment comment : comments) {
             CommentView view = new CommentView(this);
-            view.initView(comment, toEdit -> view.toggleEditable(), deleted -> comments.removeView(view), global);
-            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUsername(), this));
-            comments.addView(view);
+            view.initView(comment, toEdit -> view.toggleEditable(), deleted -> layout.removeView(view), global);
+            view.setOnClickListener(view1 -> Util.openAccountPage(global, comment.getUser().getUsername(), this));
+            layout.addView(view);
         }
     }
 }

@@ -1,19 +1,23 @@
 android.buildTypes {
     demodev {
         buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8443/\""
+        buildConfigField "String", "WEBSOCKETS_URL", "\"wss://coms-309-010.class.las.iastate.edu:8443/\""
 //        buildConfigField "String", "BASE_API_URL", "\"https://10.90.75.54:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     demo {
         buildConfigField "String", "BASE_API_URL", "\"https://coms-309-010.class.las.iastate.edu:8080/\""
+        buildConfigField "String", "WEBSOCKETS_URL", "\"wss://coms-309-010.class.las.iastate.edu:8080/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     release {
         buildConfigField "String", "BASE_API_URL", "\"https://api.edek.xyz/\""
+        buildConfigField "String", "WEBSOCKETS_URL", "\"wss://api.edek.xyz/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
     debug {
         buildConfigField "String", "BASE_API_URL", "\"https://10.90.75.54:8443/\""
+        buildConfigField "String", "WEBSOCKETS_URL", "\"wss://10.90.75.54:8443/\""
         buildConfigField "Boolean", "SSL_OFF", "true"
     }
 }

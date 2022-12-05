@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -26,15 +25,12 @@ import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
-import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
-import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.HomeRecipeView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,10 +91,10 @@ public class HomeFragment extends BaseFragment {
         TabLayout nutritionTabs = view.findViewById(R.id.nutritionTabs);
 
         HomeNutritionCardModel[] models = new HomeNutritionCardModel[]{
-                new HomeNutritionCardModel("Calories", null),
-                new HomeNutritionCardModel("Carbohydrates", null),
-                new HomeNutritionCardModel("Protein", null),
-                new HomeNutritionCardModel("Fat", null)
+                new HomeNutritionCardModel("Calories", R.drawable.calories),
+                new HomeNutritionCardModel("Carbohydrates", R.drawable.carb),
+                new HomeNutritionCardModel("Protein", R.drawable.meat),
+                new HomeNutritionCardModel("Fat", R.drawable.fat)
         };
 
         HomeNutritionAdapter adapter1 = new HomeNutritionAdapter(models);
@@ -107,12 +103,7 @@ public class HomeFragment extends BaseFragment {
         new TabLayoutMediator(nutritionTabs, nutritionPager, (tab, position) -> {}).attach();
 
         new GetUserFeedRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
-            try {
-                System.out.print(response.toString(3));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
+            GetRecipesResponse recipeResponse = Util.objFromJson(response, GetRecipesResponse.class);
 
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
@@ -129,46 +120,50 @@ public class HomeFragment extends BaseFragment {
 
         }, requireContext());
 
-        adapter = new RecipeListAdapter(this.getActivity(), recipes);
-        LinearLayout layout = view.findViewById(R.id.feed);
-
-        HomeRecipeView view1 = new HomeRecipeView(requireContext());
-        view1.initView("Test Recipe", "Test Description\nDescription\nDescription", view3 -> {
+        adapter = new RecipeListAdapter(this.getActivity(), recipes, recipe -> {
             Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
-            intent.putExtra(PARCEL_RECIPE, new Recipe(
-                    0, "Test Recipe", "Test Description", new Ingredient[]{
-                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
-                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
-                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
-                    new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm")
-            }, new Instruction[]{
-                    new Instruction(1, "step"),
-                    new Instruction(2, "step"),
-                    new Instruction(3, "step"),
-                    new Instruction(4, "step")
-            }, "papajohn", new Comment[]{
-                    new Comment("papajohn", "joe mama", 1),
-                    new Comment("Test2", "joe mamajoe mama", 2),
-                    new Comment("Test3", "joe mamajoe mamajoe mamajoe mama", 3),
-                    new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 4),
-                    new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 5),
-                    new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 6),
-                    new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 7),
-                    new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 8),
-                    new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 9),
-            }
-            ));
+            intent.putExtra(PARCEL_RECIPE, recipe);
             startActivity(intent);
         });
-        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
+        LinearLayout layout = view.findViewById(R.id.feed);
+
+        Recipe recipe1 = new Recipe(0, "Test Recipe", "Test Description", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm")
+        }, new Instruction[]{
+                new Instruction(1, "step"),
+                new Instruction(2, "step"),
+                new Instruction(3, "step"),
+                new Instruction(4, "step")
+        }, "papajohn", new Comment[]{
+//                new Comment("papajohn", "joe mama", 1),
+//                new Comment("Test2", "joe mamajoe mama", 2),
+//                new Comment("Test3", "joe mamajoe mamajoe mamajoe mama", 3),
+//                new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 4),
+//                new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 5),
+//                new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 6),
+//                new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 7),
+//                new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 8),
+//                new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 9),
+        });
+
+        HomeRecipeView view1 = new HomeRecipeView(requireContext());
+        view1.initView(recipe1, view3 -> {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, recipe1);
+            startActivity(intent);
+        });
+//        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view1);
 
-        HomeRecipeView view2 = new HomeRecipeView(requireContext());
-        view2.initView("Test Recipe", "Test Description", view3 -> {
-            // TODO: Load recipe details page
-        });
-        new GetRecipeImageRequest("0").request((ImageView) view2.findViewById(R.id.recipeImage), getContext());
-        layout.addView(view2);
+//        HomeRecipeView view2 = new HomeRecipeView(requireContext());
+//        view2.initView("Test Recipe", "Test Description", view3 -> {
+//            // TODO: Load recipe details page
+//        });
+//        new GetRecipeImageRequest("0").request((ImageView) view2.findViewById(R.id.recipeImage), getContext());
+//        layout.addView(view2);
 
         // TODO: Write recipe details code (2 steps)
         //       1: Get image

@@ -38,8 +38,10 @@ import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.request.users.LoginHashRequest;
 import com.example.cs309android.models.api.request.users.LoginTokenRequest;
 import com.example.cs309android.models.api.request.users.RegenTokenRequest;
@@ -48,6 +50,7 @@ import com.example.cs309android.models.api.request.users.SaltRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.models.api.response.users.SaltResponse;
 import com.example.cs309android.util.security.Hasher;
@@ -109,7 +112,7 @@ public class Util {
      */
     public static void spin(View view) {
         view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
+//        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
     }
 
     /**
@@ -205,19 +208,26 @@ public class Util {
      * @param global   GlobalClass for context and storing login details
      * @param username Username for the account to log into
      * @param token    Token used for authentication
-     * @param userType Type of the user. 0: regular, 1: moderator, 2: admin
      */
-    public static void login(GlobalClass global, String username, String token, int userType) {
+    public static void login(GlobalClass global, String username, String token) {
         global.setUsername(username);
         global.setToken(token);
         global.updateLoginPrefs();
-        global.setUserType(userType);
 
+        new GetUserTypeRequest(username).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            global.setUserType(genericResponse.getResult());
+        }, global);
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
+        new GetProfileRequest(username).request(response -> {
+            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+            global.setBio(profileResponse.getBio());
+        }, global);
 
         MainActivity.clearShoppingList();
         new GetListRequest(token).request(response -> {
+            System.out.println(response);
             GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
             MainActivity.setShoppingList(shoppingResponse.getShoppingList());
         }, global);
@@ -239,6 +249,7 @@ public class Util {
         new SaltRequest(username).request(response -> {
             SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);
 
+            System.out.println(response);
             int result = saltResponse.getResult();
             if (result == RESULT_OK) {
                 byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());
@@ -276,7 +287,7 @@ public class Util {
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token, loginResponse.getUserType());
+                    login(global, username, token);
                     listener.run();
                     break;
                 }
@@ -303,11 +314,11 @@ public class Util {
             int result = loginResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, loginResponse.getUsername(), loginResponse.getUserType(), token, listener, errorListener, errorListener2, 0);
+                    regenToken(global, loginResponse.getUsername(), token, listener, errorListener, errorListener2, 0);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, loginResponse.getUsername(), token, loginResponse.getUserType());
+                    login(global, loginResponse.getUsername(), token);
                     listener.run();
                     break;
                 }
@@ -328,7 +339,7 @@ public class Util {
      * @param errorListener ErrorListener to handle request errors and error codes
      * @param depth         Number of retries
      */
-    public static void regenToken(GlobalClass global, String username, int userType, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+    public static void regenToken(GlobalClass global, String username, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
         if (depth > TOKEN_MAX_DEPTH) {
             Toaster.toastShort("Unable to generate a token", global);
             return;
@@ -342,11 +353,11 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_REGEN_TOKEN: {
-                    regenToken(global, username, userType, oldToken, listener, errorListener, errorListener2, depth + 1);
+                    regenToken(global, username, oldToken, listener, errorListener, errorListener2, depth + 1);
                     break;
                 }
                 case RESULT_LOGGED_IN: {
-                    login(global, username, token, userType);
+                    login(global, username, token);
                     listener.run();
                     break;
                 }
@@ -383,7 +394,7 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_USER_CREATED: {
-                    login(global, username, token, Constants.UserType.USER_REG);
+                    login(global, username, token);
                     listener.run();
                     break;
                 }

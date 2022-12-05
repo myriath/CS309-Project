@@ -147,5 +147,6 @@
     <string name="account_badge">Account badge</string>
     <string name="add_a_new_comment">Add a new comment...</string>
     <string name="post">Post</string>
+    <string name="notification_category">Notification Settings</string>
 
 </resources>

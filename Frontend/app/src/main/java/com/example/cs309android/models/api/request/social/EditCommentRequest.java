@@ -18,17 +18,19 @@ public class EditCommentRequest extends PatchRequest {
      * Comment to update (contains updated text)
      */
     @Expose
-    private final Comment comment;
+    private final String comment;
 
     /**
      * Public constructor
      *
-     * @param comment Comment with updated text
-     * @param token   Token for authentication
+     * @param comment   Comment with updated text
+     * @param commentId Id of the comment to edit
+     * @param token     Token for authentication
      */
-    public EditCommentRequest(Comment comment, String token) {
+    public EditCommentRequest(String comment, int commentId, String token) {
         super(new ParameterizedRequestURL(EDIT_COMMENT_URL)
                 .addPathVar(token)
+                .addPathVar(commentId)
                 .toString());
         this.comment = comment;
     }
@@ -38,7 +40,7 @@ public class EditCommentRequest extends PatchRequest {
      *
      * @return updated comment
      */
-    public Comment getComment() {
+    public String getComment() {
         return comment;
     }
 }

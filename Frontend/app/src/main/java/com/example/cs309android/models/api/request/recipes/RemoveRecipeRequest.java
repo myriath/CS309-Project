@@ -13,10 +13,10 @@ import com.google.gson.annotations.Expose;
  */
 public class RemoveRecipeRequest extends DeleteRequest {
     /**
-     * Index of recipe to remove
+     * Recipe id of recipe to remove
      */
     @Expose
-    private final int index;
+    private final int rid;
     /**
      * Authentication token of the user
      */
@@ -26,25 +26,25 @@ public class RemoveRecipeRequest extends DeleteRequest {
     /**
      * Public constructor
      *
-     * @param index Index of recipe to remove
+     * @param rid   Recipe id of recipe to remove
      * @param token Authentication token for the user
      */
-    public RemoveRecipeRequest(int index, String token) {
+    public RemoveRecipeRequest(int rid, String token) {
         super(new ParameterizedRequestURL(REMOVE_RECIPES_URL)
                 .addPathVar(token)
-                .addPathVar(index)
+                .addPathVar(rid)
                 .toString());
-        this.index = index;
+        this.rid = rid;
         this.token = token;
     }
 
     /**
-     * Getter for the recipe index
+     * Getter for the recipe id
      *
-     * @return item to add
+     * @return Recipe id
      */
-    public int getRecipe() {
-        return index;
+    public int getRid() {
+        return rid;
     }
 
     /**

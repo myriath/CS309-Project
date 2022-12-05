@@ -62,7 +62,7 @@ public class CommentView extends FrameLayout {
     public void initView(Comment comment, RunWithComment onEdit, RunWithComment onDelete, GlobalClass global) {
         View view = inflate(getContext(), R.layout.adapter_comment, this);
 
-        String username = comment.getUsername();
+        String username = comment.getUser().getUsername();
         ((TextView) view.findViewById(R.id.username)).setText(username);
 
         ImageView profilePicture = view.findViewById(R.id.profile_picture);
@@ -71,7 +71,7 @@ public class CommentView extends FrameLayout {
         TextView commentView = view.findViewById(R.id.comment);
         int maxLines = commentView.getMaxLines();
         commentView.setMaxLines(Integer.MAX_VALUE);
-        commentView.setText(comment.getComment());
+        commentView.setText(comment.getBody());
         commentView.post(() -> {
             if (commentView.getLineCount() > maxLines) {
                 commentView.setMaxLines(maxLines);
@@ -103,7 +103,7 @@ public class CommentView extends FrameLayout {
                     if (id == R.id.edit) {
                         onEdit.run(comment);
                     } else if (id == R.id.delete) {
-                        new DeleteCommentRequest(comment.getId(), global.getToken()).request(response -> {
+                        new DeleteCommentRequest(comment.getCid(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                             if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                                 Toaster.toastShort("Error", getContext());
@@ -117,10 +117,10 @@ public class CommentView extends FrameLayout {
             });
 
             TextInputLayout commentInput = findViewById(R.id.commentInputLayout);
-            Objects.requireNonNull(commentInput.getEditText()).setText(comment.getComment());
+            Objects.requireNonNull(commentInput.getEditText()).setText(comment.getBody());
 
             findViewById(R.id.updateButton).setOnClickListener(view1 -> {
-                new EditCommentRequest(new Comment(comment.getUsername(), commentInput.getEditText().getText().toString(), comment.getId()), global.getToken()).request(response -> {
+                new EditCommentRequest(commentInput.getEditText().getText().toString(), comment.getCid(), global.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                         Toaster.toastShort("Error", getContext());
