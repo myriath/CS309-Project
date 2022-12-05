@@ -311,9 +311,17 @@ public class Constants {
          */
         int INTENT_RECIPE_ADD = 1;
         /**
-         * Used to tell SearchActivity the intent is a food log
+         * Used to tell SearchActivity the intent is a breakfast item
          */
-        int INTENT_FOOD_LOG = 2;
+        int INTENT_FOOD_LOG_BREAKFAST = 2;
+        /**
+         * Used to tell SearchActivity the intent is a lunch item
+         */
+        int INTENT_FOOD_LOG_LUNCH = 3;
+        /**
+         * Used to tell SearchActivity the intent is a dinner item
+         */
+        int INTENT_FOOD_LOG_DINNER = 4;
     }
 
     /**

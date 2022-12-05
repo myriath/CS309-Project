@@ -2,16 +2,18 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
-import static com.example.cs309android.util.Constants.PICASSO;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
-import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_BREAKFAST;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_DINNER;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_LUNCH;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
+import static com.example.cs309android.util.Constants.PICASSO;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
 import static com.example.cs309android.util.Constants.PREF_NAME;
@@ -39,6 +41,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
@@ -258,12 +261,25 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
 
         // Log add button
-        addLog.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SearchActivity.class);
-            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG);
-            intent.putExtra(PARCEL_FOODITEMS_LIST, breakfast);
-            foodSearchLauncher.launch(intent);
-        });
+        addLog.setOnClickListener(view -> new AlertDialog.Builder(this)
+                .setTitle(R.string.select_log)
+                .setItems(R.array.meals_array, (dialog, which) -> {
+                    Intent intent = new Intent(this, SearchActivity.class);
+                    switch (which) {
+                        case 0: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_BREAKFAST);
+                        }
+                        case 1: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_LUNCH);
+                        }
+                        case 2: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_DINNER);
+                        }
+                    }
+                    foodSearchLauncher.launch(intent);
+                })
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel())
+                .create().show());
 
         // Hides the keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

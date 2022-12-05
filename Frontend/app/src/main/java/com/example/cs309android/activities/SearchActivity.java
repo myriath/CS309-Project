@@ -3,13 +3,14 @@ package com.example.cs309android.activities;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
-import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_BREAKFAST;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_DINNER;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_LUNCH;
 import static com.example.cs309android.util.Constants.Intents.INTENT_NONE;
 import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
 
@@ -38,7 +39,6 @@ import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.activities.food.NewFoodActivity;
-import com.example.cs309android.fragments.ModalImageSelect;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.USDA.Constants;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
@@ -178,6 +178,18 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 }, SearchActivity.this, getWindow().getDecorView());
                 break;
             }
+            case INTENT_FOOD_LOG_BREAKFAST: {
+                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                break;
+            }
+            case INTENT_FOOD_LOG_LUNCH: {
+                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                break;
+            }
+            case INTENT_FOOD_LOG_DINNER: {
+                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                break;
+            }
             case INTENT_RECIPE_ADD: {
                 Intent intent1 = new Intent();
                 intent1.putExtra(PARCEL_FOODITEM, item);
@@ -189,15 +201,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     /**
-     * Shows the image source selection modal bottom sheet
-     */
-    public void imageChooser() {
-        ModalImageSelect select = new ModalImageSelect();
-        select.setCallbackFragment(this);
-        select.show(getSupportFragmentManager(), ModalImageSelect.TAG);
-    }
-
-    /**
      * Runs when the system back button is pressed or the app's back button is pressed.
      * Sends all selected items back to the activity that called this activity.
      */
@@ -206,7 +209,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         Intent intent = new Intent();
         switch (intentCode) {
             case INTENT_SHOPPING_LIST:
-            case INTENT_FOOD_LOG: {
+            case INTENT_FOOD_LOG_BREAKFAST:
+            case INTENT_FOOD_LOG_LUNCH:
+            case INTENT_FOOD_LOG_DINNER: {
                 setResult(RESULT_OK, intent);
                 break;
             }
