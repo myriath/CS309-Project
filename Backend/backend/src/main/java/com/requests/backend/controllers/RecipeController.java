@@ -231,7 +231,7 @@ public class RecipeController {
     @GetMapping(path="/userRecipeList/{Username}")
     @ResponseBody
     public RecipeResponse userRecipeList(@PathVariable String Username) {
-        Recipe[] recipe = recipeRepository.queryuserRecipeList(Username);
+        Recipe[] recipe = recipeRepository.queryUserRecipeList(Username);
         RecipeResponse res = new RecipeResponse();
 
         if(recipe.length == 0) {

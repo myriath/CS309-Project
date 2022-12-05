@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Simple food item used for displaying and moving data in the app
@@ -37,6 +38,9 @@ public class SimpleFoodItem {
     @Id
     @Expose
     private boolean isCustom;
+
+    @OneToMany(mappedBy = "food", fetch = FetchType.LAZY)
+    private Set<Ingredient> ingredients;
 
     public SimpleFoodItem() {}
 
