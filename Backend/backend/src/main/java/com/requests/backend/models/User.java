@@ -24,6 +24,9 @@ public class User {
     @Expose
     private String bio;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Token> token;
+
     @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
     @JoinTable(name = "follows",
             joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
@@ -99,6 +102,14 @@ public class User {
 
     public void addShoppingList(ShoppingList list) {
         this.shoppingLists.add(list);
+    }
+
+    public Collection<Token> getToken() {
+        return token;
+    }
+
+    public void setToken(Collection<Token> token) {
+        this.token = token;
     }
 
     @Override
