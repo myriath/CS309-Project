@@ -223,7 +223,7 @@ public class UserController {
             int otherType = other.getUserType();
 
             if (userType > USER_MOD && otherType < userType) {
-                tokenRepository.deleteByUsername(other.getUsername());
+                tokenRepository.deleteByUser(other);
                 userRepository.delete(other);
                 res.setResult(RESULT_OK);
             } else {
