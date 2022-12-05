@@ -218,17 +218,17 @@ public class UserController {
     @DeleteMapping(path = "/delete/{token}")
     public @ResponseBody ResultResponse deleteUser(@PathVariable String token, @RequestParam String username) {
         return getUserFromToken(token, (user, res) -> {
+            int userType = user.getUserType();
             User other = userRepository.queryGetUserByUsername(username)[0];
-            switch (user.getUserType()) {
-                case USER_ADM:
-                    if (other.getUserType() > USER_MOD) break;
-                case USER_DEV:
-                    if (other.getUserType() > USER_ADM) break;
-                    res.setResult(userRepository.deleteByUsername(other.getUsername()) > 0 ? RESULT_OK : RESULT_ERROR);
-                    return;
-                default: break;
+            int otherType = other.getUserType();
+
+            if (userType > USER_MOD && otherType < userType) {
+                tokenRepository.deleteByUsername(other.getUsername());
+                userRepository.delete(other);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
             }
-            res.setResult(RESULT_ERROR);
         }, tokenRepository);
     }
 
