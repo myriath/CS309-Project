@@ -182,9 +182,6 @@ public class AccountActivity extends AppCompatActivity {
                 followingCount.setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
 
                 ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
-
-                ImageView badge = findViewById(R.id.badge);
-                Util.getBadge(global.getUserType(), badge);
             }
         }, AccountActivity.this);
 
@@ -256,7 +253,10 @@ public class AccountActivity extends AppCompatActivity {
         new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountActivity.this);
 
         new GetRecipesRequest(username).request(response -> {
+            System.out.println(response);
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
+            if (postsResponse.getRecipes() == null || postsResponse.getRecipes().length == 0)
+                return;
 
             findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
             LinearLayout recipeList = findViewById(R.id.yourRecipesList);

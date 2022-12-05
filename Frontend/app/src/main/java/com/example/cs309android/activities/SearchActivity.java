@@ -46,13 +46,14 @@ import com.example.cs309android.models.USDA.queries.SearchResult;
 import com.example.cs309android.models.USDA.queries.SearchResultFood;
 import com.example.cs309android.models.adapters.FoodSearchListAdapter;
 import com.example.cs309android.models.api.models.CustomFoodItem;
+import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.food.FDCByUPCRequest;
 import com.example.cs309android.models.api.request.food.GetCustomFoodsRequest;
 import com.example.cs309android.models.api.request.shopping.ShoppingAddRequest;
-import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.food.FDCByUPCResponse;
 import com.example.cs309android.models.api.response.food.GetCustomFoodsResponse;
+import com.example.cs309android.models.api.response.shopping.ShoppingAddResponse;
 import com.example.cs309android.util.BarcodeAnalyzer;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
@@ -136,33 +137,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        switch (intentCode) {
-                            case INTENT_SHOPPING_LIST: {
-                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
-
-                                Util.spin(getWindow().getDecorView());
-                                new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
-                                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                                    System.out.println(response);
-                                    if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
-                                        MainActivity.getShoppingList().add(item);
-                                        Toaster.toastShort("Added", this);
-                                    } else {
-                                        Toaster.toastShort("Error", this);
-                                    }
-                                }, SearchActivity.this, getWindow().getDecorView());
-                                break;
-                            }
-                            case INTENT_RECIPE_ADD: {
-                                SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
-
-                                Intent intent1 = new Intent();
-                                intent1.putExtra(PARCEL_FOODITEM, item);
-                                setResult(RESULT_OK, intent1);
-                                finish();
-                                break;
-                            }
-                        }
+                        runWithItem(Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM));
                     }
                 }
         );
@@ -174,18 +149,41 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         Intent intent = result.getData();
                         SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
                         Util.spin(getWindow().getDecorView());
-                        new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
-                            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                            if (genericResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
-                                MainActivity.getShoppingList().add(item);
-                                Toaster.toastShort("Added", this);
-                            } else {
-                                Toaster.toastShort("Error", this);
-                            }
-                        }, SearchActivity.this, getWindow().getDecorView());
+                        runWithItem(item);
                     }
                 }
         );
+    }
+
+    /**
+     * Does the current intent with the given simple food item
+     *
+     * @param item Item to work with
+     */
+    public void runWithItem(SimpleFoodItem item) {
+        switch (intentCode) {
+            case INTENT_SHOPPING_LIST: {
+                Util.spin(getWindow().getDecorView());
+                new ShoppingAddRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
+                    ShoppingAddResponse addResponse = Util.objFromJson(response, ShoppingAddResponse.class);
+                    System.out.println(response);
+                    if (addResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
+                        MainActivity.getShoppingList().add(new ShoppingList(addResponse.getId(), item, false));
+                        Toaster.toastShort("Added", this);
+                    } else {
+                        Toaster.toastShort("Error", this);
+                    }
+                }, SearchActivity.this, getWindow().getDecorView());
+                break;
+            }
+            case INTENT_RECIPE_ADD: {
+                Intent intent1 = new Intent();
+                intent1.putExtra(PARCEL_FOODITEM, item);
+                setResult(RESULT_OK, intent1);
+                finish();
+                break;
+            }
+        }
     }
 
     /**

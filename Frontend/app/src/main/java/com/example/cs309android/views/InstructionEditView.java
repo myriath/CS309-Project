@@ -93,6 +93,6 @@ public class InstructionEditView extends FrameLayout {
      * @return Instruction representing this view
      */
     public Instruction getInstruction() {
-        return new Instruction(position, getInstructionText());
+        return new Instruction(position + 1, getInstructionText());
     }
 }

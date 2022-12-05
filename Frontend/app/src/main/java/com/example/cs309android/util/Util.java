@@ -112,7 +112,7 @@ public class Util {
      */
     public static void spin(View view) {
         view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
+//        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
     }
 
     /**
@@ -227,6 +227,7 @@ public class Util {
 
         MainActivity.clearShoppingList();
         new GetListRequest(token).request(response -> {
+            System.out.println(response);
             GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
             MainActivity.setShoppingList(shoppingResponse.getShoppingList());
         }, global);

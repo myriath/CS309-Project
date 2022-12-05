@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
@@ -57,6 +58,7 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.services.NotificationService;
 import com.example.cs309android.util.Constants;
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Shopping list items for the shopping list
      */
-    private static ArrayList<SimpleFoodItem> shoppingListItems;
+    private static ArrayList<ShoppingList> shoppingListItems;
     /**
      * Used to store the breakfast items
      */
@@ -295,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        System.out.println(token);
+        Log.d("TOKEN", token);
         if (token != null) {
             Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
         } else {
@@ -571,17 +573,19 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Getter for the shopping list
+     *
      * @return ArrayList of food items
      */
-    public static ArrayList<SimpleFoodItem> getShoppingList() {
+    public static ArrayList<ShoppingList> getShoppingList() {
         return shoppingListItems;
     }
 
     /**
      * Setter for the shopping list
+     *
      * @param items Array of food items to add to the shopping list
      */
-    public static void setShoppingList(SimpleFoodItem[] items) {
+    public static void setShoppingList(ShoppingList[] items) {
         shoppingListItems.addAll(Arrays.asList(items));
     }
 

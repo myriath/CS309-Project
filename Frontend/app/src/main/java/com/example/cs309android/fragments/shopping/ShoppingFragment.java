@@ -16,7 +16,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.models.ShoppingList;
 
 import java.util.ArrayList;
 
@@ -66,7 +66,7 @@ public class ShoppingFragment extends BaseFragment {
      * @param view Root view of the fragment
      */
     public void refreshList(View view) {
-        ArrayList<SimpleFoodItem> items = MainActivity.getShoppingList();
+        ArrayList<ShoppingList> items = MainActivity.getShoppingList();
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
 //        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);
