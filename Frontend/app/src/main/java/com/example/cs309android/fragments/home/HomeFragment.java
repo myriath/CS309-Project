@@ -18,11 +18,8 @@ import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
 import com.example.cs309android.models.adapters.HomeNutritionAdapter;
-<<<<<<< Frontend/app/src/main/java/com/example/cs309android/fragments/home/HomeFragment.java
 import com.example.cs309android.models.adapters.RecipeListAdapter;
 import com.example.cs309android.models.api.models.Comment;
-=======
->>>>>>> Frontend/app/src/main/java/com/example/cs309android/fragments/home/HomeFragment.java
 import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
