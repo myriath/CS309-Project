@@ -54,4 +54,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             value = "SELECT * FROM users WHERE email = :email",
             nativeQuery = true)
     User[] queryGetUserByEmail(@Param("email") String email);
+
+    long deleteByUsername(String username);
 }

@@ -224,8 +224,7 @@ public class UserController {
                     if (other.getUserType() > USER_MOD) break;
                 case USER_DEV:
                     if (other.getUserType() > USER_ADM) break;
-                    userRepository.delete(other);
-                    res.setResult(RESULT_OK);
+                    res.setResult(userRepository.deleteByUsername(other.getUsername()) > 0 ? RESULT_OK : RESULT_ERROR);
                     return;
                 default: break;
             }
@@ -233,8 +232,8 @@ public class UserController {
         }, tokenRepository);
     }
 
-    @PatchMapping(path = "/updateUserType/{token}/{username}/{type}")
-    public @ResponseBody ResultResponse updateType(@PathVariable String token, @PathVariable String username, @PathVariable int type) {
+    @PatchMapping(path = "/updateUserType/{token}")
+    public @ResponseBody ResultResponse updateType(@PathVariable String token, @RequestParam String username, @RequestParam int type) {
         return getUserFromToken(token, (user, res) -> {
             User other = userRepository.queryGetUserByUsername(username)[0];
             switch (user.getUserType()) {
