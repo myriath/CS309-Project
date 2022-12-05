@@ -27,7 +27,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Token> token;
 
-    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
+    @ManyToMany(targetEntity = User.class, cascade = CascadeType.ALL)
     @JoinTable(name = "follows",
             joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
             inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
