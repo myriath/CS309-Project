@@ -259,14 +259,10 @@ public class SocialController {
     public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody CommentRequest body) {
         return UserController.getUserFromToken(token, (user, res) -> {
             Comment comment = commentRepository.getReferenceById(commentId);
-            LOGGER.info(comment.getUser().toString());
 
             if (comment.getUser().getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
-                LOGGER.info(comment.toString());
                 comment.setBody(body.comment);
-                LOGGER.info(comment.toString());
                 commentRepository.save(comment);
-                LOGGER.info("Success");
                 res.setResult(RESULT_OK);
             } else {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);

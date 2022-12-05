@@ -12,8 +12,6 @@ import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import static com.util.Constants.LOGGER;
-
 /**
  * Static utility class designed to streamline the secure generation of
  * hashes from plaintext passwords.

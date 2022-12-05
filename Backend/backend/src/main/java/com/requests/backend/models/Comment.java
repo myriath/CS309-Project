@@ -20,6 +20,7 @@ public class Comment {
     private User user;
 
     @Expose
+    @Column(length = 2000)
     private String body;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
