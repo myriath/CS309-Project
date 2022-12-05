@@ -8,6 +8,7 @@ import com.requests.backend.models.requests.ShoppingListAddRequest;
 import com.requests.backend.models.requests.ShoppingListRemoveRequest;
 import com.requests.backend.models.requests.StrikeoutRequest;
 import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.models.responses.ShoppingAddResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
 import com.requests.backend.repositories.SimpleFoodRepository;
@@ -86,7 +87,7 @@ public class ShoppingListController {
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        ResultResponse res = new ResultResponse();
+        ShoppingAddResponse res = new ShoppingAddResponse();
 
         // Find token in table
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -107,6 +108,7 @@ public class ShoppingListController {
                 list = shoppingRepository.save(list);
                 user.addShoppingList(list);
                 userRepository.save(user);
+                res.setId(list.getShoppingId());
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
