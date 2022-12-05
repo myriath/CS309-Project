@@ -240,7 +240,7 @@ public class SocialController {
     @DeleteMapping(path = "/removeComment/{token}/{commentId}")
     public @ResponseBody ResultResponse deleteComment(@PathVariable String token, @PathVariable int commentId) {
         return UserController.getUserFromToken(token, (user, res) -> {
-            User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
+            User commentUser = commentRepository.getReferenceById(commentId).getUser();
 
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 commentRepository.deleteById(commentId);
@@ -257,11 +257,10 @@ public class SocialController {
     @PatchMapping(path = "/editComment/{token}/{commentId}")
     public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody CommentRequest body) {
         return UserController.getUserFromToken(token, (user, res) -> {
-            User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
-            LOGGER.info(commentUser.toString());
+            Comment comment = commentRepository.getReferenceById(commentId);
+            LOGGER.info(comment.getUser().toString());
 
-            if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
-                Comment comment = commentRepository.getReferenceById(commentId);
+            if (comment.getUser().getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 LOGGER.info(comment.toString());
                 comment.setBody(body.comment);
                 LOGGER.info(comment.toString());
