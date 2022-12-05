@@ -55,5 +55,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     User[] queryGetUserByEmail(@Param("email") String email);
 
+    @Transactional
     long deleteByUsername(String username);
 }
