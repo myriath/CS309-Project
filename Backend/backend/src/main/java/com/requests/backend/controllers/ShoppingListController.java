@@ -119,15 +119,12 @@ public class ShoppingListController {
     /**
      * Changes the strikeout status of an item in the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param req JSON request body containing identifying information for the item to change
+     * @param id    ID for the shopping list row
      * @return Result code
      */
-    @PatchMapping (path="/strikeout/{token}")
-    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @RequestBody StrikeoutRequest req) {
+    @PatchMapping (path="/strikeout/{token}/{id}")
+    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        int id = req.getId();
-        boolean isCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -140,12 +137,16 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUser().getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             // User does not exist
             try {
                 // User already passed authentication from token earlier
-                shoppingRepository.queryShoppingChangeStricken(id, isCustom, username);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                if (user.getShoppingLists().contains(list)) {
+                    list.setStricken(!list.getStricken());
+                }
+                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -158,15 +159,12 @@ public class ShoppingListController {
     /**
      * Deletes an item from the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param req JSON request body containing identifying information for the item to delete
+     * @param id    ID for the shopping list row
      * @return Result code
      */
-    @PutMapping (path = "/remove/{token}")
-    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @RequestBody ShoppingListRemoveRequest req) {
+    @PutMapping (path = "/remove/{token}/{id}")
+    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        int foodId = req.getId();
-        boolean foodCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -180,11 +178,13 @@ public class ShoppingListController {
         else {
 
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUser().getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(foodId, foodCustom, username);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                user.getShoppingLists().remove(list);
+                userRepository.save(user);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
