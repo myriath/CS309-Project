@@ -239,11 +239,7 @@ public class SocialController {
      */
     @DeleteMapping(path = "/removeComment/{token}/{commentId}")
     public @ResponseBody ResultResponse deleteComment(@PathVariable String token, @PathVariable int commentId) {
-        String hashed = Hasher.sha256(token);
-        LOGGER.info(token);
-        LOGGER.info(hashed);
-
-        return UserController.getUserFromToken(hashed, (user, res) -> {
+        return UserController.getUserFromToken(token, (user, res) -> {
             User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
 
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
@@ -260,11 +256,7 @@ public class SocialController {
      */
     @PatchMapping(path = "/editComment/{token}/{commentId}")
     public @ResponseBody ResultResponse editComment(@PathVariable String token, @PathVariable int commentId, @RequestBody CommentRequest body) {
-        String hashed = Hasher.sha256(token);
-        LOGGER.info(token);
-        LOGGER.info(hashed);
-
-        return UserController.getUserFromToken(hashed, (user, res) -> {
+        return UserController.getUserFromToken(token, (user, res) -> {
             User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
             LOGGER.info(commentUser.toString());
 
