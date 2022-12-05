@@ -8,6 +8,7 @@ import static com.example.cs309android.util.Constants.UserType.USER_REG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -172,7 +173,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         LinearLayout comments = findViewById(R.id.comments);
         findViewById(R.id.postButton).setOnClickListener(view -> {
-            String commentText = Objects.requireNonNull(((TextInputLayout) findViewById(R.id.newComment)).getEditText()).getText().toString();
+            EditText inputEditText = ((TextInputLayout) findViewById(R.id.newComment)).getEditText();
+            String commentText = Objects.requireNonNull(inputEditText).getText().toString();
             new CommentRequest(commentText, recipe.getRecipeID(), global.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
@@ -183,6 +185,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 Comment comment = new Comment(new User(global.getUsername(), 0, ""), commentText, ITEM_ID_NULL);
                 commentView.initView(comment, onEdit -> commentView.toggleEditable(), onDelete -> comments.removeView(view), global);
                 comments.addView(commentView, 0);
+                inputEditText.setText(null);
+                Util.hideKeyboard(view, this);
+
             }, error -> {
                 error.printStackTrace();
                 Toaster.toastShort("Error", this);

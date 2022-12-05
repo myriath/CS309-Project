@@ -3,6 +3,8 @@ package com.example.cs309android.models.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -25,7 +27,7 @@ public class Comment implements Parcelable {
      * Comment id from the database
      */
     @Expose
-    private final int id;
+    private final int cid;
     /**
      * Whether or not to show the full text
      */
@@ -36,12 +38,12 @@ public class Comment implements Parcelable {
      *
      * @param user    username of the comment creator
      * @param comment comment text
-     * @param id      comment id from the database
+     * @param cid     comment id from the database
      */
-    public Comment(User user, String comment, int id) {
+    public Comment(User user, String comment, int cid) {
         this.user = user;
         this.body = comment;
-        this.id = id;
+        this.cid = cid;
     }
 
     /**
@@ -52,7 +54,7 @@ public class Comment implements Parcelable {
     protected Comment(Parcel in) {
         user = in.readTypedObject(User.CREATOR);
         body = in.readString();
-        id = in.readInt();
+        cid = in.readInt();
         showFull = in.readByte() != 0;
     }
 
@@ -66,7 +68,7 @@ public class Comment implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedObject(user, flags);
         dest.writeString(body);
-        dest.writeInt(id);
+        dest.writeInt(cid);
         dest.writeByte((byte) (showFull ? 1 : 0));
     }
 
@@ -118,8 +120,8 @@ public class Comment implements Parcelable {
      *
      * @return comment id
      */
-    public int getId() {
-        return id;
+    public int getCid() {
+        return cid;
     }
 
     /**
@@ -138,5 +140,16 @@ public class Comment implements Parcelable {
      */
     public void setShowFull(boolean showFull) {
         this.showFull = showFull;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "user=" + user +
+                ", body='" + body + '\'' +
+                ", id=" + cid +
+                ", showFull=" + showFull +
+                '}';
     }
 }

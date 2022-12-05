@@ -103,7 +103,7 @@ public class CommentView extends FrameLayout {
                     if (id == R.id.edit) {
                         onEdit.run(comment);
                     } else if (id == R.id.delete) {
-                        new DeleteCommentRequest(comment.getId(), global.getToken()).request(response -> {
+                        new DeleteCommentRequest(comment.getCid(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                             if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                                 Toaster.toastShort("Error", getContext());
@@ -120,7 +120,7 @@ public class CommentView extends FrameLayout {
             Objects.requireNonNull(commentInput.getEditText()).setText(comment.getBody());
 
             findViewById(R.id.updateButton).setOnClickListener(view1 -> {
-                new EditCommentRequest(commentInput.getEditText().getText().toString(), comment.getId(), global.getToken()).request(response -> {
+                new EditCommentRequest(commentInput.getEditText().getText().toString(), comment.getCid(), global.getToken()).request(response -> {
                     GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                     if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                         Toaster.toastShort("Error", getContext());
