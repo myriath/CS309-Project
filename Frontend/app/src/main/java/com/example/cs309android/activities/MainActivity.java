@@ -195,13 +195,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        // Creates notification channels
-        Constants.Notifications.createNotificationChannels(this);
-//        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
-
-        // Starts the notification service
-        startService(new Intent(this, NotificationService.class));
-
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 
@@ -278,7 +271,13 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         spin(this);
         Log.d("TOKEN", token);
         if (token != null) {
-            Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
+            Util.loginAttempt(global, token, () -> {
+                unSpin(this);
+                // Creates notification channels
+                Constants.Notifications.createNotificationChannels(this);
+                // Starts the notification service
+                startService(new Intent(this, NotificationService.class));
+            }, result -> failedLogin(), error -> failedLogin());
         } else {
             unSpin(this);
             startLoginActivity(false);

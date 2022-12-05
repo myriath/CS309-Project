@@ -459,7 +459,7 @@ public class Constants {
         /**
          * URL for the notification websocket
          */
-        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "notifications/";
+        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "websocket/";
 
         /**
          * URLs for the users endpoint
