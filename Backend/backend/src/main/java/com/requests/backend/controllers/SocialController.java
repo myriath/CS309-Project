@@ -245,8 +245,9 @@ public class SocialController {
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 commentRepository.deleteById(commentId);
                 res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
-            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }, tokenRepository);
     }
 
@@ -267,8 +268,9 @@ public class SocialController {
                 commentRepository.save(comment);
                 LOGGER.info("Success");
                 res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
-            res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }, tokenRepository);
     }
 
