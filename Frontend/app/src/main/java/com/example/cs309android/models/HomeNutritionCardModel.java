@@ -13,9 +13,9 @@ public class HomeNutritionCardModel {
      */
     private final String title;
     /**
-     * Image to display
+     * Drawable id to display
      */
-    private final Bitmap image;
+    private final int image;
     /**
      * Current amount of the nutrient tracked
      */
@@ -25,7 +25,7 @@ public class HomeNutritionCardModel {
      */
     private double limit;
 
-    public HomeNutritionCardModel(String title, Bitmap image) {
+    public HomeNutritionCardModel(String title, int image) {
         this.title = title;
         this.image = image;
     }
@@ -71,10 +71,10 @@ public class HomeNutritionCardModel {
     }
 
     /**
-     * Getter for the image
-     * @return Image to display for this nutrient card
+     * Getter for the image res id
+     * @return Image res id to display for this nutrient card
      */
-    public Bitmap getImage() {
+    public int getImage() {
         return image;
     }
 }

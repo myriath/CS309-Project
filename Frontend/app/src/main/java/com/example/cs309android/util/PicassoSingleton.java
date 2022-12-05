@@ -33,7 +33,7 @@ public class PicassoSingleton {
     /**
      * Picasso instance for the application
      */
-    private static Picasso instance;
+    private Picasso instance;
 
     /**
      * Getter for the Picasso singleton
@@ -41,7 +41,7 @@ public class PicassoSingleton {
      * @param context Volley context
      * @return Picasso instance for the application
      */
-    public static Picasso getInstance(Context context) {
+    public Picasso getInstance(Context context) {
         if (instance == null) {
             Picasso.Builder picassoBuilder = new Picasso.Builder(context);
             SSLContext sslContext;

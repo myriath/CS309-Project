@@ -54,7 +54,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/editCard"
+                android:id="@+id/menuCard"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
@@ -66,7 +66,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
-                    android:id="@+id/editButton"
+                    android:id="@+id/menuButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -77,6 +77,16 @@
                     app:tint="@color/black" />
 
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/badge"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/banner"
+                android:layout_marginBottom="-24dp"
+                android:layout_marginStart="24dp"
+                android:contentDescription="@string/account_badge" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/pfpCard"
@@ -165,18 +175,30 @@
 
             </androidx.cardview.widget.CardView>
 
-            <ListView
-                android:id="@+id/yourRecipesList"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/recipesLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:text="@string/recipes"
+                android:visibility="gone"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bioCardView" />
 
+            <LinearLayout
+                android:id="@+id/yourRecipesList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipesLabel" />
+
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 app:layout_constraintTop_toBottomOf="@id/yourRecipesList" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

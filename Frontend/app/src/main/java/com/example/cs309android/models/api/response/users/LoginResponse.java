@@ -1,6 +1,7 @@
 package com.example.cs309android.models.api.response.users;
 
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.util.Constants;
 import com.google.gson.annotations.Expose;
 
 /**

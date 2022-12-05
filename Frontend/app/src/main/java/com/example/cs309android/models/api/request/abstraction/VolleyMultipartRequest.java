@@ -67,7 +67,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * Gets the headers
      *
      * @return header mapping
-     * @throws AuthFailureError
      */
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
@@ -88,7 +87,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * Gets the body
      *
      * @return body bytes
-     * @throws AuthFailureError
      */
     @Override
     public byte[] getBody() throws AuthFailureError {
@@ -165,7 +163,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * @param dos      data output stream
      * @param params   inputs collection
      * @param encoding encode the inputs, default UTF-8
-     * @throws IOException
      */
     private void textParse(DataOutputStream dos, Map<String, String> params, String encoding) throws IOException {
         try {
@@ -182,7 +179,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      *
      * @param dos  Data output stream
      * @param data Data to parse
-     * @throws IOException
      */
     private void dataParse(DataOutputStream dos, Map<String, DataPart> data) throws IOException {
         for (Map.Entry<String, DataPart> entry : data.entrySet()) {
@@ -196,7 +192,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * @param dos   Data output stream
      * @param param name of the input
      * @param value value of the input
-     * @throws IOException
      */
     private void buildTextPart(DataOutputStream dos, String param, String value) throws IOException {
         dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);
@@ -211,7 +206,6 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * @param dos  Data output stream
      * @param data Data to write
      * @param name Name of the input
-     * @throws IOException
      */
     private void buildDataPart(DataOutputStream dos, DataPart data, String name) throws IOException {
         dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);

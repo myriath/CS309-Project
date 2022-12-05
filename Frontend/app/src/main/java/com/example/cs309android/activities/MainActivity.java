@@ -2,24 +2,23 @@ package com.example.cs309android.activities;
 
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
-import static com.example.cs309android.util.Constants.CALLBACK_SEARCH_FOOD;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_SEARCH_FOOD;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
-import static com.example.cs309android.util.Constants.INTENT_FOOD_LOG;
-import static com.example.cs309android.util.Constants.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
-import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEMS_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
-import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.PREF_FIRST_TIME;
 import static com.example.cs309android.util.Constants.PREF_LOGIN;
 import static com.example.cs309android.util.Constants.PREF_NAME;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEMS_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_LOGGED_OUT;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
 import static com.example.cs309android.util.Util.spin;
 import static com.example.cs309android.util.Util.unSpin;
@@ -29,6 +28,7 @@ import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
@@ -57,8 +57,11 @@ import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.services.NotificationService;
 import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.PicassoSingleton;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.NukeSSLCerts;
@@ -69,7 +72,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Main activity
@@ -83,10 +85,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Used to launch various activities.
      */
     ActivityResultLauncher<Intent> foodSearchLauncher;
-    /**
-     * Fragment containing the current login window.
-     */
-    private CallbackFragment loginWindowFragment;
     /**
      * Main window fragment
      */
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Shopping list items for the shopping list
      */
-    private static ArrayList<SimpleFoodItem> shoppingListItems;
+    private static ArrayList<ShoppingList> shoppingListItems;
     /**
      * Used to store the breakfast items
      */
@@ -135,12 +133,45 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     private static ArrayList<FoodLogItem> dinner;
 
     /**
+     * Public constructor
+     * Initializes arraylists if they are null
+     */
+    public MainActivity() {
+        if (shoppingListItems == null) {
+            shoppingListItems = new ArrayList<>();
+        }
+        if (breakfast == null) {
+            breakfast = new ArrayList<>();
+        }
+        if (lunch == null) {
+            lunch = new ArrayList<>();
+        }
+        if (dinner == null) {
+            dinner = new ArrayList<>();
+        }
+    }
+
+    /**
      * Cancels all Volley requests when the application is closed or otherwise stopped.
      */
     @Override
     protected void onStop() {
         super.onStop();
         new RequestHandler(MainActivity.this).cancelAll();
+    }
+
+    /**
+     * If on the homepage, close the app
+     * Otherwise, move back to the homepage
+     */
+    @Override
+    public void onBackPressed() {
+        if (currentFragment == 2) {
+            finish();
+        } else {
+            navbar.setSelectedItemId(R.id.home);
+            currentFragment = 2;
+        }
     }
 
     /**
@@ -170,26 +201,26 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        if (shoppingListItems == null) {
-            shoppingListItems = new ArrayList<>();
-        }
-        if (breakfast == null) {
-            breakfast = new ArrayList<>();
-        }
-        if (lunch == null) {
-            lunch = new ArrayList<>();
-        }
-        if (dinner == null) {
-            dinner = new ArrayList<>();
-        }
+        // Creates notification channels
+        Constants.Notifications.createNotificationChannels(this);
+//        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
 
+        // Starts the notification service
+        startService(new Intent(this, NotificationService.class));
+
+        // Creates Picasso singleton
+        PICASSO = new PicassoSingleton();
+
+        // Creates main menu button icons
         Util.mainButtonEdit = Util.bitmapDrawableFromVector(this, R.drawable.ic_edit);
         Util.mainButtonClose = Util.bitmapDrawableFromVector(this, R.drawable.ic_close);
 
+        // Sets dp scalars for the app
         Util.dpScalar = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, getResources().getDisplayMetrics());
         Constants.dp16 = Util.scalePixels(16);
         Constants.dp8 = Util.scalePixels(8);
 
+        // Sets global and gets the preferences
         global = ((GlobalClass) getApplicationContext());
         global.setPreferences(getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE));
 
@@ -199,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             NukeSSLCerts.nuke();
         }
 
+        // Sets up main buttons and animations
         mainButton = findViewById(R.id.mainButton);
         TransitionDrawable drawable = (TransitionDrawable) mainButton.getDrawable();
         drawable.setDrawableByLayerId(R.id.closed, Util.mainButtonEdit);
@@ -208,9 +240,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addRecipe = findViewById(R.id.addRecipe);
 
         // Hides/un-hides other buttons
-        mainButton.setOnClickListener(view -> {
-            toggleMenu();
-        });
+        mainButton.setOnClickListener(view -> toggleMenu());
 
         // Recipe add button
         addRecipe.setOnClickListener(view -> {
@@ -222,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addShopping.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
-            intent.putExtra(PARCEL_FOODITEMS_LIST, shoppingListItems);
             foodSearchLauncher.launch(intent);
         });
 
@@ -234,13 +263,14 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             foodSearchLauncher.launch(intent);
         });
 
+        // Hides the keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
 
+        // Launches the search activity for a result
         foodSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    shoppingListItems = Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(PARCEL_FOODITEMS_LIST);
                     mainFragment = new ShoppingFragment();
                     mainFragment.setCallbackFragment(this);
                     getSupportFragmentManager()
@@ -251,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 }
         );
 
+        // Runs the tutorial on first run
         if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
             // TODO: First time
             global.getPreferences().edit().putBoolean(PREF_FIRST_TIME, true).apply();
@@ -259,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         // Gets stored password hash, if it exists
         Map<String, String> users = Util.objFromJson(global.getPreferences().getString(PREF_LOGIN, "").trim(), Map.class);
 
-        if (users == null) users = new HashMap<>();
+        if (users == null || users.size() == 0) users = new HashMap<>();
         global.setUsers(users);
         global.updateLoginPrefs();
 
@@ -267,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        System.out.println(token);
+        Log.d("TOKEN", token);
         if (token != null) {
             Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
         } else {
@@ -451,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     public void callback(int op, Bundle bundle) {
         switch (op) {
             case (CALLBACK_START_LOGIN): {
+                callback(CALLBACK_MOVE_TO_HOME, null);
                 boolean backEnabled = false;
                 if (bundle != null) {
                     backEnabled = bundle.getBoolean(PARCEL_BACK_ENABLED);
@@ -512,8 +544,14 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * Then creates a new fragment and sets up the opening animations.
      */
     public void startLoginActivity(boolean backEnabled) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        Intent intent;
+        if (global.getUsers().size() > 1) {
+            intent = new Intent(this, AccountSwitchActivity.class);
+            intent.putExtra(PARCEL_LOGGED_OUT, !backEnabled);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(PARCEL_BACK_ENABLED, backEnabled);
+        }
         startActivity(intent);
     }
 
@@ -536,17 +574,19 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
     /**
      * Getter for the shopping list
+     *
      * @return ArrayList of food items
      */
-    public static ArrayList<SimpleFoodItem> getShoppingList() {
+    public static ArrayList<ShoppingList> getShoppingList() {
         return shoppingListItems;
     }
 
     /**
      * Setter for the shopping list
+     *
      * @param items Array of food items to add to the shopping list
      */
-    public static void setShoppingList(SimpleFoodItem[] items) {
+    public static void setShoppingList(ShoppingList[] items) {
         shoppingListItems.addAll(Arrays.asList(items));
     }
 

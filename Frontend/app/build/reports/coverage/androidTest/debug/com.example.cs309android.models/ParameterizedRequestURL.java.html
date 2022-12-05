@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ParameterizedRequestURL.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models</a> &gt; <span class="el_source">ParameterizedRequestURL.java</span></div><h1>ParameterizedRequestURL.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models;
+
+import androidx.annotation.NonNull;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * Class used to encode parameters to a valid Get request url.
+ *
+ * @author Mitch Hudson
+ */
+public class ParameterizedRequestURL {
+    /**
+     * ArrayList of parameters to encode into the url
+     */
+    private final ArrayList&lt;RequestParam&gt; params;
+    /**
+     * Base url (no '?')
+     * if null, the returned string will just be the encoded parameters.
+     */
+    private final StringBuilder url;
+
+    /**
+     * Constructor for a new GetRequestURL that only outputs encoded parameters.
+     */
+<span class="nc" id="L29">    public ParameterizedRequestURL() {</span>
+<span class="nc" id="L30">        this.params = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L31">        this.url = null;</span>
+<span class="nc" id="L32">    }</span>
+
+    /**
+     * Constructor to construct a new GetRequestURL.
+     *
+     * @param url Base url (no '?')
+     */
+<span class="fc" id="L39">    public ParameterizedRequestURL(String url) {</span>
+<span class="fc" id="L40">        this.params = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L41">        this.url = new StringBuilder(url);</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Constructor to construct a new GetRequestURL.
+     *
+     * @param params ArrayList of params
+     * @param url    Base url (no '?')
+     */
+<span class="nc" id="L50">    public ParameterizedRequestURL(String url, ArrayList&lt;RequestParam&gt; params) {</span>
+<span class="nc" id="L51">        this.params = params;</span>
+<span class="nc" id="L52">        this.url = new StringBuilder(url);</span>
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(String variable) {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (url != null) {</span>
+            try {
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">                if (url.charAt(url.length() - 1) != '/') url.append('/');</span>
+<span class="fc" id="L65">                url.append(URLEncoder.encode(variable, &quot;utf-8&quot;));</span>
+<span class="nc" id="L66">            } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L67">                e.printStackTrace();</span>
+<span class="fc" id="L68">            }</span>
+        }
+<span class="fc" id="L70">        return this;</span>
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(int variable) {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (url != null) {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (url.charAt(url.length() - 1) != '/') url.append('/');</span>
+<span class="nc" id="L82">            url.append(variable);</span>
+        }
+<span class="nc" id="L84">        return this;</span>
+    }
+
+    /**
+     * Adds a given parameter to the list of parameters for this url
+     *
+     * @param param parameter to add
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addParam(RequestParam param) {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (param == null) return this;</span>
+<span class="nc" id="L95">        params.add(param);</span>
+<span class="nc" id="L96">        return this;</span>
+    }
+
+    /**
+     * Adds a parameter
+     *
+     * @param name  Name of the parameter
+     * @param value Value of the parameter
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addParam(String name, Object value) {
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (value == null) return this;</span>
+<span class="fc" id="L108">        params.add(new RequestParam(name, value));</span>
+<span class="fc" id="L109">        return this;</span>
+    }
+
+    /**
+     * Adds an array of parameters
+     *
+     * @param params Array to add
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addArray(RequestParam[] params) {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (params == null) return this;</span>
+<span class="nc" id="L120">        this.params.addAll(Arrays.asList(params));</span>
+<span class="nc" id="L121">        return this;</span>
+    }
+
+    /**
+     * Adds a specific item from an array of parameters
+     *
+     * @param params Array to get param from
+     * @param index  index of param to add (-1 = all)
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addArray(RequestParam[] params, int index) {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (params == null) return this;</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (index == -1) {</span>
+<span class="nc" id="L134">            this.params.addAll(Arrays.asList(params));</span>
+        } else {
+<span class="nc" id="L136">            this.params.add(params[index]);</span>
+        }
+
+<span class="nc" id="L139">        return this;</span>
+    }
+
+    /**
+     * Adds an array of parameters
+     *
+     * @param name   Name of the parameter
+     * @param values Values for the parameter
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addArray(String name, Object[] values) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (values == null) return this;</span>
+<span class="nc" id="L151">        StringBuilder builder = new StringBuilder();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        for (Object value : values) {</span>
+<span class="nc" id="L153">            builder.append(value).append(&quot;,&quot;);</span>
+        }
+<span class="nc" id="L155">        params.add(new RequestParam(name, builder.substring(0, builder.length() - 1)));</span>
+<span class="nc" id="L156">        return this;</span>
+    }
+
+    /**
+     * Adds an array of parameters
+     *
+     * @param name   Name of the parameter
+     * @param values Values for the parameter
+     * @param index  Index of the array to add (-1 = all)
+     * @return this (allows stacking calls)
+     */
+    public ParameterizedRequestURL addArray(String name, Object[] values, int index) {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (values == null) return this;</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if (index == -1) {</span>
+<span class="nc" id="L170">            StringBuilder builder = new StringBuilder();</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            for (Object value : values) {</span>
+<span class="nc" id="L172">                builder.append(value).append(&quot;,&quot;);</span>
+            }
+<span class="nc" id="L174">            params.add(new RequestParam(name, builder.substring(0, builder.length() - 1)));</span>
+<span class="nc" id="L175">        } else {</span>
+<span class="nc" id="L176">            params.add(new RequestParam(name, values[index]));</span>
+        }
+<span class="nc" id="L178">        return this;</span>
+    }
+
+    /**
+     * Turns the GetRequestURL into an encoded url with all of the parameters.
+     *
+     * @return Proper url with included parameters.
+     */
+    @NonNull
+    @Override
+    public String toString() {
+<span class="fc" id="L189">        StringBuilder builder = new StringBuilder();</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (url != null) {</span>
+<span class="fc" id="L191">            builder.append(url);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            if (params.size() == 0) {</span>
+<span class="fc" id="L193">                return builder.toString();</span>
+            }
+<span class="fc" id="L195">            builder.append(&quot;?&quot;);</span>
+        }
+
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        for (RequestParam param : params) {</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if (param != null) {</span>
+<span class="fc" id="L200">                builder.append(param).append(&quot;&amp;&quot;);</span>
+            }
+<span class="fc" id="L202">        }</span>
+<span class="fc" id="L203">        return builder.substring(0, builder.length() - 1);</span>
+    }
+
+    /**
+     * RequestParam class used to make urls.
+     */
+    public static class RequestParam {
+        /**
+         * Name of the parameter
+         * (Stuff before the '='
+         */
+        private final String name;
+        /**
+         * Value of the parameter.
+         * (Stuff after the '=').
+         * This object needs a sensible toString method for the mapping to work correctly.
+         */
+        private final Object value;
+
+        /**
+         * Constructor to create a new RequestParam
+         *
+         * @param name  Name of the parameter (stuff before the '=')
+         * @param value Value of the parameter (stuff after the '=') [needs toString method]
+         */
+<span class="fc" id="L228">        public RequestParam(String name, Object value) {</span>
+<span class="fc" id="L229">            this.name = name;</span>
+<span class="fc" id="L230">            this.value = value;</span>
+<span class="fc" id="L231">        }</span>
+
+        /**
+         * Generate a url encoding for this request parameter.
+         *
+         * @return URL encoded parameter
+         */
+        @NonNull
+        @Override
+        public String toString() {
+<span class="pc bpc" id="L241" title="2 of 4 branches missed.">            if (name == null || value == null) return &quot;&quot;;</span>
+            try {
+<span class="fc" id="L243">                return URLEncoder.encode(name, &quot;utf-8&quot;) + &quot;=&quot; + URLEncoder.encode(value.toString(), &quot;utf-8&quot;);</span>
+<span class="nc" id="L244">            } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L245">                return &quot;&quot;;</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

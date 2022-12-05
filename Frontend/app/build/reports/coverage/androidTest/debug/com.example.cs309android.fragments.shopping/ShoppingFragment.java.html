@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.fragments.shopping</a> &gt; <span class="el_source">ShoppingFragment.java</span></div><h1>ShoppingFragment.java</h1><pre class="source lang-java linenums">package com.example.cs309android.fragments.shopping;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.ShoppingListAdapter;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.shopping.GetListRequest;
+import com.example.cs309android.models.api.response.shopping.GetListResponse;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * Shopping list fragment.
+ * Consists of a ListView and a FAB to add items.
+ * The list view has a custom adapter that has a checkbox to strike out the text, a label, and
+ * a button to remove the item.
+ *
+ * @author Mitch Hudson
+ */
+<span class="fc" id="L38">public class ShoppingFragment extends BaseFragment {</span>
+    /**
+     * Runs when the fragment is created.
+     *
+     * @param inflater           Inflates the fragment
+     * @param container          Parent container for the fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated fragment view
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+<span class="fc" id="L51">        View view = inflater.inflate(R.layout.fragment_shopping, container, false);</span>
+
+<span class="fc" id="L53">        ListView listView = view.findViewById(R.id.shopping_list);</span>
+<span class="fc" id="L54">        listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);</span>
+
+<span class="fc" id="L56">        refreshList(view);</span>
+
+<span class="fc" id="L58">        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.shopping_list), (v, windowInsets) -&gt; {</span>
+<span class="nc" id="L59">            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());</span>
+<span class="nc" id="L60">            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();</span>
+<span class="nc" id="L61">            mlp.topMargin = insets.top;</span>
+<span class="nc" id="L62">            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());</span>
+<span class="nc" id="L63">            mlp.bottomMargin = insets.bottom;</span>
+<span class="nc" id="L64">            return WindowInsetsCompat.CONSUMED;</span>
+        });
+
+<span class="fc" id="L67">        return view;</span>
+    }
+
+    /**
+     * Refreshes the shopping list
+     *
+     * @param view Root view of the fragment
+     */
+    public void refreshList(View view) {
+<span class="fc" id="L76">        ArrayList&lt;SimpleFoodItem&gt; items = MainActivity.getShoppingList();</span>
+<span class="fc" id="L77">        ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);</span>
+<span class="fc" id="L78">        ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);</span>
+//        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);
+
+<span class="fc" id="L81">        TextView empty = view.findViewById(R.id.empty_text);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (items.isEmpty()) {</span>
+<span class="nc" id="L83">            empty.setVisibility(View.VISIBLE);</span>
+//            fab.extend();
+        } else {
+<span class="fc" id="L86">            empty.setVisibility(View.INVISIBLE);</span>
+//            fab.shrink();
+        }
+<span class="fc" id="L89">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

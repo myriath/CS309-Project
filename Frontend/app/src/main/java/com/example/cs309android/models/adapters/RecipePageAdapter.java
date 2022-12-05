@@ -10,7 +10,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
-import com.example.cs309android.models.api.models.Recipe;
 
 /**
  * Adapter to use with the TabLayout for the recipe page
@@ -81,11 +80,11 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
             switch (position) {
                 case 0:
                     // TODO: Get popular recipes
-//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+//                results.setAdapter(new RecipeListAdapter(itemView.getContext(), ));
                     break;
                 case 1:
                     // TODO: Get new recipes
-//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+//                results.setAdapter(new RecipeListAdapter(itemView.getContext(), ));
                     break;
                 default:
                     searchView.setVisibility(View.VISIBLE);
@@ -93,7 +92,7 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
                         @Override
                         public boolean onQueryTextSubmit(String query) {
                             // TODO: search
-//                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+//                        results.setAdapter(new RecipeListAdapter(itemView.getContext(), ));
                             return true;
                         }
 

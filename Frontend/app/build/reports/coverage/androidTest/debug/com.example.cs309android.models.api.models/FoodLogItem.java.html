@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodLogItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.api.models</a> &gt; <span class="el_source">FoodLogItem.java</span></div><h1>FoodLogItem.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.api.models;
+
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * Simple food log item model
+ *
+ * @author Travis Massner
+ */
+public class FoodLogItem {
+    /**
+     * Food log id
+     */
+    @Expose
+    private final int logId;
+    /**
+     * User username
+     */
+    @Expose
+    private final String username;
+    /**
+     * Food item id
+     */
+    @Expose
+    private final int fdcId;
+    /**
+     * Food item name
+     */
+    @Expose
+    private final String foodName;
+    /**
+     * Serving amount
+     */
+    @Expose
+    private final int servingAmt;
+    /**
+     * Serving unit
+     */
+    @Expose
+    private final String servingUnit;
+    /**
+     * Fat amount
+     */
+    @Expose
+    private final int fat;
+    /**
+     * Saturated fat amount
+     */
+    @Expose
+    private final int sat_fat;
+    /**
+     * Sodium amount
+     */
+    @Expose
+    private final int sodium;
+    /**
+     * Carbohydrate amount
+     */
+    @Expose
+    private final int carbohydrates;
+    /**
+     * Fiber amount
+     */
+    @Expose
+    private final int fiber;
+    /**
+     * Sugar amount
+     */
+    @Expose
+    private final int sugars;
+    /**
+     * Protein amount
+     */
+    @Expose
+    private final int protein;
+    /**
+     * Date of log
+     */
+    @Expose
+    private final String date;
+    /**
+     * Meal type
+     */
+    @Expose
+    private final String meal;
+
+    /**
+     * Constructor for gson
+     *
+     * @param logId         Log id
+     * @param username      Username
+     * @param fdcId         Food item id
+     * @param foodName      Food item name
+     * @param servingAmt    Serving amount
+     * @param servingUnit   Serving unit
+     * @param fat           Fat amount
+     * @param sat_fat       Saturated fat amount
+     * @param sodium        Sodium amount
+     * @param carbohydrates Carbohydrate amount
+     * @param fiber         Fiber amount
+     * @param sugars        Sugar amount
+     * @param protein       Protein amount
+     * @param date          Date of log
+     * @param meal          Meal type
+     */
+<span class="nc" id="L110">    public FoodLogItem(int logId, String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {</span>
+<span class="nc" id="L111">        this.logId = logId;</span>
+<span class="nc" id="L112">        this.username = username;</span>
+<span class="nc" id="L113">        this.fdcId = fdcId;</span>
+<span class="nc" id="L114">        this.foodName = foodName;</span>
+<span class="nc" id="L115">        this.servingAmt = servingAmt;</span>
+<span class="nc" id="L116">        this.servingUnit = servingUnit;</span>
+<span class="nc" id="L117">        this.fat = fat;</span>
+<span class="nc" id="L118">        this.sat_fat = sat_fat;</span>
+<span class="nc" id="L119">        this.sodium = sodium;</span>
+<span class="nc" id="L120">        this.carbohydrates = carbohydrates;</span>
+<span class="nc" id="L121">        this.fiber = fiber;</span>
+<span class="nc" id="L122">        this.sugars = sugars;</span>
+<span class="nc" id="L123">        this.protein = protein;</span>
+<span class="nc" id="L124">        this.date = date;</span>
+<span class="nc" id="L125">        this.meal = meal;</span>
+<span class="nc" id="L126">    }</span>
+
+    /**
+     * Constructor for creating a new food log item
+     *
+     * @param username Username
+     * @param foodName Food item name
+     */
+<span class="nc" id="L134">    public FoodLogItem(String username, String foodName) {</span>
+<span class="nc" id="L135">        this.logId = ITEM_ID_NULL;</span>
+<span class="nc" id="L136">        this.username = username;</span>
+<span class="nc" id="L137">        this.fdcId = ITEM_ID_NULL;</span>
+<span class="nc" id="L138">        this.foodName = foodName;</span>
+<span class="nc" id="L139">        this.servingAmt = 0;</span>
+<span class="nc" id="L140">        this.servingUnit = &quot;&quot;;</span>
+<span class="nc" id="L141">        this.fat = 0;</span>
+<span class="nc" id="L142">        this.sat_fat = 0;</span>
+<span class="nc" id="L143">        this.sodium = 0;</span>
+<span class="nc" id="L144">        this.carbohydrates = 0;</span>
+<span class="nc" id="L145">        this.fiber = 0;</span>
+<span class="nc" id="L146">        this.sugars = 0;</span>
+<span class="nc" id="L147">        this.protein = 0;</span>
+<span class="nc" id="L148">        this.date = &quot;&quot;;</span>
+<span class="nc" id="L149">        this.meal = &quot;&quot;;</span>
+<span class="nc" id="L150">    }</span>
+
+    /**
+     * Constructor for new food log item
+     *
+     * @param username      Username
+     * @param fdcId         Food item id
+     * @param foodName      Food item name
+     * @param servingAmt    Serving amount
+     * @param servingUnit   Serving unit
+     * @param fat           Fat amount
+     * @param sat_fat       Saturated fat amount
+     * @param sodium        Sodium amount
+     * @param carbohydrates Carbohydrate amount
+     * @param fiber         Fiber amount
+     * @param sugars        Sugar amount
+     * @param protein       Protein amount
+     * @param date          Date of log
+     * @param meal          Meal type
+     */
+<span class="nc" id="L170">    public FoodLogItem(String username, int fdcId, String foodName, int servingAmt, String servingUnit, int fat, int sat_fat, int sodium, int carbohydrates, int fiber, int sugars, int protein, String date, String meal) {</span>
+<span class="nc" id="L171">        this.logId = ITEM_ID_NULL;</span>
+<span class="nc" id="L172">        this.username = username;</span>
+<span class="nc" id="L173">        this.fdcId = fdcId;</span>
+<span class="nc" id="L174">        this.foodName = foodName;</span>
+<span class="nc" id="L175">        this.servingAmt = servingAmt;</span>
+<span class="nc" id="L176">        this.servingUnit = servingUnit;</span>
+<span class="nc" id="L177">        this.fat = fat;</span>
+<span class="nc" id="L178">        this.sat_fat = sat_fat;</span>
+<span class="nc" id="L179">        this.sodium = sodium;</span>
+<span class="nc" id="L180">        this.carbohydrates = carbohydrates;</span>
+<span class="nc" id="L181">        this.fiber = fiber;</span>
+<span class="nc" id="L182">        this.sugars = sugars;</span>
+<span class="nc" id="L183">        this.protein = protein;</span>
+<span class="nc" id="L184">        this.date = date;</span>
+<span class="nc" id="L185">        this.meal = meal;</span>
+<span class="nc" id="L186">    }</span>
+
+    /**
+     * Constructor for parcelable
+     *
+     * @param in Parcel
+     */
+<span class="nc" id="L193">    protected FoodLogItem(Parcel in) {</span>
+<span class="nc" id="L194">        logId = in.readInt();</span>
+<span class="nc" id="L195">        username = in.readString();</span>
+<span class="nc" id="L196">        fdcId = in.readInt();</span>
+<span class="nc" id="L197">        foodName = in.readString();</span>
+<span class="nc" id="L198">        servingAmt = in.readInt();</span>
+<span class="nc" id="L199">        servingUnit = in.readString();</span>
+<span class="nc" id="L200">        fat = in.readInt();</span>
+<span class="nc" id="L201">        sat_fat = in.readInt();</span>
+<span class="nc" id="L202">        sodium = in.readInt();</span>
+<span class="nc" id="L203">        carbohydrates = in.readInt();</span>
+<span class="nc" id="L204">        fiber = in.readInt();</span>
+<span class="nc" id="L205">        sugars = in.readInt();</span>
+<span class="nc" id="L206">        protein = in.readInt();</span>
+<span class="nc" id="L207">        date = in.readString();</span>
+<span class="nc" id="L208">        meal = in.readString();</span>
+<span class="nc" id="L209">    }</span>
+
+    /**
+     * Getter for the log id
+     *
+     * @return log id
+     */
+    public int getLogId() {
+<span class="nc" id="L217">        return logId;</span>
+    }
+
+    /**
+     * Getter for the username
+     *
+     * @return username
+     */
+    public String getUsername() {
+<span class="nc" id="L226">        return username;</span>
+    }
+
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
+    public int getFdcId() {
+<span class="nc" id="L235">        return fdcId;</span>
+    }
+
+    /**
+     * Getter for the food's name
+     *
+     * @return food name
+     */
+    public String getFoodName() {
+<span class="nc" id="L244">        return foodName;</span>
+    }
+
+    /**
+     * Getter for the serving amount
+     *
+     * @return serving amount
+     */
+    public int getServingAmt() {
+<span class="nc" id="L253">        return servingAmt;</span>
+    }
+
+    /**
+     * Getter for the serving unit
+     *
+     * @return serving unit
+     */
+    public String getServingUnit() {
+<span class="nc" id="L262">        return servingUnit;</span>
+    }
+
+    /**
+     * Getter for the fat
+     *
+     * @return fat
+     */
+    public int getFat() {
+<span class="nc" id="L271">        return fat;</span>
+    }
+
+    /**
+     * Getter for the saturated fat
+     *
+     * @return saturated fat
+     */
+    public int getSat_fat() {
+<span class="nc" id="L280">        return sat_fat;</span>
+    }
+
+    /**
+     * Getter for the sodium
+     *
+     * @return sodium
+     */
+    public int getSodium() {
+<span class="nc" id="L289">        return sodium;</span>
+    }
+
+    /**
+     * Getter for the carbohydrates
+     *
+     * @return carbs
+     */
+    public int getCarbohydrates() {
+<span class="nc" id="L298">        return carbohydrates;</span>
+    }
+
+    /**
+     * Getter for the fiber
+     *
+     * @return fiber
+     */
+    public int getFiber() {
+<span class="nc" id="L307">        return fiber;</span>
+    }
+
+    /**
+     * Getter for the sugars
+     *
+     * @return sugars
+     */
+    public int getSugars() {
+<span class="nc" id="L316">        return sugars;</span>
+    }
+
+    /**
+     * Getter for the protein
+     *
+     * @return protein
+     */
+    public int getProtein() {
+<span class="nc" id="L325">        return protein;</span>
+    }
+
+    /**
+     * Getter for the date
+     *
+     * @return date of the logged item
+     */
+    public String getDate() {
+<span class="nc" id="L334">        return date;</span>
+    }
+
+    /**
+     * Getter for the meal value
+     * Ex: Lunch, Dinner
+     *
+     * @return meal value
+     */
+    public String getMeal() {
+<span class="nc" id="L344">        return meal;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.profile;
 
-import static com.example.cs309android.util.Constants.BANNER_URL;
+import static com.example.cs309android.util.Constants.Urls.Profile.BANNER_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.ImageRequest;

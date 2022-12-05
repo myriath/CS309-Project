@@ -1,7 +1,7 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,14 +21,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.request.shopping.ShoppingRemoveRequest;
 import com.example.cs309android.models.api.request.shopping.StrikeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -37,11 +36,11 @@ import java.util.ArrayList;
  *
  * @author Mitch Hudson
  */
-public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
+public class ShoppingListAdapter extends ArrayAdapter<ShoppingList> {
     /**
      * List of items in the shopping list
      */
-    private final ArrayList<SimpleFoodItem> items;
+    private final ArrayList<ShoppingList> items;
 
     /**
      * Public constructor.
@@ -49,7 +48,7 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public ShoppingListAdapter(Context context, ArrayList<SimpleFoodItem> items) {
+    public ShoppingListAdapter(Context context, ArrayList<ShoppingList> items) {
         super(context, R.layout.shopping_list_item, items);
         this.items = items;
     }
@@ -74,12 +73,12 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.setClickable(true);
         convertView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(PARCEL_FOODITEM, items.get(position));
+            bundle.putParcelable(PARCEL_FOODITEM, items.get(position).getFoodItem());
             ((MainActivity) parent.getContext()).callback(CALLBACK_FOOD_DETAIL, bundle);
         });
 
         TextView name = convertView.findViewById(R.id.name);
-        name.setText(items.get(position).getDescription());
+        name.setText(items.get(position).getFoodItem().getDescription());
         if (items.get(position).isStricken()) {
             name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             name.setEnabled(false);
@@ -93,50 +92,35 @@ public class ShoppingListAdapter extends ArrayAdapter<SimpleFoodItem> {
         convertView.findViewById(R.id.stricken).setOnClickListener(view -> {
             CheckBox checkBox = (CheckBox) view;
 
-            SimpleFoodItem item = items.get(position);
-            if (checkBox.isChecked()) {
-                new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
-                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                    if (genericResponse.getResult() == Constants.RESULT_OK) {
-                        name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        name.setEnabled(false);
-                    } else {
-                        Toaster.toastShort("Error", getContext());
-                        checkBox.setChecked(false);
-                    }
-                }, getContext());
-            } else {
-                new StrikeRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
-                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                    if (genericResponse.getResult() == Constants.RESULT_OK) {
-                        name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                        name.setEnabled(true);
-                    } else {
-                        Toaster.toastShort("Error", getContext());
-                        checkBox.setChecked(true);
-                    }
-                }, getContext());
-            }
-            items.get(position).setStricken(checkBox.isChecked());
-        });
-
-        convertView.findViewById(R.id.remove).setOnClickListener(view1 -> {
-            SimpleFoodItem item = items.get(position);
-            new ShoppingRemoveRequest(item.getId(), item.isCustom(), globalVariable.getToken()).request(response -> {
+            new StrikeRequest(items.get(position).getShoppingId(), globalVariable.getToken()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                if (genericResponse.getResult() == Constants.RESULT_OK) {
-                    if (MainActivity.removeShoppingItem(position)) {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).extend();
-                        view1.getRootView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+                boolean checked = ((CheckBox) view).isChecked();
+                if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
+                    if (checked) {
+                        name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     } else {
-                        ((ExtendedFloatingActionButton) view1.getRootView().findViewById(R.id.add_item)).shrink();
+                        name.setPaintFlags(name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     }
-                    ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
+                    name.setEnabled(!checked);
                 } else {
                     Toaster.toastShort("Error", getContext());
+                    checkBox.setChecked(checked);
                 }
             }, getContext());
         });
+
+        convertView.findViewById(R.id.menu).setOnClickListener(view1 ->
+                new ShoppingRemoveRequest(items.get(position).getShoppingId(), globalVariable.getToken()).request(response -> {
+                    GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+                    if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
+                        if (MainActivity.removeShoppingItem(position)) {
+                            view1.getRootView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
+                        }
+                        ((ListView) view1.getRootView().findViewById(R.id.shopping_list)).setAdapter(this);
+                    } else {
+                        Toaster.toastShort("Error", getContext());
+                    }
+                }, getContext()));
 
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray array = parent.getContext().obtainStyledAttributes(attrs);
