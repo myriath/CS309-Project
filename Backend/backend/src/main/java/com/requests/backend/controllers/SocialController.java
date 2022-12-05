@@ -262,11 +262,15 @@ public class SocialController {
 
         return UserController.getUserFromToken(token, (user, res) -> {
             User commentUser = commentRepository.queryGetCommentByCid(commentId)[0].getUser();
+            LOGGER.info(commentUser.toString());
 
             if (commentUser.getUsername().equals(user.getUsername()) || user.getUserType() > USER_REG) {
                 Comment comment = commentRepository.getReferenceById(commentId);
+                LOGGER.info(comment.toString());
                 comment.setBody(body.comment);
+                LOGGER.info(comment.toString());
                 commentRepository.save(comment);
+                LOGGER.info("Success");
                 res.setResult(RESULT_OK);
             }
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
