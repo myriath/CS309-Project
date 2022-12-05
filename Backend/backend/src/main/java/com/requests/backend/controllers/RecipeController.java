@@ -41,6 +41,9 @@ public class RecipeController {
     private TokenRepository tokenRepository;
 
     @Autowired
+    private NotificationsWebsocket notificationsWebsocket;
+
+    @Autowired
     private InstructionRepository instructionRepository;
     @Autowired
     private IngredientRepository ingredientRepository;
@@ -104,7 +107,7 @@ public class RecipeController {
      */
     @PostMapping(path="/add/{token}")
     @ResponseBody
-    public AddRecipeResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) {
+    public AddRecipeResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) throws IOException {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -142,6 +145,16 @@ public class RecipeController {
 //                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
+
+                Notification notification = new Notification();
+
+                // Send out a notification to all followers that a new recipe has been added.
+                notification.setFromUsername(username);
+                notification.setRid(recipe.getRid());
+                notification.setType(Notification.NotificationType.RECIPE);
+
+                notificationsWebsocket.sendPostNotifications(notification);
+
 //            } catch (Exception e) {
 //                res.setResult(RESULT_ERROR);
 //            }
