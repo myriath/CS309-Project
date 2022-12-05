@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/manage_accounts_title" />
+        app:title="@string/switch_user_title" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"

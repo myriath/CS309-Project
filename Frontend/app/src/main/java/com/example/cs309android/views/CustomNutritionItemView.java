@@ -85,4 +85,13 @@ public class CustomNutritionItemView extends FrameLayout {
     public float getValue() {
         return Float.parseFloat(Objects.requireNonNull(input.getEditText()).getText().toString());
     }
+
+    /**
+     * Sets the value of the custom nutrient
+     *
+     * @param value new value of the nutrient
+     */
+    public void setValue(float value) {
+        Objects.requireNonNull(input.getEditText()).setText(String.valueOf(value));
+    }
 }

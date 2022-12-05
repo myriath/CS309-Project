@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NutrientAnalysisDetails.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">NutrientAnalysisDetails.java</span></div><h1>NutrientAnalysisDetails.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Nutrient Analysis Details model
+ *
+ * @author Mitch Hudson
+ */
+public class NutrientAnalysisDetails {
+    /**
+     * Sub sample id
+     */
+    @Expose
+    private final int subSampleId;
+    /**
+     * Amount
+     */
+    @Expose
+    private final float amount;
+    /**
+     * Nutrient id
+     */
+    @Expose
+    private final int nutrientId;
+    /**
+     * Lab method
+     */
+    @Expose
+    private final String labMethodDescription;
+    /**
+     * Lab method original description
+     */
+    @Expose
+    private final String labMethodOriginalDescription;
+    /**
+     * Lab method link
+     */
+    @Expose
+    private final String labMethodLink;
+    /**
+     * Lab method technique
+     */
+    @Expose
+    private final String labMethodTechnique;
+    /**
+     * Nutrient acquisition details
+     */
+    @Expose
+    private final NutrientAcquisitionDetails[] nutrientAcquisitionDetails;
+
+    /**
+     * Public constructor
+     *
+     * @param subSampleId                  sub sample id
+     * @param amount                       amount
+     * @param nutrientId                   nutrient id
+     * @param labMethodDescription         lab method description
+     * @param labMethodOriginalDescription lab method original description
+     * @param labMethodLink                lab method link
+     * @param labMethodTechnique           lab method technique
+     * @param nutrientAcquisitionDetails   acquisition details
+     */
+<span class="nc" id="L64">    public NutrientAnalysisDetails(int subSampleId, float amount, int nutrientId, String labMethodDescription, String labMethodOriginalDescription, String labMethodLink, String labMethodTechnique, NutrientAcquisitionDetails[] nutrientAcquisitionDetails) {</span>
+<span class="nc" id="L65">        this.subSampleId = subSampleId;</span>
+<span class="nc" id="L66">        this.amount = amount;</span>
+<span class="nc" id="L67">        this.nutrientId = nutrientId;</span>
+<span class="nc" id="L68">        this.labMethodDescription = labMethodDescription;</span>
+<span class="nc" id="L69">        this.labMethodOriginalDescription = labMethodOriginalDescription;</span>
+<span class="nc" id="L70">        this.labMethodLink = labMethodLink;</span>
+<span class="nc" id="L71">        this.labMethodTechnique = labMethodTechnique;</span>
+<span class="nc" id="L72">        this.nutrientAcquisitionDetails = nutrientAcquisitionDetails;</span>
+<span class="nc" id="L73">    }</span>
+
+    /**
+     * Getter for the sub sample id
+     *
+     * @return sub sample id
+     */
+    public int getSubSampleId() {
+<span class="nc" id="L81">        return subSampleId;</span>
+    }
+
+    /**
+     * Getter for the amount
+     *
+     * @return amount
+     */
+    public float getAmount() {
+<span class="nc" id="L90">        return amount;</span>
+    }
+
+    /**
+     * Getter for the nutrient id
+     *
+     * @return nutrient id
+     */
+    public int getNutrientId() {
+<span class="nc" id="L99">        return nutrientId;</span>
+    }
+
+    /**
+     * Getter for the lab method description
+     *
+     * @return lab method description
+     */
+    public String getLabMethodDescription() {
+<span class="nc" id="L108">        return labMethodDescription;</span>
+    }
+
+    /**
+     * Getter for the lab method original description
+     *
+     * @return lab method original description
+     */
+    public String getLabMethodOriginalDescription() {
+<span class="nc" id="L117">        return labMethodOriginalDescription;</span>
+    }
+
+    /**
+     * Getter for the lab method link
+     *
+     * @return lab method link
+     */
+    public String getLabMethodLink() {
+<span class="nc" id="L126">        return labMethodLink;</span>
+    }
+
+    /**
+     * Getter for the lab method technique
+     *
+     * @return lab method technique
+     */
+    public String getLabMethodTechnique() {
+<span class="nc" id="L135">        return labMethodTechnique;</span>
+    }
+
+    /**
+     * Getter for the nutrient acquisition details
+     *
+     * @return nutrient acquisition details
+     */
+    public NutrientAcquisitionDetails[] getNutrientAcquisitionDetails() {
+<span class="nc" id="L144">        return nutrientAcquisitionDetails;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

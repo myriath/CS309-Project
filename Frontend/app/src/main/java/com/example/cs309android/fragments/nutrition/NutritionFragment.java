@@ -1,6 +1,8 @@
 package com.example.cs309android.fragments.nutrition;
 
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,35 +20,34 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.food.FoodDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.adapters.NutritionLogAdapter;
 import com.example.cs309android.models.api.models.FoodLogItem;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogRequest;
 import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
+import com.google.android.material.divider.MaterialDivider;
 
 import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Nutrition page fragment to display nutrition info
+ * TODO: Calculate or retrieve nutrition data and update the progress bars
+ * TODO: Maybe replace FoodLogItem with just a regular simple food item? or otherwise have that information available
  *
  * @author Travis Massner
  */
 public class NutritionFragment extends BaseFragment {
-    /**
-     * Used to store the list of simple food items
-     */
-    private static ArrayList<FoodLogItem> foods;
     /**
      * Calendar for tracking the date
      */
@@ -71,22 +73,27 @@ public class NutritionFragment extends BaseFragment {
      */
     private CallbackFragment nutritionFragment;
 
+    /**
+     * Stores the value of dp8 in pixels
+     */
+    private int dp8;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         date = Calendar.getInstance();
+        dp8 = (int) Util.scalePixels(8);
 
         //THIS IS JUST TEST DATA
-        foods = new ArrayList<>();
-        FoodLogItem foodLog = new FoodLogItem("papajohn", "chicken");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "turkey");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "mayo");
-        foods.add(foodLog);
-        foodLog = new FoodLogItem("papajohn", "bread");
-        foods.add(foodLog);
+//        MainActivity.clearFoodLog();
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "chicken"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "bacon"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "cheese"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "beef"), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "pork"), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "turkey"), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem("papajohn", "eggs"), DINNER_LOG);
 
 //        foodSearchLauncher = registerForActivityResult(
 //                new ActivityResultContracts.StartActivityForResult(),
@@ -112,10 +119,11 @@ public class NutritionFragment extends BaseFragment {
      */
     private void updateDate() {
         TextView dateText = requireActivity().findViewById(R.id.date);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        dateText.setText(format.format(date.getTime()));
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
+
+        // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
@@ -124,13 +132,24 @@ public class NutritionFragment extends BaseFragment {
             }
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
-
             FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            foods = new ArrayList<>();
-            foods.addAll(Arrays.asList(newItems));
 
+            for (FoodLogItem item : newItems) {
+                switch (item.getMeal()) {
+                    case "Breakfast":
+                        MainActivity.addLogItem(item, BREAKFAST_LOG);
+                        break;
+                    case "Lunch":
+                        MainActivity.addLogItem(item, LUNCH_LOG);
+                        break;
+                    case "Dinner":
+                        MainActivity.addLogItem(item, DINNER_LOG);
+                        break;
+                }
+            }
         }, requireContext());
-
+        format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
+        dateText.setText(format.format(date.getTime()));
     }
 
     /**
@@ -162,6 +181,7 @@ public class NutritionFragment extends BaseFragment {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateStr = format.format(date.getTime());
+        // TODO: Getter should get a list of each meal, or this needs to split it up
         new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -> {
             try {
                 System.out.print(response.toString(3));
@@ -169,12 +189,28 @@ public class NutritionFragment extends BaseFragment {
                 e.printStackTrace();
             }
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
-
-            FoodLogItem[] newItems = recipeResponse.getFoodLog();
-            foods = new ArrayList<>();
-            foods.addAll(Arrays.asList(newItems));
             if (recipeResponse == null) {
                 Toaster.toastShort("Error getting recipes", requireContext());
+                return;
+            }
+
+            FoodLogItem[] newItems = recipeResponse.getFoodLog();
+
+            for (FoodLogItem item : newItems) {
+                switch (item.getMeal()) {
+                    case "Breakfast":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, BREAKFAST_LOG);
+                        break;
+                    case "Lunch":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, LUNCH_LOG);
+                        break;
+                    case "Dinner":
+                        System.out.println(item.getMeal());
+                        MainActivity.addLogItem(item, DINNER_LOG);
+                        break;
+                }
             }
 
         }, requireContext());
@@ -199,14 +235,7 @@ public class NutritionFragment extends BaseFragment {
 
         refreshList(view);
 
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            SimpleFoodItem selectedItem = (SimpleFoodItem) parent.getItemAtPosition(position);
-            Intent i = new Intent(getActivity(), FoodDetailsActivity.class);
-            i.putExtra(PARCEL_FOODITEM, selectedItem);
-            startActivity(i);
-        });
-
-        format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        format = new SimpleDateFormat("EEE MMM, d, yyyy", Locale.getDefault());
         dateText.setText(format.format(date.getTime()));
 
         return view;
@@ -215,11 +244,72 @@ public class NutritionFragment extends BaseFragment {
     /**
      * Refreshes the nutrition log
      *
-     * @param view
+     * @param view view to find subviews of
      */
     public void refreshList(View view) {
-        adapter = new NutritionLogAdapter(this.getActivity(), foods);
-        listView = view.findViewById(R.id.log_list);
-        listView.setAdapter(adapter);
+        ArrayList<FoodLogItem> breakfast = MainActivity.getLog(BREAKFAST_LOG);
+        ArrayList<FoodLogItem> lunch = MainActivity.getLog(LUNCH_LOG);
+        ArrayList<FoodLogItem> dinner = MainActivity.getLog(DINNER_LOG);
+        if (breakfast != null) {
+            LinearLayout list = view.findViewById(R.id.breakfastList);
+            for (int i = 0; i < breakfast.size(); i++) {
+                FoodLogItem item = breakfast.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                }, i == breakfast.size() - 1);
+            }
+            view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.breakfastCard).setVisibility(View.GONE);
+        }
+        if (lunch != null) {
+            LinearLayout list = view.findViewById(R.id.lunchList);
+            for (int i = 0; i < lunch.size(); i++) {
+                FoodLogItem item = lunch.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                }, i == lunch.size() - 1);
+            }
+            view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.lunchCard).setVisibility(View.GONE);
+        }
+        if (dinner != null) {
+            LinearLayout list = view.findViewById(R.id.dinnerList);
+            for (int i = 0; i < dinner.size(); i++) {
+                FoodLogItem item = dinner.get(i);
+                addLogItem(item, list, view1 -> {
+                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+                    startActivity(intent);
+                }, i == dinner.size() - 1);
+            }
+            view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);
+        } else {
+            view.findViewById(R.id.dinnerCard).setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Adds a log item to the given linear layout
+     * @param item      Item to add
+     * @param list      LinearLayout to add to
+     * @param listener  OnClickListener for the item
+     */
+    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener, boolean lastItem) {
+        View view = View.inflate(getContext(), R.layout.ingredient_layout, null);
+        ((TextView) view.findViewById(R.id.quantity)).setText("TODO");
+        ((TextView) view.findViewById(R.id.name)).setText(item.getFoodName());
+        view.setOnClickListener(listener);
+        view.setPadding(dp8, dp8, dp8, dp8);
+        list.addView(view);
+        if (!lastItem) {
+            MaterialDivider divider = new MaterialDivider(requireContext());
+            list.addView(divider);
+        }
     }
 }

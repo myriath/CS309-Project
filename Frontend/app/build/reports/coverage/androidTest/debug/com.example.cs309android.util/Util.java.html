@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Util.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.util</a> &gt; <span class="el_source">Util.java</span></div><h1>Util.java</h1><pre class="source lang-java linenums">package com.example.cs309android.util;
+
+import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+import static com.example.cs309android.util.Constants.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
+import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+
+import androidx.core.content.ContextCompat;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.account.AccountActivity;
+import com.example.cs309android.activities.login.AccountSwitchActivity;
+import com.example.cs309android.interfaces.ErrorListener;
+import com.example.cs309android.interfaces.SuccessListener;
+import com.example.cs309android.models.VolleyErrorHandler;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.shopping.GetListRequest;
+import com.example.cs309android.models.api.request.social.IsFollowingRequest;
+import com.example.cs309android.models.api.request.users.LoginHashRequest;
+import com.example.cs309android.models.api.request.users.LoginTokenRequest;
+import com.example.cs309android.models.api.request.users.RegenTokenRequest;
+import com.example.cs309android.models.api.request.users.RegisterRequest;
+import com.example.cs309android.models.api.request.users.SaltRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.shopping.GetListResponse;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.users.LoginResponse;
+import com.example.cs309android.models.api.response.users.SaltResponse;
+import com.example.cs309android.util.security.Hasher;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+
+/**
+ * Utility class containing many commonly used methods
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L65">public class Util {</span>
+    /**
+     * GSON Builder used for the entire application
+     */
+<span class="fc" id="L69">    public static final GsonBuilder GSON_BUILDER = new GsonBuilder()</span>
+<span class="fc" id="L70">            .serializeNulls()</span>
+<span class="fc" id="L71">            .excludeFieldsWithoutExposeAnnotation();</span>
+    /**
+     * GSON used for the entire application
+     */
+<span class="fc" id="L75">    public static final Gson GSON = GSON_BUILDER.create();</span>
+
+    /**
+     * Bitmap drawable for the main button's closed state
+     */
+    public static BitmapDrawable mainButtonEdit;
+    /**
+     * Bitmap drawable for the main button's open state
+     */
+    public static BitmapDrawable mainButtonClose;
+
+    /**
+     * Scalar defined by MainActivity
+     * Scales pixels to DIPs
+     */
+    public static float dpScalar;
+
+    /**
+     * Converts pixels to dip
+     *
+     * @param pixels pixel measurement
+     * @return dip
+     */
+    public static float scalePixels(float pixels) {
+<span class="fc" id="L99">        return pixels * dpScalar;</span>
+    }
+
+    /**
+     * Makes the spinner visible and locks interaction to the register page.
+     * This is ran when the user starts a request to the server.
+     *
+     * @param view View to find the spinner from.
+     */
+    public static void spin(View view) {
+<span class="fc" id="L109">        view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L110">        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Makes the spinner visible and locks interaction to the register page.
+     * This is ran when the user starts a request to the server.
+     *
+     * @param activity View to find the spinner from.
+     */
+    public static void spin(Activity activity) {
+<span class="fc" id="L120">        spin(activity.getWindow().getDecorView());</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Makes the spinner invisible and unlocks interaction with the register page.
+     * This is ran when a response is received from the server.
+     *
+     * @param view View to find the spinner from.
+     */
+    public static void unSpin(View view) {
+<span class="nc" id="L130">        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);</span>
+<span class="nc" id="L131">        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out));</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * Makes the spinner invisible and unlocks interaction with the register page.
+     * This is ran when a response is received from the server.
+     *
+     * @param view View to find the spinner from.
+     */
+    public static void unSpin(Activity view) {
+<span class="fc" id="L141">        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);</span>
+<span class="fc" id="L142">        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view, R.anim.fade_out));</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Sets the title of the activity
+     *
+     * @param title   New title
+     * @param toolbar Toolbar to change the title of
+     */
+    public static void setTitle(String title, MaterialToolbar toolbar) {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (title.length() &gt; 20) {</span>
+<span class="nc" id="L153">            toolbar.setTitle(title.substring(0, 20) + &quot;...&quot;);</span>
+        } else {
+<span class="nc" id="L155">            toolbar.setTitle(title);</span>
+        }
+<span class="nc" id="L157">    }</span>
+
+    /**
+     * Sets the subtitle to whatever the brand of the item is
+     *
+     * @param subtitle Subtitle for the toolbar
+     * @param toolbar  Toolbar to set subtitle of
+     */
+    public static void setSubtitle(String subtitle, MaterialToolbar toolbar) {
+<span class="nc bnc" id="L166" title="All 4 branches missed.">        if (subtitle != null &amp;&amp; !subtitle.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L167">            toolbar.setSubtitle(subtitle);</span>
+        }
+<span class="nc" id="L169">    }</span>
+
+    /**
+     * Hides the keyboard. This is usually ran when the user clicks a button.
+     *
+     * @param view View of the button/object being interacted with.
+     */
+    public static void hideKeyboard(View view, Activity activity) {
+<span class="fc" id="L177">        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);</span>
+<span class="fc" id="L178">        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);</span>
+<span class="fc" id="L179">    }</span>
+
+    /**
+     * Generates a BitmapDrawable from a vector drawable.
+     * This allows the drawables to be used for cross fade transitions
+     *
+     * @param context Context to get resources from
+     * @param id      R.drawable ID of the vector drawable
+     * @return BitmapDrawable for cross fade animations
+     */
+    public static BitmapDrawable bitmapDrawableFromVector(Context context, int id) {
+<span class="fc" id="L190">        Drawable drawable = ContextCompat.getDrawable(context, id);</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (drawable == null) return null;</span>
+<span class="fc" id="L192">        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);</span>
+<span class="fc" id="L193">        Canvas canvas = new Canvas(bitmap);</span>
+<span class="fc" id="L194">        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());</span>
+<span class="fc" id="L195">        drawable.draw(canvas);</span>
+<span class="fc" id="L196">        return new BitmapDrawable(context.getResources(), bitmap);</span>
+    }
+
+    /**
+     * Sets variables necessary for app functions after a login
+     * Also sets the preferences for a new token
+     *
+     * @param global   GlobalClass for context and storing login details
+     * @param username Username for the account to log into
+     * @param token    Token used for authentication
+     */
+    public static void login(GlobalClass global, String username, String token) {
+<span class="fc" id="L208">        global.setUsername(username);</span>
+<span class="fc" id="L209">        global.setToken(token);</span>
+<span class="fc" id="L210">        global.updateLoginPrefs();</span>
+
+<span class="fc" id="L212">        new GetProfilePictureRequest(username).request(global::setPfp, global);</span>
+<span class="fc" id="L213">        new GetBannerRequest(username).request(global::setBanner, global);</span>
+
+<span class="fc" id="L215">        MainActivity.clearShoppingList();</span>
+<span class="fc" id="L216">        new GetListRequest(token).request(response -&gt; {</span>
+<span class="fc" id="L217">            GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);</span>
+<span class="fc" id="L218">            MainActivity.setShoppingList(shoppingResponse.getShoppingList());</span>
+<span class="fc" id="L219">        }, global);</span>
+
+<span class="fc" id="L221">        MainActivity.clearFoodLog();</span>
+        // TODO: Get the food log
+<span class="fc" id="L223">    }</span>
+
+    /**
+     * Gets the salt and attempts a login
+     *
+     * @param global        GlobalClass for context and storing login details
+     * @param username      Username to attempt a login for
+     * @param pwd           Password to hash
+     * @param errorListener Runs when the request fails or the response code is incorrect
+     */
+    public static void loginAttempt(GlobalClass global, String username, String pwd, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2) {
+<span class="fc" id="L234">        VolleyErrorHandler errorHandler = new VolleyErrorHandler(errorListener, errorListener2);</span>
+<span class="fc" id="L235">        new SaltRequest(username).request(response -&gt; {</span>
+<span class="fc" id="L236">            SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);</span>
+
+<span class="fc" id="L238">            int result = saltResponse.getResult();</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">            if (result == RESULT_OK) {</span>
+<span class="fc" id="L240">                byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());</span>
+<span class="fc" id="L241">                hashRequest(global, username, Hasher.getEncoded(Hasher.hash(pwd.toCharArray(), salt)), listener, errorListener, errorListener2, 0);</span>
+<span class="fc" id="L242">            } else {</span>
+<span class="nc" id="L243">                errorHandler.onErrorResponse(new VolleyError(String.valueOf(result)));</span>
+            }
+<span class="fc" id="L245">        }, errorHandler, global);</span>
+<span class="fc" id="L246">    }</span>
+
+    /**
+     * Makes a login hash request
+     *
+     * @param global        GlobalClass for context and storing login data
+     * @param username      Username to login with
+     * @param hash          Hash to login with
+     * @param errorListener ErrorListener handles errors
+     * @param depth         Number of retries
+     */
+    public static void hashRequest(GlobalClass global, String username, String hash, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">        if (depth &gt; TOKEN_MAX_DEPTH) {</span>
+<span class="nc" id="L259">            Toaster.toastShort(&quot;Unable to generate a token&quot;, global);</span>
+<span class="nc" id="L260">            return;</span>
+        }
+
+<span class="fc" id="L263">        VolleyErrorHandler errorHandler = new VolleyErrorHandler(errorListener, errorListener2);</span>
+<span class="fc" id="L264">        String token = Hasher.genToken();</span>
+<span class="fc" id="L265">        new LoginHashRequest(username, hash, token).request(response -&gt; {</span>
+<span class="fc" id="L266">            LoginResponse loginResponse = objFromJson(response, LoginResponse.class);</span>
+
+<span class="fc" id="L268">            int result = loginResponse.getResult();</span>
+<span class="pc bpc" id="L269" title="2 of 3 branches missed.">            switch (loginResponse.getResult()) {</span>
+                case RESULT_REGEN_TOKEN: {
+<span class="nc" id="L271">                    hashRequest(global, username, hash, listener, errorListener, errorListener2, depth + 1);</span>
+<span class="nc" id="L272">                    break;</span>
+                }
+                case RESULT_LOGGED_IN: {
+<span class="nc" id="L275">                    login(global, username, token);</span>
+<span class="nc" id="L276">                    listener.run();</span>
+<span class="nc" id="L277">                    break;</span>
+                }
+                default: {
+<span class="fc" id="L280">                    errorHandler.onErrorResponse(new VolleyError(String.valueOf(result)));</span>
+                }
+            }
+<span class="fc" id="L283">        }, errorHandler, global);</span>
+<span class="fc" id="L284">    }</span>
+
+    /**
+     * Does a token based login request
+     *
+     * @param global        GlobalClass for context and storing login details
+     * @param token         Token to log in with
+     * @param listener      Listener to run on successful login
+     * @param errorListener ErrorListener to handle request errors and error codes
+     */
+    public static void loginAttempt(GlobalClass global, String token, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2) {
+<span class="fc" id="L295">        VolleyErrorHandler errorHandler = new VolleyErrorHandler(errorListener, errorListener2);</span>
+<span class="fc" id="L296">        new LoginTokenRequest(token).request(response -&gt; {</span>
+<span class="fc" id="L297">            LoginResponse loginResponse = objFromJson(response, LoginResponse.class);</span>
+
+<span class="fc" id="L299">            int result = loginResponse.getResult();</span>
+<span class="pc bpc" id="L300" title="1 of 3 branches missed.">            switch (result) {</span>
+                case RESULT_REGEN_TOKEN: {
+<span class="nc" id="L302">                    regenToken(global, loginResponse.getUsername(), token, listener, errorListener, errorListener2, 0);</span>
+<span class="nc" id="L303">                    break;</span>
+                }
+                case RESULT_LOGGED_IN: {
+<span class="fc" id="L306">                    login(global, loginResponse.getUsername(), token);</span>
+<span class="fc" id="L307">                    listener.run();</span>
+<span class="fc" id="L308">                    break;</span>
+                }
+                default: {
+<span class="fc" id="L311">                    errorHandler.onErrorResponse(new VolleyError(String.valueOf(result)));</span>
+                }
+            }
+<span class="fc" id="L314">        }, errorHandler, global);</span>
+<span class="fc" id="L315">    }</span>
+
+    /**
+     * Generates a new token for the account
+     *
+     * @param global        GlobalClass for context and storing login details
+     * @param username      Username of the account to log into
+     * @param oldToken      Old token for authentication
+     * @param listener      Listener to run on successful login
+     * @param errorListener ErrorListener to handle request errors and error codes
+     * @param depth         Number of retries
+     */
+    public static void regenToken(GlobalClass global, String username, String oldToken, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+<span class="nc bnc" id="L328" title="All 2 branches missed.">        if (depth &gt; TOKEN_MAX_DEPTH) {</span>
+<span class="nc" id="L329">            Toaster.toastShort(&quot;Unable to generate a token&quot;, global);</span>
+<span class="nc" id="L330">            return;</span>
+        }
+
+<span class="nc" id="L333">        VolleyErrorHandler errorHandler = new VolleyErrorHandler(errorListener, errorListener2);</span>
+<span class="nc" id="L334">        String token = Hasher.genToken();</span>
+<span class="nc" id="L335">        new RegenTokenRequest(token, oldToken).request(response -&gt; {</span>
+<span class="nc" id="L336">            GenericResponse genericResponse = objFromJson(response, GenericResponse.class);</span>
+
+<span class="nc" id="L338">            int result = genericResponse.getResult();</span>
+<span class="nc bnc" id="L339" title="All 3 branches missed.">            switch (result) {</span>
+                case RESULT_REGEN_TOKEN: {
+<span class="nc" id="L341">                    regenToken(global, username, oldToken, listener, errorListener, errorListener2, depth + 1);</span>
+<span class="nc" id="L342">                    break;</span>
+                }
+                case RESULT_LOGGED_IN: {
+<span class="nc" id="L345">                    login(global, username, token);</span>
+<span class="nc" id="L346">                    listener.run();</span>
+<span class="nc" id="L347">                    break;</span>
+                }
+                default: {
+<span class="nc" id="L350">                    errorHandler.onErrorResponse(new VolleyError(String.valueOf(result)));</span>
+                }
+            }
+<span class="nc" id="L353">        }, errorHandler, global);</span>
+<span class="nc" id="L354">    }</span>
+
+    /**
+     * Registers a new account for the application
+     *
+     * @param global        GlobalClass for context and storing login details
+     * @param email         Email for the new account
+     * @param username      Username for the new account
+     * @param hash          Salted hash of the password for the new account
+     * @param salt          Salt used for the hash
+     * @param listener      Listener to run when the login succeeds
+     * @param errorListener ErrorListener to handle request errors and error codes
+     * @param depth         Number of retries
+     */
+    public static void register(GlobalClass global, String email, String username, String hash, String salt, SuccessListener listener, ErrorListener errorListener, Response.ErrorListener errorListener2, int depth) {
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">        if (depth &gt; TOKEN_MAX_DEPTH) {</span>
+<span class="nc" id="L370">            Toaster.toastShort(&quot;Unable to generate a token&quot;, global);</span>
+<span class="nc" id="L371">            return;</span>
+        }
+
+<span class="fc" id="L374">        VolleyErrorHandler errorHandler = new VolleyErrorHandler(errorListener, errorListener2);</span>
+<span class="fc" id="L375">        String token = Hasher.genToken();</span>
+<span class="fc" id="L376">        new RegisterRequest(email, username, hash, salt, token).request(response -&gt; {</span>
+<span class="fc" id="L377">            GenericResponse genericResponse = objFromJson(response, GenericResponse.class);</span>
+
+<span class="fc" id="L379">            int result = genericResponse.getResult();</span>
+<span class="pc bpc" id="L380" title="2 of 3 branches missed.">            switch (result) {</span>
+                case RESULT_USER_CREATED: {
+<span class="nc" id="L382">                    Util.login(global, username, token);</span>
+<span class="nc" id="L383">                    listener.run();</span>
+<span class="nc" id="L384">                    break;</span>
+                }
+                case RESULT_REGEN_TOKEN: {
+<span class="nc" id="L387">                    register(global, email, username, hash, salt, listener, errorListener, errorListener2, depth + 1);</span>
+<span class="nc" id="L388">                    break;</span>
+                }
+                default: {
+<span class="fc" id="L391">                    errorHandler.onErrorResponse(new VolleyError(String.valueOf(result)));</span>
+                }
+            }
+<span class="fc" id="L394">        }, errorHandler, global);</span>
+<span class="fc" id="L395">    }</span>
+
+    /**
+     * Opens the account page based on the given parameters
+     *
+     * @param global   Used to get the current user's account details
+     * @param username Username of the account to open
+     * @param context  Context to start activity / volley with
+     */
+    public static void openAccountPage(GlobalClass global, String username, Context context) {
+<span class="nc" id="L405">        new IsFollowingRequest(global.getUsername(), username).request(response -&gt; {</span>
+<span class="nc" id="L406">            FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);</span>
+
+<span class="nc" id="L408">            Intent intent = new Intent(context, AccountActivity.class);</span>
+<span class="nc bnc" id="L409" title="All 4 branches missed.">            intent.putExtra(PARCEL_FOLLOWING, followResponse.getUsers() != null &amp;&amp; followResponse.getUsers().length != 0);</span>
+<span class="nc" id="L410">            intent.putExtra(PARCEL_USERNAME, username);</span>
+<span class="nc" id="L411">            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));</span>
+<span class="nc" id="L412">            context.startActivity(intent);</span>
+<span class="nc" id="L413">        }, error -&gt; {</span>
+<span class="nc" id="L414">            Intent intent = new Intent(context, AccountActivity.class);</span>
+<span class="nc" id="L415">            intent.putExtra(PARCEL_USERNAME, username);</span>
+<span class="nc" id="L416">            intent.putExtra(PARCEL_OWNER, username.equals(global.getUsername()));</span>
+<span class="nc" id="L417">            context.startActivity(intent);</span>
+<span class="nc" id="L418">        }, context);</span>
+<span class="nc" id="L419">    }</span>
+
+    /**
+     * Switches the active user to the new username
+     *
+     * @param global   Global class for variables
+     * @param username New username to switch to
+     */
+    public static void switchUser(GlobalClass global, String username) {
+<span class="nc" id="L428">        global.getUsers().put(USERS_LATEST, username);</span>
+<span class="nc" id="L429">        global.updateLoginPrefs();</span>
+<span class="nc" id="L430">    }</span>
+
+    /**
+     * Logs out of the given account
+     *
+     * @param global   Global class for variables
+     * @param username Username to log out of
+     */
+    public static void logout(GlobalClass global, String username) {
+<span class="nc" id="L439">        global.setUsername(null);</span>
+<span class="nc" id="L440">        global.removeToken(username);</span>
+<span class="nc" id="L441">        global.updateLoginPrefs();</span>
+<span class="nc" id="L442">    }</span>
+
+    /**
+     * Creates an object from JSON using GSON's fromJson() method
+     *
+     * @param json JSONObject (usually from a volley response)
+     * @param type Type of the returned object
+     * @param &lt;T&gt;  Type of json object
+     * @return Object from json
+     */
+    public static &lt;T&gt; T objFromJson(JSONObject json, Type type) {
+<span class="fc" id="L453">        return objFromJson(json.toString(), type);</span>
+    }
+
+    /**
+     * Creates an object from JSON using GSON's fromJson() method
+     *
+     * @param json JSON string
+     * @param type Type of the returned object
+     * @param &lt;T&gt;  Type of json object
+     * @return Object from json
+     */
+    public static &lt;T&gt; T objFromJson(String json, Type type) {
+<span class="fc" id="L465">        return GSON.fromJson(json, type);</span>
+    }
+
+    /**
+     * Creates an object from JSON using GSON and a custom type adapter
+     *
+     * @param json        JSON string
+     * @param type        Type of the returned object
+     * @param typeAdapter Adapter object to be used for generation
+     * @param &lt;T&gt;         Type of the json object
+     * @return Object from json
+     */
+    public static &lt;T&gt; T objFromJsonAdapted(String json, Type type, Object typeAdapter) {
+<span class="nc" id="L478">        return GSON_BUILDER</span>
+<span class="nc" id="L479">                .registerTypeAdapter(type, typeAdapter)</span>
+<span class="nc" id="L480">                .create()</span>
+<span class="nc" id="L481">                .fromJson(json, type);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

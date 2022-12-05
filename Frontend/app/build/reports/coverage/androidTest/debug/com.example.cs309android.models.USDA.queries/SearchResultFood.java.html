@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchResultFood.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.queries</a> &gt; <span class="el_source">SearchResultFood.java</span></div><h1>SearchResultFood.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.queries;
+
+import com.example.cs309android.models.USDA.models.AbridgedFoodNutrient;
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Search Result Food model
+ * Models a food item returned from a search
+ *
+ * @author Mitch Hudson
+ */
+public class SearchResultFood {
+    /**
+     * FDC id
+     */
+    @Expose
+    private final Integer fdcId;
+    /**
+     * Data type (5 values possible)
+     */
+    @Expose
+    private final String dataType;
+    /**
+     * Description / name
+     */
+    @Expose
+    private final String description;
+    /**
+     * Food code
+     */
+    @Expose
+    private final String foodCode;
+    /**
+     * Food nutrients
+     */
+    @Expose
+    private final AbridgedFoodNutrient[] foodNutrients;
+    /**
+     * Publication date
+     */
+    @Expose
+    private final String publicationDate;
+    /**
+     * Scientific name
+     */
+    @Expose
+    private final String scientificName;
+    /**
+     * Brand owner
+     */
+    @Expose
+    private final String brandOwner;
+    /**
+     * UPC code?
+     */
+    @Expose
+    private final String gtinUpc;
+    /**
+     * Ingredients list from the label
+     */
+    @Expose
+    private final String ingredients;
+    /**
+     * NDB number
+     */
+    @Expose
+    private final Integer ndbNumber;
+    /**
+     * Any additional descriptions
+     */
+    @Expose
+    private final String additionalDescriptions;
+    /**
+     * All highlighted fields from the search
+     */
+    @Expose
+    private final String allHighlightFields;
+    /**
+     * Score?
+     */
+    @Expose
+    private final Float score;
+
+    /**
+     * Public constructor
+     *
+     * @param fdcId                  fdci d
+     * @param dataType               data type
+     * @param description            description / name
+     * @param foodCode               food code
+     * @param foodNutrients          food nutrients
+     * @param publicationDate        publication date
+     * @param scientificName         scientific name
+     * @param brandOwner             brand owner
+     * @param gtinUpc                upc?
+     * @param ingredients            ingredients from the label
+     * @param ndbNumber              ndb number
+     * @param additionalDescriptions additional descriptions
+     * @param allHighlightFields     highlighted fields
+     * @param score                  score?
+     */
+<span class="nc" id="L102">    public SearchResultFood(Integer fdcId, String dataType, String description, String foodCode, AbridgedFoodNutrient[] foodNutrients, String publicationDate, String scientificName, String brandOwner, String gtinUpc, String ingredients, Integer ndbNumber, String additionalDescriptions, String allHighlightFields, Float score) {</span>
+<span class="nc" id="L103">        this.fdcId = fdcId;</span>
+<span class="nc" id="L104">        this.dataType = dataType;</span>
+<span class="nc" id="L105">        this.description = description;</span>
+<span class="nc" id="L106">        this.foodCode = foodCode;</span>
+<span class="nc" id="L107">        this.foodNutrients = foodNutrients;</span>
+<span class="nc" id="L108">        this.publicationDate = publicationDate;</span>
+<span class="nc" id="L109">        this.scientificName = scientificName;</span>
+<span class="nc" id="L110">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L111">        this.gtinUpc = gtinUpc;</span>
+<span class="nc" id="L112">        this.ingredients = ingredients;</span>
+<span class="nc" id="L113">        this.ndbNumber = ndbNumber;</span>
+<span class="nc" id="L114">        this.additionalDescriptions = additionalDescriptions;</span>
+<span class="nc" id="L115">        this.allHighlightFields = allHighlightFields;</span>
+<span class="nc" id="L116">        this.score = score;</span>
+<span class="nc" id="L117">    }</span>
+
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
+    public Integer getFdcId() {
+<span class="nc" id="L125">        return fdcId;</span>
+    }
+
+    /**
+     * Getter for the data type
+     *
+     * @return data type
+     */
+    public String getDataType() {
+<span class="nc" id="L134">        return dataType;</span>
+    }
+
+    /**
+     * Getter for the description / name
+     *
+     * @return description / name
+     */
+    public String getDescription() {
+<span class="nc" id="L143">        return description;</span>
+    }
+
+    /**
+     * Getter for the food code
+     *
+     * @return food code
+     */
+    public String getFoodCode() {
+<span class="nc" id="L152">        return foodCode;</span>
+    }
+
+    /**
+     * Getter for the food nutrients
+     *
+     * @return food nutrients
+     */
+    public AbridgedFoodNutrient[] getFoodNutrients() {
+<span class="nc" id="L161">        return foodNutrients;</span>
+    }
+
+    /**
+     * Getter for the publication date
+     *
+     * @return publication date
+     */
+    public String getPublicationDate() {
+<span class="nc" id="L170">        return publicationDate;</span>
+    }
+
+    /**
+     * Getter for the scientific name
+     *
+     * @return scientific name
+     */
+    public String getScientificName() {
+<span class="nc" id="L179">        return scientificName;</span>
+    }
+
+    /**
+     * Getter for the brand owner
+     *
+     * @return brand owner
+     */
+    public String getBrandOwner() {
+<span class="nc" id="L188">        return brandOwner;</span>
+    }
+
+    /**
+     * Getter for the upc?
+     *
+     * @return upc?
+     */
+    public String getGtinUpc() {
+<span class="nc" id="L197">        return gtinUpc;</span>
+    }
+
+    /**
+     * Getter for the ingredients
+     *
+     * @return ingredients list from the label
+     */
+    public String getIngredients() {
+<span class="nc" id="L206">        return ingredients;</span>
+    }
+
+    /**
+     * Getter for the ndb number
+     *
+     * @return ndb number
+     */
+    public Integer getNdbNumber() {
+<span class="nc" id="L215">        return ndbNumber;</span>
+    }
+
+    /**
+     * Getter for the additional descriptions
+     *
+     * @return additional descriptions
+     */
+    public String getAdditionalDescriptions() {
+<span class="nc" id="L224">        return additionalDescriptions;</span>
+    }
+
+    /**
+     * Getter for the highlighted fields
+     *
+     * @return highlighted fields
+     */
+    public String getAllHighlightFields() {
+<span class="nc" id="L233">        return allHighlightFields;</span>
+    }
+
+    /**
+     * Getter for the score?
+     *
+     * @return score?
+     */
+    public Float getScore() {
+<span class="nc" id="L242">        return score;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,13 +1,13 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.GET_RECIPE_IMAGE_URL;
+import static com.example.cs309android.util.Constants.PICASSO;
+import static com.example.cs309android.util.Constants.Urls.Recipes.GET_RECIPE_IMAGE_URL;
 
 import android.content.Context;
 import android.widget.ImageView;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.ImageRequest;
-import com.example.cs309android.util.PicassoSingleton;
 
 /**
  * Get image request for recipes
@@ -51,6 +51,6 @@ public class GetRecipeImageRequest extends ImageRequest {
     }
 
     public void request(ImageView view, Context context) {
-        PicassoSingleton.getInstance(context).load(getURL()).into(view);
+        PICASSO.getInstance(context).load(getURL()).into(view);
     }
 }

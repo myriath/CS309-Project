@@ -5,6 +5,8 @@ import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -94,7 +96,7 @@ public class SimpleFoodItem implements Parcelable {
      * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int id, int dbId, String description, String brand, boolean stricken, boolean isCustom) {
+    public SimpleFoodItem(int id, String description, String brand, boolean stricken, boolean isCustom) {
         this.id = id;
         this.description = description;
         this.brand = brand;
@@ -209,5 +211,17 @@ public class SimpleFoodItem implements Parcelable {
         parcel.writeString(brand);
         parcel.writeBoolean(stricken);
         parcel.writeBoolean(isCustom);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SimpleFoodItem{" +
+                "id=" + id +
+                ", isCustom=" + isCustom +
+                ", description='" + description + '\'' +
+                ", brand='" + brand + '\'' +
+                ", stricken=" + stricken +
+                '}';
     }
 }

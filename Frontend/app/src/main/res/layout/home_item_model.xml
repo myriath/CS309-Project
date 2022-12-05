@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginBottom="16dp">
+    android:layout_marginVertical="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,13 +31,14 @@
             android:id="@+id/recipeDescription"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/recipeTitle"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="8dp"
-            android:textSize="20sp"
             android:layout_toEndOf="@id/recipeImage"
-            android:layout_below="@id/recipeTitle"
+            android:enabled="false"
             android:maxLines="2"
-            android:enabled="false" />
+            android:ellipsize="end"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

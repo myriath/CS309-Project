@@ -12,20 +12,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.adapters.ShoppingListAdapter;
-import com.example.cs309android.models.api.models.SimpleFoodItem;
-import com.example.cs309android.models.api.request.shopping.GetListRequest;
-import com.example.cs309android.models.api.response.shopping.GetListResponse;
-import com.example.cs309android.util.Constants;
-import com.example.cs309android.util.Toaster;
-import com.example.cs309android.util.Util;
+import com.example.cs309android.models.api.models.ShoppingList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Shopping list fragment.
@@ -73,7 +66,7 @@ public class ShoppingFragment extends BaseFragment {
      * @param view Root view of the fragment
      */
     public void refreshList(View view) {
-        ArrayList<SimpleFoodItem> items = MainActivity.getShoppingList();
+        ArrayList<ShoppingList> items = MainActivity.getShoppingList();
         ShoppingListAdapter adapter = new ShoppingListAdapter(this.getActivity(), items);
         ((ListView) view.findViewById(R.id.shopping_list)).setAdapter(adapter);
 //        ExtendedFloatingActionButton fab = view.findViewById(R.id.add_item);

@@ -1,9 +1,9 @@
 package com.example.cs309android.activities.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_OPEN_ACCOUNT;
-import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
-import static com.example.cs309android.util.Constants.PARCEL_TITLE;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_OPEN_ACCOUNT;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
 
 import android.content.Intent;
 import android.os.Bundle;
