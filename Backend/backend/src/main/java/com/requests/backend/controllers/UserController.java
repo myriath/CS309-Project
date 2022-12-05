@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 
 import static com.util.Constants.*;
-import static com.util.Constants.UserType.USER_REG;
+import static com.util.Constants.UserType.*;
 
 /**
  * This class is responsible for handling all requests related to users login, register, etc.
@@ -213,6 +213,43 @@ public class UserController {
         }
 
         return res;
+    }
+
+    @DeleteMapping(path = "/delete/{token}")
+    public @ResponseBody ResultResponse deleteUser(@PathVariable String token, @RequestParam String username) {
+        return getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            switch (user.getUserType()) {
+                case USER_ADM:
+                    if (other.getUserType() > USER_MOD) break;
+                case USER_DEV:
+                    if (other.getUserType() > USER_ADM) break;
+                    userRepository.delete(other);
+                    res.setResult(RESULT_OK);
+                    return;
+                default: break;
+            }
+            res.setResult(RESULT_ERROR);
+        }, tokenRepository);
+    }
+
+    @PatchMapping(path = "/updateUserType/{token}/{username}/{type}")
+    public @ResponseBody ResultResponse updateType(@PathVariable String token, @PathVariable String username, @PathVariable int type) {
+        return getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            switch (user.getUserType()) {
+                case USER_ADM:
+                    if (other.getUserType() > USER_MOD) break;
+                case USER_DEV:
+                    if (type > USER_ADM || other.getUserType() == USER_DEV) break;
+                    other.setUserType(type);
+                    userRepository.save(other);
+                    res.setResult(RESULT_OK);
+                    return;
+                default: break;
+            }
+            res.setResult(RESULT_ERROR);
+        }, tokenRepository);
     }
 
     @GetMapping(path = "/getUserType/{username}")

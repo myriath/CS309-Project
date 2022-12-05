@@ -49,7 +49,7 @@ public class CustomController {
     }
 
     /**
-     * Get information about a specific custom food by its ID.
+     * Get information about a custom food by its ID.
      * @param id ID of the item to get
      * @return JSON string containing information about the food item.
      */
