@@ -254,12 +254,15 @@ public class RecipeController {
         try {
             User user = tokens[0].getUser();
             User other = recipe[0].getUser();
-            LOGGER.info(token + " " + user.getUsername() + " " + recipe);
+            LOGGER.info(token + " " + user.getUsername() + " " + recipe[0]);
 
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
                     (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
-                recipeRepository.queryDeleteRecipe(rid);
+//                ingredientRepository.queryDeleteRecipe(rid);
+//                instructionRepository.queryDeleteRecipe(rid);
+//                recipeRepository.queryDeleteRecipe(rid);
+                recipeRepository.delete(recipe[0]);
                 res.setResult(RESULT_OK);
             } else {
                 res.setResult(RESULT_ERROR);

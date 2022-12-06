@@ -52,9 +52,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     @Query (
 
-            value = "SELECT token, creation_date, username FROM token WHERE t.token = :Token",
+            value = "SELECT * FROM tokens WHERE token = :token",
             nativeQuery = true)
-    Token[] queryRecipeDeleteCheck(@Param("Token") String Token);
+    Token[] queryRecipeDeleteCheck(@Param("token") String token);
 
     @Modifying
     @Query(
