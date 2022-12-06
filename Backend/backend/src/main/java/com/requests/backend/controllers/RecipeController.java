@@ -157,6 +157,7 @@ public class RecipeController {
             Recipe recipe = recipeRepository.queryGetRecipeByRid(rid)[0];
             User other = recipe.getUser();
 
+            LOGGER.info(token + " " + user.getUsername() + " " + req);
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
                     (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
