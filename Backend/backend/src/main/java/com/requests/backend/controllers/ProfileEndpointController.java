@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.Collection;
 
 import static com.util.Constants.*;
+import static com.util.Constants.UserType.USER_MOD;
 
 /**
  * This controller handles all requests related to the user's individual profile.
@@ -108,6 +109,19 @@ public class ProfileEndpointController {
         return UserController.getUserFromToken(token, (user, res) -> userRepository.queryUpdateBio(user.getUsername(), req.getNewBio()), tokenRepository);
     }
 
+    @PatchMapping(path = "/updateProfile/{token}/{username}")
+    public @ResponseBody ResultResponse updateOtherProfile(@PathVariable String token, @PathVariable String username, @RequestBody UpdateProfileRequest req) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            if (user.getUserType() > USER_MOD && user.getUserType() > other.getUserType()) {
+                userRepository.queryUpdateBio(user.getUsername(), req.getNewBio());
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
+    }
+
     /**
      * Update a user's profile picture.
      * @param token Token for authentication
@@ -119,6 +133,11 @@ public class ProfileEndpointController {
         return updateImage(token, file, PFP_SOURCE);
     }
 
+    @PatchMapping(path="/updatePfp/{token}/{username}")
+    public @ResponseBody ResultResponse updatePFPOther(@PathVariable String token, @PathVariable String username, @RequestParam("image") MultipartFile file) {
+        return updateImage(token, username, file, PFP_SOURCE);
+    }
+
     /**
      * Update a user's profile banner.
      * @param token Token for authentication
@@ -128,6 +147,11 @@ public class ProfileEndpointController {
     @PatchMapping(path="/updateBanner/{token}")
     public @ResponseBody ResultResponse updateBanner(@PathVariable String token, @RequestParam("image") MultipartFile file) {
         return updateImage(token, file, BANNER_SOURCE);
+    }
+
+    @PatchMapping(path="/updateBanner/{token}/{username}")
+    public @ResponseBody ResultResponse updateBannerOther(@PathVariable String token, @PathVariable String username, @RequestParam("image") MultipartFile file) {
+        return updateImage(token, username, file, BANNER_SOURCE);
     }
 
     /**
@@ -146,6 +170,32 @@ public class ProfileEndpointController {
                 res.setResult(RESULT_OK);
             } catch (IOException e) {
                 e.printStackTrace();
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
+    }
+
+    /**
+     * Updates an image on the server
+     * @param token Token for authentication
+     * @param file New image to replace
+     * @param basePath Base path to the destination
+     * @return Result response with the result code to be handled by the backend
+     */
+    public ResultResponse updateImage(String token, String username, MultipartFile file, String basePath) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            if (user.getUserType() > USER_MOD && user.getUserType() > other.getUserType()) {
+                String filename = Hasher.sha256plaintext(username) + ".webp";
+                File file1 = new File(basePath, filename);
+                try (FileOutputStream outputStream = new FileOutputStream(file1)) {
+                    outputStream.write(file.getBytes());
+                    res.setResult(RESULT_OK);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    res.setResult(RESULT_ERROR);
+                }
+            } else {
                 res.setResult(RESULT_ERROR);
             }
         }, tokenRepository);
