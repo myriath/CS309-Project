@@ -5,6 +5,7 @@ import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_USER_DELETED;
 import static com.example.cs309android.util.Constants.UserType.USER_ADM;
 import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 import static com.example.cs309android.util.Constants.UserType.USER_REG;
@@ -211,12 +212,16 @@ public class AccountActivity extends AppCompatActivity {
                             intent1.putExtra(PARCEL_USERNAME, username);
                             editUserLauncher.launch(intent1);
                         } else if (id == R.id.delete) {
-                            new DeleteUserRequest(username, global.getToken()).request(response1 -> {
-                                GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
-                                if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
-                                    Toaster.toastShort("Error", this);
-                                }
-                            }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+//                            new DeleteUserRequest(username, global.getToken()).request(response1 -> {
+//                                GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
+//                                if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
+//                                    Toaster.toastShort("Error", this);
+//                                }
+//                            }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+                            Intent intent = new Intent();
+                            intent.putExtra(PARCEL_USERNAME, username);
+                            System.out.println(username);
+                            setResult(RESULT_USER_DELETED, intent);
                             finish();
                         } else if (id == R.id.change_type) {
                             PopupMenu menu1 = new PopupMenu(this, view);
