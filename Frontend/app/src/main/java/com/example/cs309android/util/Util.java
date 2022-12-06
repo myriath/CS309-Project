@@ -1,14 +1,17 @@
 package com.example.cs309android.util;
 
-import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
-import static com.example.cs309android.util.Constants.PARCEL_OWNER;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_LOGGED_IN;
-import static com.example.cs309android.util.Constants.RESULT_OK;
-import static com.example.cs309android.util.Constants.RESULT_REGEN_TOKEN;
-import static com.example.cs309android.util.Constants.RESULT_USER_CREATED;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_LOGGED_IN;
+import static com.example.cs309android.util.Constants.Results.RESULT_OK;
+import static com.example.cs309android.util.Constants.Results.RESULT_REGEN_TOKEN;
+import static com.example.cs309android.util.Constants.Results.RESULT_USER_CREATED;
 import static com.example.cs309android.util.Constants.TOKEN_MAX_DEPTH;
 import static com.example.cs309android.util.Constants.USERS_LATEST;
+import static com.example.cs309android.util.Constants.UserType.USER_ADM;
+import static com.example.cs309android.util.Constants.UserType.USER_DEV;
+import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +21,9 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
@@ -33,8 +38,10 @@ import com.example.cs309android.interfaces.SuccessListener;
 import com.example.cs309android.models.VolleyErrorHandler;
 import com.example.cs309android.models.api.request.profile.GetBannerRequest;
 import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
 import com.example.cs309android.models.api.request.shopping.GetListRequest;
 import com.example.cs309android.models.api.request.social.IsFollowingRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.request.users.LoginHashRequest;
 import com.example.cs309android.models.api.request.users.LoginTokenRequest;
 import com.example.cs309android.models.api.request.users.RegenTokenRequest;
@@ -43,6 +50,7 @@ import com.example.cs309android.models.api.request.users.SaltRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.shopping.GetListResponse;
 import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
 import com.example.cs309android.models.api.response.users.LoginResponse;
 import com.example.cs309android.models.api.response.users.SaltResponse;
 import com.example.cs309android.util.security.Hasher;
@@ -103,21 +111,18 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void spin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.VISIBLE);
+//        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in));
     }
 
     /**
      * Makes the spinner visible and locks interaction to the register page.
      * This is ran when the user starts a request to the server.
      *
-     * @param view View to find the spinner from.
+     * @param activity View to find the spinner from.
      */
-    public static void spin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0.5f);
-        view.findViewById(R.id.spinnerBlocker).setClickable(true);
+    public static void spin(Activity activity) {
+        spin(activity.getWindow().getDecorView());
     }
 
     /**
@@ -127,9 +132,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(View view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out));
     }
 
     /**
@@ -139,9 +143,8 @@ public class Util {
      * @param view View to find the spinner from.
      */
     public static void unSpin(Activity view) {
-        view.findViewById(R.id.loginSpinner).setVisibility(View.GONE);
-        view.findViewById(R.id.spinnerBlocker).setAlpha(0);
-        view.findViewById(R.id.spinnerBlocker).setClickable(false);
+        view.findViewById(R.id.spinnerBlocker).setVisibility(View.GONE);
+        view.findViewById(R.id.spinnerBlocker).startAnimation(AnimationUtils.loadAnimation(view, R.anim.fade_out));
     }
 
     /**
@@ -211,14 +214,26 @@ public class Util {
         global.setToken(token);
         global.updateLoginPrefs();
 
+        new GetUserTypeRequest(username).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            global.setUserType(genericResponse.getResult());
+        }, global);
         new GetProfilePictureRequest(username).request(global::setPfp, global);
         new GetBannerRequest(username).request(global::setBanner, global);
+        new GetProfileRequest(username).request(response -> {
+            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+            global.setBio(profileResponse.getBio());
+        }, global);
 
         MainActivity.clearShoppingList();
         new GetListRequest(token).request(response -> {
+            System.out.println(response);
             GetListResponse shoppingResponse = Util.objFromJson(response, GetListResponse.class);
             MainActivity.setShoppingList(shoppingResponse.getShoppingList());
         }, global);
+
+        MainActivity.clearFoodLog();
+        // TODO: Get the food log
     }
 
     /**
@@ -234,6 +249,7 @@ public class Util {
         new SaltRequest(username).request(response -> {
             SaltResponse saltResponse = Util.objFromJson(response, SaltResponse.class);
 
+            System.out.println(response);
             int result = saltResponse.getResult();
             if (result == RESULT_OK) {
                 byte[] salt = Hasher.B64_URL_DECODER.decode(saltResponse.getSalt());
@@ -378,7 +394,7 @@ public class Util {
             int result = genericResponse.getResult();
             switch (result) {
                 case RESULT_USER_CREATED: {
-                    Util.login(global, username, token);
+                    login(global, username, token);
                     listener.run();
                     break;
                 }
@@ -478,5 +494,28 @@ public class Util {
                 .registerTypeAdapter(type, typeAdapter)
                 .create()
                 .fromJson(json, type);
+    }
+
+    /**
+     * Gets the badge R id for the user
+     *
+     * @param userType Type of the user
+     * @param badge    ImageView to change
+     */
+    public static void getBadge(int userType, ImageView badge) {
+        switch (userType) {
+            case USER_DEV: {
+                badge.setImageResource(R.drawable.gem);
+                break;
+            }
+            case USER_ADM: {
+                badge.setImageResource(R.drawable.gold);
+                break;
+            }
+            case USER_MOD: {
+                badge.setImageResource(R.drawable.silver);
+                break;
+            }
+        }
     }
 }

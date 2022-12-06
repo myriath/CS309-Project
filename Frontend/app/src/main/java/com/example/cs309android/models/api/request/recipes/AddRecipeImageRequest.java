@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.ADD_RECIPE_IMAGE_URL;
+import static com.example.cs309android.util.Constants.Urls.Recipes.ADD_RECIPE_IMAGE_URL;
 
 import android.graphics.Bitmap;
 

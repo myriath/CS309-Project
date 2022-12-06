@@ -1,12 +1,11 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_HOME;
-import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
-import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_HOME;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.example.cs309android.R;
 import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.login.AccountSwitchActivity;
 import com.example.cs309android.fragments.BasePreferenceFragment;
-import com.example.cs309android.fragments.shopping.ShoppingFragment;
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 
 import java.util.Objects;
@@ -55,25 +54,46 @@ public class SettingsFragment extends BasePreferenceFragment {
 
         switchUserLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == CALLBACK_START_LOGIN) {
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean(PARCEL_BACK_ENABLED, true);
-                        callbackFragment.callback(CALLBACK_START_LOGIN, bundle);
-                    } else if (result.getResultCode() != Activity.RESULT_CANCELED) {
-                        callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null);
-                    }
-                }
+                result -> callbackFragment.callback(CALLBACK_MOVE_TO_HOME, null)
         );
 
         // Switch user changes the logged in user
         Preference switchUser = Objects.requireNonNull(findPreference("switch_user"));
         switchUser.setOnPreferenceClickListener(preference -> {
+            MainActivity.clearFoodLog();
             MainActivity.clearShoppingList();
             Intent intent = new Intent(getContext(), AccountSwitchActivity.class);
             switchUserLauncher.launch(intent);
             return true;
         });
+
+        // Logs out of the current account and prompts a login
+        Preference logout = Objects.requireNonNull(findPreference("log_out"));
+        logout.setOnPreferenceClickListener(preference -> {
+            MainActivity.clearFoodLog();
+            MainActivity.clearShoppingList();
+            Util.logout(global, global.getUsername());
+            callbackFragment.callback(CALLBACK_START_LOGIN, null);
+            return true;
+        });
+
+        // Notification settings
+        Preference notification0 = Objects.requireNonNull(findPreference("notification0"));
+        notification0.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
+
+        Preference notification1 = Objects.requireNonNull(findPreference("notification1"));
+        notification1.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
+
+        Preference notification2 = Objects.requireNonNull(findPreference("notification2"));
+        notification2.setOnPreferenceClickListener(preference -> startNotificationSettings(2));
+    }
+
+    public boolean startNotificationSettings(int channel) {
+        Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+        intent.putExtra(Settings.EXTRA_CHANNEL_ID, Constants.Notifications.CHANNELS[channel].getId());
+        startActivity(intent);
+        return true;
     }
 
     /**

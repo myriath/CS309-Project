@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalClass.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android</a> &gt; <span class="el_source">GlobalClass.java</span></div><h1>GlobalClass.java</h1><pre class="source lang-java linenums">package com.example.cs309android;
+
+import static com.example.cs309android.util.Constants.PREF_LOGIN;
+import static com.example.cs309android.util.Constants.USERS_LATEST;
+
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+
+import com.example.cs309android.util.Util;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * Global class for holding onto the token for the application
+ *
+ * @author Mitch Hudson
+ */
+<span class="fc" id="L20">public class GlobalClass extends Application {</span>
+    /**
+     * Profile picture used for the account page
+     */
+    private Bitmap pfp;
+    /**
+     * Banner image used for the account page
+     */
+    private Bitmap banner;
+    /**
+     * Biography text for the account page
+     */
+    private String bio;
+    /**
+     * Follower count
+     */
+    private int followers;
+    /**
+     * Following count;
+     */
+    private int following;
+    /**
+     * User map for storing login data
+     */
+    private Map&lt;String, String&gt; users;
+
+    /**
+     * Shared preferences for the app
+     */
+    private SharedPreferences preferences;
+
+    /**
+     * Updates the login prefs with a json string of
+     * the users map
+     */
+    public void updateLoginPrefs() {
+<span class="fc" id="L56">        preferences.edit()</span>
+<span class="fc" id="L57">                .putString(</span>
+                        PREF_LOGIN,
+<span class="fc" id="L59">                        Util.GSON.toJson(users)</span>
+<span class="fc" id="L60">                ).apply();</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Getter for the token string
+     *
+     * @return authentication token
+     */
+    public String getToken() {
+<span class="fc" id="L69">        return users.get(getUsername());</span>
+    }
+
+    /**
+     * Setter for the token string
+     *
+     * @param token authentication token
+     */
+    public void setToken(String token) {
+<span class="fc" id="L78">        users.put(getUsername(), token);</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Removes the login details of the username given
+     *
+     * @param username username to remove from the table
+     */
+    public void removeToken(String username) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (USERS_LATEST.equals(username)) return;</span>
+<span class="nc" id="L88">        users.remove(username);</span>
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Getter for the username
+     *
+     * @return username
+     */
+    public String getUsername() {
+<span class="fc" id="L97">        return users.get(USERS_LATEST);</span>
+    }
+
+    /**
+     * Setter for the username
+     *
+     * @param username new username
+     */
+    public void setUsername(String username) {
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (USERS_LATEST.equals(username)) return;</span>
+<span class="fc" id="L107">        users.put(USERS_LATEST, username);</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Getter for the list of logged in accounts
+     *
+     * @return Array of usernames
+     */
+    public String[] getAccounts() {
+<span class="nc" id="L116">        ArrayList&lt;String&gt; accounts = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L117">        users.forEach((username, token) -&gt; {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (!username.equals(USERS_LATEST)) accounts.add(username);</span>
+<span class="nc" id="L119">        });</span>
+<span class="nc" id="L120">        return accounts.toArray(new String[0]);</span>
+    }
+
+    /**
+     * Getter for the profile picture
+     *
+     * @return profile picture
+     */
+    public Bitmap getPfp() {
+<span class="nc" id="L129">        return pfp;</span>
+    }
+
+    /**
+     * Setter for the profile picture
+     *
+     * @param pfp new profile picture
+     */
+    public void setPfp(Bitmap pfp) {
+<span class="fc" id="L138">        this.pfp = pfp;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Getter for the banner image
+     *
+     * @return banner image
+     */
+    public Bitmap getBanner() {
+<span class="nc" id="L147">        return banner;</span>
+    }
+
+    /**
+     * Setter for the banner image
+     *
+     * @param banner new banner image
+     */
+    public void setBanner(Bitmap banner) {
+<span class="fc" id="L156">        this.banner = banner;</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Gets the bio text
+     *
+     * @return bio text
+     */
+    public String getBio() {
+<span class="nc" id="L165">        return bio;</span>
+    }
+
+    /**
+     * Sets the bio text
+     *
+     * @param bio new bio text
+     */
+    public void setBio(String bio) {
+<span class="nc" id="L174">        this.bio = bio;</span>
+<span class="nc" id="L175">    }</span>
+
+    /**
+     * Gets the follower count
+     *
+     * @return follower count
+     */
+    public int getFollowers() {
+<span class="nc" id="L183">        return followers;</span>
+    }
+
+    /**
+     * Sets the follower count
+     *
+     * @param followers new follower count
+     */
+    public void setFollowers(int followers) {
+<span class="nc" id="L192">        this.followers = followers;</span>
+<span class="nc" id="L193">    }</span>
+
+    /**
+     * Gets the following count
+     *
+     * @return following count
+     */
+    public int getFollowing() {
+<span class="nc" id="L201">        return following;</span>
+    }
+
+    /**
+     * Sets the following count
+     *
+     * @param following new following count
+     */
+    public void setFollowing(int following) {
+<span class="nc" id="L210">        this.following = following;</span>
+<span class="nc" id="L211">    }</span>
+
+    /**
+     * Getter for the shared preferences
+     *
+     * @return shared preferences
+     */
+    public SharedPreferences getPreferences() {
+<span class="fc" id="L219">        return preferences;</span>
+    }
+
+    /**
+     * Setter for the shared preferences
+     *
+     * @param preferences new shared preferences
+     */
+    public void setPreferences(SharedPreferences preferences) {
+<span class="fc" id="L228">        this.preferences = preferences;</span>
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Getter for the users map
+     *
+     * @return Map of users
+     */
+    public Map&lt;String, String&gt; getUsers() {
+<span class="nc" id="L237">        return users;</span>
+    }
+
+    /**
+     * Setter for the users map
+     *
+     * @param users Map of users
+     */
+    public void setUsers(Map&lt;String, String&gt; users) {
+<span class="fc" id="L246">        this.users = users;</span>
+<span class="fc" id="L247">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoundationFoodItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">FoundationFoodItem.java</span></div><h1>FoundationFoodItem.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Foundation Food Item model
+ *
+ * @author Mitch Hudson
+ */
+public class FoundationFoodItem {
+    /**
+     * FDC id
+     */
+    @Expose
+    private final int fdcId;
+    /**
+     * Data type
+     */
+    @Expose
+    private final String dataType;
+    /**
+     * Description
+     */
+    @Expose
+    private final String description;
+    /**
+     * Food class
+     */
+    @Expose
+    private final String foodClass;
+    /**
+     * Footnote
+     */
+    @Expose
+    private final String footNote;
+    /**
+     * True if this is a historical reference
+     */
+    @Expose
+    private final boolean isHistoricalReference;
+    /**
+     * NDB number
+     */
+    @Expose
+    private final int ndbNumber;
+    /**
+     * Publication date
+     */
+    @Expose
+    private final String publicationDate;
+    /**
+     * Scientific name
+     */
+    @Expose
+    private final String scientificName;
+    /**
+     * Food category
+     */
+    @Expose
+    private final FoodCategory foodCategory;
+    /**
+     * Food components
+     */
+    @Expose
+    private final FoodComponent[] foodComponents;
+    /**
+     * Food nutrients
+     */
+    @Expose
+    private final FoodNutrient[] foodNutrients;
+    /**
+     * Food portions
+     */
+    @Expose
+    private final FoodPortion[] foodPortions;
+    /**
+     * Input food foundations
+     */
+    @Expose
+    private final InputFoodFoundation[] inputFoodFoundations;
+    /**
+     * Nutrient conversion factors
+     */
+    @Expose
+    private final NutrientConversionFactors[] nutrientConversionFactors;
+
+    /**
+     * Public constructor
+     *
+     * @param fdcId                     fdc id
+     * @param dataType                  data type
+     * @param description               description / name
+     * @param foodClass                 food class
+     * @param footNote                  footnote
+     * @param isHistoricalReference     true if this is a historical reference
+     * @param ndbNumber                 ndb number
+     * @param publicationDate           publication date
+     * @param scientificName            scientific name
+     * @param foodCategory              food category
+     * @param foodComponents            food components
+     * @param foodNutrients             food nutrients
+     * @param foodPortions              food portions
+     * @param inputFoodFoundations      input food foundations
+     * @param nutrientConversionFactors conversion factors
+     */
+<span class="nc" id="L106">    public FoundationFoodItem(int fdcId, String dataType, String description, String foodClass, String footNote, boolean isHistoricalReference, int ndbNumber, String publicationDate, String scientificName, FoodCategory foodCategory, FoodComponent[] foodComponents, FoodNutrient[] foodNutrients, FoodPortion[] foodPortions, InputFoodFoundation[] inputFoodFoundations, NutrientConversionFactors[] nutrientConversionFactors) {</span>
+<span class="nc" id="L107">        this.fdcId = fdcId;</span>
+<span class="nc" id="L108">        this.dataType = dataType;</span>
+<span class="nc" id="L109">        this.description = description;</span>
+<span class="nc" id="L110">        this.foodClass = foodClass;</span>
+<span class="nc" id="L111">        this.footNote = footNote;</span>
+<span class="nc" id="L112">        this.isHistoricalReference = isHistoricalReference;</span>
+<span class="nc" id="L113">        this.ndbNumber = ndbNumber;</span>
+<span class="nc" id="L114">        this.publicationDate = publicationDate;</span>
+<span class="nc" id="L115">        this.scientificName = scientificName;</span>
+<span class="nc" id="L116">        this.foodCategory = foodCategory;</span>
+<span class="nc" id="L117">        this.foodComponents = foodComponents;</span>
+<span class="nc" id="L118">        this.foodNutrients = foodNutrients;</span>
+<span class="nc" id="L119">        this.foodPortions = foodPortions;</span>
+<span class="nc" id="L120">        this.inputFoodFoundations = inputFoodFoundations;</span>
+<span class="nc" id="L121">        this.nutrientConversionFactors = nutrientConversionFactors;</span>
+<span class="nc" id="L122">    }</span>
+
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
+    public int getFdcId() {
+<span class="nc" id="L130">        return fdcId;</span>
+    }
+
+    /**
+     * Getter for the data type
+     *
+     * @return data type
+     */
+    public String getDataType() {
+<span class="nc" id="L139">        return dataType;</span>
+    }
+
+    /**
+     * Getter for the description
+     *
+     * @return description / name
+     */
+    public String getDescription() {
+<span class="nc" id="L148">        return description;</span>
+    }
+
+    /**
+     * Getter for the food class
+     *
+     * @return food class
+     */
+    public String getFoodClass() {
+<span class="nc" id="L157">        return foodClass;</span>
+    }
+
+    /**
+     * Getter for the footnote
+     *
+     * @return footnote
+     */
+    public String getFootNote() {
+<span class="nc" id="L166">        return footNote;</span>
+    }
+
+    /**
+     * Getter for the historical reference boolean
+     *
+     * @return true if this is a historical reference
+     */
+    public boolean isHistoricalReference() {
+<span class="nc" id="L175">        return isHistoricalReference;</span>
+    }
+
+    /**
+     * Getter for the ndb number
+     *
+     * @return ndb number
+     */
+    public int getNdbNumber() {
+<span class="nc" id="L184">        return ndbNumber;</span>
+    }
+
+    /**
+     * Getter for the publication date
+     *
+     * @return publication date
+     */
+    public String getPublicationDate() {
+<span class="nc" id="L193">        return publicationDate;</span>
+    }
+
+    /**
+     * Getter for the scientific name
+     *
+     * @return scientific name
+     */
+    public String getScientificName() {
+<span class="nc" id="L202">        return scientificName;</span>
+    }
+
+    /**
+     * Getter for the food category
+     *
+     * @return food category
+     */
+    public FoodCategory getFoodCategory() {
+<span class="nc" id="L211">        return foodCategory;</span>
+    }
+
+    /**
+     * Getter for the food components
+     *
+     * @return food components
+     */
+    public FoodComponent[] getFoodComponents() {
+<span class="nc" id="L220">        return foodComponents;</span>
+    }
+
+    /**
+     * Getter for the food nutrients
+     *
+     * @return food nutrients
+     */
+    public FoodNutrient[] getFoodNutrients() {
+<span class="nc" id="L229">        return foodNutrients;</span>
+    }
+
+    /**
+     * Getter for the food portions
+     *
+     * @return food portions
+     */
+    public FoodPortion[] getFoodPortions() {
+<span class="nc" id="L238">        return foodPortions;</span>
+    }
+
+    /**
+     * Getter for the input food foundations
+     *
+     * @return input food foundations
+     */
+    public InputFoodFoundation[] getInputFoodFoundations() {
+<span class="nc" id="L247">        return inputFoodFoundations;</span>
+    }
+
+    /**
+     * Getter for the nutrient conversion factors
+     *
+     * @return nutrient conversion factors
+     */
+    public NutrientConversionFactors[] getNutrientConversionFactors() {
+<span class="nc" id="L256">        return nutrientConversionFactors;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
