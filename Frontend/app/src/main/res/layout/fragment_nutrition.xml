@@ -37,10 +37,10 @@
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@id/previous_date_button"
                     android:layout_toStartOf="@id/next_date_button"
-                    android:gravity="center"
+                    android:layout_toEndOf="@id/previous_date_button"
                     android:contentDescription="@string/date"
+                    android:gravity="center"
                     android:textSize="24sp" />
 
                 <ImageButton

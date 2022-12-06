@@ -1,7 +1,9 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_BREAKFAST;
 import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_DINNER;
@@ -9,6 +11,7 @@ import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_LU
 import static com.example.cs309android.util.Constants.Intents.INTENT_NONE;
 import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
@@ -52,7 +55,9 @@ import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.food.FDCByUPCRequest;
 import com.example.cs309android.models.api.request.food.GetCustomFoodsRequest;
+import com.example.cs309android.models.api.request.nutrition.AddFoodLogRequest;
 import com.example.cs309android.models.api.request.shopping.ShoppingAddRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.food.FDCByUPCResponse;
 import com.example.cs309android.models.api.response.food.GetCustomFoodsResponse;
 import com.example.cs309android.models.api.response.shopping.ShoppingAddResponse;
@@ -61,7 +66,10 @@ import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -139,7 +147,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        runWithItem(Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM));
+                        SimpleFoodItem item = Objects.requireNonNull(intent).getParcelableExtra(PARCEL_FOODITEM);
+                        runWithItem(item);
                     }
                 }
         );
@@ -179,15 +188,15 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 break;
             }
             case INTENT_FOOD_LOG_BREAKFAST: {
-                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                addToFoodLog(item, BREAKFAST_LOG);
                 break;
             }
             case INTENT_FOOD_LOG_LUNCH: {
-                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                addToFoodLog(item, LUNCH_LOG);
                 break;
             }
             case INTENT_FOOD_LOG_DINNER: {
-                // TODO: Use MainActivity.addLogItem() to add the item to the respective log
+                addToFoodLog(item, DINNER_LOG);
                 break;
             }
             case INTENT_RECIPE_ADD: {
@@ -198,6 +207,36 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 break;
             }
         }
+    }
+
+    private void addToFoodLog(SimpleFoodItem item, int mealType) {
+        Util.spin(getWindow().getDecorView());
+
+        Calendar date = Calendar.getInstance();
+        String meal = "";
+        switch(mealType) {
+            case BREAKFAST_LOG:
+                meal = "Breakfast";
+                break;
+            case LUNCH_LOG:
+                meal = "Lunch";
+                break;
+            case DINNER_LOG:
+                meal = "Dinner";
+                break;
+        }
+        item.setMealAndDate(meal, new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date.getTime()));
+        System.out.println(item);
+        new AddFoodLogRequest(item, ((GlobalClass) getApplicationContext()).getToken()).unspinOnComplete(response -> {
+            GenericResponse addResponse = Util.objFromJson(response, GenericResponse.class);
+            System.out.println(response);
+            if (addResponse.getResult() == com.example.cs309android.util.Constants.Results.RESULT_OK) {
+                MainActivity.addLogItem(item, mealType);
+                Toaster.toastShort("Added", this);
+            } else {
+                Toaster.toastShort("Error", this);
+            }
+        }, SearchActivity.this, getWindow().getDecorView());
     }
 
     /**

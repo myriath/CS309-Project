@@ -26,6 +26,7 @@ import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
 import com.example.cs309android.models.adapters.NutritionLogAdapter;
 import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogRequest;
 import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
 import com.example.cs309android.util.Toaster;
@@ -131,9 +132,9 @@ public class NutritionFragment extends BaseFragment {
             }
             GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);
 
-            FoodLogItem[] newItems = recipeResponse.getFoodLog();
+            SimpleFoodItem[] newItems = recipeResponse.getFoodLog();
 
-            for (FoodLogItem item : newItems) {
+            for (SimpleFoodItem item : newItems) {
                 switch (item.getMeal()) {
                     case "Breakfast":
                         MainActivity.addLogItem(item, BREAKFAST_LOG);
@@ -193,9 +194,9 @@ public class NutritionFragment extends BaseFragment {
                 return;
             }
 
-            FoodLogItem[] newItems = recipeResponse.getFoodLog();
+            SimpleFoodItem[] newItems = recipeResponse.getFoodLog();
 
-            for (FoodLogItem item : newItems) {
+            for (SimpleFoodItem item : newItems) {
                 switch (item.getMeal()) {
                     case "Breakfast":
                         System.out.println(item.getMeal());
@@ -246,13 +247,13 @@ public class NutritionFragment extends BaseFragment {
      * @param view view to find subviews of
      */
     public void refreshList(View view) {
-        ArrayList<FoodLogItem> breakfast = MainActivity.getLog(BREAKFAST_LOG);
-        ArrayList<FoodLogItem> lunch = MainActivity.getLog(LUNCH_LOG);
-        ArrayList<FoodLogItem> dinner = MainActivity.getLog(DINNER_LOG);
+        ArrayList<SimpleFoodItem> breakfast = MainActivity.getLog(BREAKFAST_LOG);
+        ArrayList<SimpleFoodItem> lunch = MainActivity.getLog(LUNCH_LOG);
+        ArrayList<SimpleFoodItem> dinner = MainActivity.getLog(DINNER_LOG);
         if (breakfast != null) {
             LinearLayout list = view.findViewById(R.id.breakfastList);
             for (int i = 0; i < breakfast.size(); i++) {
-                FoodLogItem item = breakfast.get(i);
+                SimpleFoodItem item = breakfast.get(i);
                 addLogItem(item, list, view1 -> {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
@@ -266,7 +267,7 @@ public class NutritionFragment extends BaseFragment {
         if (lunch != null) {
             LinearLayout list = view.findViewById(R.id.lunchList);
             for (int i = 0; i < lunch.size(); i++) {
-                FoodLogItem item = lunch.get(i);
+                SimpleFoodItem item = lunch.get(i);
                 addLogItem(item, list, view1 -> {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
@@ -280,7 +281,7 @@ public class NutritionFragment extends BaseFragment {
         if (dinner != null) {
             LinearLayout list = view.findViewById(R.id.dinnerList);
             for (int i = 0; i < dinner.size(); i++) {
-                FoodLogItem item = dinner.get(i);
+                SimpleFoodItem item = dinner.get(i);
                 addLogItem(item, list, view1 -> {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 //                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
@@ -299,10 +300,10 @@ public class NutritionFragment extends BaseFragment {
      * @param list      LinearLayout to add to
      * @param listener  OnClickListener for the item
      */
-    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener, boolean lastItem) {
+    public void addLogItem(SimpleFoodItem item, LinearLayout list, View.OnClickListener listener, boolean lastItem) {
         View view = View.inflate(getContext(), R.layout.ingredient_layout, null);
-        ((TextView) view.findViewById(R.id.quantity)).setText("TODO");
-        ((TextView) view.findViewById(R.id.name)).setText(item.getFoodName());
+        ((TextView) view.findViewById(R.id.quantity)).setText(item.getBrand());
+        ((TextView) view.findViewById(R.id.name)).setText(item.getDescription());
         view.setOnClickListener(listener);
         view.setPadding(dp8, dp8, dp8, dp8);
         list.addView(view);

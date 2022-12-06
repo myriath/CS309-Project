@@ -46,7 +46,7 @@ public class FoodLogItem {
      * Fat amount
      */
     @Expose
-    private final int fat;
+    private final float fat;
     /**
      * Saturated fat amount
      */
@@ -61,22 +61,22 @@ public class FoodLogItem {
      * Carbohydrate amount
      */
     @Expose
-    private final int carbohydrates;
+    private final float carbohydrates;
     /**
      * Fiber amount
      */
     @Expose
-    private final int fiber;
+    private final float fiber;
     /**
      * Sugar amount
      */
     @Expose
-    private final int sugars;
+    private final float sugars;
     /**
      * Protein amount
      */
     @Expose
-    private final int protein;
+    private final float protein;
     /**
      * Date of log
      */
@@ -87,6 +87,34 @@ public class FoodLogItem {
      */
     @Expose
     private final String meal;
+    /**
+     * Calories
+     */
+    @Expose
+    private float calories;
+
+    /**
+     * Constructor for add food log item
+     * @param item SimpleFoodItem with food log item data
+     */
+    public FoodLogItem(SimpleFoodItem item) {
+        this.logId = ITEM_ID_NULL;
+        this.username = "papajohn";
+        this.fdcId = item.getId();
+        this.foodName = item.getDescription();
+        this.servingAmt = 0;
+        this.servingUnit = "";
+        this.fat = item.getFat();
+        this.sat_fat = 0;
+        this.sodium = 0;
+        this.carbohydrates = item.getCarbs();
+        this.fiber = 0;
+        this.sugars = 0;
+        this.protein = item.getProtein();
+        this.date = item.getDate();
+        this.meal = item.getMeal();
+        this.calories = item.getCalories();
+    }
 
     /**
      * Constructor for gson
@@ -267,7 +295,7 @@ public class FoodLogItem {
      *
      * @return fat
      */
-    public int getFat() {
+    public float getFat() {
         return fat;
     }
 
@@ -294,7 +322,7 @@ public class FoodLogItem {
      *
      * @return carbs
      */
-    public int getCarbohydrates() {
+    public float getCarbohydrates() {
         return carbohydrates;
     }
 
@@ -303,7 +331,7 @@ public class FoodLogItem {
      *
      * @return fiber
      */
-    public int getFiber() {
+    public float getFiber() {
         return fiber;
     }
 
@@ -312,7 +340,7 @@ public class FoodLogItem {
      *
      * @return sugars
      */
-    public int getSugars() {
+    public float getSugars() {
         return sugars;
     }
 
@@ -321,7 +349,7 @@ public class FoodLogItem {
      *
      * @return protein
      */
-    public int getProtein() {
+    public float getProtein() {
         return protein;
     }
 
@@ -332,6 +360,13 @@ public class FoodLogItem {
      */
     public String getDate() {
         return date;
+    }
+
+    /**
+     * Getter for the calories
+     */
+    public float getCalories() {
+        return calories;
     }
 
     /**
