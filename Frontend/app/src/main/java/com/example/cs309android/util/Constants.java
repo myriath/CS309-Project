@@ -289,9 +289,13 @@ public class Constants {
      */
     public static final String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
     /**
-     * Url for getting an item from recipes
+     * Url for getting a list of user recipes
      */
     public static final String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+    /**
+     * Url for getting a recipe list by the type of recipes (Popular, New, Explore)
+     */
+    public static final String GET_RECIPES_LIST_TYPE_URL = RECIPES_URL + "getRecipeListByType/";
     /**
      * URL for setting a recipe's image
      */
