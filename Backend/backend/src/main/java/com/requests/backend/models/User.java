@@ -29,11 +29,14 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "follows",
-            joinColumns = { @JoinColumn(name = "follower") },
-            inverseJoinColumns = { @JoinColumn(name = "following") })
+            joinColumns = @JoinColumn(name = "follower"),
+            inverseJoinColumns = @JoinColumn(name = "following"))
     private Set<User> followers;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "followers")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "follows",
+            joinColumns = @JoinColumn(name = "following"),
+            inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> following;
 
     @OneToMany(cascade = CascadeType.ALL)
