@@ -255,14 +255,8 @@ public class RecipeController {
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
                     (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
-//                ingredientRepository.queryDeleteRecipe(rid);
-//                instructionRepository.queryDeleteRecipe(rid);
-//                recipeRepository.queryDeleteRecipe(rid);
-                LOGGER.info("Before delete");
                 recipeRepository.delete(recipe[0]);
-                LOGGER.info("Got here");
                 res.setResult(RESULT_OK);
-                LOGGER.info("Got here 2");
             } else {
                 res.setResult(RESULT_ERROR);
             }

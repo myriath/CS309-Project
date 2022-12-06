@@ -14,7 +14,7 @@ public class Comment {
     @Expose
     private Integer cid;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     @Expose
     private User user;

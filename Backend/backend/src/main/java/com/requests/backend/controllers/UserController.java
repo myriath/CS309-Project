@@ -327,6 +327,7 @@ public class UserController {
 
             // If the server encounters an error, return RESULT_ERROR
         } catch (Exception e) {
+            LOGGER.info(e.getMessage());
             LOGGER.info(e.getMessage(), e);
             res.setResult(RESULT_ERROR);
         }
