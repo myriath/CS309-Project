@@ -94,4 +94,17 @@ public class Recipe {
     public void addComment(Comment comment) {
         comments.add(comment);
     }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "rid=" + rid +
+                ", user=" + user +
+                ", rname='" + rname + '\'' +
+                ", description='" + description + '\'' +
+                ", instructions=" + instructions +
+                ", ingredients=" + ingredients +
+                ", comments=" + comments +
+                '}';
+    }
 }

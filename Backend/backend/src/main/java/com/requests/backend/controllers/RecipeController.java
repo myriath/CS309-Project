@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.util.Constants.*;
@@ -164,8 +165,8 @@ public class RecipeController {
                 recipe.setRname(req.getRecipeName());
                 Ingredient[] ingredients = req.getIngredients();
                 Instruction[] instructions = req.getInstructions();
-                recipe.setIngredients(List.of(ingredients));
-                recipe.setInstructions(List.of(instructions));
+                recipe.setIngredients(Arrays.asList(ingredients));
+                recipe.setInstructions(Arrays.asList(instructions));
                 recipe.setDescription(req.getDescription());
                 recipeRepository.save(recipe);
                 res.setResult(RESULT_OK);
@@ -241,6 +242,7 @@ public class RecipeController {
         try {
             User user = tokens[0].getUser();
             User other = recipe[0].getUser();
+            LOGGER.info(token + " " + user.getUsername() + " " + recipe);
 
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
