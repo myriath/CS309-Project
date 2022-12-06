@@ -162,13 +162,25 @@ public class RecipeController {
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
                     (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
-                recipe.setRname(req.getRecipeName());
-                Ingredient[] ingredients = req.getIngredients();
-                Instruction[] instructions = req.getInstructions();
-                recipe.setIngredients(Arrays.asList(ingredients));
-                recipe.setInstructions(Arrays.asList(instructions));
-                recipe.setDescription(req.getDescription());
-                recipeRepository.save(recipe);
+                ingredientRepository.queryDeleteRecipe(recipe.getRid());
+                for (Ingredient ingredient : req.getIngredients()) {
+                    ingredientRepository.queryCreateIngredient(recipe.getRid(), ingredient.getFood().getId(),
+                            ingredient.getFood().isCustom(), ingredient.getQuantity(), ingredient.getUnit());
+                }
+                instructionRepository.queryDeleteRecipe(recipe.getRid());
+                for (Instruction instruction : req.getInstructions()) {
+                    instructionRepository.queryCreateInstruction(recipe.getRid(), instruction.getStepNum(),
+                            instruction.getStepText());
+                }
+                recipeRepository.queryUpdateRecipe(recipe.getRid(),
+                        req.getDescription(), req.getRecipeName());
+//                recipe.setRname(req.getRecipeName());
+//                Ingredient[] ingredients = req.getIngredients();
+//                Instruction[] instructions = req.getInstructions();
+//                recipe.setIngredients(Arrays.asList(ingredients));
+//                recipe.setInstructions(Arrays.asList(instructions));
+//                recipe.setDescription(req.getDescription());
+//                recipeRepository.save(recipe);
                 res.setResult(RESULT_OK);
             } else {
                 res.setResult(RESULT_ERROR);

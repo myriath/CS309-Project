@@ -77,7 +77,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Transactional
     void queryDeleteRecipe(@Param("rid") int rid);
 
-
-
+    @Modifying
+    @Query(
+            value = "UPDATE user_recipes SET description = :description, rname = :name WHERE rid = :rid",
+            nativeQuery = true)
+    @Transactional
+    void queryUpdateRecipe(@Param("rid") int rid, @Param("description") String description, @Param("name") String recipeName);
 }
 
