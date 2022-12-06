@@ -247,12 +247,8 @@ public class RecipeController {
     @DeleteMapping(path="/remove/{token}/{rid}")
     @ResponseBody
     public ResultResponse removeRecipe(@PathVariable int rid, @PathVariable String token) {
-        String hashedToken = Hasher.sha256(token);
-        Token[] tokens = recipeRepository.queryRecipeDeleteCheck(hashedToken);
-        ResultResponse res = new ResultResponse();
-        Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
-        try {
-            User user = tokens[0].getUser();
+        return UserController.getUserFromToken(token, (user, res) -> {
+            Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
             User other = recipe[0].getUser();
             LOGGER.info(token + " " + user.getUsername() + " " + recipe[0]);
 
@@ -267,11 +263,7 @@ public class RecipeController {
             } else {
                 res.setResult(RESULT_ERROR);
             }
-        } catch (Exception e) {
-            res.setResult(RESULT_ERROR);
-        }
-
-        return res;
+        }, tokenRepository);
     }
 
     /**
