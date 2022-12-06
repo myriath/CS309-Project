@@ -173,6 +173,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         String token = ((GlobalClass) getApplicationContext()).getToken();
 
         Response.Listener<JSONObject> listener = response -> {
+            System.out.println(response);
             AddRecipeResponse recipeResponse = Util.objFromJson(response, AddRecipeResponse.class);
             if (recipeResponse.getResult() == Constants.Results.RESULT_RECIPE_CREATED) {
                 if (image != null) {

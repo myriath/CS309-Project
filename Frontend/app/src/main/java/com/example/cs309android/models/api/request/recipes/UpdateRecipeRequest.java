@@ -48,7 +48,7 @@ public class UpdateRecipeRequest extends PatchRequest {
     public UpdateRecipeRequest(int rid, String token, String recipeName, String description, Ingredient[] ingredients, Instruction[] instructions) {
         super(new ParameterizedRequestURL(UPDATE_RECIPES_URL)
                 .addPathVar(token)
-                .addPathVar(String.valueOf(rid))
+                .addPathVar(rid)
                 .toString());
         this.recipeName = recipeName;
         this.description = description;

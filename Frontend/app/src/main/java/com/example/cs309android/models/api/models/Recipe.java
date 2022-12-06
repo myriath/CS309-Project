@@ -39,7 +39,7 @@ public class Recipe implements Parcelable {
      * Creator of the recipe's username
      */
     @Expose
-    private final String username;
+    private final User user;
     /**
      * Name of the recipe
      */
@@ -74,16 +74,16 @@ public class Recipe implements Parcelable {
      * @param description  Description
      * @param ingredients  Ingredients
      * @param instructions Instructions
-     * @param username     Creator's username
+     * @param user         Creator's username
      * @param comments     Comments on this recipe
      */
-    public Recipe(int rid, String rname, String description, Ingredient[] ingredients, Instruction[] instructions, String username, Comment[] comments) {
+    public Recipe(int rid, String rname, String description, Ingredient[] ingredients, Instruction[] instructions, User user, Comment[] comments) {
         this.rid = rid;
         this.rname = rname;
         this.description = description;
         this.ingredients = ingredients;
         this.instructions = instructions;
-        this.username = username;
+        this.user = user;
         this.comments = comments;
     }
 
@@ -98,7 +98,7 @@ public class Recipe implements Parcelable {
         description = in.readString();
         ingredients = in.createTypedArray(Ingredient.CREATOR);
         instructions = in.createTypedArray(Instruction.CREATOR);
-        username = in.readString();
+        user = in.readTypedObject(User.CREATOR);
         comments = in.createTypedArray(Comment.CREATOR);
     }
 
@@ -115,7 +115,7 @@ public class Recipe implements Parcelable {
         dest.writeString(description);
         dest.writeTypedArray(ingredients, flags);
         dest.writeTypedArray(instructions, flags);
-        dest.writeString(username);
+        dest.writeTypedObject(user, flags);
         dest.writeTypedArray(comments, flags);
     }
 
@@ -165,12 +165,12 @@ public class Recipe implements Parcelable {
     }
 
     /**
-     * Getter for the creator's username
+     * Getter for the creator user
      *
-     * @return Creator's username
+     * @return Creator user
      */
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     /**
@@ -197,7 +197,7 @@ public class Recipe implements Parcelable {
     public String toString() {
         return "Recipe{" +
                 "rid=" + rid +
-                ", username='" + username + '\'' +
+                ", username='" + user.toString() + '\'' +
                 ", rname='" + rname + '\'' +
                 ", description='" + description + '\'' +
                 ", ingredients=" + Arrays.toString(ingredients) +
