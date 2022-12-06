@@ -3,18 +3,14 @@ package com.requests.backend.controllers;
 import com.requests.backend.models.Notification;
 import com.requests.backend.models.TextDecoder;
 import com.requests.backend.models.TextEncoder;
-import com.requests.backend.models.User;
 import com.requests.backend.repositories.FollowRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -26,13 +22,12 @@ public class NotificationsWebsocket {
     private FollowRepository followRepository;
 
     // Store all socket session and their corresponding username.
-    private static Map<Session, String > sessionUsernameMap = new Hashtable< >();
-    private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static final Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static final Map <String, Session> usernameSessionMap = new Hashtable<> ();
 
     @OnOpen
-    public void onOpen(Session session, @PathVariable("username") String username)
+    public void onOpen(Session session, @PathParam("username") String username)
             throws IOException {
-
         sessionUsernameMap.put(session, username);
         usernameSessionMap.put(username, session);
 
