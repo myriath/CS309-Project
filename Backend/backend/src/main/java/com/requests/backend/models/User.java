@@ -27,11 +27,14 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Token> token;
 
-    @ManyToMany(targetEntity = User.class, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "follows",
-            joinColumns = { @JoinColumn(name = "follower", referencedColumnName = "username") },
-            inverseJoinColumns = { @JoinColumn(name = "following", referencedColumnName = "username") })
+            joinColumns = { @JoinColumn(name = "follower") },
+            inverseJoinColumns = { @JoinColumn(name = "following") })
     private Set<User> followers;
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "followers")
+    private Set<User> following;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn
@@ -90,6 +93,14 @@ public class User {
 
     public void setFollowers(Set<User> followers) {
         this.followers = followers;
+    }
+
+    public Set<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
     }
 
     public Set<ShoppingList> getShoppingLists() {
