@@ -39,6 +39,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> following;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Recipe> recipes;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn
     private Set<ShoppingList> shoppingLists;
