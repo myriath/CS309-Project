@@ -268,7 +268,7 @@ public class NutritionFragment extends BaseFragment {
                 SimpleFoodItem item = dinner.get(i);
                 addLogItem(item, list, view1 -> {
                     Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
-                    intent.putExtra(PARCEL_FOODITEM, item); 
+                    intent.putExtra(PARCEL_FOODITEM, item);
                     startActivity(intent);
                 }, i == dinner.size() - 1);
             }
