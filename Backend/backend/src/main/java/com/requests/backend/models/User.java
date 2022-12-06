@@ -27,7 +27,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Token> token;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "follows",
             joinColumns = @JoinColumn(name = "follower"),
             inverseJoinColumns = @JoinColumn(name = "following"))
