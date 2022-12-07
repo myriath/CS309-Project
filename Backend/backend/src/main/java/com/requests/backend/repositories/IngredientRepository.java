@@ -31,6 +31,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Integer>
             value = "DELETE FROM `fod_db`.`recipe_ingredients` WHERE (`rid` = :rid)",
             nativeQuery = true)
     @Transactional
-    void queryDeleteRecipe(@Param("rid") int rid);
+    void queryDeleteByRecipe(@Param("rid") int rid);
 }
 

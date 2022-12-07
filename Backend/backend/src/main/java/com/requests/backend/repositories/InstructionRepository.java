@@ -31,6 +31,6 @@ public interface InstructionRepository extends JpaRepository<Instruction, Intege
             value = "DELETE FROM `fod_db`.`recipe_instructions` WHERE (`rid` = :rid)",
             nativeQuery = true)
     @Transactional
-    void queryDeleteRecipe(@Param("rid") int rid);
+    void queryDeleteByRecipe(@Param("rid") int rid);
 }
 
