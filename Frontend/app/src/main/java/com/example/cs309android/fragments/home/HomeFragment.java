@@ -28,6 +28,7 @@ import com.example.cs309android.models.api.models.Ingredient;
 import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.models.User;
 import com.example.cs309android.models.api.request.home.GetUserFeedRequest;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
 import com.example.cs309android.util.Toaster;
@@ -165,7 +166,7 @@ public class HomeFragment extends BaseFragment {
                 new Instruction(2, "step"),
                 new Instruction(3, "step"),
                 new Instruction(4, "step")
-        }, "papajohn", new Comment[]{
+        }, new User("papajohn", 3, "hola"), new Comment[]{
 //                new Comment("papajohn", "joe mama", 1),
 //                new Comment("Test2", "joe mamajoe mama", 2),
 //                new Comment("Test3", "joe mamajoe mamajoe mamajoe mama", 3),

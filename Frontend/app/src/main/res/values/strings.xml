@@ -148,6 +148,12 @@
     <string name="add_a_new_comment">Add a new comment...</string>
     <string name="post">Post</string>
     <string name="notification_category">Notification Settings</string>
+    <string name="new_followers_desc">Notifications about new followers</string>
+    <string name="new_followers_title">New followers</string>
+    <string name="new_for_you_desc">Notifications for recipes posted by people you follow</string>
+    <string name="new_for_you_title">New for you</string>
+    <string name="likes_comments_desc">Notifications about recipe likes and comments</string>
+    <string name="likes_comments_title">Likes and comments</string>
     <string name="select_log">Select meal</string>
     <string name="nothing_yet">Nothing here... yet</string>
 

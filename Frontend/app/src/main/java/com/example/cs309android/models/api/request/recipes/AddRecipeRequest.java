@@ -48,6 +48,7 @@ public class AddRecipeRequest extends PostRequest {
         super(new ParameterizedRequestURL(ADD_RECIPES_URL)
                 .addPathVar(token)
                 .toString());
+        System.out.println(ADD_RECIPES_URL);
         this.recipeName = recipeName;
         this.description = description;
         this.ingredients = ingredients;

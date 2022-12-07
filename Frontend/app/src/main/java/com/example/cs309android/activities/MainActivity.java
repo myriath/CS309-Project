@@ -1,5 +1,6 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.BuildConfig.BASE_API_URL;
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
@@ -87,10 +88,6 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity implements CallbackFragment {
     /**
-     * Used to launch various activities.
-     */
-    ActivityResultLauncher<Intent> foodSearchLauncher;
-    /**
      * Main window fragment
      */
     private CallbackFragment mainFragment;
@@ -175,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
             finish();
         } else {
             navbar.setSelectedItemId(R.id.home);
-            currentFragment = 2;
         }
     }
 
@@ -206,13 +202,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        // Creates notification channels
-//        Constants.Notifications.createNotificationChannels(this);
-//        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
-
-        // Starts the notification service
-//        startService(new Intent(this, NotificationService.class));
-
+        System.out.println(BASE_API_URL);
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 
@@ -257,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         addShopping.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(PARCEL_INTENT_CODE, INTENT_SHOPPING_LIST);
-            foodSearchLauncher.launch(intent);
+            startActivity(intent);
         });
 
         // Log add button
@@ -288,20 +278,6 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow((IBinder) getWindow().getCurrentFocus(), 0);
 
-        // Launches the search activity for a result
-        foodSearchLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    mainFragment = new ShoppingFragment();
-                    mainFragment.setCallbackFragment(this);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.mainLayout, (Fragment) mainFragment, null)
-                            .commit();
-                    currentFragment = 0;
-                }
-        );
-
         // Runs the tutorial on first run
         if (!global.getPreferences().getBoolean(PREF_FIRST_TIME, false)) {
             // TODO: First time
@@ -319,9 +295,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        //Log.d("TOKEN", token);
         if (token != null) {
-            Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
+            Log.d("TOKEN", token);
+            Util.loginAttempt(global, token, () -> {
+                unSpin(this);
+                // Creates notification channels
+                Constants.Notifications.createNotificationChannels(this);
+                // Starts the notification service
+                startService(new Intent(this, NotificationService.class));
+            }, result -> failedLogin(), error -> failedLogin());
         } else {
             unSpin(this);
             startLoginActivity(false);
@@ -532,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(PARCEL_INTENT_CODE, bundle.getInt(PARCEL_INTENT_CODE));
                 intent.putExtra(PARCEL_FOODITEMS_LIST, bundle.getParcelableArrayList(PARCEL_FOODITEMS_LIST));
-                foodSearchLauncher.launch(intent);
+                startActivity(intent);
                 break;
             }
             case (CALLBACK_MOVE_TO_SETTINGS): {

@@ -63,13 +63,12 @@ public class ParameterizedRequestURL {
      * @return this
      */
     public ParameterizedRequestURL addPathVar(String variable) {
-        if (url != null) {
-            try {
-                if (url.charAt(url.length() - 1) != '/') url.append('/');
-                url.append(URLEncoder.encode(variable, "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        if (variable == null || url == null) return this;
+        try {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(URLEncoder.encode(variable, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return this;
     }

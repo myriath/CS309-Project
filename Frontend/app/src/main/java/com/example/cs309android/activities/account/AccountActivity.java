@@ -5,6 +5,8 @@ import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_DELETED;
+import static com.example.cs309android.util.Constants.Results.RESULT_UPDATED;
 import static com.example.cs309android.util.Constants.UserType.USER_ADM;
 import static com.example.cs309android.util.Constants.UserType.USER_MOD;
 import static com.example.cs309android.util.Constants.UserType.USER_REG;
@@ -38,7 +40,6 @@ import com.example.cs309android.models.api.request.social.GetFollowersRequest;
 import com.example.cs309android.models.api.request.social.GetFollowingRequest;
 import com.example.cs309android.models.api.request.social.UnfollowRequest;
 import com.example.cs309android.models.api.request.users.ChangeUserTypeRequest;
-import com.example.cs309android.models.api.request.users.DeleteUserRequest;
 import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
@@ -73,6 +74,10 @@ public class AccountActivity extends AppCompatActivity {
      * Used to edit a user's account
      */
     private ActivityResultLauncher<Intent> editUserLauncher;
+    /**
+     * Used to display recipe details
+     */
+    private ActivityResultLauncher<Intent> recipeDetailsLauncher;
 
     /**
      * Runs when the activity is created
@@ -102,6 +107,24 @@ public class AccountActivity extends AppCompatActivity {
         editUserLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> update(username, followerCount, followingCount, owner, global)
+        );
+
+        recipeDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    switch (result.getResultCode()) {
+                        case RESULT_DELETED: {
+//                            int id = Objects.requireNonNull(result.getData()).getIntExtra(PARCEL_RECIPE_ID, ITEM_ID_NULL);
+//                            break;
+                        }
+                        case RESULT_UPDATED: {
+//                            Recipe newRecipe = Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_RECIPE);
+//                            for ()
+                            update(username, followerCount, followingCount, owner, global);
+                            break;
+                        }
+                    }
+                }
         );
 
         if (!owner) {
@@ -216,15 +239,19 @@ public class AccountActivity extends AppCompatActivity {
                             intent1.putExtra(PARCEL_USERNAME, username);
                             editUserLauncher.launch(intent1);
                         } else if (id == R.id.delete) {
-                            new DeleteUserRequest(username, global.getToken()).request(response1 -> {
-                                GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
-                                if (genericResponse1.getResult() != RESULT_OK) {
-                                    Toaster.toastShort("Error", this);
-                                }
-                            }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+//                            new DeleteUserRequest(username, global.getToken()).request(response1 -> {
+//                                GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
+//                                if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
+//                                    Toaster.toastShort("Error", this);
+//                                }
+//                            }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
+                            Intent intent = new Intent();
+                            intent.putExtra(PARCEL_USERNAME, username);
+                            System.out.println(username);
+                            setResult(RESULT_DELETED, intent);
                             finish();
                         } else if (id == R.id.change_type) {
-                            PopupMenu menu1 = new PopupMenu(this, menu.getMenu().findItem(R.id.change_type).getActionView());
+                            PopupMenu menu1 = new PopupMenu(this, view);
                             menu1.inflate(R.menu.user_types);
                             menu1.show();
                             menu1.setOnMenuItemClickListener(item1 -> {
@@ -239,9 +266,11 @@ public class AccountActivity extends AppCompatActivity {
                                 }
                                 new ChangeUserTypeRequest(username, global.getToken(), newType).request(response1 -> {
                                     GenericResponse genericResponse1 = Util.objFromJson(response1, GenericResponse.class);
-                                    if (genericResponse1.getResult() != RESULT_OK) {
+                                    if (genericResponse1.getResult() != Constants.Results.RESULT_OK) {
                                         Toaster.toastShort("Error", this);
+                                        return;
                                     }
+                                    Util.getBadge(newType, findViewById(R.id.badge));
                                 }, error -> Toaster.toastShort("Error", this), AccountActivity.this);
                                 return true;
                             });
@@ -258,7 +287,7 @@ public class AccountActivity extends AppCompatActivity {
         new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountActivity.this);
 
         new GetRecipesRequest(username).request(response -> {
-            System.out.println(response);
+//            System.out.println(response);
             GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
             if (postsResponse.getRecipes() == null || postsResponse.getRecipes().length == 0)
                 return;
@@ -270,7 +299,7 @@ public class AccountActivity extends AppCompatActivity {
                 recipeView.initView(recipe, view1 -> {
                     Intent intent = new Intent(this, RecipeDetailsActivity.class);
                     intent.putExtra(PARCEL_RECIPE, recipe);
-                    startActivity(intent);
+                    recipeDetailsLauncher.launch(intent);
                 });
 
                 recipeList.addView(recipeView);
