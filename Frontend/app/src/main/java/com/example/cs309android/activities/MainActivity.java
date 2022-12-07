@@ -8,6 +8,9 @@ import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_SEARCH_FOOD;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
 import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_BREAKFAST;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_DINNER;
+import static com.example.cs309android.util.Constants.Intents.INTENT_FOOD_LOG_LUNCH;
 import static com.example.cs309android.util.Constants.Intents.INTENT_SHOPPING_LIST;
 import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.PICASSO;
@@ -38,6 +41,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
@@ -123,15 +127,15 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
     /**
      * Used to store the breakfast items
      */
-    private static ArrayList<FoodLogItem> breakfast;
+    private static ArrayList<SimpleFoodItem> breakfast;
     /**
      * Used to store the lunch items
      */
-    private static ArrayList<FoodLogItem> lunch;
+    private static ArrayList<SimpleFoodItem> lunch;
     /**
      * Used to store the dinner items
      */
-    private static ArrayList<FoodLogItem> dinner;
+    private static ArrayList<SimpleFoodItem> dinner;
 
     /**
      * Public constructor
@@ -203,11 +207,11 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         // Creates notification channels
-        Constants.Notifications.createNotificationChannels(this);
+//        Constants.Notifications.createNotificationChannels(this);
 //        Constants.Notifications.notify(this, NOTIFICATION_NEW_COMMENT, "papajohn", null);
 
         // Starts the notification service
-        startService(new Intent(this, NotificationService.class));
+//        startService(new Intent(this, NotificationService.class));
 
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
@@ -257,10 +261,28 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         });
 
         // Log add button
-        addLog.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SearchActivity.class);
-            foodSearchLauncher.launch(intent);
-        });
+        addLog.setOnClickListener(view -> new AlertDialog.Builder(this)
+                .setTitle(R.string.select_log)
+                .setItems(R.array.meals_array, (dialog, which) -> {
+                    Intent intent = new Intent(this, SearchActivity.class);
+                    switch (which) {
+                        case 0: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_BREAKFAST);
+                            break;
+                        }
+                        case 1: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_LUNCH);
+                            break;
+                        }
+                        case 2: {
+                            intent.putExtra(PARCEL_INTENT_CODE, INTENT_FOOD_LOG_DINNER);
+                            break;
+                        }
+                    }
+                    foodSearchLauncher.launch(intent);
+                })
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel())
+                .create().show());
 
         // Hides the keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -297,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        Log.d("TOKEN", token);
+        //Log.d("TOKEN", token);
         if (token != null) {
             Util.loginAttempt(global, token, () -> unSpin(this), result -> failedLogin(), error -> failedLogin());
         } else {
@@ -631,7 +653,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * @param item  Item to add
      * @param logId Log id constant for the log to target
      */
-    public static void addLogItem(FoodLogItem item, int logId) {
+    public static void addLogItem(SimpleFoodItem item, int logId) {
         switch (logId) {
             case BREAKFAST_LOG: {
                 breakfast.add(item);
@@ -653,7 +675,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * @param items Items to add to the food log
      * @param logId Log ID constant for the log to add to
      */
-    public static void setLog(FoodLogItem[] items, int logId) {
+    public static void setLog(SimpleFoodItem[] items, int logId) {
         switch (logId) {
             case BREAKFAST_LOG: {
                 breakfast.addAll(Arrays.asList(items));
@@ -676,7 +698,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * @param logId Log id constant for the log to retrieve from
      * @return      Item from the log, null if the logId is invalid
      */
-    public static FoodLogItem getLogItem(int i, int logId) {
+    public static SimpleFoodItem getLogItem(int i, int logId) {
         switch (logId) {
             case BREAKFAST_LOG: {
                 return breakfast.get(i);
@@ -696,7 +718,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
      * @param logId ID of the log to retrieve
      * @return      Food log list for an adapter
      */
-    public static ArrayList<FoodLogItem> getLog(int logId) {
+    public static ArrayList<SimpleFoodItem> getLog(int logId) {
         switch (logId) {
             case BREAKFAST_LOG: {
                 return breakfast;
