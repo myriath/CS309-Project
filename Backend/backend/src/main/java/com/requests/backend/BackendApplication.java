@@ -20,16 +20,16 @@ public class BackendApplication {
 	}
 
 
-//	/**
-//	 * Tells springboot to output all loaded beans at startup
-//	 */
-//	@Bean
-//	public CommandLineRunner run(ApplicationContext appContext) {
-//		return args -> {
-//		  String[] beans = appContext.getBeanDefinitionNames();
-//			Arrays.stream(beans).sorted().forEach(System.out::println);
-//		};
-//	}
+	/**
+	 * Tells springboot to output all loaded beans at startup
+	 */
+	@Bean
+	public CommandLineRunner run(ApplicationContext appContext) {
+		return args -> {
+		  String[] beans = appContext.getBeanDefinitionNames();
+			Arrays.stream(beans).sorted().forEach(System.out::println);
+		};
+	}
 }
 
 
