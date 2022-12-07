@@ -1,6 +1,9 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,12 +16,12 @@ import java.util.Set;
  * @author Mitch Hudson
  */
 @Entity
-@Table(name = "simple_foods")
 @IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
+@Table(name = "simple_foods")
 public class SimpleFoodItem {
-    /**
-     * FDC ID from the api or Custom Food ID
-     */
+    //    /**
+    //     * FDC ID from the api or Custom Food ID
+    //     */
     @Id
     @Expose
     private int id;
@@ -28,18 +31,12 @@ public class SimpleFoodItem {
      */
     @Expose
     private String description;
-    /**
-     * True if the item should appear with strikeout on the shopping list
-     */
-    @Expose
-    @Transient
-    private boolean stricken = false;
 
-    @Id
     @Expose
     private boolean isCustom;
 
-    @OneToMany(mappedBy = "food", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "food")
+    @JsonIgnore
     private Set<Ingredient> ingredients;
 
     public SimpleFoodItem() {}
@@ -50,7 +47,7 @@ public class SimpleFoodItem {
      * @return item id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -70,26 +67,8 @@ public class SimpleFoodItem {
         return description;
     }
 
-    /**
-     * Getter for the stricken boolean
-     *
-     * @return true if this item should be rendered with strikeout
-     */
-    public boolean isStricken() {
-        return stricken;
-    }
-
-    /**
-     * Setter for the stricken boolean
-     *
-     * @param stricken true if this item should be rendered with strikeout
-     */
-    public void setStricken(boolean stricken) {
-        this.stricken = stricken;
-    }
-
     public boolean isCustom() {
-        return isCustom;
+        return this.isCustom;
     }
 
     public void setCustom(boolean isCustom) {
@@ -99,35 +78,35 @@ public class SimpleFoodItem {
     @Override
     public String toString() {
         return "SimpleFoodItem{" +
-                "id=" + id +
+                "id=" + this.id +
                 ", description='" + description + '\'' +
-                ", stricken=" + stricken +
-                ", isCustom=" + isCustom +
+                ", isCustom=" +  this.isCustom +
                 '}';
     }
 
-    public static class SimpleFoodItemPK implements Serializable {
-        protected int id;
-        protected boolean isCustom;
+        public static class SimpleFoodItemPK implements Serializable {
+            protected int id;
 
-        public SimpleFoodItemPK() {}
+            protected boolean isCustom;
 
-        public SimpleFoodItemPK(int id, boolean isCustom) {
-            this.isCustom = isCustom;
-            this.id = id;
-        }
+            public SimpleFoodItemPK() {}
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, isCustom);
-        }
+            public SimpleFoodItemPK(int id, boolean isCustom) {
+                this.isCustom = isCustom;
+                this.id = id;
+            }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
-            return other.isCustom == isCustom && other.id == id;
-        }
+            @Override
+            public int hashCode() {
+                return Objects.hash(id, isCustom);
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj) return true;
+                if (obj == null || getClass() != obj.getClass()) return false;
+                SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
+                return other.isCustom == isCustom && other.id == id;
+            }
     }
 }

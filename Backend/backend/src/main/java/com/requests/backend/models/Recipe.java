@@ -12,8 +12,10 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Expose
     private int rid;
+    @ManyToOne
+    @JoinColumn(name = "username")
     @Expose
-    private String username;
+    private User user;
     @Expose
     private String rname;
     @Expose
@@ -33,12 +35,12 @@ public class Recipe {
 
     public Recipe() {}
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String Username) {
-        this.username = Username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getRname() {
@@ -91,5 +93,18 @@ public class Recipe {
 
     public void addComment(Comment comment) {
         comments.add(comment);
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "rid=" + rid +
+                ", user=" + user +
+                ", rname='" + rname + '\'' +
+                ", description='" + description + '\'' +
+                ", instructions=" + instructions +
+                ", ingredients=" + ingredients +
+                ", comments=" + comments +
+                '}';
     }
 }

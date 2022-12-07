@@ -1,5 +1,6 @@
 package com.requests.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
@@ -12,12 +13,14 @@ import java.util.Set;
 @Table(name = "votes")
 public class Vote {
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "cid")
     private Comment comment;
 
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "username")
     private User user;
 

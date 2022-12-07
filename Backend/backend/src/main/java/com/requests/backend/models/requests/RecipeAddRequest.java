@@ -16,6 +16,8 @@ public class RecipeAddRequest {
     @Expose
     private Ingredient[] ingredients;
 
+    public RecipeAddRequest() {}
+
     public RecipeAddRequest(String recipeName, String description, Instruction[] instructions, Ingredient[] ingredients) {
         this.recipeName = recipeName;
         this.description = description;

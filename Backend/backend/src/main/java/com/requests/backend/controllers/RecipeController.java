@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.util.Constants.*;
+import static com.util.Constants.UserType.USER_DEV;
+import static com.util.Constants.UserType.USER_REG;
 
 /**
  * This class is responsible for handling all requests related to recipes.
@@ -39,6 +42,9 @@ public class RecipeController {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private NotificationsWebsocket notificationsWebsocket;
 
     @Autowired
     private InstructionRepository instructionRepository;
@@ -104,7 +110,7 @@ public class RecipeController {
      */
     @PostMapping(path="/add/{token}")
     @ResponseBody
-    public AddRecipeResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) {
+    public AddRecipeResponse addNewRecipe(@PathVariable String token, @RequestBody RecipeAddRequest req) throws IOException {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -114,18 +120,18 @@ public class RecipeController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUser().getUsername();
+            User user = tokenQueryRes[0].getUser();
 
 //            try {
                 Recipe recipe = new Recipe();
-                recipe.setUsername(username);
+                recipe.setUser(user);
                 recipe.setRname(req.getRecipeName());
                 Ingredient[] ingredients = req.getIngredients();
+                Instruction[] instructions = req.getInstructions();
 //                for (int i = 0; i < ingredients.length; i++) {
-//                    simpleFoodRepository.save(ingredients[i].getFood());
+//                    ingredients[i].setFood(simpleFoodRepository.save(ingredients[i].getFood()));
 //                    ingredients[i] = ingredientRepository.save(ingredients[i]);
 //                }
-                Instruction[] instructions = req.getInstructions();
 //                for (int i = 0; i < instructions.length; i++) {
 //                    instructions[i] = instructionRepository.save(instructions[i]);
 //                }
@@ -133,21 +139,60 @@ public class RecipeController {
                 recipe.setInstructions(List.of(instructions));
                 recipe.setDescription(req.getDescription());
                 recipe = recipeRepository.save(recipe);
-//                for (Instruction instruction : instructions) {
-//                    instructionRepository.save(instruction);
-//                }
-//                for (Ingredient ingredient : req.getIngredients()) {
-//                    simpleFoodRepository.save(ingredient.getFood());
-//                    ingredientRepository.save(ingredient);
-//                }
                 res.setResult(RESULT_RECIPE_CREATED);
                 res.setRid(recipe.getRid());
+
+                Notification notification = new Notification();
+
+                // Send out a notification to all followers that a new recipe has been added.
+                notification.setFromUsername(user.getUsername());
+                notification.setRid(recipe.getRid());
+                notification.setType(Notification.NotificationType.RECIPE);
+
+                notificationsWebsocket.sendPostNotifications(notification);
+
 //            } catch (Exception e) {
 //                res.setResult(RESULT_ERROR);
 //            }
         }
 
         return res;
+    }
+
+    @PatchMapping(path = "/update/{token}/{rid}")
+    public @ResponseBody ResultResponse updateRecipe(@PathVariable String token, @PathVariable int rid, @RequestBody RecipeAddRequest req) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            Recipe recipe = recipeRepository.queryGetRecipeByRid(rid)[0];
+            User other = recipe.getUser();
+
+            LOGGER.info(token + " " + user.getUsername() + " " + req);
+            if (user.getUsername().equals(other.getUsername()) ||
+                    user.getUserType() == USER_DEV ||
+                    (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
+                ingredientRepository.queryDeleteByRecipe(recipe.getRid());
+                for (Ingredient ingredient : req.getIngredients()) {
+                    ingredientRepository.queryCreateIngredient(recipe.getRid(), ingredient.getFood().getId(),
+                            ingredient.getFood().isCustom(), ingredient.getQuantity(), ingredient.getUnit());
+                }
+                instructionRepository.queryDeleteByRecipe(recipe.getRid());
+                for (Instruction instruction : req.getInstructions()) {
+                    instructionRepository.queryCreateInstruction(recipe.getRid(), instruction.getStepNum(),
+                            instruction.getStepText());
+                }
+                recipeRepository.queryUpdateRecipe(recipe.getRid(),
+                        req.getDescription(), req.getRecipeName());
+//                recipe.setRname(req.getRecipeName());
+//                Ingredient[] ingredients = req.getIngredients();
+//                Instruction[] instructions = req.getInstructions();
+//                recipe.setIngredients(Arrays.asList(ingredients));
+//                recipe.setInstructions(Arrays.asList(instructions));
+//                recipe.setDescription(req.getDescription());
+//                recipeRepository.save(recipe);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
     }
 
     /**
@@ -162,18 +207,24 @@ public class RecipeController {
     public ResultResponse addRecipePicture(@PathVariable String token, @PathVariable String rid, MultipartFile file) {
         return UserController.getUserFromToken(token, (user, res) -> {
             Recipe[] recipes = recipeRepository.queryGetRecipeByRid(Integer.parseInt(rid));
-            if (recipes.length == 0 || !recipes[0].getUsername().equals(user.getUsername())) {
-                res.setResult(RESULT_ERROR);
-            } else {
-                String filename = Hasher.sha256plaintext(rid) + ".webp";
-                File file1 = new File(RECIPE_SOURCE, filename);
-                try (FileOutputStream outputStream = new FileOutputStream(file1)) {
-                    outputStream.write(file.getBytes());
-                    res.setResult(RESULT_OK);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    res.setResult(RESULT_ERROR);
+
+            try {
+                User other = recipes[0].getUser();
+                if (other.getUsername().equals(user.getUsername()) ||
+                        user.getUserType() == USER_DEV ||
+                        (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
+                    String filename = Hasher.sha256plaintext(rid) + ".webp";
+                    File file1 = new File(RECIPE_SOURCE, filename);
+                    try (FileOutputStream outputStream = new FileOutputStream(file1)) {
+                        outputStream.write(file.getBytes());
+                        res.setResult(RESULT_OK);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        res.setResult(RESULT_ERROR);
+                    }
                 }
+            } catch (Exception e) {
+                res.setResult(RESULT_ERROR);
             }
         }, tokenRepository);
     }
@@ -202,20 +253,21 @@ public class RecipeController {
      */
     @DeleteMapping(path="/remove/{token}/{rid}")
     @ResponseBody
-    public ResultResponse removeRecipe(@PathVariable  int rid, @PathVariable  String token) {
-        String hashedToken = Hasher.sha256(token);
-        Token[] tokens = recipeRepository.queryRecipeDeleteCheck(hashedToken);
-        ResultResponse res = new ResultResponse();
-        Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
+    public ResultResponse removeRecipe(@PathVariable int rid, @PathVariable String token) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            Recipe[] recipe = recipeRepository.queryGetRecipeByRid(rid);
+            User other = recipe[0].getUser();
+            LOGGER.info(token + " " + user.getUsername() + " " + recipe[0]);
 
-        if (tokens.length == 0) {
-            res.setResult(RESULT_ERROR);
-        } else if(tokens[0].getUser().getUsername().equals(recipe[0].getUsername())){
-            recipeRepository.queryDeleteRecipe(rid);
-            res.setResult(RESULT_OK);
-        }
-
-        return res;
+            if (user.getUsername().equals(other.getUsername()) ||
+                    user.getUserType() == USER_DEV ||
+                    (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
+                recipeRepository.delete(recipe[0]);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
     }
 
     /**
