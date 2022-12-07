@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
                             break;
                         }
                     }
-                    foodSearchLauncher.launch(intent);
+                    startActivity(intent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel())
                 .create().show());
