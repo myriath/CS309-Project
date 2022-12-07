@@ -15,6 +15,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -28,8 +29,8 @@ public class NotificationsWebsocket {
     private TokenRepository tokenRepository;
 
     // Store all socket session and their corresponding username.
-    private static final Map<Session, User> sessionUsernameMap = new Hashtable<>();
-    private static final Map <String, Session> usernameSessionMap = new Hashtable<> ();
+    private static final Map<Session, User> sessionUsernameMap = new HashMap<>();
+    private static final Map <String, Session> usernameSessionMap = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token)
@@ -69,6 +70,9 @@ public class NotificationsWebsocket {
     }
 
     private void broadcast(Notification notification) {
+        if (followRepository == null) {
+            followRepository = BeanUtil.getBean(FollowRepository.class);
+        }
 
         String[] followers = followRepository.queryGetFollowers(notification.getFromUsername());
 
