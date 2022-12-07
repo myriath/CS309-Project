@@ -33,8 +33,8 @@ public class SimpleFoodItem {
     @Expose
     private String description;
 
-    @Expose
-    private boolean isCustom;
+//    @Expose
+//    private boolean isCustom;
 
     @OneToMany(mappedBy = "food")
     private Set<Ingredient> ingredients;
@@ -68,11 +68,11 @@ public class SimpleFoodItem {
     }
 
     public boolean isCustom() {
-        return isCustom;
+        return this.simpleFoodItemKey.isCustom;
     }
 
     public void setCustom(boolean isCustom) {
-        this.isCustom = isCustom;
+        this.simpleFoodItemKey.isCustom = isCustom;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SimpleFoodItem {
         return "SimpleFoodItem{" +
                 "id=" + this.simpleFoodItemKey.id +
                 ", description='" + description + '\'' +
-                ", isCustom=" + isCustom +
+                ", isCustom=" +  this.simpleFoodItemKey.isCustom +
                 '}';
     }
 
