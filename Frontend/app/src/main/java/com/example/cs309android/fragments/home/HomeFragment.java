@@ -1,5 +1,8 @@
 package com.example.cs309android.fragments.home;
 
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 
 import android.content.Intent;
@@ -14,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
 import com.example.cs309android.models.HomeNutritionCardModel;
@@ -88,6 +92,38 @@ public class HomeFragment extends BaseFragment {
                 new HomeNutritionCardModel("Protein", R.drawable.meat),
                 new HomeNutritionCardModel("Fat", R.drawable.fat)
         };
+        int totalCalories = 0;
+        int totalFat = 0;
+        int totalCarbs = 0;
+        int totalProtein = 0;
+
+        for (SimpleFoodItem item : MainActivity.getLog(BREAKFAST_LOG)) {
+            totalCalories += item.getCalories();
+            totalFat += item.getFat();
+            totalCarbs += item.getCarbs();
+            totalProtein += item.getProtein();
+        }
+        for (SimpleFoodItem item : MainActivity.getLog(LUNCH_LOG)) {
+            totalCalories += item.getCalories();
+            totalFat += item.getFat();
+            totalCarbs += item.getCarbs();
+            totalProtein += item.getProtein();
+        }
+        for (SimpleFoodItem item : MainActivity.getLog(DINNER_LOG)) {
+            totalCalories += item.getCalories();
+            totalFat += item.getFat();
+            totalCarbs += item.getCarbs();
+            totalProtein += item.getProtein();
+        }
+        models[0].setLimit(1600);
+        models[1].setLimit(200);
+        models[2].setLimit(80);
+        models[3].setLimit(53);
+
+        models[0].setAmount(totalCalories);
+        models[1].setAmount(totalCarbs);
+        models[2].setAmount(totalProtein);
+        models[3].setAmount(totalFat);
 
         HomeNutritionAdapter adapter1 = new HomeNutritionAdapter(models);
         nutritionPager.setAdapter(adapter1);
