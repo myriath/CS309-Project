@@ -30,6 +30,7 @@ public class SimpleFoodItem {
     private String description;
 
     @Id
+    @Column(unique = true)
     @Expose
     private boolean isCustom;
 
