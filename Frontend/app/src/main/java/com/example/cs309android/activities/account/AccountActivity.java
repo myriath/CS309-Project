@@ -200,7 +200,12 @@ public class AccountActivity extends AppCompatActivity {
             if (profileResponse.getResult() == Constants.Results.RESULT_OK) {
                 followers = profileResponse.getFollowers();
                 ((TextView) findViewById(R.id.unameView)).setText(username);
-                ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+                String bioText = profileResponse.getBio();
+                if (bioText == null || bioText.length() == 0) {
+                    ((TextView) findViewById(R.id.bioTextView)).setText(R.string.nothing_yet);
+                } else {
+                    ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+                }
                 followerCount.setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
                 followingCount.setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
 

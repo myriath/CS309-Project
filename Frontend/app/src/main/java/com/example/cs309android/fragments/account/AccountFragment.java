@@ -45,8 +45,6 @@ import com.example.cs309android.views.HomeRecipeView;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -109,8 +107,12 @@ public class AccountFragment extends BaseFragment {
                     .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
             ((TextView) view.findViewById(R.id.followingCount))
                     .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
-            ((TextView) view.findViewById(R.id.bioTextView))
-                    .setText(global.getBio());
+            String bioText = profileResponse.getBio();
+            if (bioText == null || bioText.length() == 0) {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(R.string.nothing_yet);
+            } else {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+            }
         }, requireContext());
 
         new GetRecipesRequest(global.getUsername()).request(response -> {

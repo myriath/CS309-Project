@@ -300,6 +300,18 @@ public class Constants {
          * Tells the SearchActivity it was opened from recipe add
          */
         int INTENT_RECIPE_ADD = 1;
+        /**
+         * Used to tell SearchActivity the intent is a breakfast item
+         */
+        int INTENT_FOOD_LOG_BREAKFAST = 2;
+        /**
+         * Used to tell SearchActivity the intent is a lunch item
+         */
+        int INTENT_FOOD_LOG_LUNCH = 3;
+        /**
+         * Used to tell SearchActivity the intent is a dinner item
+         */
+        int INTENT_FOOD_LOG_DINNER = 4;
     }
 
     /**
@@ -587,6 +599,10 @@ public class Constants {
              * Url for getting an item from recipes
              */
             String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+            /**
+             * Url for getting a recipe list by type
+             */
+            String GET_RECIPES_LIST_TYPE_URL = RECIPES_URL + "getRecipeListByType/";
             /**
              * URL for setting a recipe's image
              */
