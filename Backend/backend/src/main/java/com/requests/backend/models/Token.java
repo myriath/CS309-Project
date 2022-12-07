@@ -1,5 +1,6 @@
 package com.requests.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,11 +12,15 @@ import java.util.concurrent.TimeUnit;
 @Table(name="tokens")
 public class Token {
     @Id
+    @JsonIgnore
     private String token;
-
-    private String username;
-
+    @JsonIgnore
     private Date creationDate;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @JsonIgnore
+    private User user;
 
     public String getToken() {
         return token;
@@ -25,19 +30,19 @@ public class Token {
         this.token = token;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
 
     public void setCreationDate(Date creationDate) { this.creationDate = creationDate; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public boolean isOutdated() {
 

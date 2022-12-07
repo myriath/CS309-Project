@@ -1,8 +1,11 @@
-package com.requests.backend.models;
+package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
+import com.requests.backend.models.CustomFood;
 import com.requests.backend.models.responses.ResultResponse;
 
 public class FoodsResponse {
+    @Expose
     private CustomFood[] items;
 
     public FoodsResponse() {

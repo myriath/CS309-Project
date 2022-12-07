@@ -1,6 +1,7 @@
 package com.requests.backend.repositories;
 
 import com.requests.backend.models.Token;
+import com.requests.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,5 +37,8 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
             nativeQuery = true)
     @Transactional
     void queryUpdateToken(@Param("newToken") String newToken, @Param("creation_date") Date creationDate, @Param("oldToken") String oldToken);
+
+    @Transactional
+    long deleteByUser(User user);
 }
 

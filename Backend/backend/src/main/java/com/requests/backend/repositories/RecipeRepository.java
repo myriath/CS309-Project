@@ -1,6 +1,7 @@
 package com.requests.backend.repositories;
 
 import com.requests.backend.models.Recipe;
+import com.requests.backend.models.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -45,23 +46,23 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 
     @Query(
-            value = "SELECT DISTINCT(r.rid), r.instructions, r.rname, r.username FROM user_recipes r join tokens t on r.username = t.username where t.token = :token",
+            value = "SELECT * FROM user_recipes WHERE username = :username",
             nativeQuery = true)
-    Recipe[] queryuserRecipeList(@Param("token") String token);
+    Recipe[] queryUserRecipeList(@Param("username") String username);
 
     @Query (
 
-            value = "SELECT DISTINCT(rid), instructions, rname, r.username  FROM user_recipes r join tokens t on r.username = t.username where t.token = :Token and t.username = :username",
+            value = "SELECT * FROM tokens WHERE token = :token",
             nativeQuery = true)
-    Recipe[] queryRecipeDeleteCheck(@Param("Token") String Token, @Param("username") String username);
+    Token[] queryRecipeDeleteCheck(@Param("token") String token);
 
     @Modifying
     @Query(
             value =
-                    "INSERT INTO user_recipes (username, rname, instructions) VALUES (:username, :rname, :instructions)",
+                    "INSERT INTO user_recipes (username, rname) VALUES (:username, :rname)",
             nativeQuery = true)
     @Transactional
-    void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname, @Param("instructions") String instructions);
+    void queryCreateRecipe(@Param("username") String username, @Param("rname") String rname);
 
     @Query(
             value ="SELECT * FROM user_recipes WHERE username " +
@@ -76,7 +77,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Transactional
     void queryDeleteRecipe(@Param("rid") int rid);
 
-
-
+    @Modifying
+    @Query(
+            value = "UPDATE user_recipes SET description = :description, rname = :name WHERE rid = :rid",
+            nativeQuery = true)
+    @Transactional
+    void queryUpdateRecipe(@Param("rid") int rid, @Param("description") String description, @Param("name") String recipeName);
 }
 

@@ -1,55 +1,38 @@
 package com.requests.backend.models;
 
-import com.requests.backend.models.composites.ShoppingListPK;
+import com.google.gson.annotations.Expose;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="shopping_list")
-@IdClass(ShoppingListPK.class)
 public class ShoppingList {
     @Id
-    private String username;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
+    private int shoppingId;
 
-    @Id
-    private Integer id;
-
-    private String description;
-
-    private Boolean  stricken;
-
-    private Boolean isCustom;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
+            @JoinColumn(name = "food_custom", referencedColumnName = "isCustom", nullable = false)
+    })
+    @Expose
+    private SimpleFoodItem foodItem;
+    @Expose
+    private Boolean stricken;
 
     public ShoppingList() {
 
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer fdcId) {
-        this.id = fdcId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public Boolean getStricken() {
         return stricken;
@@ -59,9 +42,47 @@ public class ShoppingList {
         this.stricken = stricken;
     }
 
-    public void setIsCustom(Boolean isCustom) { this.isCustom = isCustom; }
+    public SimpleFoodItem getFoodItem() {
+        return foodItem;
+    }
 
-    public Boolean getIsCustom() { return isCustom; }
+    public void setFoodItem(SimpleFoodItem foodItem) {
+        this.foodItem = foodItem;
+    }
+
+    public int getShoppingId() {
+        return shoppingId;
+    }
+
+    public void setShoppingId(int shoppingId) {
+        this.shoppingId = shoppingId;
+    }
+
+    //    @Embeddable
+//    public static class ShoppingListPK implements Serializable {
+//        protected String username;
+//        protected SimpleFoodItem.SimpleFoodItemPK foodItem;
+//
+//        public ShoppingListPK() {}
+//
+//        public ShoppingListPK(String username, SimpleFoodItem.SimpleFoodItemPK foodItem) {
+//            this.username = username;
+//            this.foodItem = foodItem;
+//        }
+//
+//        @Override
+//        public boolean equals(Object o) {
+//            if (this == o) return true;
+//            if (o == null || getClass() != o.getClass()) return false;
+//            ShoppingListPK that = (ShoppingListPK) o;
+//            return Objects.equals(username, that.username) && Objects.equals(foodItem, that.foodItem);
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            return Objects.hash(username, foodItem);
+//        }
+//    }
 }
 
 

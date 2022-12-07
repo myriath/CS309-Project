@@ -1,6 +1,9 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
+
 public class LoginResponse extends ResultResponse {
+    @Expose
     private String username;
 
     public LoginResponse() {

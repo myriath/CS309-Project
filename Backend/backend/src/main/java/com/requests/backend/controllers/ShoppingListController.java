@@ -8,8 +8,10 @@ import com.requests.backend.models.requests.ShoppingListAddRequest;
 import com.requests.backend.models.requests.ShoppingListRemoveRequest;
 import com.requests.backend.models.requests.StrikeoutRequest;
 import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.models.responses.ShoppingAddResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
+import com.requests.backend.repositories.SimpleFoodRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
@@ -35,6 +37,8 @@ public class ShoppingListController {
     private UserRepository userRepository;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private SimpleFoodRepository simpleFoodRepository;
 
     /**
      * Gets the users shopping list if the hash provided is valid.
@@ -61,21 +65,11 @@ public class ShoppingListController {
         // Otherwise, the token exists in the table
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
-            Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
-
-            if (userQueryRes.isEmpty()) {
-                res.setResult(RESULT_ERROR);
-            }
-            // If the credentials aren't valid, return hash mismatch error code.
-            else {
-                ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
-
-                // User already passed authentication, just return shopping list
-                res.setResult(RESULT_OK);
-                res.setShoppingList(listItems);
-            }
+            // User already passed authentication, just return shopping list
+            res.setResult(RESULT_OK);
+            res.setShoppingList(user.getShoppingLists().toArray(new ShoppingList[0]));
         }
 
         return res;
@@ -93,12 +87,7 @@ public class ShoppingListController {
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        String itemName = foodItem.getDescription();
-        int fdcId = foodItem.getFdcId();
-        boolean stricken = false;
-        boolean isCustom = foodItem.isCustom();
-
-        ResultResponse res = new ResultResponse();
+        ShoppingAddResponse res = new ShoppingAddResponse();
 
         // Find token in table
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -109,10 +98,17 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             try {
-                shoppingRepository.queryCreateShoppingListEntry(itemName, username, fdcId, isCustom, stricken);
+                foodItem = simpleFoodRepository.save(foodItem);
+                ShoppingList list = new ShoppingList();
+                list.setFoodItem(foodItem);
+                list.setStricken(false);
+                list = shoppingRepository.save(list);
+                user.addShoppingList(list);
+                userRepository.save(user);
+                res.setId(list.getShoppingId());
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -125,15 +121,12 @@ public class ShoppingListController {
     /**
      * Changes the strikeout status of an item in the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param req JSON request body containing identifying information for the item to change
+     * @param id    ID for the shopping list row
      * @return Result code
      */
-    @PatchMapping (path="/strikeout/{token}")
-    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @RequestBody StrikeoutRequest req) {
+    @PatchMapping (path="/strikeout/{token}/{id}")
+    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        int id = req.getId();
-        boolean isCustom = req.isCustom();
 
         ResultResponse res = new ResultResponse();
 
@@ -146,12 +139,16 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             // User does not exist
             try {
                 // User already passed authentication from token earlier
-                shoppingRepository.queryShoppingChangeStricken(id, isCustom, username);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                if (user.getShoppingLists().contains(list)) {
+                    list.setStricken(!list.getStricken());
+                }
+                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -164,14 +161,12 @@ public class ShoppingListController {
     /**
      * Deletes an item from the shopping list if the hash provided is valid.
      * @param token Token for authentication
-     * @param req JSON request body containing identifying information for the item to delete
+     * @param id    ID for the shopping list row
      * @return Result code
      */
-    @PutMapping (path = "/remove/{token}")
-    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @RequestBody ShoppingListRemoveRequest req) {
+    @PutMapping (path = "/remove/{token}/{id}")
+    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        int reqId = req.getId();
 
         ResultResponse res = new ResultResponse();
 
@@ -185,11 +180,13 @@ public class ShoppingListController {
         else {
 
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(username, reqId);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                user.getShoppingLists().remove(list);
+                userRepository.save(user);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);

@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.Collection;
 
 import static com.util.Constants.*;
+import static com.util.Constants.UserType.USER_MOD;
 
 /**
  * This controller handles all requests related to the user's individual profile.
@@ -49,16 +50,15 @@ public class ProfileEndpointController {
     public @ResponseBody ProfileResponse getProfile(@PathVariable String username) {
         ProfileResponse res = new ProfileResponse();
 
-        Collection<User> users = userRepository.queryGetUserByUsername(username);
-        if (users.isEmpty()) {
+        User[] users = userRepository.queryGetUserByUsername(username);
+        if (users.length == 0) {
             res.setResult(RESULT_ERROR);
         } else {
-            User user = (User) users.toArray()[0];
             res.setResult(RESULT_OK);
 
             res.setFollowers(followRepository.queryGetFollowers(username).length);
             res.setFollowing(followRepository.queryGetFollowing(username).length);
-            res.setBio(user.getBio());
+            res.setBio(users[0].getBio());
         }
 
         return res;
@@ -73,8 +73,8 @@ public class ProfileEndpointController {
     @GetMapping(path="/profilePicture/{username}", produces="image/webp")
     public @ResponseBody byte[] getPFP(@PathVariable String username) throws IOException {
         File img = new File(PFP_SOURCE, Hasher.sha256plaintext(username) + ".webp");
-        LOGGER.info(username + " " + Hasher.sha256plaintext(username) + ".webp " + img.exists());
-        LOGGER.info(img.getAbsolutePath());
+//        LOGGER.info(username + " " + Hasher.sha256plaintext(username) + ".webp " + img.exists());
+//        LOGGER.info(img.getAbsolutePath());
         if (!img.exists()) {
             img = new File(DEFAULT_PFP);
         }
@@ -106,7 +106,20 @@ public class ProfileEndpointController {
      */
     @PatchMapping(path="/updateProfile/{token}")
     public @ResponseBody ResultResponse updateProfile(@PathVariable String token, @RequestBody UpdateProfileRequest req) {
-        return UserController.getUsernameFromToken(token, (username, res) -> userRepository.queryUpdateBio(username, req.getNewBio()), tokenRepository);
+        return UserController.getUserFromToken(token, (user, res) -> userRepository.queryUpdateBio(user.getUsername(), req.getNewBio()), tokenRepository);
+    }
+
+    @PatchMapping(path = "/updateProfile/{token}/{username}")
+    public @ResponseBody ResultResponse updateOtherProfile(@PathVariable String token, @PathVariable String username, @RequestBody UpdateProfileRequest req) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            if (user.getUserType() > USER_MOD && user.getUserType() > other.getUserType()) {
+                userRepository.queryUpdateBio(user.getUsername(), req.getNewBio());
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
     }
 
     /**
@@ -120,6 +133,11 @@ public class ProfileEndpointController {
         return updateImage(token, file, PFP_SOURCE);
     }
 
+    @PatchMapping(path="/updatePfp/{token}/{username}")
+    public @ResponseBody ResultResponse updatePFPOther(@PathVariable String token, @PathVariable String username, @RequestParam("image") MultipartFile file) {
+        return updateImage(token, username, file, PFP_SOURCE);
+    }
+
     /**
      * Update a user's profile banner.
      * @param token Token for authentication
@@ -131,6 +149,11 @@ public class ProfileEndpointController {
         return updateImage(token, file, BANNER_SOURCE);
     }
 
+    @PatchMapping(path="/updateBanner/{token}/{username}")
+    public @ResponseBody ResultResponse updateBannerOther(@PathVariable String token, @PathVariable String username, @RequestParam("image") MultipartFile file) {
+        return updateImage(token, username, file, BANNER_SOURCE);
+    }
+
     /**
      * Updates an image on the server
      * @param token Token for authentication
@@ -139,14 +162,40 @@ public class ProfileEndpointController {
      * @return Result response with the result code to be handled by the backend
      */
     public ResultResponse updateImage(String token, MultipartFile file, String basePath) {
-        return UserController.getUsernameFromToken(token, (username, res) -> {
-            String filename = Hasher.sha256plaintext(username) + ".webp";
+        return UserController.getUserFromToken(token, (user, res) -> {
+            String filename = Hasher.sha256plaintext(user.getUsername()) + ".webp";
             File file1 = new File(basePath, filename);
             try (FileOutputStream outputStream = new FileOutputStream(file1)) {
                 outputStream.write(file.getBytes());
                 res.setResult(RESULT_OK);
             } catch (IOException e) {
                 e.printStackTrace();
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
+    }
+
+    /**
+     * Updates an image on the server
+     * @param token Token for authentication
+     * @param file New image to replace
+     * @param basePath Base path to the destination
+     * @return Result response with the result code to be handled by the backend
+     */
+    public ResultResponse updateImage(String token, String username, MultipartFile file, String basePath) {
+        return UserController.getUserFromToken(token, (user, res) -> {
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            if (user.getUserType() > USER_MOD && user.getUserType() > other.getUserType()) {
+                String filename = Hasher.sha256plaintext(username) + ".webp";
+                File file1 = new File(basePath, filename);
+                try (FileOutputStream outputStream = new FileOutputStream(file1)) {
+                    outputStream.write(file.getBytes());
+                    res.setResult(RESULT_OK);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    res.setResult(RESULT_ERROR);
+                }
+            } else {
                 res.setResult(RESULT_ERROR);
             }
         }, tokenRepository);

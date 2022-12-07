@@ -1,8 +1,15 @@
 package com.requests.backend.models.responses;
 
+
+import com.google.gson.annotations.Expose;
+
+//Everything But Bio needs to be moved into socailController
 public class ProfileResponse extends ResultResponse {
+    @Expose
     private int followers;
+    @Expose
     private int following;
+    @Expose
     private String bio;
 
     public int getFollowers() {

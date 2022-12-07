@@ -10,16 +10,12 @@ import com.requests.backend.models.responses.SaltResponse;
 import com.requests.backend.repositories.FavoriteRepository;
 import com.requests.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Date;
-import java.util.Collection;
 
 import static com.util.Constants.*;
+import static com.util.Constants.UserType.*;
 
 /**
  * This class is responsible for handling all requests related to users login, register, etc.
@@ -48,15 +44,14 @@ public class UserController {
     @GetMapping(path = "/getSalt/{username}")
     @ResponseBody
     public SaltResponse getSalt(@PathVariable String username) {
-        Collection<User> userRes = userRepository.queryValidateUsername(username);
+        User[] userRes = userRepository.queryValidateUsername(username);
 
         SaltResponse res = new SaltResponse();
 
-        if (userRes.isEmpty()) {
+        if (userRes.length == 0) {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
-            res.setSalt(null);
         } else {
-            User user = userRes.iterator().next();
+            User user = userRes[0];
             String salt = user.getPSalt();
             res.setResult(RESULT_OK);
             res.setSalt(salt);
@@ -97,12 +92,12 @@ public class UserController {
                 // If the difference is one day or greater, a new token needs to be generated.
                 if (outdatedToken) {
                     res.setResult(RESULT_REGEN_TOKEN);
-                    res.setUsername(dbToken.getUsername());
+                    res.setUsername(dbToken.getUser().getUsername());
                 }
                 // Otherwise, the user should be logged in, as the token is valid.
                 else {
                     res.setResult(RESULT_LOGGED_IN);
-                    res.setUsername(dbToken.getUsername());
+                    res.setUsername(dbToken.getUser().getUsername());
                 }
             }
 
@@ -127,17 +122,17 @@ public class UserController {
         String pHash = Hasher.sha256(hash); // SHA-256's the incoming hash
         String tokenHash = Hasher.sha256(newToken); // SHA-256's the incoming token, this is added to the table as another hash for the username
 
-        Collection<User> userRes = userRepository.queryValidateUsername(username);
+        User[] userRes = userRepository.queryValidateUsername(username);
 
         LoginResponse res = new LoginResponse(RESULT_OK);
 
-        if (userRes.isEmpty()) {
+        if (userRes.length == 0) {
             res.setResult(RESULT_ERROR);
         }
         else {
 
             // If a user with the username is found, assign that user to the user variable
-            User user = userRes.iterator().next();
+            User user = userRes[0];
 
             // If the provided password does not match the user's password, return hash mismatch code
             if (user.getPHash().compareTo(pHash) != 0) {
@@ -185,19 +180,32 @@ public class UserController {
         LoginResponse res = new LoginResponse();
 
         Token[] tokenQuery = tokenRepository.queryGetToken(tokenHash);
+        User[] users = userRepository.queryGetUserByUsername(username);
+        User[] users2 = userRepository.queryGetUserByEmail(email);
 
         // If the token exists in the table, return RESULT_REGEN_TOKEN,
-        if (tokenQuery.length > 0) {
-            res.setResult(RESULT_REGEN_TOKEN);
-        }
+        if (tokenQuery.length > 0) res.setResult(RESULT_REGEN_TOKEN);
+        else if (users.length != 0) res.setResult(RESULT_ERROR_USERNAME_TAKEN);
+        else if (users2.length != 0) res.setResult(RESULT_ERROR_EMAIL_TAKEN);
         else {
             // If the token does not already exist, try to add the user to user table
             try {
-                userRepository.queryCreateUser(username, email, pHash, pSalt, "User");
-                tokenRepository.queryAddToken(tokenHash, new Date(System.currentTimeMillis()), username);
+                User user = new User();
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setPHash(pHash);
+                user.setPSalt(pSalt);
+                user.setUserType(USER_REG);
+                user = userRepository.save(user);
+
+                Token token = new Token();
+                token.setUser(user);
+                token.setToken(tokenHash);
+                token.setCreationDate(new Date(System.currentTimeMillis()));
+                tokenRepository.save(token);
+
                 res.setResult(RESULT_USER_CREATED);
                 res.setUsername(username);
-
             // If the username already exists in the user table, return an error result
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
@@ -205,6 +213,51 @@ public class UserController {
         }
 
         return res;
+    }
+
+    @DeleteMapping(path = "/delete/{token}")
+    public @ResponseBody ResultResponse deleteUser(@PathVariable String token, @RequestParam String username) {
+        return getUserFromToken(token, (user, res) -> {
+            int userType = user.getUserType();
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            int otherType = other.getUserType();
+
+            if (userType > USER_MOD && otherType < userType) {
+                tokenRepository.deleteByUser(other);
+                userRepository.delete(other);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
+    }
+
+    @PatchMapping(path = "/updateUserType/{token}")
+    public @ResponseBody ResultResponse updateType(@PathVariable String token, @RequestParam String username, @RequestParam int type) {
+        return getUserFromToken(token, (user, res) -> {
+            int userType = user.getUserType();
+            User other = userRepository.queryGetUserByUsername(username)[0];
+            int otherType = other.getUserType();
+
+            if (userType > USER_MOD && type < userType && otherType < userType) {
+                other.setUserType(type);
+                userRepository.save(other);
+                res.setResult(RESULT_OK);
+            } else {
+                res.setResult(RESULT_ERROR);
+            }
+        }, tokenRepository);
+    }
+
+    @GetMapping(path = "/getUserType/{username}")
+    public @ResponseBody ResultResponse getType(@PathVariable String username) {
+        ResultResponse resultResponse = new ResultResponse();
+        try {
+            resultResponse.setResult(userRepository.queryGetUserByUsername(username)[0].getUserType());
+        } catch (Exception e) {
+            resultResponse.setResult(RESULT_ERROR);
+        }
+        return resultResponse;
     }
 
     /**
@@ -256,7 +309,7 @@ public class UserController {
      * @param tokenRepository The token repository.
      * @return JSON string containing the result code and username.
      */
-    public static ResultResponse getUsernameFromToken(String token, RunWithUsername runner, TokenRepository tokenRepository) {
+    public static ResultResponse getUserFromToken(String token, RunWithUser runner, TokenRepository tokenRepository) {
         String hashedToken = Hasher.sha256(token);
 
         ResultResponse res = new ResultResponse();
@@ -269,19 +322,20 @@ public class UserController {
                 res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
             }
             else {
-                runner.run(tokenQuery[0].getUsername(), res);
+                runner.run(tokenQuery[0].getUser(), res);
             }
 
             // If the server encounters an error, return RESULT_ERROR
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.info(e.getMessage());
+            LOGGER.info(e.getMessage(), e);
             res.setResult(RESULT_ERROR);
         }
 
         return res;
     }
 
-    public interface RunWithUsername {
-        void run(String username, ResultResponse res);
+    public interface RunWithUser {
+        void run(User user, ResultResponse res);
     }
 }

@@ -1,8 +1,12 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
+
 public class CustomFoodResponse {
+    @Expose
     private int dbId;
 
+    @Expose
     private int result;
 
     public CustomFoodResponse() {

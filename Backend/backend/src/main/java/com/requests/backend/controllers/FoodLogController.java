@@ -11,6 +11,8 @@ import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+
 import static com.util.Constants.*;
 
 /**
@@ -43,7 +45,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
             FoodLog[] foodLog = foodLogRepository.queryGetFoodLog(username);
 
             res.setFoodLog(foodLog);
@@ -60,7 +62,7 @@ public class FoodLogController {
      * @return          A JSON array containing all food log entries for the given date
      */
     @GetMapping (path = "/getDay/{token}")
-    public @ResponseBody FoodLogGetResponse getLogByDay(@PathVariable String token, @RequestParam String date) {
+    public @ResponseBody FoodLogGetResponse getLogByDay(@PathVariable String token, @RequestParam Date date) {
         String hashedToken = Hasher.sha256(token);
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
 
@@ -70,7 +72,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             FoodLog[] foodLog = foodLogRepository.queryGetLogByDay(username, date);
 
@@ -98,7 +100,7 @@ public class FoodLogController {
             res.setResult(RESULT_ERROR_USER_HASH_MISMATCH);
         }
         else {
-            String username = tokenQueryRes[0].getUsername();
+            String username = tokenQueryRes[0].getUser().getUsername();
 
             foodLogRepository.queryAddToLog(username, req.getFdcId(), req.getFoodName(), req.getServingAmt(),
                     req.getServingUnit(), req.getFat(), req.getSatFat(), req.getSodium(), req.getCarbohydrates(),

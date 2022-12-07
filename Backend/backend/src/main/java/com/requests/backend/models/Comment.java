@@ -1,5 +1,7 @@
 package com.requests.backend.models;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,20 +11,21 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private Integer cid;
 
-    private String username;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @Expose
+    private User user;
 
+    @Expose
+    @Column(length = 2000)
     private String body;
 
-    @Column(columnDefinition = "INTEGER DEFAULT 0")
-    private int upvotes;
-
-    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
-    @JoinTable(name = "comment_votes",
-            joinColumns = { @JoinColumn(name = "cid", referencedColumnName = "cid") },
-            inverseJoinColumns = { @JoinColumn(name = "username", referencedColumnName = "username") })
-    private Set<User> voters;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+    @Expose
+    private Set<Vote> votes;
 
     public Integer getCid() {
         return cid;
@@ -30,14 +33,6 @@ public class Comment {
 
     public void setCid(Integer cid) {
         this.cid = cid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getBody() {
@@ -48,11 +43,19 @@ public class Comment {
         this.body = body;
     }
 
-    public int getUpvotes() {
-        return upvotes;
+    public User getUser() {
+        return user;
     }
 
-    public void setUpvotes(int upvotes) {
-        this.upvotes = upvotes;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 }

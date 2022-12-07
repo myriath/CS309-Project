@@ -1,6 +1,7 @@
 package com.requests.backend.repositories;
 
 import com.requests.backend.models.Comment;
+import com.requests.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +44,22 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     void queryDownvoteComment(@Param("cid") int cid);
 
 
+    @Modifying
+    @Query(
+            value = "UPDATE comments SET body = :body WHERE cid = :cid",
+            nativeQuery = true)
+    @Transactional
+    void queryUpdateComment(@Param("cid") int commentId, @Param("body") String body);
+
+    @Modifying
+    @Query(
+            value = "DELETE FROM comments WHERE cid = :cid",
+            nativeQuery = true)
+    @Transactional
+    void queryRemoveComment(@Param("cid") int commentId);
+
+    @Query(
+            value = "SELECT * FROM comments WHERE cid = :cid",
+            nativeQuery = true)
+    Comment[] queryGetCommentByCid(@Param("cid") int commentId);
 }
