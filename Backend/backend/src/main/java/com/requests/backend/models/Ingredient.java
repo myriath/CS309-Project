@@ -18,7 +18,7 @@ public class Ingredient {
 //    private int food_id;
 //    private boolean is_custom;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumns({
             @JoinColumn(name = "food_id", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "is_custom", referencedColumnName = "isCustom", nullable = false)

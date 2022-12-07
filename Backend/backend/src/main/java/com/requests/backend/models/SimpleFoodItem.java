@@ -28,18 +28,12 @@ public class SimpleFoodItem {
      */
     @Expose
     private String description;
-    /**
-     * True if the item should appear with strikeout on the shopping list
-     */
-    @Expose
-    @Transient
-    private boolean stricken = false;
 
     @Id
     @Expose
     private boolean isCustom;
 
-    @OneToMany(mappedBy = "food", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "food")
     private Set<Ingredient> ingredients;
 
     public SimpleFoodItem() {}
@@ -70,24 +64,6 @@ public class SimpleFoodItem {
         return description;
     }
 
-    /**
-     * Getter for the stricken boolean
-     *
-     * @return true if this item should be rendered with strikeout
-     */
-    public boolean isStricken() {
-        return stricken;
-    }
-
-    /**
-     * Setter for the stricken boolean
-     *
-     * @param stricken true if this item should be rendered with strikeout
-     */
-    public void setStricken(boolean stricken) {
-        this.stricken = stricken;
-    }
-
     public boolean isCustom() {
         return isCustom;
     }
@@ -101,7 +77,6 @@ public class SimpleFoodItem {
         return "SimpleFoodItem{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
-                ", stricken=" + stricken +
                 ", isCustom=" + isCustom +
                 '}';
     }
