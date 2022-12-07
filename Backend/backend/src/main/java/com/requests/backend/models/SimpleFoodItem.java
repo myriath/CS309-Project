@@ -1,6 +1,8 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "simple_foods")
+@NaturalIdCache
 @IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
 public class SimpleFoodItem {
     /**
@@ -29,8 +32,7 @@ public class SimpleFoodItem {
     @Expose
     private String description;
 
-    @Id
-    @Column(unique = true)
+    @NaturalId
     @Expose
     private boolean isCustom;
 
@@ -84,6 +86,7 @@ public class SimpleFoodItem {
 
     public static class SimpleFoodItemPK implements Serializable {
         protected int id;
+
         protected boolean isCustom;
 
         public SimpleFoodItemPK() {}
