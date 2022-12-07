@@ -64,13 +64,13 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    @JsonIgnore
     public String getEmail() { return email; }
 
     public void setEmail(String email) {
         this.email = email;
     }
-
+    @JsonIgnore
     public String getPHash() {
         return pHash;
     }
@@ -78,7 +78,7 @@ public class User {
     public void setPHash(String pHash) {
         this.pHash = pHash;
     }
-
+    @JsonIgnore
     public String getPSalt() {
         return pSalt;
     }
@@ -100,7 +100,7 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
+    @JsonIgnore
     public Set<User> getFollowers() {
         return followers;
     }
@@ -108,7 +108,7 @@ public class User {
     public void setFollowers(Set<User> followers) {
         this.followers = followers;
     }
-
+    @JsonIgnore
     public Set<User> getFollowing() {
         return following;
     }
