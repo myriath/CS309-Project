@@ -271,8 +271,8 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
 
         // Attempts a login with stored creds. If they are invalid or don't exist, open login page
         spin(this);
-        Log.d("TOKEN", token);
         if (token != null) {
+            Log.d("TOKEN", token);
             Util.loginAttempt(global, token, () -> {
                 unSpin(this);
                 // Creates notification channels
