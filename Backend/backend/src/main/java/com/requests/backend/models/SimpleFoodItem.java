@@ -1,7 +1,7 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
