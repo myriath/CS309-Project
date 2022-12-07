@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Arrays;
 
-@SpringBootApplication(exclude = { JacksonAutoConfiguration.class })
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class, JacksonAutoConfiguration.class })
+@ComponentScan(basePackages = "com.requests.backend.controllers")
 public class BackendApplication {
 
 	public static void main(String[] args) {
