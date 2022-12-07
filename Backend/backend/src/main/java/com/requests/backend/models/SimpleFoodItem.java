@@ -16,7 +16,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "simple_foods")
-@NaturalIdCache
 @IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
 public class SimpleFoodItem {
     /**
@@ -32,7 +31,6 @@ public class SimpleFoodItem {
     @Expose
     private String description;
 
-    @NaturalId
     @Expose
     private boolean isCustom;
 
