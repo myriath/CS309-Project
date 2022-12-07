@@ -175,7 +175,7 @@ public class NutritionFragment extends BaseFragment {
             }
 
             SimpleFoodItem[] newItems = recipeResponse.getFoodLog();
-            MainActivity.clearFoodLog();
+//            MainActivity.clearFoodLog();
             for (SimpleFoodItem item : newItems) {
                 switch (item.getMeal()) {
                     case "Breakfast":
