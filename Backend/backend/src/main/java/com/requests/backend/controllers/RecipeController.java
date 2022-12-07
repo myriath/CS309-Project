@@ -162,12 +162,12 @@ public class RecipeController {
             if (user.getUsername().equals(other.getUsername()) ||
                     user.getUserType() == USER_DEV ||
                     (user.getUserType() > USER_REG && user.getUserType() > other.getUserType())) {
-                ingredientRepository.queryDeleteRecipe(recipe.getRid());
+                ingredientRepository.queryDeleteByRecipe(recipe.getRid());
                 for (Ingredient ingredient : req.getIngredients()) {
                     ingredientRepository.queryCreateIngredient(recipe.getRid(), ingredient.getFood().getId(),
                             ingredient.getFood().isCustom(), ingredient.getQuantity(), ingredient.getUnit());
                 }
-                instructionRepository.queryDeleteRecipe(recipe.getRid());
+                instructionRepository.queryDeleteByRecipe(recipe.getRid());
                 for (Instruction instruction : req.getInstructions()) {
                     instructionRepository.queryCreateInstruction(recipe.getRid(), instruction.getStepNum(),
                             instruction.getStepText());
