@@ -15,12 +15,12 @@ import java.util.Set;
  * @author Mitch Hudson
  */
 @Entity
-@Table(name = "simple_foods")
 @IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
+@Table(name = "simple_foods")
 public class SimpleFoodItem {
-    /**
-     * FDC ID from the api or Custom Food ID
-     */
+    //    /**
+    //     * FDC ID from the api or Custom Food ID
+    //     */
     @Id
     @Expose
     private int id;
@@ -45,7 +45,7 @@ public class SimpleFoodItem {
      * @return item id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -66,7 +66,7 @@ public class SimpleFoodItem {
     }
 
     public boolean isCustom() {
-        return isCustom;
+        return this.isCustom;
     }
 
     public void setCustom(boolean isCustom) {
@@ -76,35 +76,35 @@ public class SimpleFoodItem {
     @Override
     public String toString() {
         return "SimpleFoodItem{" +
-                "id=" + id +
+                "id=" + this.id +
                 ", description='" + description + '\'' +
-                ", isCustom=" + isCustom +
+                ", isCustom=" +  this.isCustom +
                 '}';
     }
 
-    public static class SimpleFoodItemPK implements Serializable {
-        protected int id;
+        public static class SimpleFoodItemPK implements Serializable {
+            protected int id;
 
-        protected boolean isCustom;
+            protected boolean isCustom;
 
-        public SimpleFoodItemPK() {}
+            public SimpleFoodItemPK() {}
 
-        public SimpleFoodItemPK(int id, boolean isCustom) {
-            this.isCustom = isCustom;
-            this.id = id;
-        }
+            public SimpleFoodItemPK(int id, boolean isCustom) {
+                this.isCustom = isCustom;
+                this.id = id;
+            }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, isCustom);
-        }
+            @Override
+            public int hashCode() {
+                return Objects.hash(id, isCustom);
+            }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
-            return other.isCustom == isCustom && other.id == id;
-        }
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj) return true;
+                if (obj == null || getClass() != obj.getClass()) return false;
+                SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
+                return other.isCustom == isCustom && other.id == id;
+            }
     }
 }
