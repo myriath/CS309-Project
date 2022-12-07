@@ -23,14 +23,9 @@ import static com.util.Constants.LOGGER;
 @ServerEndpoint(value = "/websocket/{token}", decoders = TextDecoder.class, encoders = TextEncoder.class)
 @Component
 public class NotificationsWebsocket {
-    private final FollowRepository followRepository;
+    private FollowRepository followRepository;
 
-    private final TokenRepository tokenRepository;
-
-    public NotificationsWebsocket() {
-        followRepository = BeanUtil.getBean(FollowRepository.class);
-        tokenRepository = BeanUtil.getBean(TokenRepository.class);
-    }
+    private TokenRepository tokenRepository;
 
     // Store all socket session and their corresponding username.
     private static final Map<Session, User> sessionUsernameMap = new Hashtable<>();
@@ -39,6 +34,12 @@ public class NotificationsWebsocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token)
             throws IOException {
+        if (followRepository == null) {
+            followRepository = BeanUtil.getBean(FollowRepository.class);
+        }
+        if (tokenRepository == null) {
+            tokenRepository = BeanUtil.getBean(TokenRepository.class);
+        }
         LOGGER.info("WEBSOCKETS");
         LOGGER.info(token);
         LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].toString());
