@@ -23,7 +23,6 @@ import java.util.List;
 @EnableWebMvc
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
-
     /**
      * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
      * TODO: Stop disabling CORS and CSRF.

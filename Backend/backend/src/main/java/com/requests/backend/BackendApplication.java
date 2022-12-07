@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.util.Arrays;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class, JacksonAutoConfiguration.class })
+@ComponentScan(basePackages = "com.requests.backend.controllers")
 public class BackendApplication {
 
 	public static void main(String[] args) {
