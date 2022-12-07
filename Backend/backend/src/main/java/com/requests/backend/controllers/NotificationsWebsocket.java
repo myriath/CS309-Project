@@ -49,9 +49,9 @@ public class NotificationsWebsocket {
     @OnClose
     public void onClose(Session session) throws IOException {
 
-        User user = sessionUsernameMap.get(session);
-        sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(user.getUsername());
+//        User user = sessionUsernameMap.get(session);
+//        sessionUsernameMap.remove(session);
+//        usernameSessionMap.remove(user.getUsername());
 
     }
 
