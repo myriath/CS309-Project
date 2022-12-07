@@ -120,7 +120,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
 
         findViewById(R.id.saveButton).setOnClickListener(view -> {
             Util.spin(this);
-            new UpdateProfileRequest(global.getToken(), Objects.requireNonNull(bioInput.getEditText()).getText().toString()).request(response -> {
+            new UpdateProfileRequest(global.getToken(), username, Objects.requireNonNull(bioInput.getEditText()).getText().toString()).request(response -> {
                 GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
                 if (genericResponse.getResult() == Constants.Results.RESULT_OK) {
                     global.setBio(bioInput.getEditText().getText().toString());
@@ -128,7 +128,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                     if (profileImage == null) {
                         profileImage = global.getPfp();
                     }
-                    new UpdateProfileImageRequest(global.getToken(), profileImage).request(response1 -> {
+                    new UpdateProfileImageRequest(global.getToken(), username, profileImage).request(response1 -> {
                         String json = new String(response1.data);
                         GenericResponse genericResponse1 = Util.objFromJson(json, GenericResponse.class);
                         if (genericResponse1.getResult() == Constants.Results.RESULT_OK) {
@@ -137,7 +137,7 @@ public class AccountEditActivity extends AppCompatActivity implements CallbackFr
                             if (bannerImage == null) {
                                 bannerImage = global.getBanner();
                             }
-                            new UpdateBannerImageRequest(global.getToken(), bannerImage).request(response2 -> {
+                            new UpdateBannerImageRequest(global.getToken(), username, bannerImage).request(response2 -> {
                                 String json1 = new String(response2.data);
                                 GenericResponse genericResponse2 = Util.objFromJson(json1, GenericResponse.class);
                                 if (genericResponse2.getResult() == Constants.Results.RESULT_OK) {

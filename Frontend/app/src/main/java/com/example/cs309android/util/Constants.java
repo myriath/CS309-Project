@@ -410,9 +410,13 @@ public class Constants {
          */
         int RESULT_REGEN_TOKEN = 3;
         /**
-         * Result for deleted user, not used by api
+         * Intent result for deleted, not used by api
          */
-        int RESULT_USER_DELETED = 4;
+        int RESULT_DELETED = 4;
+        /**
+         * Intent result for updated, not used by api
+         */
+        int RESULT_UPDATED = 5;
         /**
          * Indicates the user has been successfully created
          */

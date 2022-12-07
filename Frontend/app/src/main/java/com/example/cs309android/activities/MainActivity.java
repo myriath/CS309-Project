@@ -1,5 +1,6 @@
 package com.example.cs309android.activities;
 
+import static com.example.cs309android.BuildConfig.BASE_API_URL;
 import static com.example.cs309android.BuildConfig.SSL_OFF;
 import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
@@ -195,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        System.out.println(BASE_API_URL);
         // Creates Picasso singleton
         PICASSO = new PicassoSingleton();
 

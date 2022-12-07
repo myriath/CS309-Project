@@ -2,9 +2,13 @@ package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE_ID;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Results.RESULT_DELETED;
+import static com.example.cs309android.util.Constants.Results.RESULT_UPDATED;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -44,6 +48,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Fragment to display account details
@@ -55,6 +60,10 @@ public class AccountFragment extends BaseFragment {
      * Launcher for the account edit activity
      */
     private ActivityResultLauncher<Intent> accountEditLauncher;
+    /**
+     * Launcher for the recipe details activity
+     */
+    private ActivityResultLauncher<Intent> recipeDetailsLauncher;
 
     /**
      * Refresh the account page
@@ -120,7 +129,7 @@ public class AccountFragment extends BaseFragment {
                 recipeView.initView(recipe, view1 -> {
                     Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
                     intent.putExtra(PARCEL_RECIPE, recipe);
-                    startActivity(intent);
+                    recipeDetailsLauncher.launch(intent);
                 });
 
                 recipeList.addView(recipeView);
@@ -147,6 +156,24 @@ public class AccountFragment extends BaseFragment {
         accountEditLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> refreshAccount(view, global)
+        );
+
+        recipeDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    switch (result.getResultCode()) {
+                        case RESULT_DELETED: {
+//                            int id = Objects.requireNonNull(result.getData()).getIntExtra(PARCEL_RECIPE_ID, ITEM_ID_NULL);
+//                            break;
+                        }
+                        case RESULT_UPDATED: {
+//                            Recipe newRecipe = Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_RECIPE);
+//                            for ()
+                            refreshAccount(view, global);
+                            break;
+                        }
+                    }
+                }
         );
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);

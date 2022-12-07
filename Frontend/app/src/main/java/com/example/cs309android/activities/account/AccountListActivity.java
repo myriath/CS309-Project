@@ -6,7 +6,7 @@ import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOLLOWING;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_OWNER;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.Results.RESULT_USER_DELETED;
+import static com.example.cs309android.util.Constants.Results.RESULT_DELETED;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -66,7 +66,7 @@ public class AccountListActivity extends AppCompatActivity implements CallbackFr
         accountLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_USER_DELETED) {
+                    if (result.getResultCode() == RESULT_DELETED) {
                         ArrayList<String> users = new ArrayList<>(Arrays.asList(accounts));
                         users.removeIf(filter -> filter.equals(opened));
                         accounts = users.toArray(new String[0]);

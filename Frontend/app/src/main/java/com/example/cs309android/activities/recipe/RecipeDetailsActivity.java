@@ -3,6 +3,7 @@ package com.example.cs309android.activities.recipe;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE_ID;
 import static com.example.cs309android.util.Constants.UserType.USER_REG;
 
 import android.content.Intent;
@@ -142,7 +143,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             instructionsList.addView(view);
         }
 
-        if (recipe.getUser().equals(global.getUsername()) || global.getUserType() > USER_REG) {
+        if (recipe.getUser().getUsername().equals(global.getUsername()) || global.getUserType() > USER_REG) {
             findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
             findViewById(R.id.menuButton).setOnClickListener(view -> {
                 PopupMenu menu = new PopupMenu(this, view);
@@ -157,11 +158,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     } else if (id == R.id.delete) {
                         new RemoveRecipeRequest(recipe.getRecipeID(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                            if (genericResponse.getResult() != RESULT_OK) {
+                            if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                                 Toaster.toastShort("Error", this);
+                                return;
                             }
+                            Intent intent = new Intent();
+                            intent.putExtra(PARCEL_RECIPE_ID, recipe.getRecipeID());
+                            setResult(Constants.Results.RESULT_DELETED, intent);
+                            finish();
                         }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
-                        finish();
                     }
                     return true;
                 });
