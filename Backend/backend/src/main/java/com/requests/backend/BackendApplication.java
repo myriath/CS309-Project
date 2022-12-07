@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.util.Arrays;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class, JacksonAutoConfiguration.class })
-@ComponentScan(basePackages = "com.requests.backend.controllers")
+//@ComponentScan(basePackages = "com.requests.backend.controllers")
 public class BackendApplication {
 
 	public static void main(String[] args) {
