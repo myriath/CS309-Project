@@ -1,5 +1,6 @@
 package com.requests.backend.models;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,11 +12,14 @@ import java.util.concurrent.TimeUnit;
 @Table(name="tokens")
 public class Token {
     @Id
+    @JsonIgnore
     private String token;
+    @JsonIgnore
     private Date creationDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @JsonIgnore
     private User user;
 
     public String getToken() {
