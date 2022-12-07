@@ -1,10 +1,11 @@
 package com.example.cs309android.models.api.request.abstraction;
 
+import static com.example.cs309android.util.Constants.PICASSO;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.example.cs309android.util.PicassoSingleton;
 import com.squareup.picasso.Callback;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public abstract class ImageRequest {
     public void request(RunWithBitmap runner, Context context) {
         new Thread(() -> {
             try {
-                runner.run(PicassoSingleton.getInstance(context).load(getURL()).get());
+                runner.run(PICASSO.getInstance(context).load(getURL()).get());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,7 +47,7 @@ public abstract class ImageRequest {
      * @param context       Context for Picasso
      */
     public void request(ImageView view, Context context) {
-        PicassoSingleton.getInstance(context).load(getURL()).into(view);
+        PICASSO.getInstance(context).load(getURL()).into(view);
     }
 
     /**
@@ -57,7 +58,7 @@ public abstract class ImageRequest {
      * @param context  Context for Picasso
      */
     public void request(ImageView view, Callback callback, Context context) {
-        PicassoSingleton.getInstance(context).load(getURL()).into(view, callback);
+        PICASSO.getInstance(context).load(getURL()).into(view, callback);
     }
 
     /**

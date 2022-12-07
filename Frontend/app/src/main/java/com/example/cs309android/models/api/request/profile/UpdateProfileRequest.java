@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.profile;
 
-import static com.example.cs309android.util.Constants.UPDATE_PROFILE_URL;
+import static com.example.cs309android.util.Constants.Urls.Profile.UPDATE_PROFILE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PatchRequest;
@@ -23,9 +23,10 @@ public class UpdateProfileRequest extends PatchRequest {
      *
      * @param token authentication token
      */
-    public UpdateProfileRequest(String token, String newBio) {
+    public UpdateProfileRequest(String token, String username, String newBio) {
         super(new ParameterizedRequestURL(UPDATE_PROFILE_URL)
                 .addPathVar(token)
+                .addPathVar(username)
                 .toString());
         this.newBio = newBio;
     }

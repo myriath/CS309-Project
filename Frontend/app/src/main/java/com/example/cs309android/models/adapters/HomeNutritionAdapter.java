@@ -106,7 +106,8 @@ public class HomeNutritionAdapter extends RecyclerView.Adapter<HomeNutritionAdap
             ((TextView) itemView.findViewById(R.id.nutrientAmount)).setText(String.valueOf(amount));
             ((TextView) itemView.findViewById(R.id.calLimit)).setText(String.valueOf(limit));
             ((LinearProgressIndicator) itemView.findViewById(R.id.nutrientProgressBar)).setProgress(progress);
-            ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageBitmap(model.getImage());
+            if (model.getImage() != -1)
+                ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageResource(model.getImage());
             ((TextView) itemView.findViewById(R.id.nutrientTitle)).setText(model.getTitle());
 
 //            itemView.findViewById(R.id.leftButton).setOnClickListener(model.getLeftListener());

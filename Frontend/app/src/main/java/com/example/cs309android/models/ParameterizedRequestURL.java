@@ -1,8 +1,12 @@
 package com.example.cs309android.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,13 +63,12 @@ public class ParameterizedRequestURL {
      * @return this
      */
     public ParameterizedRequestURL addPathVar(String variable) {
-        if (url != null) {
-            try {
-                if (url.charAt(url.length() - 1) != '/') url.append('/');
-                url.append(URLEncoder.encode(variable, "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        if (variable == null || url == null) return this;
+        try {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(URLEncoder.encode(variable, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return this;
     }
@@ -201,6 +204,20 @@ public class ParameterizedRequestURL {
             }
         }
         return builder.substring(0, builder.length() - 1);
+    }
+
+    /**
+     * Generates a URI using this ParameterizedRequestURL
+     *
+     * @return URI for this request url
+     */
+    public URI toURI() {
+        try {
+            return new URI(toString());
+        } catch (URISyntaxException e) {
+            Log.e("URI", "Error converting to uri", e);
+            return null;
+        }
     }
 
     /**

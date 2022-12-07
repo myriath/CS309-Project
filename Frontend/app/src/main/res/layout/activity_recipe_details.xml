@@ -29,6 +29,7 @@
                 android:layout_gravity="top"
                 android:contentDescription="@string/food_item_image"
                 android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:srcCompat="?android:attr/fastScrollTrackDrawable"
                 tools:ignore="ImageContrastCheck" />
@@ -43,7 +44,7 @@
                 app:title="">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/editCard"
+                    android:id="@+id/menuCard"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="end"
@@ -55,13 +56,13 @@
                     app:cardElevation="0dp">
 
                     <ImageButton
-                        android:id="@+id/editButton"
+                        android:id="@+id/menuButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@null"
-                        android:contentDescription="@string/add_image"
-                        android:src="@drawable/ic_edit"
+                        android:contentDescription="@string/menu"
+                        android:src="@drawable/ic_kebab"
                         app:tint="@color/black" />
 
                 </androidx.cardview.widget.CardView>
@@ -118,7 +119,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -154,11 +155,20 @@
                     android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:layout_toEndOf="@id/pfpCard"
+                    android:layout_toStartOf="@id/badge"
                     android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/badge"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/account_badge" />
 
             </RelativeLayout>
 
@@ -226,6 +236,44 @@
                     android:orientation="vertical" />
 
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/comments"
+                android:layout_marginBottom="16dp"
+                android:textSize="20sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/newComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_a_new_comment"
+                    android:maxLength="2000"
+                    android:inputType="textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/postButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:text="@string/post" />
+
+            <LinearLayout
+                android:id="@+id/comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <Space
                 android:layout_width="match_parent"

@@ -1,9 +1,9 @@
 package com.example.cs309android.activities.login;
 
-import static com.example.cs309android.util.Constants.PARCEL_PASSWORD;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_ERROR_EMAIL_TAKEN;
-import static com.example.cs309android.util.Constants.RESULT_ERROR_USERNAME_TAKEN;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_PASSWORD;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_ERROR_EMAIL_TAKEN;
+import static com.example.cs309android.util.Constants.Results.RESULT_ERROR_USERNAME_TAKEN;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -98,9 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                         System.out.println(result);
                     }
                 }
-            }, error -> {
-                Util.unSpin(this);
-            }, 0);
+            }, error -> Util.unSpin(this), 0);
         });
     }
 }

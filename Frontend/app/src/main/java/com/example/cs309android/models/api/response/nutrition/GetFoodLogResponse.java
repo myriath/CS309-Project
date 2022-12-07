@@ -1,6 +1,7 @@
 package com.example.cs309android.models.api.response.nutrition;
 
 import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.response.GenericResponse;
 import com.google.gson.annotations.Expose;
 
@@ -14,7 +15,7 @@ public class GetFoodLogResponse extends GenericResponse {
      * Food Log array from JSON
      */
     @Expose
-    private final FoodLogItem[] foodLog;
+    private final SimpleFoodItem[] foodLog;
 
     /**
      * Public constructor
@@ -22,7 +23,7 @@ public class GetFoodLogResponse extends GenericResponse {
      * @param result  Result code from the request
      * @param foodLog Shopping list array
      */
-    public GetFoodLogResponse(int result, FoodLogItem[] foodLog) {
+    public GetFoodLogResponse(int result, SimpleFoodItem[] foodLog) {
         super(result);
         this.foodLog = foodLog;
     }
@@ -32,7 +33,7 @@ public class GetFoodLogResponse extends GenericResponse {
      *
      * @return Array of simple food items.
      */
-    public FoodLogItem[] getFoodLog() {
+    public SimpleFoodItem[] getFoodLog() {
         return foodLog;
     }
 }

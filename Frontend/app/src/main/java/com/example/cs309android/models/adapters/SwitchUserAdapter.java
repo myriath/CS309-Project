@@ -1,8 +1,8 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_DEFAULT;
-import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
-import static com.example.cs309android.util.Constants.PARCEL_ITEM_POSITION;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_DEFAULT;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ITEM_POSITION;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -78,7 +78,7 @@ public class SwitchUserAdapter extends ArrayAdapter<String> {
             Util.loginAttempt(global, global.getToken(), () -> callbackFragment.callback(CALLBACK_DEFAULT, null), System.out::println, System.out::println);
         });
 
-        convertView.findViewById(R.id.remove).setOnClickListener(view -> {
+        convertView.findViewById(R.id.menu).setOnClickListener(view -> {
             Util.logout(global, username);
             Bundle bundle = new Bundle();
             bundle.putInt(PARCEL_ITEM_POSITION, position);

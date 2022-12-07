@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -11,19 +13,24 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cs309android.R;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 
 import java.util.ArrayList;
 
 /**
- * Adapter to show a user's feed of recipes
+ * Adapter for the list of recipes in various pages
  *
  * @author Travis Massner
  */
-public class FeedAdapter extends ArrayAdapter<Recipe> {
+public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     /**
-     * List of items in the shopping list
+     * List of items in the recipe list
      */
     private final ArrayList<Recipe> items;
+    /**
+     * On click listener for when the item is clicked
+     */
+    private final RunWithRecipe runWithRecipe;
 
     /**
      * Public constructor.
@@ -31,14 +38,14 @@ public class FeedAdapter extends ArrayAdapter<Recipe> {
      * @param context context used by the superclass {@link ArrayAdapter}
      * @param items   list of items to display.
      */
-    public FeedAdapter(Context context, ArrayList<Recipe> items) {
-        super(context, R.layout.shopping_list_item, items);
+    public RecipeListAdapter(Context context, ArrayList<Recipe> items, RunWithRecipe runWithRecipe) {
+        super(context, R.layout.home_item_model, items);
         this.items = items;
+        this.runWithRecipe = runWithRecipe;
     }
 
     /**
      * Ran for each of the child views (items in the list)
-     * Here is where button functionality for each item is given.
      *
      * @param position    index of the item in the list
      * @param convertView converted view of the item in the list
@@ -47,18 +54,32 @@ public class FeedAdapter extends ArrayAdapter<Recipe> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Recipe item = items.get(position);
+        Recipe recipe = items.get(position);
         if (convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.food_search_branded, null);
+            convertView = View.inflate(getContext(), R.layout.home_item_model, null);
         }
 
-        // TODO: Build item view
+        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID()))
+                .request((ImageView) convertView.findViewById(R.id.recipeImage), getContext());
+
+        ((TextView) convertView.findViewById(R.id.recipeTitle)).setText(recipe.getRname());
+        ((TextView) convertView.findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
 
         ViewCompat.setOnApplyWindowInsetsListener(parent, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;
             return WindowInsetsCompat.CONSUMED;
         });
+
+        convertView.setOnClickListener(view -> runWithRecipe.run(recipe));
+
         return convertView;
+    }
+
+    /**
+     * Runs some code with a recipe
+     */
+    public interface RunWithRecipe {
+        void run(Recipe recipe);
     }
 }

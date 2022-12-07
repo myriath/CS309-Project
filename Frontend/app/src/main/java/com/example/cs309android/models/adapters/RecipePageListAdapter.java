@@ -55,9 +55,10 @@ public class RecipePageListAdapter extends ArrayAdapter<Recipe> {
         }
 
         TextView name = convertView.findViewById(R.id.recipeTitle);
-        name.setText(items.get(position).getRecipeName());
+        name.setText(items.get(position).getRname());
 
         return convertView;
     }
 
 }
+

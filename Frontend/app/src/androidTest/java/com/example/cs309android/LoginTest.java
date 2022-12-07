@@ -69,13 +69,13 @@ public class LoginTest {
     public void testRegister() throws InterruptedException {
         NukeSSLCerts.nuke();
         Util.register(TestingUtil.getGlobal(), "test1@gmail.com", "test1", "test", "test", Assert::fail, result -> {
-            assertEquals(Constants.RESULT_ERROR_USERNAME_TAKEN, result);
+            assertEquals(Constants.Results.RESULT_ERROR_USERNAME_TAKEN, result);
         }, error -> {
             error.printStackTrace();
             fail();
         }, 0);
         Util.register(TestingUtil.getGlobal(), "test1@gmail.com", "131411241253143", "test", "test", Assert::fail, result -> {
-            assertEquals(Constants.RESULT_ERROR_EMAIL_TAKEN, result);
+            assertEquals(Constants.Results.RESULT_ERROR_EMAIL_TAKEN, result);
         }, error -> {
             error.printStackTrace();
             fail();
@@ -92,13 +92,13 @@ public class LoginTest {
     public void testLogin() throws InterruptedException {
         NukeSSLCerts.nuke();
         Util.loginAttempt(TestingUtil.getGlobal(), "test1", "test1pass", Assert::fail, result -> {
-            assertEquals(Constants.RESULT_ERROR_USER_HASH_MISMATCH, result);
+            assertEquals(Constants.Results.RESULT_ERROR_USER_HASH_MISMATCH, result);
         }, error -> {
             error.printStackTrace();
             fail();
         });
         Util.loginAttempt(TestingUtil.getGlobal(), Hasher.sha256plaintext("test token"), Assert::fail, result -> {
-            assertEquals(Constants.RESULT_ERROR_USER_HASH_MISMATCH, result);
+            assertEquals(Constants.Results.RESULT_ERROR_USER_HASH_MISMATCH, result);
         }, error -> {
             error.printStackTrace();
             fail();
