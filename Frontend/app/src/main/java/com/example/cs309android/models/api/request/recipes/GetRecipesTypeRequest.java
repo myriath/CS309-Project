@@ -1,7 +1,8 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.GET_RECIPES_LIST_TYPE_URL;
-import static com.example.cs309android.util.Constants.GET_RECIPES_URL;
+
+
+import static com.example.cs309android.util.Constants.Urls.Recipes.GET_RECIPES_LIST_TYPE_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;

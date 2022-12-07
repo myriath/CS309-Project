@@ -600,6 +600,10 @@ public class Constants {
              */
             String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
             /**
+             * Url for getting a recipe list by type
+             */
+            String GET_RECIPES_LIST_TYPE_URL = RECIPES_URL + "getRecipeListByType/";
+            /**
              * URL for setting a recipe's image
              */
             String ADD_RECIPE_IMAGE_URL = RECIPES_URL + "addPicture/";
