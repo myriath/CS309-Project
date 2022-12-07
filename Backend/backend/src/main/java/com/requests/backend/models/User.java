@@ -2,6 +2,7 @@ package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
 import com.util.SkipSerialization;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -24,6 +25,7 @@ public class User {
     @Expose
     private String bio;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Token> token;
 
