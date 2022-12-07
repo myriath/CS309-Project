@@ -27,7 +27,7 @@ public class NotificationsWebsocket {
     private FollowRepository followRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
     // Store all socket session and their corresponding username.
     private static final Map<Session, User> sessionUsernameMap = new Hashtable<>();
@@ -38,7 +38,7 @@ public class NotificationsWebsocket {
             throws IOException {
         LOGGER.info("WEBSOCKETS");
         LOGGER.info(token);
-        LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser().toString());
+        LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].toString());
         LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser().getUsername());
         User user = tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser();
         sessionUsernameMap.put(session, user);
