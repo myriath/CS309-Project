@@ -1,6 +1,7 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -35,6 +36,7 @@ public class SimpleFoodItem {
     private boolean isCustom;
 
     @OneToMany(mappedBy = "food")
+    @JsonIgnore
     private Set<Ingredient> ingredients;
 
     public SimpleFoodItem() {}

@@ -15,10 +15,12 @@ public class User {
     @Expose
     private String username;
 
+    @JsonIgnore
     private String email;
 
+    @JsonIgnore
     private String pHash;
-
+    @JsonIgnore
     private String pSalt;
     @Expose
     private int userType;
@@ -29,21 +31,25 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Token> token;
 
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "follows",
             joinColumns = @JoinColumn(name = "follower"),
             inverseJoinColumns = @JoinColumn(name = "following"))
     private Set<User> followers;
 
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "follows",
             joinColumns = @JoinColumn(name = "following"),
             inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> following;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Recipe> recipes;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn
     private Set<ShoppingList> shoppingLists;
