@@ -13,7 +13,10 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.example.cs309android.activities.MainActivity;
 import com.example.cs309android.activities.login.LoginActivity;
+import com.example.cs309android.fragments.nutrition.NutritionFragment;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.testutil.TestingUtil;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
@@ -25,6 +28,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Tests the nutrition add to food log functionality
  *
@@ -34,8 +42,8 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class FoodLogTest {
     @Rule
-    public ActivityScenarioRule<NutritionFragment> rule =
-            new ActivityScenarioRule<>(NutritionFragment.class);
+    public ActivityScenarioRule<MainActivity> rule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     /**
      * Tests adding a food to the food log,
@@ -47,13 +55,13 @@ public class FoodLogTest {
     public void addToFoodLogTest() throws InterruptedException {
         MainActivity mainActivity = new MainActivity();
         mainActivity.clearFoodLog();
-        SimpleFoodItem item = new SimpleFoodItem(1, "testDescription", "testBrand", 9.9, 8.8, 7.7, 6.6, "testMeal", false);
+        SimpleFoodItem item = new SimpleFoodItem(1, "testDescription", "testBrand", (float) 9.9, (float) 8.8, (float) 7.7, (float) 6.6, "testMeal", false);
         mainActivity.addLogItem(item, 0);
 
         onView(withId(R.id.home)).perform(click());
         onView(withId(R.id.nutrition)).perform(click());
 
-        onView(withId(R.id.breakfastCard)).check(isDisplayed());
+        onView(withId(R.id.breakfastCard)).check(matches(isDisplayed()));
     }
 
     /**
@@ -65,7 +73,7 @@ public class FoodLogTest {
     public void deleteFromFoodLogTest() throws InterruptedException {
         MainActivity mainActivity = new MainActivity();
         mainActivity.clearFoodLog();
-        SimpleFoodItem item = new SimpleFoodItem(1, "testDescription", "testBrand", 9.9, 8.8, 7.7, 6.6, "testMeal", false);
+        SimpleFoodItem item = new SimpleFoodItem(1, "testDescription", "testBrand", (float) 9.9, (float) 8.8, (float) 7.7, (float) 6.6, "testMeal", false);
         mainActivity.addLogItem(item, 0);
 
         onView(withId(R.id.home)).perform(click());
@@ -76,7 +84,7 @@ public class FoodLogTest {
         onView(withId(R.id.home)).perform(click());
         onView(withId(R.id.nutrition)).perform(click());
 
-        onView(withId(R.id.breakfastCard)).check(not(isDisplayed()));
+        onView(withId(R.id.breakfastCard)).check(doesNotExist());
     }
 
     /**
