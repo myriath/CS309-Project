@@ -1,5 +1,6 @@
 package com.requests.backend.controllers;
 
+import com.requests.backend.BeanUtil;
 import com.requests.backend.models.Notification;
 import com.requests.backend.models.TextDecoder;
 import com.requests.backend.models.TextEncoder;
@@ -22,12 +23,14 @@ import static com.util.Constants.LOGGER;
 @ServerEndpoint(value = "/websocket/{token}", decoders = TextDecoder.class, encoders = TextEncoder.class)
 @Component
 public class NotificationsWebsocket {
+    private final FollowRepository followRepository;
 
-    @Autowired
-    private FollowRepository followRepository;
+    private final TokenRepository tokenRepository;
 
-    @Autowired
-    private TokenRepository tokenRepository;
+    public NotificationsWebsocket() {
+        followRepository = BeanUtil.getBean(FollowRepository.class);
+        tokenRepository = BeanUtil.getBean(TokenRepository.class);
+    }
 
     // Store all socket session and their corresponding username.
     private static final Map<Session, User> sessionUsernameMap = new Hashtable<>();
