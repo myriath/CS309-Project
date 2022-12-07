@@ -23,9 +23,10 @@ public class UpdateProfileRequest extends PatchRequest {
      *
      * @param token authentication token
      */
-    public UpdateProfileRequest(String token, String newBio) {
+    public UpdateProfileRequest(String token, String username, String newBio) {
         super(new ParameterizedRequestURL(UPDATE_PROFILE_URL)
                 .addPathVar(token)
+                .addPathVar(username)
                 .toString());
         this.newBio = newBio;
     }

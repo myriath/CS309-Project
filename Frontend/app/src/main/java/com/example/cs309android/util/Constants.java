@@ -89,50 +89,37 @@ public class Constants {
      */
     public interface Notifications {
         /**
-         * New comment notification builder index
-         */
-        int NOTIFICATION_NEW_COMMENT = 0;
-        /**
-         * Recipe liked notification builder index
-         */
-        int NOTIFICATION_LIKED = 1;
-        /**
-         * New follower notification builder index
-         */
-        int NOTIFICATION_FOLLOWER = 2;
-        /**
-         * New recipe notification builder index
-         */
-        int NOTIFICATION_NEW_RECIPE = 3;
-
-        /**
          * Descriptions for the notification channels
          */
-        String[] DESCRIPTIONS = new String[]{
-                "high desc", "reg desc", "low desc"
+        int[] DESCRIPTIONS = new int[]{
+                R.string.new_followers_desc,
+                R.string.new_for_you_desc,
+                R.string.likes_comments_desc
         };
 
         /**
          * IDs for the notification channels
          */
         String[] IDS = new String[]{
-                "cs309.notification.high", "cs309.notification", "cs309.notification.low"
+                "cs309.notification.high", "cs309.notification.low", "cs309.notification"
         };
 
         /**
          * Names for the notification channels
          */
-        String[] NAMES = new String[]{
-                "High Importance", "Regular Importance", "Low Importance"
+        int[] NAMES = new int[]{
+                R.string.new_followers_title,
+                R.string.new_for_you_title,
+                R.string.likes_comments_title
         };
 
         /**
          * Array of existing notification channels
          */
-        NotificationChannel[] CHANNELS = new NotificationChannel[]{
-                new NotificationChannel(IDS[0], NAMES[0], NotificationManager.IMPORTANCE_HIGH),
-                new NotificationChannel(IDS[1], NAMES[1], NotificationManager.IMPORTANCE_DEFAULT),
-                new NotificationChannel(IDS[2], NAMES[2], NotificationManager.IMPORTANCE_LOW)
+        NotificationChannel[] CHANNELS = new NotificationChannel[3];
+
+        int[] IMPORTANCE = new int[]{
+                NotificationManager.IMPORTANCE_HIGH, NotificationManager.IMPORTANCE_LOW, NotificationManager.IMPORTANCE_DEFAULT
         };
 
         /**
@@ -159,6 +146,8 @@ public class Constants {
                 R.drawable.ic_add_user,
                 R.drawable.ic_add_recipe
         };
+
+        int[] CHANNEL_IDS = new int[]{2, 2, 0, 1};
 
         /**
          * Titles for the various notifications
@@ -187,13 +176,14 @@ public class Constants {
          */
         static void createNotificationChannels(Context context) {
             for (int i = 0; i < CHANNELS.length; i++) {
-                CHANNELS[i].setDescription(DESCRIPTIONS[i]);
+                CHANNELS[i] = new NotificationChannel(IDS[i], context.getString(NAMES[i]), IMPORTANCE[i]);
+                CHANNELS[i].setDescription(context.getString(DESCRIPTIONS[i]));
             }
             manager = context.getSystemService(NotificationManager.class);
             manager.createNotificationChannels(Arrays.asList(CHANNELS));
 
             for (int i = 0; i < BUILDERS.length; i++) {
-                BUILDERS[i] = createBuilder(context, Math.min(2, i), i);
+                BUILDERS[i] = createBuilder(context, CHANNEL_IDS[i], i);
             }
         }
 
@@ -310,6 +300,18 @@ public class Constants {
          * Tells the SearchActivity it was opened from recipe add
          */
         int INTENT_RECIPE_ADD = 1;
+        /**
+         * Used to tell SearchActivity the intent is a breakfast item
+         */
+        int INTENT_FOOD_LOG_BREAKFAST = 2;
+        /**
+         * Used to tell SearchActivity the intent is a lunch item
+         */
+        int INTENT_FOOD_LOG_LUNCH = 3;
+        /**
+         * Used to tell SearchActivity the intent is a dinner item
+         */
+        int INTENT_FOOD_LOG_DINNER = 4;
     }
 
     /**
@@ -420,6 +422,14 @@ public class Constants {
          */
         int RESULT_REGEN_TOKEN = 3;
         /**
+         * Intent result for deleted, not used by api
+         */
+        int RESULT_DELETED = 4;
+        /**
+         * Intent result for updated, not used by api
+         */
+        int RESULT_UPDATED = 5;
+        /**
          * Indicates the user has been successfully created
          */
         int RESULT_RECIPE_CREATED = 22;
@@ -466,8 +476,10 @@ public class Constants {
          * URL for getting images
          */
         String IMAGE_URL = BASE_API_URL + "images/";
-
-        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "notifications/";
+        /**
+         * URL for the notification websocket
+         */
+        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "websocket/";
 
         /**
          * URLs for the users endpoint
@@ -587,6 +599,10 @@ public class Constants {
              * Url for getting an item from recipes
              */
             String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+            /**
+             * Url for getting a recipe list by type
+             */
+            String GET_RECIPES_LIST_TYPE_URL = RECIPES_URL + "getRecipeListByType/";
             /**
              * URL for setting a recipe's image
              */
