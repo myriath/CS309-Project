@@ -3,7 +3,10 @@ package com.requests.backend.controllers;
 import com.requests.backend.models.Notification;
 import com.requests.backend.models.TextDecoder;
 import com.requests.backend.models.TextEncoder;
+import com.requests.backend.models.User;
 import com.requests.backend.repositories.FollowRepository;
+import com.requests.backend.repositories.TokenRepository;
+import com.util.security.Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,31 +17,35 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
-@ServerEndpoint(value = "/websocket/{username}", decoders = TextDecoder.class, encoders = TextEncoder.class)
+@ServerEndpoint(value = "/websocket/{token}", decoders = TextDecoder.class, encoders = TextEncoder.class)
 @Component
 public class NotificationsWebsocket {
 
     @Autowired
     private FollowRepository followRepository;
 
+    @Autowired
+    TokenRepository tokenRepository;
+
     // Store all socket session and their corresponding username.
-    private static final Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static final Map<Session, User> sessionUsernameMap = new Hashtable<>();
     private static final Map <String, Session> usernameSessionMap = new Hashtable<> ();
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username)
+    public void onOpen(Session session, @PathParam("token") String token)
             throws IOException {
-        sessionUsernameMap.put(session, username);
-        usernameSessionMap.put(username, session);
+        User user = tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser();
+        sessionUsernameMap.put(session, user);
+        usernameSessionMap.put(user.getUsername(), session);
 
     }
 
     @OnClose
     public void onClose(Session session) throws IOException {
 
-        String username = sessionUsernameMap.get(session);
+        User user = sessionUsernameMap.get(session);
         sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(username);
+        usernameSessionMap.remove(user.getUsername());
 
     }
 
