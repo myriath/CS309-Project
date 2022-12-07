@@ -148,5 +148,7 @@
     <string name="add_a_new_comment">Add a new comment...</string>
     <string name="post">Post</string>
     <string name="notification_category">Notification Settings</string>
+    <string name="select_log">Select meal</string>
+    <string name="nothing_yet">Nothing here... yet</string>
 
 </resources>
