@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
+import static com.util.Constants.LOGGER;
+
 @ServerEndpoint(value = "/websocket/{token}", decoders = TextDecoder.class, encoders = TextEncoder.class)
 @Component
 public class NotificationsWebsocket {
@@ -34,6 +36,10 @@ public class NotificationsWebsocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token)
             throws IOException {
+        LOGGER.info("WEBSOCKETS");
+        LOGGER.info(token);
+        LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser().toString());
+        LOGGER.info(tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser().getUsername());
         User user = tokenRepository.queryGetToken(Hasher.sha256(token))[0].getUser();
         sessionUsernameMap.put(session, user);
         usernameSessionMap.put(user.getUsername(), session);
