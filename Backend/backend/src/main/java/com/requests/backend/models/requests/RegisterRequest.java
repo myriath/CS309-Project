@@ -1,14 +1,21 @@
 package com.requests.backend.models.requests;
 
+import com.google.gson.annotations.Expose;
+
 public class RegisterRequest {
+    @Expose
     private String username;
 
+    @Expose
     private String email;
 
+    @Expose
     private String pHash;
 
+    @Expose
     private String pSalt;
 
+    @Expose
     private String token;
 
     public RegisterRequest(String username, String email, String pHash, String pSalt, String token){

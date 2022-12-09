@@ -523,7 +523,7 @@ public class BrandedFoodItem {
         /**
          * Getter for the sugars
          *
-         * @return
+         * @return sugars
          */
         public Nutrient getSugars() {
             return sugars;

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodSearchCriteria.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.queries</a> &gt; <span class="el_source">FoodSearchCriteria.java</span></div><h1>FoodSearchCriteria.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.queries;
+
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
+import static com.example.cs309android.models.USDA.Constants.API_URL_SEARCH_ENDPOINT;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.api.request.abstraction.GetRequest;
+import com.google.gson.annotations.Expose;
+
+/**
+ * A copy of the criteria that were used in the search.
+ * &lt;p&gt;
+ * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodSearchCriteria
+ *
+ * @author Mitch Hudson
+ */
+public class FoodSearchCriteria extends GetRequest {
+    /**
+     * Search query
+     */
+    @Expose
+    private final String query;
+    /**
+     * Search data types
+     */
+    @Expose
+    private String[] dataType;
+    /**
+     * Page size
+     */
+    @Expose
+    private Integer pageSize;
+    /**
+     * Page number
+     */
+    @Expose
+    private Integer pageNumber;
+    /**
+     * Sort by prompt
+     */
+    @Expose
+    private String sortBy;
+    /**
+     * Sort order prompt
+     */
+    @Expose
+    private String sortOrder;
+    /**
+     * Brand to get food items of
+     */
+    @Expose
+    private String brandOwner;
+    /**
+     * Trade channel prompt
+     */
+    @Expose
+    private String[] tradeChannel;
+    /**
+     * Start date
+     */
+    @Expose
+    private String startDate;
+    /**
+     * End date
+     */
+    @Expose
+    private String endDate;
+
+    /**
+     * Public constructor
+     *
+     * @param query        search query
+     * @param dataType     data types to search
+     * @param pageSize     page size
+     * @param pageNumber   page number
+     * @param sortBy       sort by prompt
+     * @param sortOrder    sort order prompt
+     * @param brandOwner   brand owner prompt
+     * @param tradeChannel trade channels prompt
+     * @param startDate    start date prompt
+     * @param endDate      end date prompt
+     */
+<span class="nc" id="L84">    public FoodSearchCriteria(String query, String[] dataType, Integer pageSize, Integer pageNumber, String sortBy, String sortOrder, String brandOwner, String[] tradeChannel, String startDate, String endDate) {</span>
+<span class="nc" id="L85">        this.query = query;</span>
+<span class="nc" id="L86">        this.dataType = dataType;</span>
+<span class="nc" id="L87">        this.pageSize = pageSize;</span>
+<span class="nc" id="L88">        this.pageNumber = pageNumber;</span>
+<span class="nc" id="L89">        this.sortBy = sortBy;</span>
+<span class="nc" id="L90">        this.sortOrder = sortOrder;</span>
+<span class="nc" id="L91">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L92">        this.tradeChannel = tradeChannel;</span>
+<span class="nc" id="L93">        this.startDate = startDate;</span>
+<span class="nc" id="L94">        this.endDate = endDate;</span>
+<span class="nc" id="L95">    }</span>
+
+    /**
+     * Public constructor
+     *
+     * @param query         search query
+     * @param dataTypes     data types to search
+     * @param pageSize      page size
+     * @param pageNumber    page number
+     * @param sortBy        sort by prompt
+     * @param sortOrder     sort order prompt
+     * @param brandOwner    brand owner prompt
+     * @param tradeChannels trade channels prompt
+     * @param startDate     start date prompt
+     * @param endDate       end date prompt
+     */
+<span class="nc" id="L111">    public FoodSearchCriteria(String query, Constants.DataType[] dataTypes, Integer pageSize, Integer pageNumber, Constants.SortBy sortBy, Constants.SortOrder sortOrder, String brandOwner, Constants.TradeChannel[] tradeChannels, String startDate, String endDate) {</span>
+<span class="nc" id="L112">        this.query = query;</span>
+<span class="nc" id="L113">        String[] dataType = new String[dataTypes.length];</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for (int i = 0; i &lt; dataTypes.length; i++) dataType[i] = dataTypes[i].getValue();</span>
+<span class="nc" id="L115">        this.dataType = dataType;</span>
+<span class="nc" id="L116">        this.pageSize = pageSize;</span>
+<span class="nc" id="L117">        this.pageNumber = pageNumber;</span>
+<span class="nc" id="L118">        this.sortBy = sortBy.getValue();</span>
+<span class="nc" id="L119">        this.sortOrder = sortOrder.getValue();</span>
+<span class="nc" id="L120">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L121">        String[] tradeChannel = new String[tradeChannels.length];</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        for (int i = 0; i &lt; tradeChannels.length; i++)</span>
+<span class="nc" id="L123">            tradeChannel[i] = tradeChannels[i].getValue();</span>
+<span class="nc" id="L124">        this.tradeChannel = tradeChannel;</span>
+<span class="nc" id="L125">        this.startDate = startDate;</span>
+<span class="nc" id="L126">        this.endDate = endDate;</span>
+<span class="nc" id="L127">    }</span>
+
+    /**
+     * Public constructor (everything else default)
+     *
+     * @param query    search query
+     * @param dataType data types to search
+     */
+<span class="nc" id="L135">    public FoodSearchCriteria(String query, Constants.DataType dataType) {</span>
+<span class="nc" id="L136">        this.query = query;</span>
+<span class="nc" id="L137">        this.dataType = new String[]{dataType.getValue()};</span>
+<span class="nc" id="L138">        this.pageSize = null;</span>
+<span class="nc" id="L139">        this.pageNumber = null;</span>
+<span class="nc" id="L140">        this.sortBy = null;</span>
+<span class="nc" id="L141">        this.sortOrder = null;</span>
+<span class="nc" id="L142">        this.brandOwner = null;</span>
+<span class="nc" id="L143">        this.tradeChannel = null;</span>
+<span class="nc" id="L144">        this.startDate = null;</span>
+<span class="nc" id="L145">        this.endDate = null;</span>
+<span class="nc" id="L146">    }</span>
+
+    /**
+     * Getter for the data types
+     *
+     * @return data types
+     */
+    public String[] getDataType() {
+<span class="nc" id="L154">        return dataType;</span>
+    }
+
+    /**
+     * Setter for the data types
+     *
+     * @param dataType data types
+     */
+    public void setDataType(String[] dataType) {
+<span class="nc" id="L163">        this.dataType = dataType;</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
+     * Getter for the page size
+     *
+     * @return page size
+     */
+    public Integer getPageSize() {
+<span class="nc" id="L172">        return pageSize;</span>
+    }
+
+    /**
+     * Setter for the page size
+     *
+     * @param pageSize page size
+     */
+    public void setPageSize(Integer pageSize) {
+<span class="nc" id="L181">        this.pageSize = pageSize;</span>
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * Getter for the page number
+     *
+     * @return page number
+     */
+    public Integer getPageNumber() {
+<span class="nc" id="L190">        return pageNumber;</span>
+    }
+
+    /**
+     * Setter for the page number
+     *
+     * @param pageNumber page number
+     */
+    public void setPageNumber(Integer pageNumber) {
+<span class="nc" id="L199">        this.pageNumber = pageNumber;</span>
+<span class="nc" id="L200">    }</span>
+
+    /**
+     * Getter for the sort by prompt
+     *
+     * @return sort by prompt
+     */
+    public String getSortBy() {
+<span class="nc" id="L208">        return sortBy;</span>
+    }
+
+    /**
+     * Setter for the sort by prompt
+     *
+     * @param sortBy sort by prompt
+     */
+    public void setSortBy(String sortBy) {
+<span class="nc" id="L217">        this.sortBy = sortBy;</span>
+<span class="nc" id="L218">    }</span>
+
+    /**
+     * Getter for the sort order prompt
+     *
+     * @return sort order prompt
+     */
+    public String getSortOrder() {
+<span class="nc" id="L226">        return sortOrder;</span>
+    }
+
+    /**
+     * Setter for the sort order prompt
+     *
+     * @param sortOrder sort order prompt
+     */
+    public void setSortOrder(String sortOrder) {
+<span class="nc" id="L235">        this.sortOrder = sortOrder;</span>
+<span class="nc" id="L236">    }</span>
+
+    /**
+     * Getter for the brand owner prompt
+     *
+     * @return brand owner prompt
+     */
+    public String getBrandOwner() {
+<span class="nc" id="L244">        return brandOwner;</span>
+    }
+
+    /**
+     * Setter for the brand owner prompt
+     *
+     * @param brandOwner brand owner prompt
+     */
+    public void setBrandOwner(String brandOwner) {
+<span class="nc" id="L253">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L254">    }</span>
+
+    /**
+     * Getter for the trade channel prompt
+     *
+     * @return trade channel prompt
+     */
+    public String[] getTradeChannel() {
+<span class="nc" id="L262">        return tradeChannel;</span>
+    }
+
+    /**
+     * Setter for the trade channel prompt
+     *
+     * @param tradeChannel trade channel prompt
+     */
+    public void setTradeChannel(String[] tradeChannel) {
+<span class="nc" id="L271">        this.tradeChannel = tradeChannel;</span>
+<span class="nc" id="L272">    }</span>
+
+    /**
+     * Getter for the start date prompt
+     *
+     * @return start date prompt
+     */
+    public String getStartDate() {
+<span class="nc" id="L280">        return startDate;</span>
+    }
+
+    /**
+     * Setter for the start date prompt
+     *
+     * @param startDate start date prompt
+     */
+    public void setStartDate(String startDate) {
+<span class="nc" id="L289">        this.startDate = startDate;</span>
+<span class="nc" id="L290">    }</span>
+
+    /**
+     * Getter for the end date prompt
+     *
+     * @return end date prompt
+     */
+    public String getEndDate() {
+<span class="nc" id="L298">        return endDate;</span>
+    }
+
+    /**
+     * Setter for the end date prompt
+     *
+     * @param endDate end date prompt
+     */
+    public void setEndDate(String endDate) {
+<span class="nc" id="L307">        this.endDate = endDate;</span>
+<span class="nc" id="L308">    }</span>
+
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
+    @Override
+    public String getURL() {
+<span class="nc" id="L317">        return new ParameterizedRequestURL(API_URL_SEARCH_ENDPOINT)</span>
+<span class="nc" id="L318">                .addParam(&quot;query&quot;, query)</span>
+<span class="nc" id="L319">                .addArray(&quot;dataType&quot;, dataType)</span>
+<span class="nc" id="L320">                .addParam(&quot;pageSize&quot;, pageSize)</span>
+<span class="nc" id="L321">                .addParam(&quot;pageNumber&quot;, pageNumber)</span>
+<span class="nc" id="L322">                .addParam(&quot;sortBy&quot;, sortBy)</span>
+<span class="nc" id="L323">                .addParam(&quot;sortOrder&quot;, sortOrder)</span>
+<span class="nc" id="L324">                .addParam(&quot;brandOwner&quot;, brandOwner)</span>
+<span class="nc" id="L325">                .addArray(&quot;tradeChannel&quot;, tradeChannel)</span>
+<span class="nc" id="L326">                .addParam(&quot;startDate&quot;, startDate)</span>
+<span class="nc" id="L327">                .addParam(&quot;endDate&quot;, endDate)</span>
+<span class="nc" id="L328">                .addParam(&quot;api_key&quot;, API_KEY)</span>
+<span class="nc" id="L329">                .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.food;
 
-import static com.example.cs309android.util.Constants.QUERY_FOOD_DB;
+import static com.example.cs309android.util.Constants.Urls.Food.QUERY_FOOD_DB;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;

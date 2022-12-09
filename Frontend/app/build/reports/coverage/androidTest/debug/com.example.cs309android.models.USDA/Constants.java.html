@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA;
+
+/**
+ * Constants util class for USDA objects
+ *
+ * @author Mitch Hudson
+ */
+public class Constants {
+<span class="nc" id="L9">    public static final DataType[] SEARCH_ALL_TYPES = new DataType[]{DataType.BRANDED, DataType.SURVEY, DataType.LEGACY, DataType.FOUNDATION};</span>
+    public static final String API_KEY = &quot;ku3IulAMpmefeIA26Op2ZSN80uObLD4bwwjAoXns&quot;;
+    public static final String API_KEY_GET = &quot;&amp;api_key=&quot; + API_KEY;
+    public static final String API_URL = &quot;https://api.nal.usda.gov/fdc&quot;;
+    public static final String API_URL_FOOD_ENDPOINT = API_URL + &quot;/v1/food/&quot;;
+    public static final String API_URL_FOODS_ENDPOINT = API_URL + &quot;/v1/foods&quot;;
+    public static final String API_URL_LIST_ENDPOINT = API_URL + &quot;/v1/foods/list&quot;;
+    public static final String API_URL_SEARCH_ENDPOINT = API_URL + &quot;/v1/foods/search&quot;;
+    public static final String API_URL_JSON_SPEC_ENDPOINT = API_URL + &quot;/v1/json-spec&quot;;
+    public static final String API_URL_YAML_SPEC_ENDPOINT = API_URL + &quot;/v1/yaml-spec&quot;;
+
+    /**
+     * Util class
+     */
+    private Constants() {
+    }
+
+    /**
+     * Possible DataType values for the dataType parameter
+     */
+<span class="nc" id="L29">    public enum DataType {</span>
+<span class="nc" id="L30">        BRANDED(&quot;Branded&quot;),</span>
+<span class="nc" id="L31">        FOUNDATION(&quot;Foundation&quot;),</span>
+<span class="nc" id="L32">        SURVEY(&quot;Survey (FNDDS)&quot;),</span>
+<span class="nc" id="L33">        LEGACY(&quot;SR Legacy&quot;),</span>
+<span class="nc" id="L34">        ABRIDGED(&quot;else&quot;);</span>
+
+        private final String value;
+
+<span class="nc" id="L38">        DataType(String value) {</span>
+<span class="nc" id="L39">            this.value = value;</span>
+<span class="nc" id="L40">        }</span>
+
+        public static DataType forCode(String value) {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            for (DataType dataType : values()) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">                if (dataType.getValue().equals(value)) return dataType;</span>
+            }
+<span class="nc" id="L46">            return ABRIDGED;</span>
+        }
+
+        public String getValue() {
+<span class="nc" id="L50">            return value;</span>
+        }
+    }
+
+    /**
+     * Possible SortBy values for the sortBy parameter
+     */
+<span class="nc" id="L57">    public enum SortBy {</span>
+<span class="nc" id="L58">        DATA_TYPE(&quot;dataType.keyword&quot;),</span>
+<span class="nc" id="L59">        DESCRIPTION(&quot;lowercaseDescription.keyword&quot;),</span>
+<span class="nc" id="L60">        FDC_ID(&quot;fdcId&quot;),</span>
+<span class="nc" id="L61">        PUBLISHED_DATE(&quot;publishedDate&quot;);</span>
+
+        private final String value;
+
+<span class="nc" id="L65">        SortBy(String value) {</span>
+<span class="nc" id="L66">            this.value = value;</span>
+<span class="nc" id="L67">        }</span>
+
+        public static SortBy forCode(String value) {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            for (SortBy sortBy : values()) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (sortBy.getValue().equals(value)) return sortBy;</span>
+            }
+<span class="nc" id="L73">            return null;</span>
+        }
+
+        public String getValue() {
+<span class="nc" id="L77">            return value;</span>
+        }
+    }
+
+    /**
+     * Possible SortOrder values for the sortOrder parameter
+     */
+<span class="nc" id="L84">    public enum SortOrder {</span>
+<span class="nc" id="L85">        ASCENDING(&quot;asc&quot;),</span>
+<span class="nc" id="L86">        DESCENDING(&quot;desc&quot;);</span>
+
+        private final String value;
+
+<span class="nc" id="L90">        SortOrder(String value) {</span>
+<span class="nc" id="L91">            this.value = value;</span>
+<span class="nc" id="L92">        }</span>
+
+        public static SortOrder forCode(String value) {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            for (SortOrder sortOrder : values()) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                if (sortOrder.getValue().equals(value)) return sortOrder;</span>
+            }
+<span class="nc" id="L98">            return null;</span>
+        }
+
+        public String getValue() {
+<span class="nc" id="L102">            return value;</span>
+        }
+    }
+
+    /**
+     * Possible TradeChannel values for the tradeChannel parameter
+     */
+<span class="nc" id="L109">    public enum TradeChannel {</span>
+<span class="nc" id="L110">        CHILD_NUTRITION_FOOD_PROGRAMS(&quot;CHILD_NUTRITION_FOOD_PROGRAMS&quot;),</span>
+<span class="nc" id="L111">        DRUG(&quot;DRUG&quot;),</span>
+<span class="nc" id="L112">        FOOD_SERVICE(&quot;FOOD_SERVICE&quot;),</span>
+<span class="nc" id="L113">        GROCERY(&quot;GROCERY&quot;),</span>
+<span class="nc" id="L114">        MASS_MERCHANDISING(&quot;MASS_MERCHANDISING&quot;),</span>
+<span class="nc" id="L115">        MILITARY(&quot;MILITARY&quot;),</span>
+<span class="nc" id="L116">        ONLINE(&quot;ONLINE&quot;),</span>
+<span class="nc" id="L117">        VENDING(&quot;VENDING&quot;);</span>
+
+        private final String value;
+
+<span class="nc" id="L121">        TradeChannel(String value) {</span>
+<span class="nc" id="L122">            this.value = value;</span>
+<span class="nc" id="L123">        }</span>
+
+        public static TradeChannel forCode(String value) {
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            for (TradeChannel tradeChannel : values()) {</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                if (tradeChannel.getValue().equals(value)) return tradeChannel;</span>
+            }
+<span class="nc" id="L129">            return null;</span>
+        }
+
+        public String getValue() {
+<span class="nc" id="L133">            return value;</span>
+        }
+    }
+
+    /**
+     * Possible Format values for the format parameter
+     */
+<span class="nc" id="L140">    public enum Format {</span>
+<span class="nc" id="L141">        ABRIDGED(&quot;abridged&quot;),</span>
+<span class="nc" id="L142">        FULL(&quot;full&quot;);</span>
+
+        private final String value;
+
+<span class="nc" id="L146">        Format(String value) {</span>
+<span class="nc" id="L147">            this.value = value;</span>
+<span class="nc" id="L148">        }</span>
+
+        public static Format forCode(String value) {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            for (Format format : values()) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                if (format.getValue().equals(value)) return format;</span>
+            }
+<span class="nc" id="L154">            return null;</span>
+        }
+
+        public String getValue() {
+<span class="nc" id="L158">            return value;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeDetailsActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.recipe</a> &gt; <span class="el_source">RecipeDetailsActivity.java</span></div><h1>RecipeDetailsActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.recipe;
+
+import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
+import com.example.cs309android.util.Util;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * Activity for viewing a recipe's details
+ *
+ * @author Travis Massner
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L36">public class RecipeDetailsActivity extends AppCompatActivity {</span>
+    /**
+     * Launcher for the edit recipe activity
+     */
+    private ActivityResultLauncher&lt;Intent&gt; editLauncher;
+
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L49">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L50">        setContentView(R.layout.activity_recipe_details);</span>
+
+<span class="nc" id="L52">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="nc" id="L54">        editLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                    if (result.getResultCode() == RESULT_OK) {</span>
+<span class="nc" id="L58">                        clearDetails();</span>
+<span class="nc" id="L59">                        Recipe recipe = Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_RECIPE);</span>
+<span class="nc" id="L60">                        setDetails(recipe, global);</span>
+                    }
+<span class="nc" id="L62">                }</span>
+        );
+
+<span class="nc" id="L65">        Intent i = getIntent();</span>
+<span class="nc" id="L66">        Recipe recipe = i.getParcelableExtra(PARCEL_RECIPE);</span>
+
+<span class="nc" id="L68">        setDetails(recipe, global);</span>
+<span class="nc" id="L69">    }</span>
+
+    /**
+     * Clears the linear layouts to be repopulated
+     */
+    public void clearDetails() {
+<span class="nc" id="L75">        ((LinearLayout) findViewById(R.id.ingredients)).removeAllViews();</span>
+<span class="nc" id="L76">        ((LinearLayout) findViewById(R.id.instructions)).removeAllViews();</span>
+<span class="nc" id="L77">    }</span>
+
+    /**
+     * Fills in the activity with recipe details
+     *
+     * @param recipe Recipe to fill the details for
+     * @param global Global to check account with
+     */
+    public void setDetails(Recipe recipe, GlobalClass global) {
+<span class="nc" id="L86">        ImageView image = findViewById(R.id.image_view);</span>
+<span class="nc" id="L87">        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);</span>
+//        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image::setImageBitmap,
+//                RecipeDetailsActivity.this);
+
+<span class="nc" id="L91">        new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);</span>
+<span class="nc" id="L92">        ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());</span>
+<span class="nc" id="L93">        findViewById(R.id.creator).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L94">            Util.openAccountPage(global, recipe.getUsername(), this);</span>
+<span class="nc" id="L95">        });</span>
+
+<span class="nc" id="L97">        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRecipeName());</span>
+<span class="nc" id="L98">        ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());</span>
+
+<span class="nc" id="L100">        LinearLayout ingredientsList = findViewById(R.id.ingredients);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (Ingredient ingredient : recipe.getIngredients()) {</span>
+<span class="nc" id="L102">            View view = View.inflate(this, R.layout.ingredient_layout, null);</span>
+<span class="nc" id="L103">            String text = ingredient.getQuantity() + &quot; &quot; + ingredient.getUnit();</span>
+<span class="nc" id="L104">            ((TextView) view.findViewById(R.id.quantity)).setText(text);</span>
+<span class="nc" id="L105">            ((TextView) view.findViewById(R.id.name)).setText(ingredient.getFood().getCappedDescription(25));</span>
+
+<span class="nc" id="L107">            view.setOnClickListener(view1 -&gt; {</span>
+<span class="nc" id="L108">                Intent intent = new Intent(this, FoodDetailsActivity.class);</span>
+<span class="nc" id="L109">                intent.putExtra(PARCEL_FOODITEM, ingredient.getFood());</span>
+<span class="nc" id="L110">                startActivity(intent);</span>
+<span class="nc" id="L111">            });</span>
+
+<span class="nc" id="L113">            ingredientsList.addView(view);</span>
+        }
+
+<span class="nc" id="L116">        LinearLayout instructionsList = findViewById(R.id.instructions);</span>
+<span class="nc" id="L117">        Instruction[] instructions = recipe.getInstructions();</span>
+<span class="nc" id="L118">        Arrays.sort(instructions, new Instruction.Sorter());</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        for (Instruction instruction : instructions) {</span>
+<span class="nc" id="L120">            View view = View.inflate(this, R.layout.instruction_layout, null);</span>
+<span class="nc" id="L121">            ((TextView) view.findViewById(R.id.stepNum)).setText(String.valueOf(instruction.getStepNum()));</span>
+<span class="nc" id="L122">            ((TextView) view.findViewById(R.id.stepText)).setText(instruction.getStepText());</span>
+
+<span class="nc" id="L124">            instructionsList.addView(view);</span>
+        }
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (recipe.getUsername().equals(global.getUsername())) {</span>
+<span class="nc" id="L128">            findViewById(R.id.editCard).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L129">            findViewById(R.id.editButton).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L130">                Intent intent = new Intent(this, AddRecipeActivity.class);</span>
+<span class="nc" id="L131">                intent.putExtra(PARCEL_RECIPE, recipe);</span>
+<span class="nc" id="L132">                editLauncher.launch(intent);</span>
+<span class="nc" id="L133">            });</span>
+
+<span class="nc" id="L135">            findViewById(R.id.favoriteButton).setVisibility(View.GONE);</span>
+        }
+
+<span class="nc" id="L138">        findViewById(R.id.backButton).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L139">            onBackPressed();</span>
+<span class="nc" id="L140">        });</span>
+<span class="nc" id="L141">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

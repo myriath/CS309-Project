@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodsCriteria.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.queries</a> &gt; <span class="el_source">FoodsCriteria.java</span></div><h1>FoodsCriteria.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.queries;
+
+import static com.example.cs309android.models.USDA.Constants.API_KEY;
+
+import com.example.cs309android.models.ParameterizedRequestURL;
+import com.example.cs309android.models.USDA.Constants;
+import com.example.cs309android.models.api.request.abstraction.GetRequest;
+import com.google.gson.annotations.Expose;
+
+/**
+ * JSON for request body of 'foods' POST request. Retrieves a list of food items by a list of up to
+ * 20 FDC IDs. Optional format and nutrients can be specified. Invalid FDC ID's or ones that are not
+ * found are omitted and an empty set is returned if there are no matches.
+ * &lt;p&gt;
+ * From https://app.swaggerhub.com/apis/fdcnal/food-data_central_api/1.0.1#/FoodsCriteria
+ *
+ * @author Mitch Hudson
+ */
+public class FoodsCriteria extends GetRequest {
+    /**
+     * FDC ids to get details for
+     */
+    @Expose
+    private final Integer[] fdcIds;
+    /**
+     * Search format
+     */
+    @Expose
+    private final String format;
+    /**
+     * Nutrients to get data for
+     */
+    @Expose
+    private final Integer[] nutrients;
+    /**
+     * Index value to search specific fdc id
+     */
+<span class="nc" id="L38">    @Expose</span>
+    private int index = 0;
+
+    /**
+     * Public constructor (Multiple fdc ids, String format)
+     *
+     * @param fdcIds    array of fdc ids
+     * @param format    search format
+     * @param nutrients nutrients array
+     */
+<span class="nc" id="L48">    public FoodsCriteria(Integer[] fdcIds, String format, Integer[] nutrients) {</span>
+<span class="nc" id="L49">        this.fdcIds = fdcIds;</span>
+<span class="nc" id="L50">        this.format = format;</span>
+<span class="nc" id="L51">        this.nutrients = nutrients;</span>
+<span class="nc" id="L52">    }</span>
+
+    /**
+     * Public constructor (Multiple fdc ids, Format format)
+     *
+     * @param fdcIds    fdc ids to get details for
+     * @param format    search format
+     * @param nutrients nutrients to get
+     */
+    public FoodsCriteria(Integer[] fdcIds, Constants.Format format, Integer[] nutrients) {
+<span class="nc" id="L62">        this(fdcIds, format.getValue(), nutrients);</span>
+<span class="nc" id="L63">    }</span>
+
+    /**
+     * Public constructor (Single fdc id, Format format)
+     *
+     * @param fdcId     fdc id to get details for
+     * @param format    search format
+     * @param nutrients nutrients to get
+     */
+    public FoodsCriteria(int fdcId, Constants.Format format, Integer[] nutrients) {
+<span class="nc" id="L73">        this(new Integer[]{fdcId}, format.getValue(), nutrients);</span>
+<span class="nc" id="L74">    }</span>
+
+    /**
+     * Getter for the fdc ids
+     *
+     * @return fdc ids
+     */
+    public Integer[] getFdcIds() {
+<span class="nc" id="L82">        return fdcIds;</span>
+    }
+
+    /**
+     * Getter for the search format
+     *
+     * @return search format
+     */
+    public String getFormat() {
+<span class="nc" id="L91">        return format;</span>
+    }
+
+    /**
+     * Getter for the nutrients
+     *
+     * @return nutrients
+     */
+    public Integer[] getNutrients() {
+<span class="nc" id="L100">        return nutrients;</span>
+    }
+
+    /**
+     * Setter for the index
+     *
+     * @param index Which fdc id to get (-1 for all)
+     * @return this
+     */
+    public FoodsCriteria setIndex(int index) {
+<span class="nc" id="L110">        this.index = index;</span>
+<span class="nc" id="L111">        return this;</span>
+    }
+
+    /**
+     * Getter for the request URL
+     *
+     * @return request URL
+     */
+    @Override
+    public String getURL() {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (index == -1) return new ParameterizedRequestURL(Constants.API_URL_FOODS_ENDPOINT)</span>
+<span class="nc" id="L122">                .addArray(&quot;fdcId&quot;, fdcIds, index)</span>
+<span class="nc" id="L123">                .addParam(&quot;format&quot;, format)</span>
+<span class="nc" id="L124">                .addArray(&quot;nutrients&quot;, nutrients)</span>
+<span class="nc" id="L125">                .addParam(&quot;api_key&quot;, API_KEY)</span>
+<span class="nc" id="L126">                .toString();</span>
+<span class="nc" id="L127">        return new ParameterizedRequestURL(Constants.API_URL_FOOD_ENDPOINT + fdcIds[0])</span>
+<span class="nc" id="L128">                .addArray(&quot;fdcId&quot;, fdcIds, index)</span>
+<span class="nc" id="L129">                .addParam(&quot;format&quot;, format)</span>
+<span class="nc" id="L130">                .addArray(&quot;nutrients&quot;, nutrients)</span>
+<span class="nc" id="L131">                .addParam(&quot;api_key&quot;, API_KEY)</span>
+<span class="nc" id="L132">                .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

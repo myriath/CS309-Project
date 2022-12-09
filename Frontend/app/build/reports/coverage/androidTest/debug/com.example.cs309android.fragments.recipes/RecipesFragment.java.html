@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipesFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.fragments.recipes</a> &gt; <span class="el_source">RecipesFragment.java</span></div><h1>RecipesFragment.java</h1><pre class="source lang-java linenums">package com.example.cs309android.fragments.recipes;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
+import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.models.adapters.HomeItemAdapter;
+import com.example.cs309android.models.adapters.RecipePageAdapter;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.models.SimpleFoodItem;
+import com.example.cs309android.models.api.request.recipes.GetUserRecipesRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * Fragment to display the Recipe feed
+ *
+ * @author Travis Massner
+ */
+<span class="nc" id="L43">public class RecipesFragment extends BaseFragment {</span>
+    /**
+     * Recipe list to display
+     */
+    private static ArrayList&lt;Recipe&gt; recipes;
+
+    /**
+     * Runs when the fragment is created
+     *
+     * @param savedInstanceState Saved state
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L56">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L57">        recipes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L58">    }</span>
+
+    /**
+     * Runs when the fragment view is created
+     *
+     * @param inflater           Inflates the layout
+     * @param container          Parent view group
+     * @param savedInstanceState Saved state
+     * @return Inflated view
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+<span class="nc" id="L72">        View view = inflater.inflate(R.layout.fragment_recipes, container, false);</span>
+
+        // TODO: view pager is used to handle the recipe views now, not refreshList()
+<span class="nc" id="L75">        TabLayout tabs = view.findViewById(R.id.tabs);</span>
+<span class="nc" id="L76">        ViewPager2 pager = view.findViewById(R.id.pager);</span>
+<span class="nc" id="L77">        pager.setAdapter(new RecipePageAdapter());</span>
+<span class="nc" id="L78">        new TabLayoutMediator(tabs, pager, (tab, position) -&gt; {</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">            switch (position) {</span>
+                case 0: {
+<span class="nc" id="L81">                    tab.setText(R.string.popular);</span>
+<span class="nc" id="L82">                    break;</span>
+                }
+                case 1: {
+<span class="nc" id="L85">                    tab.setText(R.string.newText);</span>
+<span class="nc" id="L86">                    break;</span>
+                }
+                case 2: {
+<span class="nc" id="L89">                    tab.setText(R.string.explore);</span>
+                    break;
+                }
+            }
+<span class="nc" id="L93">        }).attach();</span>
+
+        // Refresh the list of recipes
+//        refreshList(view);
+
+<span class="nc" id="L98">        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.recipe_frame_layout), (v, windowInsets) -&gt; {</span>
+<span class="nc" id="L99">            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());</span>
+<span class="nc" id="L100">            ((ViewGroup.MarginLayoutParams) v.getLayoutParams()).topMargin = insets.top;</span>
+<span class="nc" id="L101">            return WindowInsetsCompat.CONSUMED;</span>
+        });
+
+<span class="nc" id="L104">        return view;</span>
+    }
+
+//    /**
+//     * Refreshes the list of recipes
+//     *
+//     * @param view View to get children of
+//     */
+//    public void refreshList(View view) {
+//        new GetUserRecipesRequest(((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -&gt; {
+//            try {
+//                System.out.println(response.toString(3));
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
+//
+//            if (recipeResponse == null) {
+//                Toaster.toastShort(&quot;Error getting recipes&quot;, requireContext());
+//                return;
+//            }
+//
+//            Recipe[] newItems = recipeResponse.getRecipes();
+//            recipes = new ArrayList&lt;&gt;();
+//            recipes.addAll(Arrays.asList(newItems));
+//        }, requireContext());
+//
+//        TextView emptyText = view.findViewById(R.id.emptyText);
+//
+//        // TODO: Temporary data until get list works
+//        recipes = new ArrayList&lt;&gt;();
+//        recipes.add(new Recipe(0, &quot;Apples&quot;, &quot;Apples for apples&quot;, new Ingredient[]{
+//                new Ingredient(new SimpleFoodItem(&quot;apple&quot;, &quot;:)&quot;), 1, &quot;gram&quot;),
+//                new Ingredient(new SimpleFoodItem(&quot;sinnamon&quot;, &quot;:(&quot;), 123, &quot;pound&quot;)
+//        }, new Instruction[]{
+//                new Instruction(1, &quot;Gimbo&quot;),
+//                new Instruction(2, &quot;juicy juicer&quot;)
+//        }, &quot;apple&quot;));
+//
+//        recipes.add(new Recipe(1, &quot;Apples2&quot;, &quot;Apples for apples&quot;, new Ingredient[]{
+//                new Ingredient(new SimpleFoodItem(&quot;apple&quot;, &quot;:)&quot;), 1, &quot;gram&quot;),
+//                new Ingredient(new SimpleFoodItem(&quot;sinnamon&quot;, &quot;:(&quot;), 123, &quot;pound&quot;)
+//        }, new Instruction[]{
+//                new Instruction(1, &quot;Gimbo&quot;),
+//                new Instruction(2, &quot;juicy juicer&quot;)
+//        }, &quot;papajohn&quot;));
+//
+//        if (recipes.isEmpty()) {
+//            emptyText.setVisibility(View.VISIBLE);
+//        } else {
+//            emptyText.setVisibility(View.INVISIBLE);
+//        }
+//
+//        HomeItemAdapter adapter = new HomeItemAdapter(this.getActivity(), recipes);
+//        ListView listView = view.findViewById(R.id.recipes_list);
+//        listView.setAdapter(adapter);
+//
+//        listView.setOnItemClickListener((parent, view1, position, id) -&gt; {
+//            Recipe selectedItem = (Recipe) parent.getItemAtPosition(position);
+//            Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+//            i.putExtra(&quot;HomeFragment.recipe&quot;, selectedItem);
+//            startActivity(i);
+//        });
+//    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

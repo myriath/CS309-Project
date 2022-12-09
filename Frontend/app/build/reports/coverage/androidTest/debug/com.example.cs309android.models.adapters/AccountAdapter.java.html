@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.adapters</a> &gt; <span class="el_source">AccountAdapter.java</span></div><h1>AccountAdapter.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.adapters;
+
+import static com.example.cs309android.util.Constants.CALLBACK_OPEN_ACCOUNT;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.RESULT_OK;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.cs309android.R;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.util.Util;
+
+/**
+ * Custom adapter to display a list of accounts
+ *
+ * @author Mitch Hudson
+ */
+public class AccountAdapter extends ArrayAdapter&lt;String&gt; {
+    /**
+     * List of items in the shopping list
+     */
+    private final String[] accounts;
+    /**
+     * Used to tell the activity when to open an account page
+     */
+    private final CallbackFragment callbackFragment;
+
+    /**
+     * Public constructor.
+     *
+     * @param context  context used by the superclass {@link ArrayAdapter}
+     * @param accounts list of accounts to display.
+     */
+    public AccountAdapter(Context context, String[] accounts, CallbackFragment callbackFragment) {
+<span class="nc" id="L44">        super(context, R.layout.shopping_list_item, accounts);</span>
+<span class="nc" id="L45">        this.accounts = accounts;</span>
+<span class="nc" id="L46">        this.callbackFragment = callbackFragment;</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * Ran for each of the child views (items in the list)
+     * Here is where button functionality for each item is given.
+     *
+     * @param position    index of the item in the list
+     * @param convertView converted view of the item in the list
+     * @param parent      ListView parent
+     * @return inflated view of the custom list_item view.
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+<span class="nc" id="L60">        String username = accounts[position];</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (convertView == null) {</span>
+<span class="nc" id="L62">            convertView = View.inflate(parent.getContext(), R.layout.adapter_account, null);</span>
+        }
+
+<span class="nc" id="L65">        convertView.setClickable(true);</span>
+<span class="nc" id="L66">        convertView.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L67">            Bundle bundle = new Bundle();</span>
+<span class="nc" id="L68">            bundle.putString(PARCEL_USERNAME, username);</span>
+<span class="nc" id="L69">            callbackFragment.callback(CALLBACK_OPEN_ACCOUNT, bundle);</span>
+<span class="nc" id="L70">        });</span>
+
+<span class="nc" id="L72">        ((TextView) convertView.findViewById(R.id.username)).setText(username);</span>
+
+<span class="nc" id="L74">        ImageView profilePicture = convertView.findViewById(R.id.profile_picture);</span>
+<span class="nc" id="L75">        new GetProfilePictureRequest(username).request(profilePicture, getContext());</span>
+
+<span class="nc" id="L77">        TextView bio = convertView.findViewById(R.id.bio);</span>
+<span class="nc" id="L78">        new GetProfileRequest(username).request(response -&gt; {</span>
+<span class="nc" id="L79">            GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);</span>
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (profileResponse.getResult() == RESULT_OK) {</span>
+<span class="nc" id="L82">                bio.setText(profileResponse.getBio());</span>
+            }
+<span class="nc" id="L84">        }, getContext());</span>
+
+<span class="nc" id="L86">        return convertView;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

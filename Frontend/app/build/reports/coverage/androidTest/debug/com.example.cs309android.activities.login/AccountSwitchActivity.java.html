@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSwitchActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.login</a> &gt; <span class="el_source">AccountSwitchActivity.java</span></div><h1>AccountSwitchActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.login;
+
+import static com.example.cs309android.util.Constants.CALLBACK_REMOVE;
+import static com.example.cs309android.util.Constants.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.PARCEL_BACK_ENABLED;
+import static com.example.cs309android.util.Constants.PARCEL_LOGGED_OUT;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ListView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.adapters.SwitchUserAdapter;
+
+/**
+ * Activity used to switch between logged in accounts
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L27">public class AccountSwitchActivity extends AppCompatActivity implements CallbackFragment {</span>
+    /**
+     * Tracks whether or not this was started because of the log out button
+     */
+<span class="nc" id="L31">    private boolean loggedOut = false;</span>
+
+    /**
+     * Handles adding accounts to the list
+     */
+    private ActivityResultLauncher&lt;Intent&gt; loginLauncher;
+
+    /**
+     * Runs when the activity starts
+     *
+     * @param savedInstanceState saved state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L45">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L46">        setContentView(R.layout.activity_switch_user);</span>
+
+<span class="nc" id="L48">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="nc" id="L50">        Toolbar toolbar = findViewById(R.id.toolbar);</span>
+
+<span class="nc" id="L52">        loginLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc" id="L55">                    refreshView(global);</span>
+<span class="nc" id="L56">                }</span>
+        );
+
+<span class="nc" id="L59">        loggedOut = getIntent().getBooleanExtra(PARCEL_LOGGED_OUT, false);</span>
+
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (loggedOut) {</span>
+<span class="nc" id="L62">            toolbar.setNavigationIcon(null);</span>
+<span class="nc" id="L63">            toolbar.setTitle(&quot;Select an account&quot;);</span>
+        } else {
+<span class="nc" id="L65">            toolbar.setNavigationOnClickListener(view -&gt; onBackPressed());</span>
+        }
+
+<span class="nc" id="L68">        refreshView(global);</span>
+
+<span class="nc" id="L70">        findViewById(R.id.addAccount).setOnClickListener(view -&gt; callback(CALLBACK_START_LOGIN, null));</span>
+<span class="nc" id="L71">    }</span>
+
+    /**
+     * Used to set the result code
+     *
+     * @param op     Used to tell the activity what the result code will be
+     * @param bundle ignored
+     */
+    @Override
+    public void callback(int op, Bundle bundle) {
+<span class="nc" id="L81">        setResult(RESULT_OK);</span>
+<span class="nc bnc" id="L82" title="All 3 branches missed.">        switch (op) {</span>
+            case CALLBACK_REMOVE:
+<span class="nc" id="L84">                refreshView((GlobalClass) getApplicationContext());</span>
+<span class="nc" id="L85">                break;</span>
+            case CALLBACK_START_LOGIN:
+<span class="nc" id="L87">                Intent intent = new Intent(this, LoginActivity.class);</span>
+<span class="nc" id="L88">                loginLauncher.launch(intent);</span>
+<span class="nc" id="L89">                break;</span>
+            default:
+<span class="nc" id="L91">                finish();</span>
+        }
+<span class="nc" id="L93">    }</span>
+
+    /**
+     * Refreshes the list of accounts
+     * @param global GlobalClass that holds account information
+     */
+    public void refreshView(GlobalClass global) {
+<span class="nc" id="L100">        String[] accounts = global.getAccounts();</span>
+<span class="nc" id="L101">        SwitchUserAdapter adapter = new SwitchUserAdapter(this, accounts, global, this);</span>
+<span class="nc" id="L102">        ((ListView) findViewById(R.id.list)).setAdapter(adapter);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (accounts.length == 0) {</span>
+<span class="nc" id="L104">            Intent intent = new Intent(this, LoginActivity.class);</span>
+<span class="nc" id="L105">            intent.putExtra(PARCEL_BACK_ENABLED, false);</span>
+<span class="nc" id="L106">            loginLauncher.launch(intent);</span>
+        }
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * No parent, ignored
+     *
+     * @param fragment ignored
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
+<span class="nc" id="L117">    }</span>
+
+    /**
+     * Checks if the back button should be enabled
+     */
+    @Override
+    public void onBackPressed() {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (!loggedOut) {</span>
+<span class="nc" id="L125">            super.onBackPressed();</span>
+        }
+<span class="nc" id="L127">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
