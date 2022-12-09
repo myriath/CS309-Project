@@ -1,14 +1,17 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.requests.backend.models.*;
+import com.requests.backend.models.ShoppingList;
+import com.requests.backend.models.SimpleFoodItem;
+import com.requests.backend.models.Token;
+import com.requests.backend.models.User;
 import com.requests.backend.models.requests.ShoppingListAddRequest;
 import com.requests.backend.models.requests.ShoppingListRemoveRequest;
 import com.requests.backend.models.requests.StrikeoutRequest;
 import com.requests.backend.models.responses.ResultResponse;
+import com.requests.backend.models.responses.ShoppingAddResponse;
 import com.requests.backend.models.responses.ShoppingListGetResponse;
 import com.requests.backend.repositories.ShoppingListRepository;
+import com.requests.backend.repositories.SimpleFoodRepository;
 import com.requests.backend.repositories.TokenRepository;
 import com.requests.backend.repositories.UserRepository;
 import com.util.security.Hasher;
@@ -19,6 +22,11 @@ import java.util.Collection;
 
 import static com.util.Constants.*;
 
+/**
+ * This class is responsible for handling all requests related to the shopping list.
+ * @author Logan
+ * @author Mitch
+ */
 @RestController
 @RequestMapping(path="/shopping")
 public class ShoppingListController {
@@ -29,6 +37,8 @@ public class ShoppingListController {
     private UserRepository userRepository;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private SimpleFoodRepository simpleFoodRepository;
 
     /**
      * Gets the users shopping list if the hash provided is valid.
@@ -36,10 +46,10 @@ public class ShoppingListController {
      * If the user exists, but the hash is incorrect, return hash mismatch error code with empty list.
      * Otherwise, the credentials are valid: return "OK" result code and shopping list for associated user.
      * @param token Token for authentication
-     * @return
+     * @return Shopping list get response that contains all the shopping list items
      */
     @GetMapping(path="/get/{token}")
-    public @ResponseBody String getShoppingList(@PathVariable String token) {
+    public @ResponseBody ShoppingListGetResponse getShoppingList(@PathVariable String token) {
 
         String hashedToken = Hasher.sha256(token);
 
@@ -55,45 +65,29 @@ public class ShoppingListController {
         // Otherwise, the token exists in the table
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
-            Collection<User> userQueryRes = userRepository.queryValidateUsername(username);
-
-            if (userQueryRes.isEmpty()) {
-                res.setResult(RESULT_ERROR);
-            }
-            // If the credentials aren't valid, return hash mismatch error code.
-            else {
-                ShoppingList[] listItems = shoppingRepository.queryGetShoppingList(username);
-
-                // User already passed authentication, just return shopping list
-                res.setResult(RESULT_OK);
-                res.setShoppingList(listItems);
-            }
+            // User already passed authentication, just return shopping list
+            res.setResult(RESULT_OK);
+            res.setShoppingList(user.getShoppingLists().toArray(new ShoppingList[0]));
         }
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().excludeFieldsWithoutExposeAnnotation().create();
-
-        return gson.toJson(res);
-
+        return res;
     }
 
+    /**
+     * Adds an item to the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param req JSON request body containing the item to add to the shopping list
+     * @return Result code
+     */
     @PostMapping(path="/add/{token}")
-    public @ResponseBody String addToShoppingList(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
+    public @ResponseBody ResultResponse addToShoppingList(@PathVariable String token, @RequestBody ShoppingListAddRequest req) {
         String hashedToken = Hasher.sha256(token);
-
-        ShoppingListAddRequest req = gson.fromJson(json, ShoppingListAddRequest.class);
 
         SimpleFoodItem foodItem = req.getFoodItem();
 
-        String itemName = foodItem.getDescription();
-        int fdcId = foodItem.getFdcId();
-        boolean stricken = false;
-
-        ResultResponse res = new ResultResponse();
+        ShoppingAddResponse res = new ShoppingAddResponse();
 
         // Find token in table
         Token[] tokenQueryRes = tokenRepository.queryGetToken(hashedToken);
@@ -104,29 +98,35 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             try {
-                shoppingRepository.queryCreateShoppingListEntry(username, itemName, fdcId, stricken);
+                foodItem = simpleFoodRepository.save(foodItem);
+                ShoppingList list = new ShoppingList();
+                list.setFoodItem(foodItem);
+                list.setStricken(false);
+                list = shoppingRepository.save(list);
+                user.addShoppingList(list);
+                userRepository.save(user);
+                res.setId(list.getShoppingId());
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
             }
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
-
-    @PatchMapping (path="/strikeout/{token}")
-    public @ResponseBody String changeStrikeout(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
+    /**
+     * Changes the strikeout status of an item in the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param id    ID for the shopping list row
+     * @return Result code
+     */
+    @PatchMapping (path="/strikeout/{token}/{id}")
+    public @ResponseBody ResultResponse changeStrikeout(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        StrikeoutRequest req = gson.fromJson(json, StrikeoutRequest.class);
-        String itemName = req.getItemName();
 
         ResultResponse res = new ResultResponse();
 
@@ -139,30 +139,34 @@ public class ShoppingListController {
         }
         else {
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             // User does not exist
             try {
                 // User already passed authentication from token earlier
-                shoppingRepository.queryShoppingChangeStricken(username, itemName);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                if (user.getShoppingLists().contains(list)) {
+                    list.setStricken(!list.getStricken());
+                }
+                shoppingRepository.save(list);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
             }
         }
 
-        return gson.toJson(res);
+        return res;
     }
 
-    @PutMapping (path = "/remove/{token}")
-    public @ResponseBody String removeFromList(@PathVariable String token, @RequestBody String json) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
+    /**
+     * Deletes an item from the shopping list if the hash provided is valid.
+     * @param token Token for authentication
+     * @param id    ID for the shopping list row
+     * @return Result code
+     */
+    @PutMapping (path = "/remove/{token}/{id}")
+    public @ResponseBody ResultResponse removeFromList(@PathVariable String token, @PathVariable int id) {
         String hashedToken = Hasher.sha256(token);
-
-        ShoppingListRemoveRequest req = gson.fromJson(json, ShoppingListRemoveRequest.class);
-        String itemName = req.getItemName();
 
         ResultResponse res = new ResultResponse();
 
@@ -176,18 +180,20 @@ public class ShoppingListController {
         else {
 
             // Get the username associated with the token
-            String username = tokenQueryRes[0].getUsername();
+            User user = tokenQueryRes[0].getUser();
 
             try {
                 // User already passed authentication from token lookup
-                shoppingRepository.queryDeleteListItem(username, itemName);
+                ShoppingList list = shoppingRepository.getReferenceById(id);
+                user.getShoppingLists().remove(list);
+                userRepository.save(user);
                 res.setResult(RESULT_OK);
             } catch (Exception e) {
                 res.setResult(RESULT_ERROR);
             }
         }
 
-        return gson.toJson(res);
+        return res;
 
     }
 }

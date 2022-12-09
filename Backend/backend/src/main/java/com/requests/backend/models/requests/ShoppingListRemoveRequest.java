@@ -1,26 +1,30 @@
 package com.requests.backend.models.requests;
 
-import com.requests.backend.models.AuthModel;
+import com.google.gson.annotations.Expose;
 
 public class ShoppingListRemoveRequest {
-    private String itemName;
+    @Expose
+    private int id;
 
-    // TODO: Replace with token
-    private String token;
+    @Expose
+    private boolean isCustom;
 
-    public String getItemName() {
-        return this.itemName;
+    public ShoppingListRemoveRequest() {
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public int getId() {
+        return id;
     }
 
-    public String getToken() {
-        return token;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public void setCustom(boolean custom) {
+        isCustom = custom;
     }
 }

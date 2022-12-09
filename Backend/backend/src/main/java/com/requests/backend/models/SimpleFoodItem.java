@@ -1,63 +1,61 @@
 package com.requests.backend.models;
 
 import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Simple food item used for displaying and moving data in the app
  *
  * @author Mitch Hudson
  */
+@Entity
+@IdClass(SimpleFoodItem.SimpleFoodItemPK.class)
+@Table(name = "simple_foods")
 public class SimpleFoodItem {
-
-    /**
-     * FDC ID from the api
-     */
+    //    /**
+    //     * FDC ID from the api or Custom Food ID
+    //     */
+    @Id
     @Expose
-    private int fdcId;
+    private int id;
 
     /**
      * Description / Item name from api
      */
     @Expose
     private String description;
-    /**
-     * True if the item should appear with strikeout on the shopping list
-     */
+
     @Expose
-    private boolean stricken;
+    private boolean isCustom;
 
-    /**
-     * Constructor for gson
-     *
-     * @param fdcId       item id
-     * @param description description / title
-     */
-    public SimpleFoodItem(int fdcId, String description) {
-        this.fdcId = fdcId;
-        this.description = description;
-        this.stricken = false;
-    }
+    @OneToMany(mappedBy = "food")
+    @JsonIgnore
+    private Set<Ingredient> ingredients;
 
-    /**
-     * Constructor for gson
-     *
-     * @param fdcId       item id
-     * @param description description / title
-     * @param stricken    true if the item should appear with strikeout on the shopping list
-     */
-    public SimpleFoodItem(int fdcId, String description, boolean stricken) {
-        this.fdcId = fdcId;
-        this.description = description;
-        this.stricken = stricken;
-    }
+    public SimpleFoodItem() {}
 
     /**
      * Getter for the id
      *
      * @return item id
      */
-    public int getFdcId() {
-        return fdcId;
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -69,22 +67,46 @@ public class SimpleFoodItem {
         return description;
     }
 
-    /**
-     * Getter for the stricken boolean
-     *
-     * @return true if this item should be rendered with strikeout
-     */
-    public boolean isStricken() {
-        return stricken;
+    public boolean isCustom() {
+        return this.isCustom;
     }
 
-    /**
-     * Setter for the stricken boolean
-     *
-     * @param stricken true if this item should be rendered with strikeout
-     */
-    public void setStricken(boolean stricken) {
-        this.stricken = stricken;
+    public void setCustom(boolean isCustom) {
+        this.isCustom = isCustom;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleFoodItem{" +
+                "id=" + this.id +
+                ", description='" + description + '\'' +
+                ", isCustom=" +  this.isCustom +
+                '}';
+    }
+
+        public static class SimpleFoodItemPK implements Serializable {
+            protected int id;
+
+            protected boolean isCustom;
+
+            public SimpleFoodItemPK() {}
+
+            public SimpleFoodItemPK(int id, boolean isCustom) {
+                this.isCustom = isCustom;
+                this.id = id;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(id, isCustom);
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj) return true;
+                if (obj == null || getClass() != obj.getClass()) return false;
+                SimpleFoodItemPK other = (SimpleFoodItemPK) obj;
+                return other.isCustom == isCustom && other.id == id;
+            }
+    }
 }

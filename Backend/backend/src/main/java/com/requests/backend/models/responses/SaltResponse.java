@@ -1,19 +1,14 @@
 package com.requests.backend.models.responses;
 
-public class SaltResponse {
+import com.google.gson.annotations.Expose;
 
+public class SaltResponse {
+    @Expose
     private int result;
+    @Expose
     private String salt;
 
     public SaltResponse() {
-    }
-
-    public SaltResponse(int responseCode) {
-        result = responseCode;
-    }
-    public SaltResponse(int responseCode, String salt) {
-        result = responseCode;
-        this.salt = salt;
     }
 
     public void setResult(int result) {
@@ -22,5 +17,21 @@ public class SaltResponse {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    @Override
+    public String toString() {
+        return "SaltResponse{" +
+                "result=" + result +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }

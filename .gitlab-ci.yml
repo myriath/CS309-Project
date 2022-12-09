@@ -139,3 +139,4 @@ deploy-spring-prod:
     - rm /home/gitlab-runner/temp/*
     - ln -sf /home/gitlab-runner/$APP_NAME-$APP_VERSION.jar /home/gitlab-runner/latest.jar
     - sudo systemctl start cs309.service
+    

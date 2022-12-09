@@ -1,25 +1,26 @@
 package com.requests.backend.models.requests;
 
-import com.requests.backend.models.AuthModel;
+import com.google.gson.annotations.Expose;
 
 public class StrikeoutRequest {
-    private String itemName;
+    @Expose
+    private int id;
+    @Expose
+    private boolean isCustom;
 
-    private String token;
-
-    public String getItemName() {
-        return itemName;
+    public int getId() {
+        return id;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getToken() {
-        return token;
+    public boolean isCustom() {
+        return isCustom;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setCustom(boolean custom) {
+        isCustom = custom;
     }
 }

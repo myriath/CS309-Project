@@ -1,27 +1,30 @@
 package com.requests.backend.models.requests;
 
-import com.requests.backend.models.AuthModel;
+import com.google.gson.annotations.Expose;
 import com.requests.backend.models.SimpleFoodItem;
 
 public class ShoppingListAddRequest {
 
+    @Expose
     private SimpleFoodItem item;
 
-    private String token;
+    public ShoppingListAddRequest() {
+    }
+
+    public ShoppingListAddRequest(SimpleFoodItem item) {
+        this.item = item;
+    }
 
     public SimpleFoodItem getFoodItem() {
         return item;
     }
 
-    public void setFoodItem(SimpleFoodItem foodItem) {
-        this.item = foodItem;
+    public void setItem(SimpleFoodItem item) {
+        this.item = item;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setAuth(String token) {
-        this.token = token;
+    @Override
+    public String toString() {
+        return "Request: {" + item.toString() + "}";
     }
 }

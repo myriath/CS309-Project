@@ -1,7 +1,8 @@
-package com.requests.backend.scripts.security;
+package com.requests.backend;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,28 +24,27 @@ import java.util.List;
 @EnableWebMvc
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
-
-    /**
-     * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
-     * TODO: Stop disabling CORS and CSRF.
-     * @param http          HTTP request
-     * @return              Built HTTP request
-     * @throws Exception    Errors
-     */
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.cors().and().csrf().disable()
-                .requiresChannel(channel ->
-                        channel.anyRequest().requiresSecure())
-                .authorizeRequests(authorize ->
-                        authorize.anyRequest().permitAll())
-                .build();
+//    /**
+//     * This filters out requests, requiring HTTPS and disabling CORS and CSRF.
+//     * TODO: Stop disabling CORS and CSRF.
+//     * @param http          HTTP request
+//     * @return              Built HTTP request
+//     * @throws Exception    Errors
+//     */
+//    @Bean
+//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        return http.cors().and().csrf().disable()
+//                .requiresChannel(channel ->
+//                        channel.anyRequest().requiresSecure())
+//                .authorizeRequests(authorize ->
+//                        authorize.anyRequest().permitAll())
+//                .build();
 //        http.authorizeRequests()
 //                .antMatchers(HttpMethod.GET, "/**").permitAll()
 //                .anyRequest().authenticated();
 
 //        return http.build();
-    }
+//    }
 
     /**
      * This allows requests from all sources.
