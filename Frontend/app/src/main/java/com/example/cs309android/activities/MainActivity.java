@@ -40,8 +40,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -62,7 +60,6 @@ import com.example.cs309android.fragments.nutrition.NutritionFragment;
 import com.example.cs309android.fragments.recipes.RecipesFragment;
 import com.example.cs309android.fragments.shopping.ShoppingFragment;
 import com.example.cs309android.interfaces.CallbackFragment;
-import com.example.cs309android.models.api.models.FoodLogItem;
 import com.example.cs309android.models.api.models.ShoppingList;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.services.NotificationService;
@@ -70,6 +67,7 @@ import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.PicassoSingleton;
 import com.example.cs309android.util.RequestHandler;
 import com.example.cs309android.util.Util;
+import com.example.cs309android.util.security.Hasher;
 import com.example.cs309android.util.security.NukeSSLCerts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -201,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements CallbackFragment 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        for (int i = 0; i < 100; i++) {
+            Log.d("HASHES" + i, Hasher.sha256plaintext(String.valueOf(i)) + ".webp");
+        }
 
         System.out.println(BASE_API_URL);
         // Creates Picasso singleton

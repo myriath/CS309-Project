@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.cs309android.activities.login.LoginActivity;
-import com.example.cs309android.testutil.TestingUtil;
 import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.util.security.Hasher;

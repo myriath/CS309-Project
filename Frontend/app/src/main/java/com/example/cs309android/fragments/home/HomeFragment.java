@@ -122,6 +122,7 @@ public class HomeFragment extends BaseFragment {
         models[3].setLimit(53);
 
         models[0].setAmount(totalCalories);
+        models[0].setAmount(943);
         models[1].setAmount(totalCarbs);
         models[2].setAmount(totalProtein);
         models[3].setAmount(totalFat);
@@ -149,14 +150,14 @@ public class HomeFragment extends BaseFragment {
 
         }, requireContext());
 
-        adapter = new RecipeListAdapter(this.getActivity(), recipes, recipe -> {
-            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
-            intent.putExtra(PARCEL_RECIPE, recipe);
-            startActivity(intent);
-        });
+//        adapter = new RecipeListAdapter(this.getActivity(), recipes, recipe -> {
+//            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+//            intent.putExtra(PARCEL_RECIPE, recipe);
+//            startActivity(intent);
+//        });
         LinearLayout layout = view.findViewById(R.id.feed);
 
-        Recipe recipe1 = new Recipe(0, "Test Recipe", "Test Description", new Ingredient[]{
+        Recipe recipe1 = new Recipe(0, "Grilled cheese", "A simple grilled cheese", new Ingredient[]{
                 new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
                 new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
                 new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
@@ -167,25 +168,54 @@ public class HomeFragment extends BaseFragment {
                 new Instruction(3, "step"),
                 new Instruction(4, "step")
         }, new User("papajohn", 3, "hola"), new Comment[]{
-//                new Comment("papajohn", "joe mama", 1),
-//                new Comment("Test2", "joe mamajoe mama", 2),
-//                new Comment("Test3", "joe mamajoe mamajoe mamajoe mama", 3),
-//                new Comment("Test4", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 4),
-//                new Comment("Test5", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 5),
-//                new Comment("Test6", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 6),
-//                new Comment("Test7", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 7),
-//                new Comment("Test8", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 8),
-//                new Comment("Test9", "joe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mamajoe mama", 9),
+        });
+        Recipe recipe2 = new Recipe(1, "Delicious salad", "The perfect salad recipe", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm")
+        }, new Instruction[]{
+                new Instruction(1, "step"),
+                new Instruction(2, "step"),
+                new Instruction(3, "step"),
+                new Instruction(4, "step")
+        }, new User("papajohn", 3, "hola"), new Comment[]{
+        });
+        Recipe recipe3 = new Recipe(2, "Tomato soup", "Robust tomato soup for a cold day", new Ingredient[]{
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm"),
+                new Ingredient(new SimpleFoodItem("test", "test"), 1, "mm")
+        }, new Instruction[]{
+                new Instruction(1, "step"),
+                new Instruction(2, "step"),
+                new Instruction(3, "step"),
+                new Instruction(4, "step")
+        }, new User("papajohn", 3, "hola"), new Comment[]{
         });
 
         HomeRecipeView view1 = new HomeRecipeView(requireContext());
-        view1.initView(recipe1, view3 -> {
+        view1.initView(recipe1, view4 -> {
             Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
             intent.putExtra(PARCEL_RECIPE, recipe1);
             startActivity(intent);
         });
-//        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
         layout.addView(view1);
+        HomeRecipeView view2 = new HomeRecipeView(requireContext());
+        view2.initView(recipe2, view4 -> {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, recipe2);
+            startActivity(intent);
+        });
+        layout.addView(view2);
+        HomeRecipeView view3 = new HomeRecipeView(requireContext());
+        view3.initView(recipe3, view4 -> {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(PARCEL_RECIPE, recipe3);
+            startActivity(intent);
+        });
+//        new GetRecipeImageRequest("0").request((ImageView) view1.findViewById(R.id.recipeImage), getContext());
+        layout.addView(view3);
 
 //        HomeRecipeView view2 = new HomeRecipeView(requireContext());
 //        view2.initView("Test Recipe", "Test Description", view3 -> {
