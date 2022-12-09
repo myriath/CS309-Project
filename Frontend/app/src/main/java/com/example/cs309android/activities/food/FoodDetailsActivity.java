@@ -107,6 +107,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         if (!item.isCustom()) {
             new FoodsCriteria(item.getId(), Format.FULL, null).unspinOnComplete(response -> {
                 BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+                item.setNutrients(foodItem.getLabelNutrients());
                 setSubtitle(foodItem.getBrandOwner(), toolbar);
                 fillIngredients(foodItem.getIngredients());
                 fillNutrition(foodItem.getLabelNutrients(), (float) foodItem.getServingSize(), foodItem.getServingSizeUnit());

@@ -3,6 +3,7 @@ package com.example.cs309android.activities.recipe;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE_ID;
 import static com.example.cs309android.util.Constants.UserType.USER_REG;
 
 import android.content.Intent;
@@ -100,16 +101,17 @@ public class RecipeDetailsActivity extends AppCompatActivity {
      */
     public void setDetails(Recipe recipe, GlobalClass global) {
         ImageView image = findViewById(R.id.image_view);
+        String username = recipe.getUser().getUsername();
         new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(image, this);
 
-        new GetProfilePictureRequest(recipe.getUsername()).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
-        new GetUserTypeRequest(recipe.getUsername()).request(response -> {
+        new GetProfilePictureRequest(username).request((ImageView) findViewById(R.id.profile_picture), RecipeDetailsActivity.this);
+        new GetUserTypeRequest(username).request(response -> {
             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
             Util.getBadge(genericResponse.getResult(), findViewById(R.id.badge));
         }, RecipeDetailsActivity.this);
 
-        ((TextView) findViewById(R.id.username)).setText(recipe.getUsername());
-        findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, recipe.getUsername(), this));
+        ((TextView) findViewById(R.id.username)).setText(username);
+        findViewById(R.id.creator).setOnClickListener(view -> Util.openAccountPage(global, username, this));
 
         ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRname());
         ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
@@ -141,7 +143,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             instructionsList.addView(view);
         }
 
-        if (recipe.getUsername().equals(global.getUsername()) || global.getUserType() > USER_REG) {
+        if (recipe.getUser().getUsername().equals(global.getUsername()) || global.getUserType() > USER_REG) {
             findViewById(R.id.menuCard).setVisibility(View.VISIBLE);
             findViewById(R.id.menuButton).setOnClickListener(view -> {
                 PopupMenu menu = new PopupMenu(this, view);
@@ -156,11 +158,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     } else if (id == R.id.delete) {
                         new RemoveRecipeRequest(recipe.getRecipeID(), global.getToken()).request(response -> {
                             GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
-                            if (genericResponse.getResult() != RESULT_OK) {
+                            if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
                                 Toaster.toastShort("Error", this);
+                                return;
                             }
+                            Intent intent = new Intent();
+                            intent.putExtra(PARCEL_RECIPE_ID, recipe.getRecipeID());
+                            setResult(Constants.Results.RESULT_DELETED, intent);
+                            finish();
                         }, error -> Toaster.toastShort("Error", this), RecipeDetailsActivity.this);
-                        finish();
                     }
                     return true;
                 });

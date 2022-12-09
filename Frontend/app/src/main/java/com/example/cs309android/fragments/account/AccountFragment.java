@@ -2,9 +2,13 @@ package com.example.cs309android.fragments.account;
 
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
 import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE_ID;
 import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Results.RESULT_DELETED;
+import static com.example.cs309android.util.Constants.Results.RESULT_UPDATED;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -41,9 +45,8 @@ import com.example.cs309android.views.HomeRecipeView;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Fragment to display account details
@@ -55,6 +58,10 @@ public class AccountFragment extends BaseFragment {
      * Launcher for the account edit activity
      */
     private ActivityResultLauncher<Intent> accountEditLauncher;
+    /**
+     * Launcher for the recipe details activity
+     */
+    private ActivityResultLauncher<Intent> recipeDetailsLauncher;
 
     /**
      * Refresh the account page
@@ -100,8 +107,12 @@ public class AccountFragment extends BaseFragment {
                     .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
             ((TextView) view.findViewById(R.id.followingCount))
                     .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
-            ((TextView) view.findViewById(R.id.bioTextView))
-                    .setText(global.getBio());
+            String bioText = profileResponse.getBio();
+            if (bioText == null || bioText.length() == 0) {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(R.string.nothing_yet);
+            } else {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+            }
         }, requireContext());
 
         new GetRecipesRequest(global.getUsername()).request(response -> {
@@ -120,7 +131,7 @@ public class AccountFragment extends BaseFragment {
                 recipeView.initView(recipe, view1 -> {
                     Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
                     intent.putExtra(PARCEL_RECIPE, recipe);
-                    startActivity(intent);
+                    recipeDetailsLauncher.launch(intent);
                 });
 
                 recipeList.addView(recipeView);
@@ -147,6 +158,24 @@ public class AccountFragment extends BaseFragment {
         accountEditLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> refreshAccount(view, global)
+        );
+
+        recipeDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    switch (result.getResultCode()) {
+                        case RESULT_DELETED: {
+//                            int id = Objects.requireNonNull(result.getData()).getIntExtra(PARCEL_RECIPE_ID, ITEM_ID_NULL);
+//                            break;
+                        }
+                        case RESULT_UPDATED: {
+//                            Recipe newRecipe = Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_RECIPE);
+//                            for ()
+                            refreshAccount(view, global);
+                            break;
+                        }
+                    }
+                }
         );
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);

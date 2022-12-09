@@ -14,19 +14,18 @@
     <PreferenceCategory android:title="@string/notification_category">
         <Preference
             android:key="notification0"
-            android:summary="High"
-            android:title="Notification0"/>
+            android:summary="@string/new_followers_desc"
+            android:title="@string/new_followers_title" />
         <Preference
             android:key="notification1"
-            android:summary="Regular"
-            android:title="Notification1"/>
+            android:summary="@string/new_for_you_desc"
+            android:title="@string/new_for_you_title" />
         <Preference
             android:key="notification2"
-            android:summary="Low"
-            android:title="Notification2"/>
+            android:summary="@string/likes_comments_desc"
+            android:title="@string/likes_comments_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/display_title">
-
-    </PreferenceCategory>
+    <!--    <PreferenceCategory android:title="@string/display_title">-->
+    <!--    </PreferenceCategory>-->
 </androidx.preference.PreferenceScreen>
