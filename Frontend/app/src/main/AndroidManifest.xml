@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".GlobalClass"
@@ -14,14 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CS309Android">
+        <service android:name=".services.NotificationService" />
+        <activity
+            android:name=".activities.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.RegisterActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.account.AccountActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:exported="false" />
         <activity
             android:name=".activities.account.AccountListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.account.AccountSwitchActivity"
+            android:name=".activities.login.AccountSwitchActivity"
             android:exported="false" />
         <activity
             android:name=".activities.account.AccountEditActivity"
@@ -31,9 +40,10 @@
             android:exported="false" />
         <activity
             android:name=".activities.recipe.RecipeDetailsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.food.CustomFoodActivity"
+            android:name=".activities.food.NewFoodActivity"
             android:exported="false" />
         <activity
             android:name=".activities.food.FoodDetailsActivity"

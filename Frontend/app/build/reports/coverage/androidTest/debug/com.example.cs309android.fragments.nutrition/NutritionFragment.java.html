@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NutritionFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.fragments.nutrition</a> &gt; <span class="el_source">NutritionFragment.java</span></div><h1>NutritionFragment.java</h1><pre class="source lang-java linenums">package com.example.cs309android.fragments.nutrition;
+
+import static com.example.cs309android.util.Constants.BREAKFAST_LOG;
+import static com.example.cs309android.util.Constants.DINNER_LOG;
+import static com.example.cs309android.util.Constants.LUNCH_LOG;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.food.FoodDetailsActivity;
+import com.example.cs309android.fragments.BaseFragment;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.models.adapters.NutritionLogAdapter;
+import com.example.cs309android.models.api.models.FoodLogItem;
+import com.example.cs309android.models.api.request.nutrition.GetDayFoodLogRequest;
+import com.example.cs309android.models.api.response.nutrition.GetFoodLogResponse;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import com.google.android.material.divider.MaterialDivider;
+
+import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
+
+/**
+ * Nutrition page fragment to display nutrition info
+ * TODO: Calculate or retrieve nutrition data and update the progress bars
+ * TODO: Maybe replace FoodLogItem with just a regular simple food item? or otherwise have that information available
+ *
+ * @author Travis Massner
+ */
+<span class="nc" id="L50">public class NutritionFragment extends BaseFragment {</span>
+    /**
+     * Calendar for tracking the date
+     */
+    Calendar date;
+    /**
+     * Button to go back in the calendar
+     */
+    ImageButton leftButton;
+    /**
+     * Button to go forward in the calendar
+     */
+    ImageButton rightButton;
+    /**
+     * Adapter for the list view
+     */
+    NutritionLogAdapter adapter;
+    /**
+     * List view to display the nutrition log
+     */
+    ListView listView;
+    /**
+     * Main window fragment
+     */
+    private CallbackFragment nutritionFragment;
+
+    /**
+     * Stores the value of dp8 in pixels
+     */
+    private int dp8;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L83">        super.onCreate(savedInstanceState);</span>
+
+<span class="nc" id="L85">        date = Calendar.getInstance();</span>
+<span class="nc" id="L86">        dp8 = (int) Util.scalePixels(8);</span>
+
+        //THIS IS JUST TEST DATA
+//        MainActivity.clearFoodLog();
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;chicken&quot;), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;bacon&quot;), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;cheese&quot;), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;beef&quot;), BREAKFAST_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;pork&quot;), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;turkey&quot;), LUNCH_LOG);
+//        MainActivity.addLogItem(new FoodLogItem(&quot;papajohn&quot;, &quot;eggs&quot;), DINNER_LOG);
+
+//        foodSearchLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -&gt; {
+//                    if (result.getResultCode() == RESULT_OK) {
+//                        nutritionFragment = NutritionFragment.newInstance(Objects.requireNonNull(result.getData()).getParcelableArrayListExtra(MainActivity.PARCEL_FOODITEMS_LIST));
+//                        System.out.println(&quot;Food search result okay&quot;);
+//                        Toaster.toastShort(&quot;Food search result okay&quot;, requireContext());
+//                    } else {
+//                        System.out.println(&quot;Food search result not okay&quot;);
+//                        nutritionFragment = new NutritionFragment();
+//                    }
+//                    System.out.println(result.getData());
+//
+//                    nutritionFragment.setCallbackFragment(this);
+//
+//                }
+//        );
+<span class="nc" id="L115">    }</span>
+
+    /**
+     * Updates the current date of the log
+     */
+    private void updateDate() {
+<span class="nc" id="L121">        TextView dateText = requireActivity().findViewById(R.id.date);</span>
+
+<span class="nc" id="L123">        SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-mm-dd&quot;, Locale.getDefault());</span>
+<span class="nc" id="L124">        String dateStr = format.format(date.getTime());</span>
+
+        // TODO: Getter should get a list of each meal, or this needs to split it up
+<span class="nc" id="L127">        new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -&gt; {</span>
+            try {
+<span class="nc" id="L129">                System.out.print(response.toString(3));</span>
+<span class="nc" id="L130">            } catch (JSONException e) {</span>
+<span class="nc" id="L131">                e.printStackTrace();</span>
+<span class="nc" id="L132">            }</span>
+<span class="nc" id="L133">            GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);</span>
+
+<span class="nc" id="L135">            FoodLogItem[] newItems = recipeResponse.getFoodLog();</span>
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            for (FoodLogItem item : newItems) {</span>
+<span class="nc bnc" id="L138" title="All 4 branches missed.">                switch (item.getMeal()) {</span>
+                    case &quot;Breakfast&quot;:
+<span class="nc" id="L140">                        MainActivity.addLogItem(item, BREAKFAST_LOG);</span>
+<span class="nc" id="L141">                        break;</span>
+                    case &quot;Lunch&quot;:
+<span class="nc" id="L143">                        MainActivity.addLogItem(item, LUNCH_LOG);</span>
+<span class="nc" id="L144">                        break;</span>
+                    case &quot;Dinner&quot;:
+<span class="nc" id="L146">                        MainActivity.addLogItem(item, DINNER_LOG);</span>
+                        break;
+                }
+            }
+<span class="nc" id="L150">        }, requireContext());</span>
+<span class="nc" id="L151">        format = new SimpleDateFormat(&quot;EEE MMM, d, yyyy&quot;, Locale.getDefault());</span>
+<span class="nc" id="L152">        dateText.setText(format.format(date.getTime()));</span>
+<span class="nc" id="L153">    }</span>
+
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the fragment view
+     * @param container          Parent for the fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated fragment view
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+<span class="nc" id="L167">        View view = inflater.inflate(R.layout.fragment_nutrition, container, false);</span>
+
+<span class="nc" id="L169">        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.nutrition_frame), (v, windowInsets) -&gt; {</span>
+<span class="nc" id="L170">            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());</span>
+<span class="nc" id="L171">            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();</span>
+<span class="nc" id="L172">            mlp.topMargin = insets.top;</span>
+<span class="nc" id="L173">            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());</span>
+<span class="nc" id="L174">            mlp.bottomMargin = insets.bottom;</span>
+<span class="nc" id="L175">            return WindowInsetsCompat.CONSUMED;</span>
+        });
+
+<span class="nc" id="L178">        leftButton = view.findViewById(R.id.previous_date_button);</span>
+<span class="nc" id="L179">        rightButton = view.findViewById(R.id.next_date_button);</span>
+<span class="nc" id="L180">        TextView dateText = view.findViewById(R.id.date);</span>
+
+<span class="nc" id="L182">        SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;, Locale.getDefault());</span>
+<span class="nc" id="L183">        String dateStr = format.format(date.getTime());</span>
+        // TODO: Getter should get a list of each meal, or this needs to split it up
+<span class="nc" id="L185">        new GetDayFoodLogRequest(dateStr, ((GlobalClass) requireActivity().getApplicationContext()).getToken()).request(response -&gt; {</span>
+            try {
+<span class="nc" id="L187">                System.out.print(response.toString(3));</span>
+<span class="nc" id="L188">            } catch (JSONException e) {</span>
+<span class="nc" id="L189">                e.printStackTrace();</span>
+<span class="nc" id="L190">            }</span>
+<span class="nc" id="L191">            GetFoodLogResponse recipeResponse = Util.objFromJson(response, GetFoodLogResponse.class);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">            if (recipeResponse == null) {</span>
+<span class="nc" id="L193">                Toaster.toastShort(&quot;Error getting recipes&quot;, requireContext());</span>
+<span class="nc" id="L194">                return;</span>
+            }
+
+<span class="nc" id="L197">            FoodLogItem[] newItems = recipeResponse.getFoodLog();</span>
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">            for (FoodLogItem item : newItems) {</span>
+<span class="nc bnc" id="L200" title="All 4 branches missed.">                switch (item.getMeal()) {</span>
+                    case &quot;Breakfast&quot;:
+<span class="nc" id="L202">                        System.out.println(item.getMeal());</span>
+<span class="nc" id="L203">                        MainActivity.addLogItem(item, BREAKFAST_LOG);</span>
+<span class="nc" id="L204">                        break;</span>
+                    case &quot;Lunch&quot;:
+<span class="nc" id="L206">                        System.out.println(item.getMeal());</span>
+<span class="nc" id="L207">                        MainActivity.addLogItem(item, LUNCH_LOG);</span>
+<span class="nc" id="L208">                        break;</span>
+                    case &quot;Dinner&quot;:
+<span class="nc" id="L210">                        System.out.println(item.getMeal());</span>
+<span class="nc" id="L211">                        MainActivity.addLogItem(item, DINNER_LOG);</span>
+                        break;
+                }
+            }
+
+<span class="nc" id="L216">        }, requireContext());</span>
+
+<span class="nc" id="L218">        leftButton.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L219">            date.add(Calendar.DATE, -1);</span>
+<span class="nc" id="L220">            updateDate();</span>
+<span class="nc" id="L221">            refreshList(view);</span>
+<span class="nc" id="L222">        });</span>
+
+<span class="nc" id="L224">        rightButton.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L225">            date.add(Calendar.DATE, 1);</span>
+<span class="nc" id="L226">            updateDate();</span>
+<span class="nc" id="L227">            refreshList(view);</span>
+<span class="nc" id="L228">        });</span>
+
+<span class="nc" id="L230">        dateText.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L231">            date = Calendar.getInstance();</span>
+<span class="nc" id="L232">            updateDate();</span>
+<span class="nc" id="L233">            refreshList(view);</span>
+<span class="nc" id="L234">        });</span>
+
+<span class="nc" id="L236">        refreshList(view);</span>
+
+<span class="nc" id="L238">        format = new SimpleDateFormat(&quot;EEE MMM, d, yyyy&quot;, Locale.getDefault());</span>
+<span class="nc" id="L239">        dateText.setText(format.format(date.getTime()));</span>
+
+<span class="nc" id="L241">        return view;</span>
+    }
+
+    /**
+     * Refreshes the nutrition log
+     *
+     * @param view view to find subviews of
+     */
+    public void refreshList(View view) {
+<span class="nc" id="L250">        ArrayList&lt;FoodLogItem&gt; breakfast = MainActivity.getLog(BREAKFAST_LOG);</span>
+<span class="nc" id="L251">        ArrayList&lt;FoodLogItem&gt; lunch = MainActivity.getLog(LUNCH_LOG);</span>
+<span class="nc" id="L252">        ArrayList&lt;FoodLogItem&gt; dinner = MainActivity.getLog(DINNER_LOG);</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        if (breakfast != null) {</span>
+<span class="nc" id="L254">            LinearLayout list = view.findViewById(R.id.breakfastList);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">            for (int i = 0; i &lt; breakfast.size(); i++) {</span>
+<span class="nc" id="L256">                FoodLogItem item = breakfast.get(i);</span>
+<span class="nc" id="L257">                addLogItem(item, list, view1 -&gt; {</span>
+<span class="nc" id="L258">                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);</span>
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+<span class="nc" id="L260">                    startActivity(intent);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">                }, i == breakfast.size() - 1);</span>
+            }
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            view.findViewById(R.id.breakfastCard).setVisibility(Objects.requireNonNull(breakfast).isEmpty() ? View.GONE : View.VISIBLE);</span>
+<span class="nc" id="L264">        } else {</span>
+<span class="nc" id="L265">            view.findViewById(R.id.breakfastCard).setVisibility(View.GONE);</span>
+        }
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if (lunch != null) {</span>
+<span class="nc" id="L268">            LinearLayout list = view.findViewById(R.id.lunchList);</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">            for (int i = 0; i &lt; lunch.size(); i++) {</span>
+<span class="nc" id="L270">                FoodLogItem item = lunch.get(i);</span>
+<span class="nc" id="L271">                addLogItem(item, list, view1 -&gt; {</span>
+<span class="nc" id="L272">                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);</span>
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+<span class="nc" id="L274">                    startActivity(intent);</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">                }, i == lunch.size() - 1);</span>
+            }
+<span class="nc bnc" id="L277" title="All 2 branches missed.">            view.findViewById(R.id.lunchCard).setVisibility(Objects.requireNonNull(lunch).isEmpty() ? View.GONE : View.VISIBLE);</span>
+<span class="nc" id="L278">        } else {</span>
+<span class="nc" id="L279">            view.findViewById(R.id.lunchCard).setVisibility(View.GONE);</span>
+        }
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        if (dinner != null) {</span>
+<span class="nc" id="L282">            LinearLayout list = view.findViewById(R.id.dinnerList);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">            for (int i = 0; i &lt; dinner.size(); i++) {</span>
+<span class="nc" id="L284">                FoodLogItem item = dinner.get(i);</span>
+<span class="nc" id="L285">                addLogItem(item, list, view1 -&gt; {</span>
+<span class="nc" id="L286">                    Intent intent = new Intent(getContext(), FoodDetailsActivity.class);</span>
+//                    intent.putExtra(PARCEL_FOODITEM, item); // TODO: Make food log item parcelable
+<span class="nc" id="L288">                    startActivity(intent);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                }, i == dinner.size() - 1);</span>
+            }
+<span class="nc bnc" id="L291" title="All 2 branches missed.">            view.findViewById(R.id.dinnerCard).setVisibility(Objects.requireNonNull(dinner).isEmpty() ? View.GONE : View.VISIBLE);</span>
+<span class="nc" id="L292">        } else {</span>
+<span class="nc" id="L293">            view.findViewById(R.id.dinnerCard).setVisibility(View.GONE);</span>
+        }
+<span class="nc" id="L295">    }</span>
+
+    /**
+     * Adds a log item to the given linear layout
+     * @param item      Item to add
+     * @param list      LinearLayout to add to
+     * @param listener  OnClickListener for the item
+     */
+    public void addLogItem(FoodLogItem item, LinearLayout list, View.OnClickListener listener, boolean lastItem) {
+<span class="nc" id="L304">        View view = View.inflate(getContext(), R.layout.ingredient_layout, null);</span>
+<span class="nc" id="L305">        ((TextView) view.findViewById(R.id.quantity)).setText(&quot;TODO&quot;);</span>
+<span class="nc" id="L306">        ((TextView) view.findViewById(R.id.name)).setText(item.getFoodName());</span>
+<span class="nc" id="L307">        view.setOnClickListener(listener);</span>
+<span class="nc" id="L308">        view.setPadding(dp8, dp8, dp8, dp8);</span>
+<span class="nc" id="L309">        list.addView(view);</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        if (!lastItem) {</span>
+<span class="nc" id="L311">            MaterialDivider divider = new MaterialDivider(requireContext());</span>
+<span class="nc" id="L312">            list.addView(divider);</span>
+        }
+<span class="nc" id="L314">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

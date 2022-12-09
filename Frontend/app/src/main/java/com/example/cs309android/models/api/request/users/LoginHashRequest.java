@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.users;
 
-import static com.example.cs309android.util.Constants.LOGIN_URL;
+import static com.example.cs309android.util.Constants.Urls.Users.LOGIN_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
@@ -33,6 +33,7 @@ public class LoginHashRequest extends GetRequest {
      *
      * @param username Username for login
      * @param hash     Hash for login
+     * @param token    New token for logging in
      */
     public LoginHashRequest(String username, String hash, String token) {
         this.username = username;

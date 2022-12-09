@@ -1,8 +1,8 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_OPEN_ACCOUNT;
-import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
-import static com.example.cs309android.util.Constants.RESULT_OK;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_OPEN_ACCOUNT;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_USERNAME;
+import static com.example.cs309android.util.Constants.Results.RESULT_OK;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -72,9 +72,9 @@ public class AccountAdapter extends ArrayAdapter<String> {
         ((TextView) convertView.findViewById(R.id.username)).setText(username);
 
         ImageView profilePicture = convertView.findViewById(R.id.profile_picture);
-        new GetProfilePictureRequest(username).request(profilePicture::setImageBitmap, getContext());
+        new GetProfilePictureRequest(username).request(profilePicture, getContext());
 
-        TextView bio = convertView.findViewById(R.id.bio);
+        TextView bio = convertView.findViewById(R.id.comment);
         new GetProfileRequest(username).request(response -> {
             GetProfileResponse profileResponse = Util.objFromJson(response, GetProfileResponse.class);
 

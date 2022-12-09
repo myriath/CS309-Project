@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.users;
 
-import static com.example.cs309android.util.Constants.REGEN_TOKEN_URL;
+import static com.example.cs309android.util.Constants.Urls.Users.REGEN_TOKEN_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.PutRequest;

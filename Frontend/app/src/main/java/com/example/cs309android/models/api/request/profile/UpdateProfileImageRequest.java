@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.profile;
 
-import static com.example.cs309android.util.Constants.UPDATE_PFP_URL;
+import static com.example.cs309android.util.Constants.Urls.Profile.UPDATE_PFP_URL;
 
 import android.graphics.Bitmap;
 
@@ -19,9 +19,10 @@ public class UpdateProfileImageRequest extends PatchImageRequest {
      * @param token  authentication token
      * @param bitmap Image to send
      */
-    public UpdateProfileImageRequest(String token, Bitmap bitmap) {
+    public UpdateProfileImageRequest(String token, String username, Bitmap bitmap) {
         super(new ParameterizedRequestURL(UPDATE_PFP_URL)
                         .addPathVar(token)
+                        .addPathVar(username)
                         .toString(),
                 bitmap);
     }

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ingredient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.api.models</a> &gt; <span class="el_source">Ingredient.java</span></div><h1>Ingredient.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.api.models;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * Ingredient class contains a SimpleFoodItem and the quantity / units for it.
+ * Used in recipes
+ *
+ * @author Mitch Hudson
+ */
+public class Ingredient implements Parcelable {
+    /**
+     * CREATOR instance for the Parcelable interface
+     */
+<span class="nc" id="L18">    public static final Creator&lt;Ingredient&gt; CREATOR = new Creator&lt;Ingredient&gt;() {</span>
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+<span class="nc" id="L21">            return new Ingredient(in);</span>
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+<span class="nc" id="L26">            return new Ingredient[size];</span>
+        }
+    };
+    /**
+     * Food item that this ingredient is.
+     */
+    @Expose
+    private final SimpleFoodItem food;
+    /**
+     * How many unit units is used in the recipe
+     */
+    @Expose
+    private float quantity;
+    /**
+     * Unit for the quantity measurement.
+     */
+    @Expose
+    private String unit;
+
+    /**
+     * Public constructor
+     *
+     * @param food     Food item for nutrition details
+     * @param quantity Quantity of the food item
+     * @param unit     Unit the quantity is measured in
+     */
+<span class="nc" id="L52">    public Ingredient(SimpleFoodItem food, float quantity, String unit) {</span>
+<span class="nc" id="L53">        this.food = food;</span>
+<span class="nc" id="L54">        this.quantity = quantity;</span>
+<span class="nc" id="L55">        this.unit = unit;</span>
+<span class="nc" id="L56">    }</span>
+
+    /**
+     * Parcel constructor
+     *
+     * @param in parcel to unpack
+     */
+<span class="nc" id="L63">    protected Ingredient(Parcel in) {</span>
+<span class="nc" id="L64">        food = in.readParcelable(SimpleFoodItem.class.getClassLoader());</span>
+<span class="nc" id="L65">        quantity = in.readFloat();</span>
+<span class="nc" id="L66">        unit = in.readString();</span>
+<span class="nc" id="L67">    }</span>
+
+    /**
+     * Getter for the food item
+     *
+     * @return food item
+     */
+    public SimpleFoodItem getFood() {
+<span class="nc" id="L75">        return food;</span>
+    }
+
+    /**
+     * Getter for the quantity
+     *
+     * @return quantity
+     */
+    public float getQuantity() {
+<span class="nc" id="L84">        return quantity;</span>
+    }
+
+    /**
+     * Setter for the quantity
+     *
+     * @param quantity new quantity
+     */
+    public void setQuantity(float quantity) {
+<span class="nc" id="L93">        this.quantity = quantity;</span>
+<span class="nc" id="L94">    }</span>
+
+    /**
+     * Getter for the unit
+     *
+     * @return units
+     */
+    public String getUnit() {
+<span class="nc" id="L102">        return unit;</span>
+    }
+
+    /**
+     * Setter for the unit
+     *
+     * @param unit new unit
+     */
+    public void setUnit(String unit) {
+<span class="nc" id="L111">        this.unit = unit;</span>
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Unused for this class
+     *
+     * @return 0
+     */
+    @Override
+    public int describeContents() {
+<span class="nc" id="L121">        return 0;</span>
+    }
+
+    /**
+     * Writes this object to the given parcel
+     *
+     * @param parcel Parcel to write to
+     * @param i      flags
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+<span class="nc" id="L132">        parcel.writeParcelable(food, i);</span>
+<span class="nc" id="L133">        parcel.writeFloat(quantity);</span>
+<span class="nc" id="L134">        parcel.writeString(unit);</span>
+<span class="nc" id="L135">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

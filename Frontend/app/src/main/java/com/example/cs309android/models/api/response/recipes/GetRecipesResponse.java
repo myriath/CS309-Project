@@ -2,6 +2,7 @@ package com.example.cs309android.models.api.response.recipes;
 
 import com.example.cs309android.models.api.models.Recipe;
 import com.example.cs309android.models.api.response.GenericResponse;
+import com.google.gson.annotations.Expose;
 
 /**
  * Response object for the get recipes request
@@ -12,17 +13,18 @@ public class GetRecipesResponse extends GenericResponse {
     /**
      * Recipe list for the user
      */
-    private final Recipe[] items;
+    @Expose
+    private final Recipe[] recipes;
 
     /**
      * Constructor to be used by GSON
      *
-     * @param result Result code from the request
-     * @param items  Array of user posts
+     * @param result  Result code from the request
+     * @param recipes Array of user posts
      */
-    public GetRecipesResponse(int result, Recipe[] items) {
+    public GetRecipesResponse(int result, Recipe[] recipes) {
         super(result);
-        this.items = items;
+        this.recipes = recipes;
     }
 
     /**
@@ -30,7 +32,7 @@ public class GetRecipesResponse extends GenericResponse {
      *
      * @return array of user posts
      */
-    public Recipe[] getItems() {
-        return items;
+    public Recipe[] getRecipes() {
+        return recipes;
     }
 }

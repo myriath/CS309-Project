@@ -5,6 +5,9 @@ import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -54,6 +57,67 @@ public class SimpleFoodItem implements Parcelable {
     @Expose
     private boolean stricken;
 
+    //ALL OF THESE ARE FOR THE NUTRITION PAGE
+    /**
+     * Calories of the item
+     */
+    @Expose
+    private float calories;
+
+    /**
+     * Fat of the item
+     */
+    @Expose
+    private float fat;
+
+    /**
+     * Carbs of the item
+     */
+    @Expose
+    private float carbs;
+
+    /**
+     * Protein of the item
+     */
+    @Expose
+    private float protein;
+
+    /**
+     * Meal type of the item
+     */
+    @Expose
+    private String meal;
+
+    /**
+     * Date of the item
+     */
+    @Expose
+    private String date;
+
+
+    /**
+     * Public constructor for new food log item
+     * @param id          item id
+     * @param description description / title
+     * @param brand       Brand of the item (if branded)
+     * @param calories    Calories of the item
+     * @param fat         Fat of the item
+     * @param carbs       Carbs of the item
+     * @param protein     Protein of the item
+     */
+    public SimpleFoodItem(int id, String description, String brand, float calories, float fat, float carbs, float protein, String meal, boolean isCustom) {
+        this.id = id;
+        this.description = description;
+        this.brand = brand;
+        this.calories = calories;
+        this.fat = fat;
+        this.carbs = carbs;
+        this.protein = protein;
+        this.meal = meal;
+        this.isCustom = isCustom;
+    }
+
+
     /**
      * Public constructor for new custom item
      * DB id will be assigned by backend
@@ -94,7 +158,7 @@ public class SimpleFoodItem implements Parcelable {
      * @param brand       Brand of the item (null for none)
      * @param stricken    true if the item should appear with strikeout on the shopping list
      */
-    public SimpleFoodItem(int id, int dbId, String description, String brand, boolean stricken, boolean isCustom) {
+    public SimpleFoodItem(int id, String description, String brand, boolean stricken, boolean isCustom) {
         this.id = id;
         this.description = description;
         this.brand = brand;
@@ -111,6 +175,10 @@ public class SimpleFoodItem implements Parcelable {
         id = in.readInt();
         description = in.readString();
         brand = in.readString();
+        calories = in.readFloat();
+        fat = in.readFloat();
+        carbs = in.readFloat();
+        protein = in.readFloat();
         stricken = in.readBoolean();
         isCustom = in.readBoolean();
     }
@@ -187,6 +255,66 @@ public class SimpleFoodItem implements Parcelable {
     }
 
     /**
+     * Gets the calories
+     */
+    public float getCalories() {
+        return calories;
+    }
+
+    /**
+     * Gets the fat
+     */
+    public float getFat() {
+        return fat;
+    }
+
+    /**
+     * Gets the carbs
+     */
+    public float getCarbs() {
+        return carbs;
+    }
+
+    /**
+     * Gets the protein
+     */
+    public float getProtein() {
+        return protein;
+    }
+
+    /**
+     * Gets the meal type
+     */
+    public String getMeal() {
+        return meal;
+    }
+
+    /**
+     * Gets the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Sets the nutrients variables for a simple food item
+     */
+    public void setNutrients(BrandedFoodItem.LabelNutrients nutrients) {
+        this.calories = nutrients.getCalories().getValue();
+        this.fat = nutrients.getFat().getValue();
+        this.carbs = nutrients.getCarbohydrates().getValue();
+        this.protein = nutrients.getProtein().getValue();
+    }
+
+    /**
+     * Set the meal and date of the simple food item for food log
+     */
+    public void setMealAndDate(String meal, String date) {
+        this.meal = meal;
+        this.date = date;
+    }
+
+    /**
      * Parcelable required method
      *
      * @return 0
@@ -207,7 +335,27 @@ public class SimpleFoodItem implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(description);
         parcel.writeString(brand);
+        parcel.writeFloat(calories);
+        parcel.writeFloat(fat);
+        parcel.writeFloat(carbs);
+        parcel.writeFloat(protein);
         parcel.writeBoolean(stricken);
         parcel.writeBoolean(isCustom);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SimpleFoodItem{" +
+                "id=" + id +
+                ", isCustom=" + isCustom +
+                ", description='" + description + '\'' +
+                ", brand='" + brand + '\'' +
+                ", stricken=" + stricken +
+                ", calories=" + calories +
+                ", fat=" + fat +
+                ", carbs=" + carbs +
+                ", protein=" + protein +
+                '}';
     }
 }

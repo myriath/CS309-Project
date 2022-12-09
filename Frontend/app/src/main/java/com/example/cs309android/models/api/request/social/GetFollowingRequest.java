@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.social;
 
-import static com.example.cs309android.util.Constants.GET_FOLLOWING_URL;
+import static com.example.cs309android.util.Constants.Urls.Social.GET_FOLLOWING_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;

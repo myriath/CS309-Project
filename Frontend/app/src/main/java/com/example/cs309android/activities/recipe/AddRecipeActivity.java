@@ -1,12 +1,12 @@
 package com.example.cs309android.activities.recipe;
 
-import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
-import static com.example.cs309android.util.Constants.INTENT_RECIPE_ADD;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_IMAGE_URI;
 import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
-import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
-import static com.example.cs309android.util.Constants.PARCEL_INTENT_CODE;
-import static com.example.cs309android.util.Constants.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Intents.INTENT_RECIPE_ADD;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_IMAGE_URI;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_INTENT_CODE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -89,16 +89,14 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
-                        SimpleFoodItem item = Objects.requireNonNull(data).getParcelableExtra(Constants.PARCEL_FOODITEM);
+                        SimpleFoodItem item = Objects.requireNonNull(data).getParcelableExtra(Constants.Parcels.PARCEL_FOODITEM);
                         // TODO: Get unit from db
                         addToIngredientList(ingredientList, item, "TODO");
                     }
                 }
         );
 
-        findViewById(R.id.backButton).setOnClickListener(view -> {
-            onBackPressed();
-        });
+        findViewById(R.id.backButton).setOnClickListener(view -> onBackPressed());
 
         findViewById(R.id.addIngredient).setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
@@ -106,9 +104,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             foodSearchLauncher.launch(intent);
         });
 
-        findViewById(R.id.addInstruction).setOnClickListener(view -> {
-            addToInstructionList(instructionList);
-        });
+        findViewById(R.id.addInstruction).setOnClickListener(view -> addToInstructionList(instructionList));
 
         ExtendedFloatingActionButton addRecipe = findViewById(R.id.add_recipe_button);
 
@@ -121,11 +117,9 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
         Intent launchIntent = getIntent();
         Recipe recipe = launchIntent.getParcelableExtra(PARCEL_RECIPE);
         if (recipe != null) {
-            new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request(response -> {
-                ((ImageView) findViewById(R.id.image_view)).setImageBitmap(response);
-            }, AddRecipeActivity.this);
+            new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID())).request((ImageView) findViewById(R.id.image_view), AddRecipeActivity.this);
 
-            Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeName)).getEditText()).setText(recipe.getRecipeName());
+            Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeName)).getEditText()).setText(recipe.getRname());
             Objects.requireNonNull(((TextInputLayout) findViewById(R.id.recipeDescription)).getEditText()).setText(recipe.getDescription());
 
             Ingredient[] ingredients = recipe.getIngredients();
@@ -148,9 +142,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             addRecipe.setText(getResources().getString(R.string.update_recipe));
         }
 
-        addRecipe.setOnClickListener(view1 -> {
-            save(ingredientList, instructionList, recipe != null ? recipe.getRecipeID() : ITEM_ID_NULL);
-        });
+        addRecipe.setOnClickListener(view1 -> save(ingredientList, instructionList, recipe != null ? recipe.getRecipeID() : ITEM_ID_NULL));
     }
 
     /**
@@ -174,21 +166,20 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
             ingredients[i] = ((IngredientEditView) ingredientList.getChildAt(i)).getIngredient();
         }
         Instruction[] instructions = new Instruction[instructionList.getChildCount()];
-        for (int i = 0; i < ingredients.length; i++) {
+        for (int i = 0; i < instructions.length; i++) {
             instructions[i] = ((InstructionEditView) instructionList.getChildAt(i)).getInstruction();
         }
 
         String token = ((GlobalClass) getApplicationContext()).getToken();
 
         Response.Listener<JSONObject> listener = response -> {
+            System.out.println(response);
             AddRecipeResponse recipeResponse = Util.objFromJson(response, AddRecipeResponse.class);
-
-            if (recipeResponse.getResult() == Constants.RESULT_RECIPE_CREATED) {
+            if (recipeResponse.getResult() == Constants.Results.RESULT_RECIPE_CREATED) {
                 if (image != null) {
                     new AddRecipeImageRequest(image, token, String.valueOf(recipeResponse.getRid())).request(response1 -> {
                         GenericResponse recipeResponse1 = Util.objFromJson(response, GenericResponse.class);
-
-                        if (recipeResponse1.getResult() != Constants.RESULT_OK) {
+                        if (recipeResponse1.getResult() != Constants.Results.RESULT_OK) {
                             Toaster.toastShort("Something went wrong", this);
                         } else {
                             Toaster.toastShort("Recipe Added", this);
@@ -199,7 +190,7 @@ public class AddRecipeActivity extends AppCompatActivity implements CallbackFrag
                     Toaster.toastShort("Recipe Added", this);
                     finish();
                 }
-            } else if (recipeResponse.getResult() == Constants.RESULT_ERROR_RID_TAKEN) {
+            } else if (recipeResponse.getResult() == Constants.Results.RESULT_ERROR_RID_TAKEN) {
                 Toaster.toastShort("That recipe is already taken", this);
             } else {
                 Toaster.toastShort("Something went wrong", this);
