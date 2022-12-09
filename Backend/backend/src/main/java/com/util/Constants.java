@@ -1,11 +1,19 @@
 package com.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Util constants class
  *
  * @author Mitch Hudson
  */
 public class Constants {
+    /**
+     * LOGGER for logging stuff
+     */
+    public static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
+
     /**
      * Private constructor (Util class)
      */
@@ -93,6 +101,55 @@ public class Constants {
      */
     public static final String STRIKE_SHOPPING_URL = SHOPPING_URL + "/strikeout";
 
+
+    // IMAGE PATHS
+    public static final String MEDIA_BASE = "/springMedia/";
+    /**
+     * Profile picture storage location
+     */
+    public static final String PFP_SOURCE = MEDIA_BASE + "pfps/";
+    /**
+     * Default pfp image path
+     */
+    public static final String DEFAULT_PFP = MEDIA_BASE + "defaultpfp.webp";
+    /**
+     * Banner image storage location
+     */
+    public static final String BANNER_SOURCE = MEDIA_BASE + "banner/";
+    /**
+     * Default banner image path
+     */
+    public static final String DEFAULT_BANNER = MEDIA_BASE + "defaultbanner.webp";
+    /**
+     * Recipe image storage location
+     */
+    public static final String RECIPE_SOURCE = MEDIA_BASE + "recipes/";
+    /**
+     * Regular image storage location
+     */
+    public static final String MEDIA_SOURCE = MEDIA_BASE + "images/";
+
+    /**
+     * User types interface
+     */
+    public interface UserType {
+        /**
+         * Regular user
+         */
+        int USER_REG = 0;
+        /**
+         * Moderator type
+         */
+        int USER_MOD = 1;
+        /**
+         * Administrator type
+         */
+        int USER_ADM = 2;
+        /**
+         * Developer type
+         */
+        int USER_DEV = 3;
+    }
 
     // TAGS
 

@@ -8,6 +8,7 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -55,11 +56,25 @@ public class NukeSSLCerts {
      */
     public static void nuke() {
         try {
+            HttpsURLConnection.setDefaultSSLSocketFactory(getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * Gets the ssl socket factory for the application with no trust paths
+     *
+     * @return Socket factory that accepts all ssl certs
+     */
+    public static SSLSocketFactory getSocketFactory() {
+        try {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
-        } catch (NoSuchAlgorithmException | KeyManagementException ignored) {
+            return sc.getSocketFactory();
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

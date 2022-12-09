@@ -18,12 +18,14 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
-        android:layout_toStartOf="@+id/remove"
+        android:layout_toStartOf="@+id/menu"
         android:layout_toEndOf="@id/stricken"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/remove"
+        android:id="@+id/menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"

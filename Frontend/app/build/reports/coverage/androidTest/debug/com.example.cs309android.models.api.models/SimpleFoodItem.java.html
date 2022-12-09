@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleFoodItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.api.models</a> &gt; <span class="el_source">SimpleFoodItem.java</span></div><h1>SimpleFoodItem.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.api.models;
+
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * Simple food item used for displaying and moving data in the app
+ *
+ * @author Mitch Hudson
+ */
+public class SimpleFoodItem implements Parcelable {
+    /**
+     * Parcelable required CREATOR object
+     */
+<span class="fc" id="L19">    public static final Creator&lt;SimpleFoodItem&gt; CREATOR = new Creator&lt;SimpleFoodItem&gt;() {</span>
+        @Override
+        public SimpleFoodItem createFromParcel(Parcel in) {
+<span class="nc" id="L22">            return new SimpleFoodItem(in);</span>
+        }
+
+        @Override
+        public SimpleFoodItem[] newArray(int size) {
+<span class="nc" id="L27">            return new SimpleFoodItem[size];</span>
+        }
+    };
+    /**
+     * FDC ID from the api
+     * -1 if it is a Custom food item
+     */
+    @Expose
+    private final int id;
+    /**
+     * True for custom, false for fdcId
+     */
+    @Expose
+    private final boolean isCustom;
+    /**
+     * Description / Item name from api
+     */
+    @Expose
+    private final String description;
+    /**
+     * Brand (if branded)
+     */
+    @Expose
+    private final String brand;
+    /**
+     * True if the item should appear with strikeout on the shopping list
+     */
+    @Expose
+    private boolean stricken;
+
+    /**
+     * Public constructor for new custom item
+     * DB id will be assigned by backend
+     *
+     * @param description description / title
+     * @param brand       Brand of the item (null for none)
+     */
+<span class="nc" id="L64">    public SimpleFoodItem(String description, String brand) {</span>
+<span class="nc" id="L65">        this.id = ITEM_ID_NULL;</span>
+<span class="nc" id="L66">        this.description = description;</span>
+<span class="nc" id="L67">        this.brand = brand;</span>
+<span class="nc" id="L68">        this.stricken = false;</span>
+<span class="nc" id="L69">        this.isCustom = true;</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Public constructor
+     *
+     * @param id          item id
+     * @param description description / title
+     * @param brand       Brand of the item (null for none)
+     * @param isCustom    True if the id is dbId, false if it is fdcId
+     */
+<span class="fc" id="L80">    public SimpleFoodItem(int id, String description, String brand, boolean isCustom) {</span>
+<span class="fc" id="L81">        this.id = id;</span>
+<span class="fc" id="L82">        this.description = description;</span>
+<span class="fc" id="L83">        this.brand = brand;</span>
+<span class="fc" id="L84">        this.stricken = false;</span>
+<span class="fc" id="L85">        this.isCustom = isCustom;</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Public constructor
+     * stricken is set
+     *
+     * @param id          item id
+     * @param description description / title
+     * @param brand       Brand of the item (null for none)
+     * @param stricken    true if the item should appear with strikeout on the shopping list
+     */
+<span class="nc" id="L97">    public SimpleFoodItem(int id, int dbId, String description, String brand, boolean stricken, boolean isCustom) {</span>
+<span class="nc" id="L98">        this.id = id;</span>
+<span class="nc" id="L99">        this.description = description;</span>
+<span class="nc" id="L100">        this.brand = brand;</span>
+<span class="nc" id="L101">        this.stricken = stricken;</span>
+<span class="nc" id="L102">        this.isCustom = isCustom;</span>
+<span class="nc" id="L103">    }</span>
+
+    /**
+     * Constructor from parcel
+     *
+     * @param in Parcel to unpack
+     */
+<span class="nc" id="L110">    protected SimpleFoodItem(Parcel in) {</span>
+<span class="nc" id="L111">        id = in.readInt();</span>
+<span class="nc" id="L112">        description = in.readString();</span>
+<span class="nc" id="L113">        brand = in.readString();</span>
+<span class="nc" id="L114">        stricken = in.readBoolean();</span>
+<span class="nc" id="L115">        isCustom = in.readBoolean();</span>
+<span class="nc" id="L116">    }</span>
+
+    /**
+     * Getter for the id
+     *
+     * @return item id
+     */
+    public int getId() {
+<span class="fc" id="L124">        return id;</span>
+    }
+
+    /**
+     * Getter for the description
+     *
+     * @return item description / title
+     */
+    public String getDescription() {
+<span class="fc" id="L133">        return description;</span>
+    }
+
+    /**
+     * Gets the description capped at a given length
+     * If the description is longer than length it will be shortened to that and have ellipses added.
+     *
+     * @param length Max length for the description.
+     * @return Capped length string
+     */
+    public String getCappedDescription(int length) {
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (length &lt; 3) return description;</span>
+
+<span class="nc" id="L146">        int descriptionLength = description.length();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        if (descriptionLength &gt; length) {</span>
+<span class="nc" id="L148">            return description.substring(0, length - 2) + &quot;...&quot;;</span>
+        }
+<span class="nc" id="L150">        return description;</span>
+    }
+
+    /**
+     * Getter for the brand
+     *
+     * @return item brand / null
+     */
+    public String getBrand() {
+<span class="nc" id="L159">        return brand;</span>
+    }
+
+    /**
+     * Getter for the stricken boolean
+     *
+     * @return true if this item should be rendered with strikeout
+     */
+    public boolean isStricken() {
+<span class="fc" id="L168">        return stricken;</span>
+    }
+
+    /**
+     * Setter for the stricken boolean
+     *
+     * @param stricken true if this item should be rendered with strikeout
+     */
+    public void setStricken(boolean stricken) {
+<span class="nc" id="L177">        this.stricken = stricken;</span>
+<span class="nc" id="L178">    }</span>
+
+    /**
+     * Gets the isCustom bool
+     *
+     * @return True if the item uses dbIds, false if it uses fdcId
+     */
+    public boolean isCustom() {
+<span class="fc" id="L186">        return isCustom;</span>
+    }
+
+    /**
+     * Parcelable required method
+     *
+     * @return 0
+     */
+    @Override
+    public int describeContents() {
+<span class="nc" id="L196">        return 0;</span>
+    }
+
+    /**
+     * Adds this object to a parcel
+     *
+     * @param parcel parcel to add this object to
+     * @param i      flags
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+<span class="nc" id="L207">        parcel.writeInt(id);</span>
+<span class="nc" id="L208">        parcel.writeString(description);</span>
+<span class="nc" id="L209">        parcel.writeString(brand);</span>
+<span class="nc" id="L210">        parcel.writeBoolean(stricken);</span>
+<span class="nc" id="L211">        parcel.writeBoolean(isCustom);</span>
+<span class="nc" id="L212">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

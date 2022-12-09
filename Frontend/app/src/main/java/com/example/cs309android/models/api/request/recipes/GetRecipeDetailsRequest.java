@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.GET_RECIPES_URL;
+import static com.example.cs309android.util.Constants.Urls.Recipes.GET_BY_RID_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.request.abstraction.GetRequest;
@@ -59,7 +59,7 @@ public class GetRecipeDetailsRequest extends GetRequest {
      */
     @Override
     public String getURL() {
-        return new ParameterizedRequestURL(GET_RECIPES_URL)
+        return new ParameterizedRequestURL(GET_BY_RID_URL)
                 .addPathVar(rid)
                 .toString();
     }

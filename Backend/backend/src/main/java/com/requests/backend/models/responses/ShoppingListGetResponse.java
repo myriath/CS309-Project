@@ -4,10 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.requests.backend.models.ShoppingList;
 
 public class ShoppingListGetResponse {
-
     @Expose
     private int result;
-
     @Expose
     private ShoppingList[] shoppingList;
 

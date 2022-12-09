@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipePageAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.adapters</a> &gt; <span class="el_source">RecipePageAdapter.java</span></div><h1>RecipePageAdapter.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.adapters;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs309android.R;
+import com.example.cs309android.models.api.models.Recipe;
+
+/**
+ * Adapter to use with the TabLayout for the recipe page
+ *
+ * @author Travis Massner
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L21">public class RecipePageAdapter extends RecyclerView.Adapter&lt;RecipePageAdapter.ViewHolder&gt; {</span>
+    /**
+     * Creates a view holder for the TabLayout
+     *
+     * @param parent   Parent of the ViewHolder
+     * @param viewType unused
+     * @return ViewHolder made with the parent
+     */
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+<span class="nc" id="L32">        return new ViewHolder(parent);</span>
+    }
+
+    /**
+     * Binds a view holder to an item in the list
+     *
+     * @param holder   ViewHolder to bind
+     * @param position Position of the item to bind in the list
+     */
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+<span class="nc" id="L43">        holder.bind(position);</span>
+<span class="nc" id="L44">    }</span>
+
+    /**
+     * Getter for the item count
+     *
+     * @return Number of pages in the pager
+     */
+    @Override
+    public int getItemCount() {
+<span class="nc" id="L53">        return 3;</span>
+    }
+
+    /**
+     * ViewHolder class used to display the card view
+     *
+     * @author Mitch Hudson
+     * @author Travis Massner
+     */
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * Public constructor
+         *
+         * @param parent Parent of the holder
+         */
+        public ViewHolder(ViewGroup parent) {
+<span class="nc" id="L69">            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.pager_list, parent, false));</span>
+<span class="nc" id="L70">        }</span>
+
+        /**
+         * Sets up the different tabs
+         *
+         * @param position Current tab number
+         */
+        public void bind(int position) {
+            // Array Lists for the results adapter should come from an api call
+<span class="nc" id="L79">            ListView results = itemView.findViewById(R.id.search_results);</span>
+<span class="nc" id="L80">            SearchView searchView = itemView.findViewById(R.id.search_bar);</span>
+<span class="nc bnc" id="L81" title="All 3 branches missed.">            switch (position) {</span>
+                case 0:
+                    // TODO: Get popular recipes
+//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+<span class="nc" id="L85">                    break;</span>
+                case 1:
+                    // TODO: Get new recipes
+//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+<span class="nc" id="L89">                    break;</span>
+                default:
+<span class="nc" id="L91">                    searchView.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L92">                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {</span>
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            // TODO: search
+//                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+<span class="nc" id="L97">                            return true;</span>
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+<span class="nc" id="L102">                            return false;</span>
+                        }
+                    });
+                    break;
+            }
+<span class="nc" id="L107">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

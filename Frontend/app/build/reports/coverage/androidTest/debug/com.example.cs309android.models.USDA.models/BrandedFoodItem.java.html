@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrandedFoodItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">BrandedFoodItem.java</span></div><h1>BrandedFoodItem.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Branded Food Item model
+ *
+ * @author Mitch Hudson
+ */
+public class BrandedFoodItem {
+    /**
+     * FDC id
+     */
+    @Expose
+    private final int fdcId;
+    /**
+     * Date made available
+     */
+    @Expose
+    private final String availableDate;
+    /**
+     * Brand name that owns this item
+     */
+    @Expose
+    private final String brandOwner;
+    /**
+     * Data source
+     */
+    @Expose
+    private final String dataSource;
+    /**
+     * Data type
+     */
+    @Expose
+    private final String dataType;
+    /**
+     * Description / name
+     */
+    @Expose
+    private final String description;
+    /**
+     * Food class
+     */
+    @Expose
+    private final String foodClass;
+    /**
+     * Unknown
+     */
+    @Expose
+    private final String gtinUpc;
+    /**
+     * Household serving size full text
+     */
+    @Expose
+    private final String householdServingFullText;
+    /**
+     * Ingredients label
+     */
+    @Expose
+    private final String ingredients;
+    /**
+     * Date last modified
+     */
+    @Expose
+    private final String modifiedDate;
+    /**
+     * Publication date
+     */
+    @Expose
+    private final String publicationDate;
+    /**
+     * Serving size
+     */
+    @Expose
+    private final double servingSize;
+    /**
+     * Serving size unit
+     */
+    @Expose
+    private final String servingSizeUnit;
+    /**
+     * Preparation state code
+     */
+    @Expose
+    private final String preparationStateCode;
+    /**
+     * Food category
+     */
+    @Expose
+    private final String brandedFoodCategory;
+    /**
+     * Trade channel
+     */
+    @Expose
+    private final String[] tradeChannel;
+    /**
+     * GPC class code
+     */
+    @Expose
+    private final int gpcClassCode;
+    /**
+     * Array of food nutrients
+     */
+    @Expose
+    private final FoodNutrient[] foodNutrients;
+    /**
+     * Food update log
+     */
+    @Expose
+    private final FoodUpdateLog[] foodUpdateLog;
+    /**
+     * Label nutrients
+     */
+    @Expose
+    private final LabelNutrients labelNutrients;
+
+    /**
+     * Public constructor
+     *
+     * @param fdcId                    fdc id
+     * @param availableDate            date made available
+     * @param brandOwner               brand that owns this item
+     * @param dataSource               data source
+     * @param dataType                 data type
+     * @param description              description / name
+     * @param foodClass                food class
+     * @param gtinUpc                  unknown
+     * @param householdServingFullText household serving size
+     * @param ingredients              ingredient list
+     * @param modifiedDate             date last modified
+     * @param publicationDate          publication date
+     * @param servingSize              serving size
+     * @param servingSizeUnit          serving size unit
+     * @param preparationStateCode     preparation state code
+     * @param brandedFoodCategory      food category
+     * @param tradeChannel             trade channel
+     * @param gpcClassCode             GPC class code
+     * @param foodNutrients            food nutrients
+     * @param foodUpdateLog            food update log
+     * @param labelNutrients           label nutrients
+     */
+<span class="nc" id="L142">    public BrandedFoodItem(int fdcId, String availableDate, String brandOwner, String dataSource, String dataType, String description, String foodClass, String gtinUpc, String householdServingFullText, String ingredients, String modifiedDate, String publicationDate, double servingSize, String servingSizeUnit, String preparationStateCode, String brandedFoodCategory, String[] tradeChannel, int gpcClassCode, FoodNutrient[] foodNutrients, FoodUpdateLog[] foodUpdateLog, LabelNutrients labelNutrients) {</span>
+<span class="nc" id="L143">        this.fdcId = fdcId;</span>
+<span class="nc" id="L144">        this.availableDate = availableDate;</span>
+<span class="nc" id="L145">        this.brandOwner = brandOwner;</span>
+<span class="nc" id="L146">        this.dataSource = dataSource;</span>
+<span class="nc" id="L147">        this.dataType = dataType;</span>
+<span class="nc" id="L148">        this.description = description;</span>
+<span class="nc" id="L149">        this.foodClass = foodClass;</span>
+<span class="nc" id="L150">        this.gtinUpc = gtinUpc;</span>
+<span class="nc" id="L151">        this.householdServingFullText = householdServingFullText;</span>
+<span class="nc" id="L152">        this.ingredients = ingredients;</span>
+<span class="nc" id="L153">        this.modifiedDate = modifiedDate;</span>
+<span class="nc" id="L154">        this.publicationDate = publicationDate;</span>
+<span class="nc" id="L155">        this.servingSize = servingSize;</span>
+<span class="nc" id="L156">        this.servingSizeUnit = servingSizeUnit;</span>
+<span class="nc" id="L157">        this.preparationStateCode = preparationStateCode;</span>
+<span class="nc" id="L158">        this.brandedFoodCategory = brandedFoodCategory;</span>
+<span class="nc" id="L159">        this.tradeChannel = tradeChannel;</span>
+<span class="nc" id="L160">        this.gpcClassCode = gpcClassCode;</span>
+<span class="nc" id="L161">        this.foodNutrients = foodNutrients;</span>
+<span class="nc" id="L162">        this.foodUpdateLog = foodUpdateLog;</span>
+<span class="nc" id="L163">        this.labelNutrients = labelNutrients;</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
+     * Getter for the fdc id
+     *
+     * @return fdc id
+     */
+    public int getFdcId() {
+<span class="nc" id="L172">        return fdcId;</span>
+    }
+
+    /**
+     * Getter for the availability date
+     *
+     * @return availability date
+     */
+    public String getAvailableDate() {
+<span class="nc" id="L181">        return availableDate;</span>
+    }
+
+    /**
+     * Getter for the brand owner
+     *
+     * @return brand owner
+     */
+    public String getBrandOwner() {
+<span class="nc" id="L190">        return brandOwner;</span>
+    }
+
+    /**
+     * Getter for the data source
+     *
+     * @return data source
+     */
+    public String getDataSource() {
+<span class="nc" id="L199">        return dataSource;</span>
+    }
+
+    /**
+     * Getter for the data type
+     *
+     * @return data type
+     */
+    public String getDataType() {
+<span class="nc" id="L208">        return dataType;</span>
+    }
+
+    /**
+     * Getter for the description
+     *
+     * @return description / name
+     */
+    public String getDescription() {
+<span class="nc" id="L217">        return description;</span>
+    }
+
+    /**
+     * Getter for the food class
+     *
+     * @return food class
+     */
+    public String getFoodClass() {
+<span class="nc" id="L226">        return foodClass;</span>
+    }
+
+    /**
+     * Getter for the gtin upc?
+     *
+     * @return upc?
+     */
+    public String getGtinUpc() {
+<span class="nc" id="L235">        return gtinUpc;</span>
+    }
+
+    /**
+     * Getter for the household serving size
+     *
+     * @return household serving size
+     */
+    public String getHouseholdServingFullText() {
+<span class="nc" id="L244">        return householdServingFullText;</span>
+    }
+
+    /**
+     * Getter for the ingredients
+     *
+     * @return ingredients
+     */
+    public String getIngredients() {
+<span class="nc" id="L253">        return ingredients;</span>
+    }
+
+    /**
+     * Getter for the date last modified
+     *
+     * @return date last modified
+     */
+    public String getModifiedDate() {
+<span class="nc" id="L262">        return modifiedDate;</span>
+    }
+
+    /**
+     * Getter for the publication date
+     *
+     * @return publication date
+     */
+    public String getPublicationDate() {
+<span class="nc" id="L271">        return publicationDate;</span>
+    }
+
+    /**
+     * Getter for the serving size
+     *
+     * @return serving size
+     */
+    public double getServingSize() {
+<span class="nc" id="L280">        return servingSize;</span>
+    }
+
+    /**
+     * Getter for the serving size unit
+     *
+     * @return serving size unit
+     */
+    public String getServingSizeUnit() {
+<span class="nc" id="L289">        return servingSizeUnit;</span>
+    }
+
+    /**
+     * Getter for the preparation state code
+     *
+     * @return preparation state code
+     */
+    public String getPreparationStateCode() {
+<span class="nc" id="L298">        return preparationStateCode;</span>
+    }
+
+    /**
+     * Getter for the branded food category
+     *
+     * @return food category
+     */
+    public String getBrandedFoodCategory() {
+<span class="nc" id="L307">        return brandedFoodCategory;</span>
+    }
+
+    /**
+     * Getter for the trade channels
+     *
+     * @return trade channels
+     */
+    public String[] getTradeChannel() {
+<span class="nc" id="L316">        return tradeChannel;</span>
+    }
+
+    /**
+     * Getter for the GPC class code
+     *
+     * @return GPC class code
+     */
+    public int getGpcClassCode() {
+<span class="nc" id="L325">        return gpcClassCode;</span>
+    }
+
+    /**
+     * Getter for the food nutrients
+     *
+     * @return nutrients
+     */
+    public FoodNutrient[] getFoodNutrients() {
+<span class="nc" id="L334">        return foodNutrients;</span>
+    }
+
+    /**
+     * Getter for the food update log
+     *
+     * @return update log
+     */
+    public FoodUpdateLog[] getFoodUpdateLog() {
+<span class="nc" id="L343">        return foodUpdateLog;</span>
+    }
+
+    /**
+     * Getter for the label nutrients
+     *
+     * @return label nutrients
+     */
+    public LabelNutrients getLabelNutrients() {
+<span class="nc" id="L352">        return labelNutrients;</span>
+    }
+
+    /**
+     * Label nutrients representing the nutrients reported on a food item's nutrition label
+     *
+     * @author Mitch Hudson
+     */
+    public static class LabelNutrients {
+        /**
+         * Fat nutrient
+         */
+        @Expose
+        private final Nutrient fat;
+        /**
+         * Saturated fat nutrient
+         */
+        @Expose
+        private final Nutrient saturatedFat;
+        /**
+         * Trans fat nutrient
+         */
+        @Expose
+        private final Nutrient transFat;
+        /**
+         * Cholesterol nutrient
+         */
+        @Expose
+        private final Nutrient cholesterol;
+        /**
+         * Sodium nutrient
+         */
+        @Expose
+        private final Nutrient sodium;
+        /**
+         * Carbohydrates nutrient
+         */
+        @Expose
+        private final Nutrient carbohydrates;
+        /**
+         * Fiber nutrient
+         */
+        @Expose
+        private final Nutrient fiber;
+        /**
+         * Sugars nutrient
+         */
+        @Expose
+        private final Nutrient sugars;
+        /**
+         * Protein nutrient
+         */
+        @Expose
+        private final Nutrient protein;
+        /**
+         * Calcium nutrient
+         */
+        @Expose
+        private final Nutrient calcium;
+        /**
+         * Iron nutrient
+         */
+        @Expose
+        private final Nutrient iron;
+        /**
+         * Potassium nutrient
+         */
+        @Expose
+        private final Nutrient potassium;
+        /**
+         * Calories nutrient
+         */
+        @Expose
+        private final Nutrient calories;
+
+        /**
+         * Public constructor
+         *
+         * @param fat           fat
+         * @param saturatedFat  saturated fat
+         * @param transFat      trans fat
+         * @param cholesterol   cholesterol
+         * @param sodium        sodium
+         * @param carbohydrates carbohydrates
+         * @param fiber         fiber
+         * @param sugars        sugars
+         * @param protein       protein
+         * @param calcium       calcium
+         * @param iron          iron
+         * @param potassium     potassium
+         * @param calories      calories
+         */
+<span class="nc" id="L444">        public LabelNutrients(Nutrient fat, Nutrient saturatedFat, Nutrient transFat, Nutrient cholesterol, Nutrient sodium, Nutrient carbohydrates, Nutrient fiber, Nutrient sugars, Nutrient protein, Nutrient calcium, Nutrient iron, Nutrient potassium, Nutrient calories) {</span>
+<span class="nc" id="L445">            this.fat = fat;</span>
+<span class="nc" id="L446">            this.saturatedFat = saturatedFat;</span>
+<span class="nc" id="L447">            this.transFat = transFat;</span>
+<span class="nc" id="L448">            this.cholesterol = cholesterol;</span>
+<span class="nc" id="L449">            this.sodium = sodium;</span>
+<span class="nc" id="L450">            this.carbohydrates = carbohydrates;</span>
+<span class="nc" id="L451">            this.fiber = fiber;</span>
+<span class="nc" id="L452">            this.sugars = sugars;</span>
+<span class="nc" id="L453">            this.protein = protein;</span>
+<span class="nc" id="L454">            this.calcium = calcium;</span>
+<span class="nc" id="L455">            this.iron = iron;</span>
+<span class="nc" id="L456">            this.potassium = potassium;</span>
+<span class="nc" id="L457">            this.calories = calories;</span>
+<span class="nc" id="L458">        }</span>
+
+        /**
+         * Getter for the fat
+         *
+         * @return fat
+         */
+        public Nutrient getFat() {
+<span class="nc" id="L466">            return fat;</span>
+        }
+
+        /**
+         * Getter for the saturated fat
+         *
+         * @return saturated fat
+         */
+        public Nutrient getSaturatedFat() {
+<span class="nc" id="L475">            return saturatedFat;</span>
+        }
+
+        /**
+         * Getter for the trans fat
+         *
+         * @return trans fat
+         */
+        public Nutrient getTransFat() {
+<span class="nc" id="L484">            return transFat;</span>
+        }
+
+        /**
+         * Getter for the cholesterol
+         *
+         * @return cholesterol
+         */
+        public Nutrient getCholesterol() {
+<span class="nc" id="L493">            return cholesterol;</span>
+        }
+
+        /**
+         * Getter for the sodium
+         *
+         * @return sodium
+         */
+        public Nutrient getSodium() {
+<span class="nc" id="L502">            return sodium;</span>
+        }
+
+        /**
+         * Getter for the carbohydrates
+         *
+         * @return carbohydrates
+         */
+        public Nutrient getCarbohydrates() {
+<span class="nc" id="L511">            return carbohydrates;</span>
+        }
+
+        /**
+         * Getter for the fiber
+         *
+         * @return fiber
+         */
+        public Nutrient getFiber() {
+<span class="nc" id="L520">            return fiber;</span>
+        }
+
+        /**
+         * Getter for the sugars
+         *
+         * @return
+         */
+        public Nutrient getSugars() {
+<span class="nc" id="L529">            return sugars;</span>
+        }
+
+        /**
+         * Getter for the protein
+         *
+         * @return protein
+         */
+        public Nutrient getProtein() {
+<span class="nc" id="L538">            return protein;</span>
+        }
+
+        /**
+         * Getter for the calcium
+         *
+         * @return calcium
+         */
+        public Nutrient getCalcium() {
+<span class="nc" id="L547">            return calcium;</span>
+        }
+
+        /**
+         * Getter for the iron
+         *
+         * @return iron
+         */
+        public Nutrient getIron() {
+<span class="nc" id="L556">            return iron;</span>
+        }
+
+        /**
+         * Getter for the potassium
+         *
+         * @return potassium
+         */
+        public Nutrient getPotassium() {
+<span class="nc" id="L565">            return potassium;</span>
+        }
+
+        /**
+         * Getter for the calories
+         *
+         * @return calories
+         */
+        public Nutrient getCalories() {
+<span class="nc" id="L574">            return calories;</span>
+        }
+
+        /**
+         * Nutrient class representing the data for each nutrient
+         *
+         * @author Mitch Hudson
+         */
+        public static class Nutrient {
+            /**
+             * Value of the nutrient
+             */
+            @Expose
+            private final float value;
+
+            /**
+             * Public constructor
+             *
+             * @param value value of the nutrient
+             */
+<span class="nc" id="L594">            public Nutrient(float value) {</span>
+<span class="nc" id="L595">                this.value = value;</span>
+<span class="nc" id="L596">            }</span>
+
+            /**
+             * Getter for the value
+             *
+             * @return value
+             */
+            public Float getValue() {
+<span class="nc" id="L604">                return value;</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

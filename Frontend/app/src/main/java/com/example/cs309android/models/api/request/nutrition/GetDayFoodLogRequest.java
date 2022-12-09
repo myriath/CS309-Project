@@ -57,7 +57,7 @@ public class GetDayFoodLogRequest extends GetRequest {
      * @return URL with token and date
      */
     public String getURL() {
-        return new ParameterizedRequestURL(Constants.GET_FOOD_LOG_BY_DAY_URL)
+        return new ParameterizedRequestURL(Constants.Urls.FoodLog.GET_FOOD_LOG_BY_DAY_URL)
                 .addPathVar(token)
                 .addParam("date", date)
                 .toString();

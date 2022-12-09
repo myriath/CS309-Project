@@ -4,13 +4,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs309android.R;
+import com.example.cs309android.models.api.models.Ingredient;
+import com.example.cs309android.models.api.models.Instruction;
 import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.request.recipes.GetRecipesTypeRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipeListResponse;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import org.json.JSONException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Adapter to use with the TabLayout for the recipe page
@@ -19,6 +29,9 @@ import com.example.cs309android.models.api.models.Recipe;
  * @author Mitch Hudson
  */
 public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.ViewHolder> {
+
+    private static ArrayList<Recipe> recipes = new ArrayList<>();
+
     /**
      * Creates a view holder for the TabLayout
      *
@@ -78,23 +91,49 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
             // Array Lists for the results adapter should come from an api call
             ListView results = itemView.findViewById(R.id.search_results);
             SearchView searchView = itemView.findViewById(R.id.search_bar);
+            TextView empty = itemView.findViewById(R.id.emptyText);
+
             switch (position) {
                 case 0:
-                    // TODO: Get popular recipes
-//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+                    recipes = getRecipesByType("popular", "");
+                    if(recipes.isEmpty()) {
+                        empty.setVisibility(View.VISIBLE);
+                        Toaster.toastShort("Error getting popular recipes", itemView.getContext());
+                        return;
+                    }
+                    else {
+                        empty.setVisibility(View.GONE);
+                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), recipes));
+                    }
                     break;
                 case 1:
-                    // TODO: Get new recipes
-//                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
+                    recipes = getRecipesByType("new", "");
+                    if(recipes.isEmpty()) {
+                        empty.setVisibility(View.VISIBLE);
+                        Toaster.toastShort("Error getting new recipes", itemView.getContext());
+                        return;
+                    }
+                    else {
+                        empty.setVisibility(View.GONE);
+                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), recipes));
+                    }
                     break;
                 default:
                     searchView.setVisibility(View.VISIBLE);
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextSubmit(String query) {
-                            // TODO: search
-//                        results.setAdapter(new RecipePageListAdapter(itemView.getContext(), ));
-                            return true;
+                            recipes = getRecipesByType("search", query);
+                            if(recipes.isEmpty()) {
+                                empty.setVisibility(View.VISIBLE);
+                                Toaster.toastShort("Error searching for recipes", itemView.getContext());
+                                return false;
+                            }
+                            else {
+                                empty.setVisibility(View.GONE);
+                                results.setAdapter(new RecipePageListAdapter(itemView.getContext(), recipes));
+                                return true;
+                            }
                         }
 
                         @Override
@@ -105,5 +144,34 @@ public class RecipePageAdapter extends RecyclerView.Adapter<RecipePageAdapter.Vi
                     break;
             }
         }
+
+        /**
+         * Get the list of recipes from the server by type of recipes
+         * @param recipeType Type of recipes to get
+         */
+        private ArrayList<Recipe> getRecipesByType(String recipeType, String search) {
+            ArrayList<Recipe> recipes = new ArrayList<>();
+            new GetRecipesTypeRequest(recipeType, search).request(response -> {
+                try {
+                    System.out.println(response.toString(3));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                GetRecipeListResponse recipeResponse = Util.objFromJson(response, GetRecipeListResponse.class);
+
+                if (recipeResponse == null) {
+                    Toaster.toastShort("Error getting recipes", itemView.getContext());
+                    return;
+                }
+
+                Recipe[] newItems = recipeResponse.getRecipes();
+
+                recipes.addAll(Arrays.asList(newItems));
+            }, itemView.getContext());
+
+            return recipes;
+        }
     }
+
+
 }

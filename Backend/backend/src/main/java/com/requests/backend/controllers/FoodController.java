@@ -1,7 +1,5 @@
 package com.requests.backend.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //
@@ -10,15 +8,21 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * This class is responsible for handling all requests related to custom foods.
+ * @author Logan
+ */
 @RestController
 @RequestMapping(path="/usda")
 class FoodController {
-    @Autowired
-    private ObjectMapper objectMapper;
 
-    // Finds top 8 search results
+    /**
+     * This method is used to get the food information from the USDA database.
+     * @param foodName Name of the food to find
+     * @return A list of foods that match the query.
+     */
     @GetMapping("/usdaFoodSearch/{foodName}")
-    public String usdaFoodSearch(@PathVariable String foodName) throws JsonProcessingException {
+    public @ResponseBody String usdaFoodSearch(@PathVariable String foodName) {
         String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + foodName + "&pageSize=6&requireAllWords=true&api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers
@@ -37,8 +41,13 @@ class FoodController {
         return res;
     }
 
+    /** Get information about a specific food item from the USDA database using the food's ID.
+     * @param fdcId FDC id of the item to get
+     * @return A JSON string containing the food's information.
+     * @throws JsonProcessingException
+     */
     @GetMapping("/foodByID")
-    public String foodByID(@RequestParam String fdcId) throws JsonProcessingException {
+    public @ResponseBody String foodByID(@RequestParam String fdcId) throws JsonProcessingException {
         String uri = "https://api.nal.usda.gov/fdc/v1/food/" + fdcId + "?api_key=CK8FPcJEM6vXFDHGk80hTpWQg9CcWo7z4X7yCavt";
 
         // Initialize a new rest template and a new set of headers

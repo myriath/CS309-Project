@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.recipes;
 
-import static com.example.cs309android.util.Constants.ADD_RECIPES_URL;
+import static com.example.cs309android.util.Constants.Urls.Recipes.ADD_RECIPES_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.Ingredient;
@@ -48,6 +48,7 @@ public class AddRecipeRequest extends PostRequest {
         super(new ParameterizedRequestURL(ADD_RECIPES_URL)
                 .addPathVar(token)
                 .toString());
+        System.out.println(ADD_RECIPES_URL);
         this.recipeName = recipeName;
         this.description = description;
         this.ingredients = ingredients;

@@ -10,31 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ShoppingListRepository extends JpaRepository<ShoppingList, Integer> {
-
-    @Query(value="SELECT * FROM shopping_list WHERE username = :username", nativeQuery = true)
-    ShoppingList[] queryGetShoppingList(@Param("username") String username);
+    @Modifying
+    @Query(
+            value =
+                    "UPDATE shopping_list SET stricken = NOT stricken WHERE shopping_lists_username = :username AND food_id = :id AND food_custom = :isCustom",
+            nativeQuery = true)
+    @Transactional
+    void queryShoppingChangeStricken(@Param("id") int id, @Param("isCustom") boolean isCustom, @Param("username") String username);
 
     @Modifying
     @Query(
             value =
-                    "INSERT INTO shopping_list (fdc_id, username, description, stricken) VALUES (:fdc_id, :username, :description, :stricken)",
+                    "DELETE FROM shopping_list WHERE shopping_lists_username = :username AND food_id = :id AND food_custom = :isCustom",
             nativeQuery = true)
     @Transactional
-    void queryCreateShoppingListEntry(@Param("username") String username, @Param("description") String description, @Param("fdc_id") Integer fdcId, @Param("stricken") Boolean stricken);
-
-    @Modifying
-    @Query(
-            value =
-                    "UPDATE shopping_list SET stricken = NOT stricken WHERE username = :username AND description = :description",
-            nativeQuery = true)
-    @Transactional
-    void queryShoppingChangeStricken(@Param("username") String username, @Param("description") String description);
-
-    @Modifying
-    @Query(
-            value =
-                    "DELETE FROM shopping_list WHERE username = :username AND description = :description",
-            nativeQuery = true)
-    @Transactional
-    void queryDeleteListItem(@Param("username") String username, @Param("description") String description);
+    void queryDeleteListItem(@Param("id") int id, @Param("isCustom") boolean isCustom, @Param("username") String username);
 }

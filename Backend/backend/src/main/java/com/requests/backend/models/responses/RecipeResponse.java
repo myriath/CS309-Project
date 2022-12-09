@@ -1,25 +1,17 @@
 package com.requests.backend.models.responses;
 
+import com.google.gson.annotations.Expose;
 import com.requests.backend.models.Recipe;
 
-public class RecipeResponse {
-    private int result;
+public class RecipeResponse extends ResultResponse {
+    @Expose
+    private Recipe[] recipes;
 
-    private Recipe recipe;
-
-    public int getResult() {
-        return result;
+    public Recipe[] getRecipes() {
+        return recipes;
     }
 
-    public void setResult(int result) {
-        this.result = result;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setRecipes(Recipe[] recipes) {
+        this.recipes = recipes;
     }
 }

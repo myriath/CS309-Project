@@ -1,7 +1,7 @@
 package com.example.cs309android.models.adapters;
 
-import static com.example.cs309android.util.Constants.CALLBACK_FOOD_DETAIL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_FOOD_DETAIL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomNutritionItemView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.views</a> &gt; <span class="el_source">CustomNutritionItemView.java</span></div><h1>CustomNutritionItemView.java</h1><pre class="source lang-java linenums">package com.example.cs309android.views;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.cs309android.R;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
+
+/**
+ * Custom view inflates the custom_nutrition_item layout.
+ * For custom nutrition values in CustomFoodActivity
+ *
+ * @author Mitch Hudson
+ */
+public class CustomNutritionItemView extends FrameLayout {
+    private TextInputLayout input;
+
+    public CustomNutritionItemView(@NonNull Context context) {
+<span class="nc" id="L28">        super(context);</span>
+<span class="nc" id="L29">    }</span>
+
+    public CustomNutritionItemView(@NonNull Context context, @Nullable AttributeSet attrs) {
+<span class="nc" id="L32">        super(context, attrs);</span>
+<span class="nc" id="L33">        TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomNutritionItemView, 0, 0);</span>
+        try {
+<span class="nc" id="L35">            initView(</span>
+<span class="nc" id="L36">                    array.getString(R.styleable.CustomNutritionItemView_name),</span>
+<span class="nc" id="L37">                    array.getString(R.styleable.CustomNutritionItemView_hint));</span>
+        } finally {
+<span class="nc" id="L39">            array.recycle();</span>
+        }
+<span class="nc" id="L41">    }</span>
+
+    public CustomNutritionItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+<span class="nc" id="L44">        super(context, attrs, defStyleAttr);</span>
+<span class="nc" id="L45">        TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomNutritionItemView, defStyleAttr, 0);</span>
+        try {
+<span class="nc" id="L47">            initView(</span>
+<span class="nc" id="L48">                    array.getString(R.styleable.CustomNutritionItemView_name),</span>
+<span class="nc" id="L49">                    array.getString(R.styleable.CustomNutritionItemView_hint));</span>
+        } finally {
+<span class="nc" id="L51">            array.recycle();</span>
+        }
+<span class="nc" id="L53">    }</span>
+
+    public CustomNutritionItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+<span class="nc" id="L56">        super(context, attrs, defStyleAttr, defStyleRes);</span>
+<span class="nc" id="L57">        TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomNutritionItemView, defStyleAttr, defStyleRes);</span>
+        try {
+<span class="nc" id="L59">            initView(</span>
+<span class="nc" id="L60">                    array.getString(R.styleable.CustomNutritionItemView_name),</span>
+<span class="nc" id="L61">                    array.getString(R.styleable.CustomNutritionItemView_hint));</span>
+        } finally {
+<span class="nc" id="L63">            array.recycle();</span>
+        }
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Inflates the custom_nutrition_item layout under this view
+     *
+     * @param name Name of the nutrient
+     * @param hint Hint for the editable text view
+     */
+    public void initView(String name, String hint) {
+<span class="nc" id="L74">        View view = inflate(getContext(), R.layout.custom_nutrition_item, this);</span>
+<span class="nc" id="L75">        ((TextView) view.findViewById(R.id.name)).setText(name);</span>
+<span class="nc" id="L76">        input = view.findViewById(R.id.valueField);</span>
+<span class="nc" id="L77">        input.setHint(hint);</span>
+<span class="nc" id="L78">    }</span>
+
+    /**
+     * Gets the value of the custom nutrient
+     *
+     * @return value of the nutrient
+     */
+    public float getValue() {
+<span class="nc" id="L86">        return Float.parseFloat(Objects.requireNonNull(input.getEditText()).getText().toString());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

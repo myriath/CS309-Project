@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodPortion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.models.USDA.models</a> &gt; <span class="el_source">FoodPortion.java</span></div><h1>FoodPortion.java</h1><pre class="source lang-java linenums">package com.example.cs309android.models.USDA.models;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * FDC Food Portion model
+ *
+ * @author Mitch Hudson
+ */
+public class FoodPortion {
+    /**
+     * Portion id
+     */
+    @Expose
+    private final int id;
+    /**
+     * Portion amount
+     */
+    @Expose
+    private final float amount;
+    /**
+     * Data points
+     */
+    @Expose
+    private final int dataPoints;
+    /**
+     * Weight in grams
+     */
+    @Expose
+    private final float gramWeight;
+    /**
+     * Minimum year acquired
+     */
+    @Expose
+    private final int minYearAcquired;
+    /**
+     * Modifier
+     */
+    @Expose
+    private final String modifier;
+    /**
+     * Portion description
+     */
+    @Expose
+    private final String portionDescription;
+    /**
+     * Sequence number
+     */
+    @Expose
+    private final int sequenceNumber;
+    /**
+     * Measure unit
+     */
+    @Expose
+    private final MeasureUnit measureUnit;
+
+    /**
+     * Public constructor
+     *
+     * @param id                 portion id
+     * @param amount             portion amount
+     * @param dataPoints         data points
+     * @param gramWeight         weight in grams
+     * @param minYearAcquired    minimum year acquired
+     * @param modifier           modifier
+     * @param portionDescription portion description
+     * @param sequenceNumber     sequence number
+     * @param measureUnit        measure unit
+     */
+<span class="nc" id="L70">    public FoodPortion(int id, float amount, int dataPoints, float gramWeight, int minYearAcquired, String modifier, String portionDescription, int sequenceNumber, MeasureUnit measureUnit) {</span>
+<span class="nc" id="L71">        this.id = id;</span>
+<span class="nc" id="L72">        this.amount = amount;</span>
+<span class="nc" id="L73">        this.dataPoints = dataPoints;</span>
+<span class="nc" id="L74">        this.gramWeight = gramWeight;</span>
+<span class="nc" id="L75">        this.minYearAcquired = minYearAcquired;</span>
+<span class="nc" id="L76">        this.modifier = modifier;</span>
+<span class="nc" id="L77">        this.portionDescription = portionDescription;</span>
+<span class="nc" id="L78">        this.sequenceNumber = sequenceNumber;</span>
+<span class="nc" id="L79">        this.measureUnit = measureUnit;</span>
+<span class="nc" id="L80">    }</span>
+
+    /**
+     * Getter for the portion id
+     *
+     * @return portion id
+     */
+    public int getId() {
+<span class="nc" id="L88">        return id;</span>
+    }
+
+    /**
+     * Getter for the portion amount
+     *
+     * @return portion amount
+     */
+    public float getAmount() {
+<span class="nc" id="L97">        return amount;</span>
+    }
+
+    /**
+     * Getter for the data points
+     *
+     * @return data points
+     */
+    public int getDataPoints() {
+<span class="nc" id="L106">        return dataPoints;</span>
+    }
+
+    /**
+     * Getter for the gram weight
+     *
+     * @return gram weight
+     */
+    public float getGramWeight() {
+<span class="nc" id="L115">        return gramWeight;</span>
+    }
+
+    /**
+     * Getter for the minimum year acquired
+     *
+     * @return minimum year acquired
+     */
+    public int getMinYearAcquired() {
+<span class="nc" id="L124">        return minYearAcquired;</span>
+    }
+
+    /**
+     * Getter for the modifier
+     *
+     * @return modifier
+     */
+    public String getModifier() {
+<span class="nc" id="L133">        return modifier;</span>
+    }
+
+    /**
+     * Getter for the portion description
+     *
+     * @return description
+     */
+    public String getPortionDescription() {
+<span class="nc" id="L142">        return portionDescription;</span>
+    }
+
+    /**
+     * Getter for the sequence number
+     *
+     * @return sequence number
+     */
+    public int getSequenceNumber() {
+<span class="nc" id="L151">        return sequenceNumber;</span>
+    }
+
+    /**
+     * Getter for the measure unit
+     *
+     * @return measure unit
+     */
+    public MeasureUnit getMeasureUnit() {
+<span class="nc" id="L160">        return measureUnit;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
