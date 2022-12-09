@@ -1,9 +1,14 @@
 package com.example.cs309android.fragments.account;
 
-import static com.example.cs309android.util.Constants.CALLBACK_CLOSE_PROFILE;
-import static com.example.cs309android.util.Constants.CALLBACK_EDIT_ACCOUNT;
-import static com.example.cs309android.util.Constants.CALLBACK_FOLLOW;
-import static com.example.cs309android.util.Constants.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_MOVE_TO_SETTINGS;
+import static com.example.cs309android.util.Constants.Callbacks.CALLBACK_START_LOGIN;
+import static com.example.cs309android.util.Constants.ITEM_ID_NULL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_RECIPE_ID;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.Results.RESULT_DELETED;
+import static com.example.cs309android.util.Constants.Results.RESULT_UPDATED;
 import static com.example.cs309android.util.Util.objFromJson;
 
 import android.content.Intent;
@@ -13,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,21 +26,27 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
-import com.example.cs309android.activities.AccountEditActivity;
-import com.example.cs309android.activities.MainActivity;
+import com.example.cs309android.activities.account.AccountEditActivity;
+import com.example.cs309android.activities.account.AccountListActivity;
+import com.example.cs309android.activities.recipe.RecipeDetailsActivity;
 import com.example.cs309android.fragments.BaseFragment;
-import com.example.cs309android.models.adapters.FeedAdapter;
-import com.example.cs309android.models.gson.request.profile.GetBannerRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfilePictureRequest;
-import com.example.cs309android.models.gson.request.profile.GetProfileRequest;
-import com.example.cs309android.models.gson.request.recipes.GetRecipesRequest;
-import com.example.cs309android.models.gson.response.recipes.GetRecipesResponse;
-import com.example.cs309android.models.gson.response.social.GetProfileResponse;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
+import com.example.cs309android.models.api.request.social.GetFollowersRequest;
+import com.example.cs309android.models.api.request.social.GetFollowingRequest;
+import com.example.cs309android.models.api.request.users.GetUserTypeRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.util.Util;
+import com.example.cs309android.views.HomeRecipeView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.json.JSONException;
+
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Fragment to display account details
@@ -43,38 +54,99 @@ import java.util.Locale;
  * @author Mitch Hudson
  */
 public class AccountFragment extends BaseFragment {
-    public static final String ARGS_USERNAME = "username";
-    private String username;
-    public static final String ARGS_OWNER = "owner";
-    private boolean owner;
-
+    /**
+     * Launcher for the account edit activity
+     */
     private ActivityResultLauncher<Intent> accountEditLauncher;
+    /**
+     * Launcher for the recipe details activity
+     */
+    private ActivityResultLauncher<Intent> recipeDetailsLauncher;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Refresh the account page
      *
-     * @return A new instance of fragment AccountFragment.
+     * @param view   view to find subviews
+     * @param global global containing account data
      */
-    public static AccountFragment newInstance(String username, boolean owner) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARGS_USERNAME, username);
-        args.putBoolean(ARGS_OWNER, owner);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            username = args.getString(ARGS_USERNAME);
-            owner = args.getBoolean(ARGS_OWNER);
+    public void refreshAccount(View view, GlobalClass global) {
+        if (global.getUsername() == null) {
+            callbackFragment.callback(CALLBACK_START_LOGIN, null);
+            return;
         }
+        ImageView profilePicture = view.findViewById(R.id.profile_picture);
+        ImageView bannerImage = view.findViewById(R.id.banner);
+
+        profilePicture.setImageBitmap(global.getPfp());
+        bannerImage.setImageBitmap(global.getBanner());
+        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
+
+        ((TextView) view.findViewById(R.id.followerCount))
+                .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
+        ((TextView) view.findViewById(R.id.followingCount))
+                .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+        ((TextView) view.findViewById(R.id.bioTextView))
+                .setText(global.getBio());
+        Util.getBadge(global.getUserType(), view.findViewById(R.id.badge));
+
+        // Checks for updates to the above values
+        new GetUserTypeRequest(global.getUsername()).request(response -> {
+            GenericResponse genericResponse = Util.objFromJson(response, GenericResponse.class);
+            global.setUserType(genericResponse.getResult());
+        }, requireContext());
+        new GetProfileRequest(global.getUsername()).request(response -> {
+            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
+            global.setBio(profileResponse.getBio());
+            global.setFollowers(profileResponse.getFollowers());
+            global.setFollowing(profileResponse.getFollowing());
+
+            ImageView badge = view.findViewById(R.id.badge);
+            Util.getBadge(global.getUserType(), badge);
+
+            ((TextView) view.findViewById(R.id.followerCount))
+                    .setText(String.format(Locale.getDefault(), "%d Followers", global.getFollowers()));
+            ((TextView) view.findViewById(R.id.followingCount))
+                    .setText(String.format(Locale.getDefault(), "%d Following", global.getFollowing()));
+            String bioText = profileResponse.getBio();
+            if (bioText == null || bioText.length() == 0) {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(R.string.nothing_yet);
+            } else {
+                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
+            }
+        }, requireContext());
+
+        new GetRecipesRequest(global.getUsername()).request(response -> {
+            try {
+                System.out.println(response.toString(4));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
+            if (postsResponse.getRecipes() == null || postsResponse.getRecipes().length < 1) return;
+
+            view.findViewById(R.id.recipesLabel).setVisibility(View.VISIBLE);
+            LinearLayout recipeList = view.findViewById(R.id.yourRecipesList);
+            for (Recipe recipe : postsResponse.getRecipes()) {
+                HomeRecipeView recipeView = new HomeRecipeView(requireContext());
+                recipeView.initView(recipe, view1 -> {
+                    Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+                    intent.putExtra(PARCEL_RECIPE, recipe);
+                    recipeDetailsLauncher.launch(intent);
+                });
+
+                recipeList.addView(recipeView);
+            }
+        }, requireContext());
     }
 
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the view of the fragment
+     * @param container          Parent of the fragment
+     * @param savedInstanceState Saved state
+     * @return inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,93 +160,55 @@ public class AccountFragment extends BaseFragment {
                 result -> refreshAccount(view, global)
         );
 
+        recipeDetailsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    switch (result.getResultCode()) {
+                        case RESULT_DELETED: {
+//                            int id = Objects.requireNonNull(result.getData()).getIntExtra(PARCEL_RECIPE_ID, ITEM_ID_NULL);
+//                            break;
+                        }
+                        case RESULT_UPDATED: {
+//                            Recipe newRecipe = Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_RECIPE);
+//                            for ()
+                            refreshAccount(view, global);
+                            break;
+                        }
+                    }
+                }
+        );
+
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
-        ImageButton editButton = view.findViewById(R.id.editButton);
-        ImageButton backButton = view.findViewById(R.id.backButton);
-        ExtendedFloatingActionButton followButton = view.findViewById(R.id.followButton);
-        if (owner) {
-            settingsButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null);
-            });
-            settingsButton.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.settingsCard).setVisibility(View.VISIBLE);
+        ImageButton editButton = view.findViewById(R.id.menuButton);
 
-            editButton.setOnClickListener(view1 -> {
-                Intent intent = new Intent(requireContext(), AccountEditActivity.class);
-                accountEditLauncher.launch(intent);
-            });
-            editButton.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.editCard).setVisibility(View.VISIBLE);
+        settingsButton.setOnClickListener(view1 -> callbackFragment.callback(CALLBACK_MOVE_TO_SETTINGS, null));
 
-            refreshAccount(view, global);
+        editButton.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireContext(), AccountEditActivity.class);
+            accountEditLauncher.launch(intent);
+        });
 
-            // TODO: Test retrieval
-            new GetProfileRequest(username).request(response -> {
-                GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
-                global.setBio(profileResponse.getBio());
-                global.setFollowers(profileResponse.getFollowers());
-                global.setFollowing(profileResponse.getFollowing());
+        refreshAccount(view, global);
 
-                ((TextView) view.findViewById(R.id.followerCount))
-                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
-                ((TextView) view.findViewById(R.id.followingCount))
-                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
-                ((TextView) view.findViewById(R.id.bioTextView))
-                        .setText(global.getBio());
+        String username = global.getUsername();
+        view.findViewById(R.id.followerCount).setOnClickListener(view1 ->
+                new GetFollowersRequest(username).request(response -> {
+                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+                    Intent intent1 = new Intent(getContext(), AccountListActivity.class);
+                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());
+                    intent1.putExtra(PARCEL_TITLE, "Followers");
+                    startActivity(intent1);
+                }, getContext()));
 
-            }, requireContext());
-        } else {
-            backButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(CALLBACK_CLOSE_PROFILE, null);
-            });
-            backButton.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.backCard).setVisibility(View.VISIBLE);
-
-            followButton.setOnClickListener(view1 -> {
-                callbackFragment.callback(CALLBACK_FOLLOW, null);
-            });
-            followButton.setVisibility(View.VISIBLE);
-
-            new GetProfileRequest(username).request(response -> {
-                GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);
-
-                ((TextView) view.findViewById(R.id.unameView)).setText(username);
-                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
-                ((TextView) view.findViewById(R.id.followerCount))
-                        .setText(String.format(Locale.getDefault(), "%d Followers", profileResponse.getFollowers()));
-                ((TextView) view.findViewById(R.id.followingCount))
-                        .setText(String.format(Locale.getDefault(), "%d Following", profileResponse.getFollowing()));
-
-                ((TextView) view.findViewById(R.id.bioTextView)).setText(profileResponse.getBio());
-            }, requireActivity());
-
-            new GetProfilePictureRequest(username).request(response -> {
-                ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(response);
-            }, requireActivity());
-
-            new GetBannerRequest(username).request(response -> {
-                ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(response);
-            }, requireActivity());
-        }
-
-        new GetRecipesRequest(username).request(response -> {
-            GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);
-            ((ListView) view.findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(requireContext(), new ArrayList<>(Arrays.asList(postsResponse.getItems()))));
-        }, requireActivity());
+        view.findViewById(R.id.followingCount).setOnClickListener(view1 ->
+                new GetFollowingRequest(username).request(response -> {
+                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);
+                    Intent intent1 = new Intent(getContext(), AccountListActivity.class);
+                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());
+                    intent1.putExtra(PARCEL_TITLE, "Following");
+                    startActivity(intent1);
+                }, getContext()));
 
         return view;
-    }
-
-    /**
-     * Refresh the account page
-     * @param view view to find subviews
-     * @param global global containing account data
-     */
-    public static void refreshAccount(View view, GlobalClass global) {
-        ((ImageView) view.findViewById(R.id.banner)).setImageBitmap(global.getBanner());
-        ((ImageView) view.findViewById(R.id.profile_picture)).setImageBitmap(global.getPfp());
-        ((TextView) view.findViewById(R.id.unameView)).setText(global.getUsername());
-        ((TextView) view.findViewById(R.id.bioTextView)).setText(global.getBio());
-
     }
 }

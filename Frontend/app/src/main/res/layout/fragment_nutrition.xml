@@ -1,14 +1,406 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nutrition_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.nutrition.NutritionFragment">
+    tools:context=".fragments.nutrition.NutritionFragment"
+    android:fitsSystemWindows="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="nutrition" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fitsSystemWindows="true">
+
+                <ImageButton
+                    android:id="@+id/previous_date_button"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="@string/previous_day"
+                    android:src="@drawable/ic_left" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@id/next_date_button"
+                    android:layout_toEndOf="@id/previous_date_button"
+                    android:contentDescription="@string/date"
+                    android:gravity="center"
+                    android:textSize="24sp" />
+
+                <ImageButton
+                    android:id="@+id/next_date_button"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="@string/next_day"
+                    android:minWidth="50dp"
+                    android:src="@drawable/ic_right" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/calAmount"
+                    android:text="@string/nutrition_calories"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/calAmount"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash1"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/slash1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/calLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/calLimit"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/caloriesBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="16dp"
+                android:max="1600"
+                app:indicatorColor="?attr/colorPrimary"
+                app:indicatorDirectionLinear="startToEnd"
+                app:trackColor="?attr/colorOnPrimary"
+                app:trackCornerRadius="5dp"
+                app:trackThickness="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/carbAmount"
+                    android:text="@string/carbs"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/carbAmount"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash2"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/slash2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/carbLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/carbLimit"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/carbBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="16dp"
+                android:max="200"
+                app:indicatorColor="@color/carbon"
+                app:indicatorDirectionLinear="startToEnd"
+                app:trackColor="@color/carb"
+                app:trackCornerRadius="5dp"
+                app:trackThickness="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/proteinAmount"
+                    android:text="@string/protein"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/proteinAmount"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash3"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/slash3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/proteinLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/proteinLimit"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/proteinBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="16dp"
+                android:max="80"
+                app:indicatorColor="@color/proteinon"
+                app:indicatorDirectionLinear="startToEnd"
+                app:trackColor="@color/protein"
+                app:trackCornerRadius="5dp"
+                app:trackThickness="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/fatAmount"
+                    android:text="@string/fat"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fatAmount"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/slash4"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/slash4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/fatLimit"
+                    android:text="@string/slash"/>
+
+                <TextView
+                    android:id="@+id/fatLimit"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/fatBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="16dp"
+                android:max="53"
+                app:indicatorColor="@color/faton"
+                app:indicatorDirectionLinear="startToEnd"
+                app:trackColor="@color/fat"
+                app:trackCornerRadius="5dp"
+                app:trackThickness="10dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/breakfastCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                android:visibility="gone"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="64dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/breakfast"
+                        android:textSize="24sp" />
+
+                    <LinearLayout
+                        android:id="@+id/breakfastList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="16dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/lunchCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                android:visibility="gone"
+                android:layout_margin="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:layout_margin="16dp"
+                        android:textSize="24sp" />
+
+                    <LinearLayout
+                        android:id="@+id/lunchList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="16dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dinnerCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                android:visibility="gone"
+                android:layout_margin="16dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/dinner"
+                        android:textSize="24sp" />
+
+                    <LinearLayout
+                        android:id="@+id/dinnerList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="16dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

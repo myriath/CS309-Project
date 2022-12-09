@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activities.food.CustomFoodActivity">
+    tools:context=".activities.food.NewFoodActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +15,9 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
+            app:navigationIcon="@drawable/ic_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,10 +36,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="@string/ingredients" />
+                android:text="@string/ingredients"
+                android:textSize="30sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -64,10 +65,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="@string/nutrition" />
+                android:text="@string/nutrition"
+                android:textSize="30sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -84,29 +85,29 @@
                         android:id="@+id/calories"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        custom:name="@string/calories"
-                        custom:hint="@string/total_calories" />
+                        custom:hint="@string/total_calories"
+                        custom:name="@string/calories" />
 
                     <com.example.cs309android.views.CustomNutritionItemView
                         android:id="@+id/fat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        custom:name="@string/fat"
-                        custom:hint="@string/total_fat" />
+                        custom:hint="@string/total_fat"
+                        custom:name="@string/fat" />
 
                     <com.example.cs309android.views.CustomNutritionItemView
                         android:id="@+id/carbs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        custom:name="@string/carbs"
-                        custom:hint="@string/total_carbs" />
+                        custom:hint="@string/total_carbs"
+                        custom:name="@string/carbs" />
 
                     <com.example.cs309android.views.CustomNutritionItemView
                         android:id="@+id/protein"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        custom:name="@string/protein"
-                        custom:hint="@string/total_protein" />
+                        custom:hint="@string/total_protein"
+                        custom:name="@string/protein" />
 
                 </LinearLayout>
 
@@ -121,36 +122,38 @@
         style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
         android:contentDescription="@string/add_item"
+        android:elevation="0dp"
         android:text="@string/add_item"
         app:fabSize="auto"
-        android:layout_margin="32dp"
-        android:layout_gravity="bottom|end"
-        app:icon="@drawable/ic_add" />
+        app:icon="@drawable/ic_add"
+        app:tint="?attr/colorOnSecondaryContainer" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/spinnerBlocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
         android:background="?android:colorBackground"
         android:backgroundTint="?android:colorBackground"
+        android:visibility="gone"
+        android:fitsSystemWindows="false"
         android:elevation="50dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:elevation="51dp"
+            android:indeterminateTint="?colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/loginSpinner"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:elevation="51dp"
-        android:indeterminateTint="?colorPrimary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

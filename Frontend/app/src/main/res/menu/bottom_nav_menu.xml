@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/shopping"
         android:contentDescription="@string/shopping_list"
         android:enabled="true"
-        android:id="@+id/shopping"
-        android:title="@string/shopping"
-        android:icon="@drawable/ic_shopping_list" />
+        android:icon="@drawable/ic_shopping_list"
+        android:title="@string/shopping" />
     <item
+        android:id="@+id/nutrition"
         android:contentDescription="@string/nutrition"
         android:enabled="true"
-        android:id="@+id/nutrition"
-        android:title="@string/nutrition"
-        android:icon="@drawable/ic_nutrition" />
+        android:icon="@drawable/ic_nutrition"
+        android:title="@string/nutrition" />
     <item
+        android:id="@+id/home"
         android:contentDescription="@string/home"
         android:enabled="true"
-        android:id="@+id/home"
-        android:title="@string/home"
-        android:icon="@drawable/ic_home" />
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
     <item
+        android:id="@+id/recipes"
         android:contentDescription="@string/recipes"
         android:enabled="true"
-        android:id="@+id/recipes"
-        android:title="@string/recipes"
-        android:icon="@drawable/ic_recipes" />
+        android:icon="@drawable/ic_recipes"
+        android:title="@string/recipes" />
     <item
+        android:id="@+id/account"
         android:contentDescription="@string/settings"
         android:enabled="true"
-        android:id="@+id/account"
-        android:title="@string/account"
-        android:icon="@drawable/ic_account" />
+        android:icon="@drawable/ic_account"
+        android:title="@string/account" />
 </menu>

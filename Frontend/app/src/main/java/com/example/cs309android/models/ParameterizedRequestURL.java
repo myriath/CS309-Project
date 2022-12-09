@@ -1,8 +1,12 @@
 package com.example.cs309android.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +25,7 @@ public class ParameterizedRequestURL {
      * Base url (no '?')
      * if null, the returned string will just be the encoded parameters.
      */
-    private final String url;
+    private final StringBuilder url;
 
     /**
      * Constructor for a new GetRequestURL that only outputs encoded parameters.
@@ -38,7 +42,7 @@ public class ParameterizedRequestURL {
      */
     public ParameterizedRequestURL(String url) {
         this.params = new ArrayList<>();
-        this.url = url;
+        this.url = new StringBuilder(url);
     }
 
     /**
@@ -49,7 +53,38 @@ public class ParameterizedRequestURL {
      */
     public ParameterizedRequestURL(String url, ArrayList<RequestParam> params) {
         this.params = params;
-        this.url = url;
+        this.url = new StringBuilder(url);
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(String variable) {
+        if (variable == null || url == null) return this;
+        try {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(URLEncoder.encode(variable, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given path variable to the url
+     *
+     * @param variable Variable to add
+     * @return this
+     */
+    public ParameterizedRequestURL addPathVar(int variable) {
+        if (url != null) {
+            if (url.charAt(url.length() - 1) != '/') url.append('/');
+            url.append(variable);
+        }
+        return this;
     }
 
     /**
@@ -169,6 +204,20 @@ public class ParameterizedRequestURL {
             }
         }
         return builder.substring(0, builder.length() - 1);
+    }
+
+    /**
+     * Generates a URI using this ParameterizedRequestURL
+     *
+     * @return URI for this request url
+     */
+    public URI toURI() {
+        try {
+            return new URI(toString());
+        } catch (URISyntaxException e) {
+            Log.e("URI", "Error converting to uri", e);
+            return null;
+        }
     }
 
     /**
