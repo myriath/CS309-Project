@@ -1,6 +1,6 @@
 package com.example.cs309android.models.api.request.food;
 
-import static com.example.cs309android.util.Constants.ADD_FOOD_URL;
+import static com.example.cs309android.util.Constants.Urls.Food.ADD_FOOD_URL;
 
 import com.example.cs309android.models.ParameterizedRequestURL;
 import com.example.cs309android.models.api.models.CustomFoodItem;

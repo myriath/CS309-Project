@@ -104,9 +104,10 @@ public class HomeNutritionAdapter extends RecyclerView.Adapter<HomeNutritionAdap
             int progress = Math.max(Math.min((int) ((amount / limit) * 100), 100), 0);
 
             ((TextView) itemView.findViewById(R.id.nutrientAmount)).setText(String.valueOf(amount));
-            ((TextView) itemView.findViewById(R.id.nutrientLimit)).setText(String.valueOf(limit));
+            ((TextView) itemView.findViewById(R.id.calLimit)).setText(String.valueOf(limit));
             ((LinearProgressIndicator) itemView.findViewById(R.id.nutrientProgressBar)).setProgress(progress);
-            ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageBitmap(model.getImage());
+            if (model.getImage() != -1)
+                ((ImageView) itemView.findViewById(R.id.nutrientImage)).setImageResource(model.getImage());
             ((TextView) itemView.findViewById(R.id.nutrientTitle)).setText(model.getTitle());
 
 //            itemView.findViewById(R.id.leftButton).setOnClickListener(model.getLeftListener());

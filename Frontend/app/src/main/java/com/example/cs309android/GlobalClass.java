@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
+import com.example.cs309android.util.Constants;
 import com.example.cs309android.util.Util;
 
 import java.util.ArrayList;
@@ -42,6 +43,13 @@ public class GlobalClass extends Application {
      * User map for storing login data
      */
     private Map<String, String> users;
+    /**
+     * Type of the user for permissions
+     * 0: regular user
+     * 1: moderator
+     * 2: administrator
+     */
+    private int userType;
 
     /**
      * Shared preferences for the app
@@ -244,5 +252,21 @@ public class GlobalClass extends Application {
      */
     public void setUsers(Map<String, String> users) {
         this.users = users;
+    }
+
+    /**
+     * Getter for the user type
+     * @return type of the user from {@link Constants.UserType}
+     */
+    public int getUserType() {
+        return userType;
+    }
+
+    /**
+     * Setter for the user type
+     * @param userType user type from {@link Constants.UserType}
+     */
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 }

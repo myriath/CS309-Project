@@ -1,8 +1,11 @@
 package com.example.cs309android.activities.food;
 
 import static com.example.cs309android.models.USDA.Constants.Format;
-import static com.example.cs309android.util.Constants.PARCEL_BUTTON_CONTROL;
-import static com.example.cs309android.util.Constants.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_BUTTON_CONTROL;
+import static com.example.cs309android.util.Constants.Parcels.PARCEL_FOODITEM;
+import static com.example.cs309android.util.Constants.UserType.USER_REG;
+import static com.example.cs309android.util.Constants.dp16;
+import static com.example.cs309android.util.Constants.dp8;
 import static com.example.cs309android.util.Util.setSubtitle;
 
 import android.content.Intent;
@@ -12,18 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
+import com.example.cs309android.GlobalClass;
 import com.example.cs309android.R;
 import com.example.cs309android.models.USDA.models.BrandedFoodItem;
 import com.example.cs309android.models.USDA.queries.FoodsCriteria;
 import com.example.cs309android.models.api.models.CustomFoodItem;
 import com.example.cs309android.models.api.models.SimpleFoodItem;
 import com.example.cs309android.models.api.request.food.CustomFoodGetRequest;
+import com.example.cs309android.models.api.request.food.DeleteCustomFoodRequest;
+import com.example.cs309android.models.api.response.GenericResponse;
 import com.example.cs309android.models.api.response.food.CustomFoodGetResponse;
 import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
 import com.example.cs309android.util.Util;
 import com.example.cs309android.views.NutritionItemView;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -48,15 +57,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public static final int CONTROL_ADD = 1;
 
     /**
-     * 16dp in pixels
-     */
-    private int dp16;
-    /**
-     * 8dp in pixels
-     */
-    private int dp8;
-
-    /**
      * Layout for displaying the food details
      */
     private LinearLayout detailsLayout;
@@ -74,13 +74,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dp16 = (int) Util.scalePixels(16);
-        dp8 = (int) Util.scalePixels(8);
-
         setContentView(R.layout.activity_food_details);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         Util.spin(this);
+        GlobalClass global = (GlobalClass) getApplicationContext();
 
         Intent intent = getIntent();
         item = intent.getParcelableExtra(PARCEL_FOODITEM);
@@ -89,11 +87,27 @@ public class FoodDetailsActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         Util.setTitle(item.getDescription(), toolbar);
 
+        if (item.isCustom() && (item.getBrand().equals(global.getUsername()) || global.getUserType() > USER_REG)) {
+            toolbar.inflateMenu(R.menu.moderation_menu);
+        }
+
         Space spacer = new Space(this);
+
+        ActivityResultLauncher<Intent> editCustomLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        update(spacer,
+                                Objects.requireNonNull(result.getData()).getParcelableExtra(PARCEL_FOODITEM),
+                                toolbar);
+                    }
+                }
+        );
 
         if (!item.isCustom()) {
             new FoodsCriteria(item.getId(), Format.FULL, null).unspinOnComplete(response -> {
                 BrandedFoodItem foodItem = Util.objFromJson(response, BrandedFoodItem.class);
+                item.setNutrients(foodItem.getLabelNutrients());
                 setSubtitle(foodItem.getBrandOwner(), toolbar);
                 fillIngredients(foodItem.getIngredients());
                 fillNutrition(foodItem.getLabelNutrients(), (float) foodItem.getServingSize(), foodItem.getServingSizeUnit());
@@ -104,11 +118,26 @@ public class FoodDetailsActivity extends AppCompatActivity {
                 CustomFoodGetResponse customFoodGetResponse = Util.objFromJson(response, CustomFoodGetResponse.class);
                 CustomFoodItem foodItem = customFoodGetResponse.getItem();
 
-                if (customFoodGetResponse.getResult() == Constants.RESULT_OK) {
-                    setSubtitle("User added", toolbar);
-                    fillIngredients(foodItem.getIngredients());
-                    fillNutrition(foodItem);
-                    detailsLayout.addView(spacer);
+                toolbar.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.edit) {
+                        Intent intent1 = new Intent(this, NewFoodActivity.class);
+                        intent1.putExtra(PARCEL_FOODITEM, foodItem);
+                        editCustomLauncher.launch(intent1);
+                    } else if (id == R.id.delete) {
+                        new DeleteCustomFoodRequest(foodItem, global.getToken()).request(response1 -> {
+                            GenericResponse genericResponse = Util.objFromJson(response1, GenericResponse.class);
+                            if (genericResponse.getResult() != Constants.Results.RESULT_OK) {
+                                Toaster.toastShort("Error", this);
+                            }
+                        }, error -> Toaster.toastShort("Error", this), FoodDetailsActivity.this);
+                        finish();
+                    }
+                    return true;
+                });
+
+                if (customFoodGetResponse.getResult() == Constants.Results.RESULT_OK) {
+                    update(spacer, foodItem, toolbar);
                 }
             }, FoodDetailsActivity.this, getWindow().getDecorView());
         }
@@ -133,24 +162,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent1);
             finish();
         });
-//z
-//        findViewById(R.id.add_item).setOnClickListener(view1 -> {
-//            Intent intent = new Intent();
-//            intent.putExtra(MainActivity.PARCEL_FOODITEM, item);
-//            setResult(RESULT_OK, intent);
-//            finish();
-//        });
-//
-//        NetworkImageView imageView = findViewById(R.id.image_view);
-//        try {
-//            Photo photo = item.getPhoto();
-//            System.out.println(photo);
-//            if (photo.getHighres() != null) {
-//                imageView.setImageUrl(photo.getHighres(), RequestHandler.getInstance(this).getImageLoader());
-//            } else {
-//                imageView.setImageUrl(photo.getThumb(), RequestHandler.getInstance(this).getImageLoader());
-//            }
-//        } catch (NullPointerException ignored) {}
+    }
+
+    public void update(Space spacer, CustomFoodItem foodItem, MaterialToolbar toolbar) {
+        setSubtitle("User added", toolbar);
+        fillIngredients(foodItem.getIngredients());
+        fillNutrition(foodItem);
+        detailsLayout.addView(spacer);
     }
 
     /**
@@ -175,7 +193,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         if (servingUnit != null) {
@@ -183,7 +201,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             subtitle.setText(String.format(Locale.getDefault(), "per %.02f %s serving", servingSize, servingUnit));
             subtitle.setTextSize(24f);
             subtitle.setEnabled(false);
-            subtitle.setPadding(dp16, dp8, dp16, dp8);
+            subtitle.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
             detailsLayout.addView(subtitle);
         }
 
@@ -192,10 +210,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight(dp16);
+        space.setMinimumHeight((int) dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -209,10 +227,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         // Micro nutrients
         // Body CardView
         cardView = new CardView(this);
-        cardView.setRadius(dp16);
+        cardView.setRadius((int) dp16);
         // Linear layout inside CardView with details
         layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -238,7 +256,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.nutrition));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         // Macro nutrients
@@ -246,10 +264,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         cardView.setRadius(dp16);
         Space space = new Space(this);
-        space.setMinimumHeight(dp16);
+        space.setMinimumHeight((int) dp16);
         // Linear layout inside CardView with details
         LinearLayout layout = new LinearLayout(this);
-        layout.setPadding(dp16, dp16, dp16, dp16);
+        layout.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         layout.setOrientation(LinearLayout.VERTICAL);
         cardView.addView(layout);
 
@@ -314,7 +332,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(getResources().getString(R.string.ingredients));
         title.setTextSize(30f);
-        title.setPadding(dp16, dp8, dp16, dp8);
+        title.setPadding((int) dp16, (int) dp8, (int) dp16, (int) dp8);
         detailsLayout.addView(title);
 
         // Body CardView
@@ -322,7 +340,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cardView.setRadius(dp16);
         TextView ingredients = new TextView(this);
         ingredients.setTextSize(20f);
-        ingredients.setPadding(dp16, dp16, dp16, dp16);
+        ingredients.setPadding((int) dp16, (int) dp16, (int) dp16, (int) dp16);
         ingredients.setText(ingredientsText);
         cardView.addView(ingredients);
         detailsLayout.addView(cardView);

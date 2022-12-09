@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModalImageSelect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.fragments</a> &gt; <span class="el_source">ModalImageSelect.java</span></div><h1>ModalImageSelect.java</h1><pre class="source lang-java linenums">package com.example.cs309android.fragments;
+
+import static android.app.Activity.RESULT_OK;
+import static com.example.cs309android.util.Constants.CALLBACK_IMAGE_URI;
+import static com.example.cs309android.util.Constants.PARCEL_IMAGE_URI;
+
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.FileProvider;
+
+import com.example.cs309android.BuildConfig;
+import com.example.cs309android.R;
+import com.example.cs309android.interfaces.CallbackFragment;
+import com.example.cs309android.util.Toaster;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.io.File;
+import java.util.Objects;
+
+/**
+ * Modal bottom sheet for selecting image source
+ * (camera or gallery)
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L34">public class ModalImageSelect extends BottomSheetDialogFragment implements CallbackFragment {</span>
+    /**
+     * Tag for the dialog
+     */
+    public static final String TAG = &quot;ImageSelector&quot;;
+    /**
+     * Launcher for the gallery select activity
+     */
+    ActivityResultLauncher&lt;Intent&gt; imageChooserLauncher;
+    /**
+     * Launcher for the camera app
+     */
+    ActivityResultLauncher&lt;Uri&gt; cameraLauncher;
+    /**
+     * Checks for permissions
+     */
+    ActivityResultLauncher&lt;String&gt; permissionsLauncher;
+    /**
+     * Callback fragment
+     */
+    private CallbackFragment callbackFragment;
+
+    /**
+     * Runs when the dialog is created
+     *
+     * @param savedInstanceState Saved state
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L63">        super.onCreate(savedInstanceState);</span>
+
+<span class="nc" id="L65">        File file = new File(requireActivity().getExternalFilesDir(&quot;images&quot;), &quot;camera_img&quot;);</span>
+<span class="nc" id="L66">        Uri uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + &quot;.provider&quot;, file);</span>
+
+<span class="nc" id="L68">        imageChooserLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.StartActivityForResult(),
+                result -&gt; {
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                    if (result.getResultCode() == RESULT_OK) {</span>
+<span class="nc" id="L72">                        Bundle bundle = new Bundle();</span>
+<span class="nc" id="L73">                        bundle.putParcelable(PARCEL_IMAGE_URI, Objects.requireNonNull(result.getData()).getData());</span>
+<span class="nc" id="L74">                        callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);</span>
+                    }
+<span class="nc" id="L76">                    dismiss();</span>
+<span class="nc" id="L77">                }</span>
+        );
+
+<span class="nc" id="L80">        cameraLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.TakePicture(),
+                success -&gt; {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                    if (success) {</span>
+<span class="nc" id="L84">                        Bundle bundle = new Bundle();</span>
+<span class="nc" id="L85">                        bundle.putParcelable(PARCEL_IMAGE_URI, uri);</span>
+<span class="nc" id="L86">                        callbackFragment.callback(CALLBACK_IMAGE_URI, bundle);</span>
+                    }
+<span class="nc" id="L88">                    dismiss();</span>
+<span class="nc" id="L89">                }</span>
+        );
+
+<span class="nc" id="L92">        permissionsLauncher = registerForActivityResult(</span>
+                new ActivityResultContracts.RequestPermission(),
+                granted -&gt; {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if (granted) {</span>
+<span class="nc" id="L96">                        cameraLauncher.launch(uri);</span>
+                    } else {
+<span class="nc" id="L98">                        Toaster.toastLong(&quot;Needs permission to take picture&quot;, requireContext());</span>
+                    }
+<span class="nc" id="L100">                }</span>
+        );
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Runs when the view is created
+     *
+     * @param inflater           Inflates the dialog fragment
+     * @param container          Parent for the dialog fragment
+     * @param savedInstanceState Saved state
+     * @return Inflated dialog fragment
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+<span class="nc" id="L116">        View view = inflater.inflate(R.layout.bottom_sheet_choose_photo, container, false);</span>
+
+<span class="nc" id="L118">        view.findViewById(R.id.take_photo).setOnClickListener(view1 -&gt;</span>
+<span class="nc" id="L119">                permissionsLauncher.launch(Manifest.permission.CAMERA)</span>
+        );
+
+<span class="nc" id="L122">        view.findViewById(R.id.from_gallery).setOnClickListener(view1 -&gt; {</span>
+<span class="nc" id="L123">            Intent i = new Intent();</span>
+<span class="nc" id="L124">            i.setType(&quot;image/*&quot;);</span>
+<span class="nc" id="L125">            i.setAction(Intent.ACTION_GET_CONTENT);</span>
+
+<span class="nc" id="L127">            imageChooserLauncher.launch(Intent.createChooser(i, &quot;Select Picture&quot;));</span>
+<span class="nc" id="L128">        });</span>
+
+<span class="nc" id="L130">        return view;</span>
+    }
+
+    /**
+     * Do nothing, no children
+     *
+     * @param op     ignored
+     * @param bundle ignored
+     */
+    @Override
+    public void callback(int op, Bundle bundle) {
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * Sets the callback fragment=
+     *
+     * @param fragment Callback fragment.
+     */
+    @Override
+    public void setCallbackFragment(CallbackFragment fragment) {
+<span class="nc" id="L150">        this.callbackFragment = fragment;</span>
+<span class="nc" id="L151">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

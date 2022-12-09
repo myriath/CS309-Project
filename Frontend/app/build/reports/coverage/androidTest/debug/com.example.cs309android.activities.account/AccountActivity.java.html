@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.cs309android.activities.account</a> &gt; <span class="el_source">AccountActivity.java</span></div><h1>AccountActivity.java</h1><pre class="source lang-java linenums">package com.example.cs309android.activities.account;
+
+import static com.example.cs309android.util.Constants.PARCEL_ACCOUNT_LIST;
+import static com.example.cs309android.util.Constants.PARCEL_FOLLOWING;
+import static com.example.cs309android.util.Constants.PARCEL_OWNER;
+import static com.example.cs309android.util.Constants.PARCEL_TITLE;
+import static com.example.cs309android.util.Constants.PARCEL_USERNAME;
+import static com.example.cs309android.util.Util.objFromJson;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.cs309android.GlobalClass;
+import com.example.cs309android.R;
+import com.example.cs309android.models.adapters.FeedAdapter;
+import com.example.cs309android.models.api.request.profile.GetBannerRequest;
+import com.example.cs309android.models.api.request.profile.GetProfilePictureRequest;
+import com.example.cs309android.models.api.request.profile.GetProfileRequest;
+import com.example.cs309android.models.api.request.recipes.GetRecipesRequest;
+import com.example.cs309android.models.api.request.social.FollowRequest;
+import com.example.cs309android.models.api.request.social.GetFollowersRequest;
+import com.example.cs309android.models.api.request.social.GetFollowingRequest;
+import com.example.cs309android.models.api.request.social.UnfollowRequest;
+import com.example.cs309android.models.api.response.recipes.GetRecipesResponse;
+import com.example.cs309android.models.api.response.social.FollowResponse;
+import com.example.cs309android.models.api.response.social.GetProfileResponse;
+import com.example.cs309android.util.Constants;
+import com.example.cs309android.util.Toaster;
+import com.example.cs309android.util.Util;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
+
+/**
+ * Account activity used to view an account's details
+ * when clicked on
+ * (ex: from a recipe details page or search)
+ *
+ * @author Mitch Hudson
+ */
+<span class="nc" id="L51">public class AccountActivity extends AppCompatActivity {</span>
+    /**
+     * Used to track following status for the follow button
+     */
+    private boolean isFollowing;
+    /**
+     * Keeps track of the follower count to display
+     * Default 0
+     */
+<span class="nc" id="L60">    private int followers = 0;</span>
+
+    /**
+     * Runs when the activity is created
+     *
+     * @param savedInstanceState Saved state
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L69">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L70">        setContentView(R.layout.activity_account);</span>
+
+<span class="nc" id="L72">        GlobalClass global = (GlobalClass) getApplicationContext();</span>
+
+<span class="nc" id="L74">        Intent intent = getIntent();</span>
+<span class="nc" id="L75">        boolean owner = intent.getBooleanExtra(PARCEL_OWNER, false);</span>
+<span class="nc" id="L76">        isFollowing = intent.getBooleanExtra(PARCEL_FOLLOWING, false);</span>
+<span class="nc" id="L77">        String username = intent.getStringExtra(PARCEL_USERNAME);</span>
+
+<span class="nc" id="L79">        ImageButton backButton = findViewById(R.id.backButton);</span>
+
+<span class="nc" id="L81">        ExtendedFloatingActionButton followButton = findViewById(R.id.followButton);</span>
+<span class="nc" id="L82">        backButton.setOnClickListener(view1 -&gt; onBackPressed());</span>
+
+<span class="nc" id="L84">        TextView followerCount = findViewById(R.id.followerCount);</span>
+<span class="nc" id="L85">        TextView followingCount = findViewById(R.id.followingCount);</span>
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (!owner) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (isFollowing) {</span>
+<span class="nc" id="L89">                followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));</span>
+<span class="nc" id="L90">                followButton.setText(getResources().getString(R.string.unfollow));</span>
+            }
+<span class="nc" id="L92">            followButton.setOnClickListener(view1 -&gt; {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                if (!isFollowing()) {</span>
+<span class="nc" id="L94">                    new FollowRequest(global.getToken(), username).request(response -&gt; {</span>
+<span class="nc" id="L95">                        FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                        if (followResponse.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L97">                            followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unfollow, getTheme()));</span>
+<span class="nc" id="L98">                            followButton.setText(getResources().getString(R.string.unfollow));</span>
+<span class="nc" id="L99">                            setFollowing(true);</span>
+<span class="nc" id="L100">                            followers++;</span>
+<span class="nc" id="L101">                            followerCount.setText(String.format(Locale.getDefault(), &quot;%d Followers&quot;, followers));</span>
+                        } else {
+<span class="nc" id="L103">                            Toaster.toastShort(&quot;Error&quot;, this);</span>
+                        }
+<span class="nc" id="L105">                    }, AccountActivity.this);</span>
+                } else {
+<span class="nc" id="L107">                    new UnfollowRequest(global.getToken(), username).request(response -&gt; {</span>
+<span class="nc" id="L108">                        FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                        if (followResponse.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L110">                            followButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite, getTheme()));</span>
+<span class="nc" id="L111">                            followButton.setText(getResources().getString(R.string.follow));</span>
+<span class="nc" id="L112">                            setFollowing(false);</span>
+<span class="nc" id="L113">                            followers--;</span>
+<span class="nc" id="L114">                            followerCount.setText(String.format(Locale.getDefault(), &quot;%d Followers&quot;, followers));</span>
+                        } else {
+<span class="nc" id="L116">                            Toaster.toastShort(&quot;Error&quot;, this);</span>
+                        }
+<span class="nc" id="L118">                    }, AccountActivity.this);</span>
+                }
+<span class="nc" id="L120">            });</span>
+<span class="nc" id="L121">            followButton.setVisibility(View.VISIBLE);</span>
+        }
+
+<span class="nc" id="L124">        findViewById(R.id.followerCount).setOnClickListener(view1 -&gt;</span>
+<span class="nc" id="L125">                new GetFollowersRequest(username).request(response -&gt; {</span>
+<span class="nc" id="L126">                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);</span>
+<span class="nc" id="L127">                    Intent intent1 = new Intent(this, AccountListActivity.class);</span>
+<span class="nc" id="L128">                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());</span>
+<span class="nc" id="L129">                    intent1.putExtra(PARCEL_TITLE, &quot;Followers&quot;);</span>
+<span class="nc" id="L130">                    startActivity(intent1);</span>
+<span class="nc" id="L131">                }, AccountActivity.this));</span>
+
+<span class="nc" id="L133">        findViewById(R.id.followingCount).setOnClickListener(view1 -&gt;</span>
+<span class="nc" id="L134">                new GetFollowingRequest(username).request(response -&gt; {</span>
+<span class="nc" id="L135">                    FollowResponse followResponse = Util.objFromJson(response, FollowResponse.class);</span>
+<span class="nc" id="L136">                    Intent intent1 = new Intent(this, AccountListActivity.class);</span>
+<span class="nc" id="L137">                    intent1.putExtra(PARCEL_ACCOUNT_LIST, followResponse.getUsers());</span>
+<span class="nc" id="L138">                    intent1.putExtra(PARCEL_TITLE, &quot;Following&quot;);</span>
+<span class="nc" id="L139">                    startActivity(intent1);</span>
+<span class="nc" id="L140">                }, AccountActivity.this));</span>
+
+<span class="nc" id="L142">        new GetProfileRequest(username).request(response -&gt; {</span>
+<span class="nc" id="L143">            GetProfileResponse profileResponse = objFromJson(response, GetProfileResponse.class);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (profileResponse.getResult() == Constants.RESULT_OK) {</span>
+<span class="nc" id="L145">                followers = profileResponse.getFollowers();</span>
+<span class="nc" id="L146">                ((TextView) findViewById(R.id.unameView)).setText(username);</span>
+<span class="nc" id="L147">                ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());</span>
+<span class="nc" id="L148">                followerCount.setText(String.format(Locale.getDefault(), &quot;%d Followers&quot;, profileResponse.getFollowers()));</span>
+<span class="nc" id="L149">                followingCount.setText(String.format(Locale.getDefault(), &quot;%d Following&quot;, profileResponse.getFollowing()));</span>
+
+<span class="nc" id="L151">                ((TextView) findViewById(R.id.bioTextView)).setText(profileResponse.getBio());</span>
+            } else {
+<span class="nc" id="L153">                Toaster.toastShort(&quot;Error&quot;, this);</span>
+            }
+<span class="nc" id="L155">        }, AccountActivity.this);</span>
+
+<span class="nc" id="L157">        new GetProfilePictureRequest(username).request((ImageView) findViewById(R.id.profile_picture), AccountActivity.this);</span>
+<span class="nc" id="L158">        new GetBannerRequest(username).request((ImageView) findViewById(R.id.banner), AccountActivity.this);</span>
+
+<span class="nc" id="L160">        new GetRecipesRequest(username).request(response -&gt; {</span>
+<span class="nc" id="L161">            GetRecipesResponse postsResponse = objFromJson(response, GetRecipesResponse.class);</span>
+<span class="nc" id="L162">            ((ListView) findViewById(R.id.yourRecipesList)).setAdapter(new FeedAdapter(this, new ArrayList&lt;&gt;(Arrays.asList(postsResponse.getItems()))));</span>
+<span class="nc" id="L163">        }, AccountActivity.this);</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
+     * Returns the current following boolean
+     *
+     * @return True if the account displayed is being followed
+     */
+    public boolean isFollowing() {
+<span class="nc" id="L172">        return isFollowing;</span>
+    }
+
+    /**
+     * Sets the current following boolean
+     *
+     * @param following True if the account displayed is being followed
+     */
+    public void setFollowing(boolean following) {
+<span class="nc" id="L181">        this.isFollowing = following;</span>
+<span class="nc" id="L182">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
