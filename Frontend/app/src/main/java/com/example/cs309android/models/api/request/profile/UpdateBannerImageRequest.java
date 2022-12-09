@@ -19,9 +19,10 @@ public class UpdateBannerImageRequest extends PatchImageRequest {
      * @param token  authentication token
      * @param bitmap Image to send
      */
-    public UpdateBannerImageRequest(String token, Bitmap bitmap) {
+    public UpdateBannerImageRequest(String token, String username, Bitmap bitmap) {
         super(new ParameterizedRequestURL(UPDATE_BANNER_URL)
                         .addPathVar(token)
+                        .addPathVar(username)
                         .toString(),
                 bitmap);
     }

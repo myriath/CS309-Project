@@ -78,7 +78,9 @@ public class IngredientEditView extends FrameLayout {
      * @return quantity
      */
     public float getQuantity() {
-        return Float.parseFloat(((EditText) view.findViewById(R.id.quantity)).getText().toString());
+        String text = ((EditText) view.findViewById(R.id.quantity)).getText().toString();
+        if (text.length() == 0) return 0;
+        return Float.parseFloat(text);
     }
 
     /**

@@ -1,6 +1,19 @@
 package com.example.cs309android.util;
 
 import static com.example.cs309android.BuildConfig.BASE_API_URL;
+import static com.example.cs309android.BuildConfig.WEBSOCKETS_URL;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.example.cs309android.R;
+
+import java.util.Arrays;
 
 /**
  * Util constants class
@@ -65,6 +78,146 @@ public class Constants {
      * Max retries for token generation
      */
     public static final int TOKEN_MAX_DEPTH = 5;
+
+    /**
+     * Notification manager for the application
+     */
+    public static NotificationManager manager;
+
+    /**
+     * Notifications constants
+     */
+    public interface Notifications {
+        /**
+         * Descriptions for the notification channels
+         */
+        int[] DESCRIPTIONS = new int[]{
+                R.string.new_followers_desc,
+                R.string.new_for_you_desc,
+                R.string.likes_comments_desc
+        };
+
+        /**
+         * IDs for the notification channels
+         */
+        String[] IDS = new String[]{
+                "cs309.notification.high", "cs309.notification.low", "cs309.notification"
+        };
+
+        /**
+         * Names for the notification channels
+         */
+        int[] NAMES = new int[]{
+                R.string.new_followers_title,
+                R.string.new_for_you_title,
+                R.string.likes_comments_title
+        };
+
+        /**
+         * Array of existing notification channels
+         */
+        NotificationChannel[] CHANNELS = new NotificationChannel[3];
+
+        int[] IMPORTANCE = new int[]{
+                NotificationManager.IMPORTANCE_HIGH, NotificationManager.IMPORTANCE_LOW, NotificationManager.IMPORTANCE_DEFAULT
+        };
+
+        /**
+         * Comment on recipe, Favorite recipe, Follows you, Someone you follow posts
+         */
+        NotificationCompat.Builder[] BUILDERS = new NotificationCompat.Builder[4];
+
+        /**
+         * Priorities for the various notification types
+         */
+        int[] PRIORITIES = new int[]{
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_DEFAULT
+        };
+
+        /**
+         * Icons for the various notifications
+         */
+        int[] ICONS = new int[]{
+                R.drawable.ic_add_comment,
+                R.drawable.ic_favorite,
+                R.drawable.ic_add_user,
+                R.drawable.ic_add_recipe
+        };
+
+        int[] CHANNEL_IDS = new int[]{2, 2, 0, 1};
+
+        /**
+         * Titles for the various notifications
+         */
+        String[] TITLES = new String[]{
+                "New comment",
+                "Someone liked your recipe",
+                "New follower",
+                "New for you"
+        };
+
+        /**
+         * Descriptions for the various notifications
+         */
+        String[] TEXTS = new String[]{
+                "%s commented on your recipe",
+                "%s liked your recipe",
+                "%s started following you",
+                "%s created a new recipe"
+        };
+
+        /**
+         * Generates and registers the notification channels
+         *
+         * @param context Context for the application
+         */
+        static void createNotificationChannels(Context context) {
+            for (int i = 0; i < CHANNELS.length; i++) {
+                CHANNELS[i] = new NotificationChannel(IDS[i], context.getString(NAMES[i]), IMPORTANCE[i]);
+                CHANNELS[i].setDescription(context.getString(DESCRIPTIONS[i]));
+            }
+            manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannels(Arrays.asList(CHANNELS));
+
+            for (int i = 0; i < BUILDERS.length; i++) {
+                BUILDERS[i] = createBuilder(context, CHANNEL_IDS[i], i);
+            }
+        }
+
+        /**
+         * Creates a notification with the given builder
+         *
+         * @param context  Context for the notification
+         * @param index    Index for the builder in the BUILDERS array
+         * @param username Username for the account being notified about
+         * @param intent   Intent to open with parameters when clicked
+         */
+        static void notify(Context context, int index, String username, PendingIntent intent) {
+            NotificationManagerCompat.from(context).notify(index, BUILDERS[index]
+                    .setContentTitle(String.format(TITLES[index], username))
+                    .setContentText(String.format(TEXTS[index], username))
+                    .setContentIntent(intent)
+                    .build());
+        }
+
+        /**
+         * Creates a new notification builder to be put into the
+         *
+         * @param context   Context for the application
+         * @param channelId Index for the channel id from the IDS array
+         * @param index     Index for the builder. Uses the index of respective arrays for details of the builder
+         * @return Notification builder to be used to create and display notifications
+         */
+        static NotificationCompat.Builder createBuilder(Context context, int channelId, int index) {
+            return new NotificationCompat.Builder(context, IDS[channelId])
+                    .setSmallIcon(ICONS[index])
+                    .setPriority(PRIORITIES[index])
+                    .setAutoCancel(true);
+        }
+    }
 
     /**
      * User types interface
@@ -147,6 +300,18 @@ public class Constants {
          * Tells the SearchActivity it was opened from recipe add
          */
         int INTENT_RECIPE_ADD = 1;
+        /**
+         * Used to tell SearchActivity the intent is a breakfast item
+         */
+        int INTENT_FOOD_LOG_BREAKFAST = 2;
+        /**
+         * Used to tell SearchActivity the intent is a lunch item
+         */
+        int INTENT_FOOD_LOG_LUNCH = 3;
+        /**
+         * Used to tell SearchActivity the intent is a dinner item
+         */
+        int INTENT_FOOD_LOG_DINNER = 4;
     }
 
     /**
@@ -181,6 +346,10 @@ public class Constants {
          * Used to parcel a recipe
          */
         String PARCEL_RECIPE = "HomeFragment.recipe";
+        /**
+         * Used to parcel a recipe id
+         */
+        String PARCEL_RECIPE_ID = "rid";
         /**
          * Used in the account page to tell if it is the owner or not
          */
@@ -253,6 +422,14 @@ public class Constants {
          */
         int RESULT_REGEN_TOKEN = 3;
         /**
+         * Intent result for deleted, not used by api
+         */
+        int RESULT_DELETED = 4;
+        /**
+         * Intent result for updated, not used by api
+         */
+        int RESULT_UPDATED = 5;
+        /**
          * Indicates the user has been successfully created
          */
         int RESULT_RECIPE_CREATED = 22;
@@ -299,6 +476,10 @@ public class Constants {
          * URL for getting images
          */
         String IMAGE_URL = BASE_API_URL + "images/";
+        /**
+         * URL for the notification websocket
+         */
+        String NOTIFICATIONS_URL = WEBSOCKETS_URL + "websocket/";
 
         /**
          * URLs for the users endpoint
@@ -332,6 +513,10 @@ public class Constants {
              * URL for changing user types (used by admin)
              */
             String UPDATE_USER_TYPE_URL = AUTH_URL + "updateUserType/";
+            /**
+             * URL for getting user types
+             */
+            String GET_USER_TYPE_URL = AUTH_URL + "getUserType";
         }
 
         /**
@@ -397,11 +582,11 @@ public class Constants {
             /**
              * Add url for adding an item to recipes
              */
-            String ADD_RECIPES_URL = RECIPES_URL + "add/";
+            String ADD_RECIPES_URL = RECIPES_URL + "add";
             /**
              * URL for updating recipes
              */
-            String UPDATE_RECIPES_URL = RECIPES_URL + "update/";
+            String UPDATE_RECIPES_URL = RECIPES_URL + "update";
             /**
              * Remove url for removing an item from recipes
              */
@@ -409,11 +594,15 @@ public class Constants {
             /**
              * Url for getting an item from recipes
              */
-            String GET_RECIPES_URL = RECIPES_URL + "getRecipeByRid/";
+            String GET_BY_RID_URL = RECIPES_URL + "getRecipeByRid/";
             /**
              * Url for getting an item from recipes
              */
             String GET_RECIPES_LIST_URL = RECIPES_URL + "userRecipeList/";
+            /**
+             * Url for getting a recipe list by type
+             */
+            String GET_RECIPES_LIST_TYPE_URL = RECIPES_URL + "getRecipeListByType/";
             /**
              * URL for setting a recipe's image
              */
@@ -422,11 +611,6 @@ public class Constants {
              * URL for getting a recipe's image
              */
             String GET_RECIPE_IMAGE_URL = RECIPES_URL + "getPicture/";
-            /**
-             * URL for deleting a recipe
-             */
-            String DELETE_URL = RECIPES_URL + "delete/";
-
         }
 
         /**
@@ -437,6 +621,10 @@ public class Constants {
              * URL used when creating a comment
              */
             String COMMENT_URL = SOCIAL_URL + "comment";
+            /**
+             * URL for getting a recipe's comments
+             */
+            String GET_COMMENTS_URL = SOCIAL_URL + "getComments";
             /**
              * URL used when editing comments
              */

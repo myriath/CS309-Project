@@ -3,6 +3,8 @@ package com.example.cs309android.models.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -15,17 +17,17 @@ public class Comment implements Parcelable {
      * Username of the account that made the comment
      */
     @Expose
-    private final String username;
+    private final User user;
     /**
      * Comment text
      */
     @Expose
-    private final String comment;
+    private final String body;
     /**
      * Comment id from the database
      */
     @Expose
-    private final int id;
+    private final int cid;
     /**
      * Whether or not to show the full text
      */
@@ -34,14 +36,14 @@ public class Comment implements Parcelable {
     /**
      * Public constructor
      *
-     * @param username username of the comment creator
-     * @param comment  comment text
-     * @param id       comment id from the database
+     * @param user    username of the comment creator
+     * @param comment comment text
+     * @param cid     comment id from the database
      */
-    public Comment(String username, String comment, int id) {
-        this.username = username;
-        this.comment = comment;
-        this.id = id;
+    public Comment(User user, String comment, int cid) {
+        this.user = user;
+        this.body = comment;
+        this.cid = cid;
     }
 
     /**
@@ -50,9 +52,9 @@ public class Comment implements Parcelable {
      * @param in Parcel to unpack
      */
     protected Comment(Parcel in) {
-        username = in.readString();
-        comment = in.readString();
-        id = in.readInt();
+        user = in.readTypedObject(User.CREATOR);
+        body = in.readString();
+        cid = in.readInt();
         showFull = in.readByte() != 0;
     }
 
@@ -64,9 +66,9 @@ public class Comment implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(username);
-        dest.writeString(comment);
-        dest.writeInt(id);
+        dest.writeTypedObject(user, flags);
+        dest.writeString(body);
+        dest.writeInt(cid);
         dest.writeByte((byte) (showFull ? 1 : 0));
     }
 
@@ -100,8 +102,8 @@ public class Comment implements Parcelable {
      *
      * @return creator's username
      */
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     /**
@@ -109,8 +111,8 @@ public class Comment implements Parcelable {
      *
      * @return comment text
      */
-    public String getComment() {
-        return comment;
+    public String getBody() {
+        return body;
     }
 
     /**
@@ -118,8 +120,8 @@ public class Comment implements Parcelable {
      *
      * @return comment id
      */
-    public int getId() {
-        return id;
+    public int getCid() {
+        return cid;
     }
 
     /**
@@ -138,5 +140,16 @@ public class Comment implements Parcelable {
      */
     public void setShowFull(boolean showFull) {
         this.showFull = showFull;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "user=" + user +
+                ", body='" + body + '\'' +
+                ", id=" + cid +
+                ", showFull=" + showFull +
+                '}';
     }
 }

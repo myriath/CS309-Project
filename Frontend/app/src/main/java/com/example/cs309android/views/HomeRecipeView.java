@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cs309android.R;
+import com.example.cs309android.models.api.models.Recipe;
+import com.example.cs309android.models.api.request.recipes.GetRecipeImageRequest;
 
 /**
  * Custom view inflates the home_item_model layout.
@@ -39,13 +41,18 @@ public class HomeRecipeView extends FrameLayout {
     /**
      * Inflates the home_item_model under this view
      *
-     * @param title         Title of the recipe
-     * @param description   Description of the recipe
+     * @param recipe   Used to fill in details for the view
+     * @param listener Runs when the item is clicked
      */
-    public void initView(String title, String description, OnClickListener listener) {
+    public void initView(Recipe recipe, OnClickListener listener) {
         inflate(getContext(), R.layout.home_item_model, this);
-        ((TextView) findViewById(R.id.recipeTitle)).setText(title);
-        ((TextView) findViewById(R.id.recipeDescription)).setText(description);
+
+        new GetRecipeImageRequest(String.valueOf(recipe.getRecipeID()))
+                .request((ImageView) findViewById(R.id.recipeImage), getContext());
+
+        ((TextView) findViewById(R.id.recipeTitle)).setText(recipe.getRname());
+        ((TextView) findViewById(R.id.recipeDescription)).setText(recipe.getDescription());
+
         setOnClickListener(listener);
     }
 

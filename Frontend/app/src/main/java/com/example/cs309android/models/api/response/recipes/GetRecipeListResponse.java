@@ -35,3 +35,4 @@ public class GetRecipeListResponse extends GenericResponse {
         return recipes;
     }
 }
+
